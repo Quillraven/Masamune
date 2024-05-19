@@ -39,9 +39,10 @@ class RenderSystem(
         with(sprite) {
             // fill sprite inside transform size by keeping aspect ratio
             val spriteSize = Scaling.fill.apply(regionWidth * UNIT_SCALE, regionHeight * UNIT_SCALE, size.x, size.y)
-            setOrigin(spriteSize.x * scale * 0.5f, spriteSize.y * scale * 0.5f)
+            setOrigin(spriteSize.x * 0.5f, spriteSize.y * 0.5f)
             rotation = rotationDeg
-            setBounds(position.x, position.y, spriteSize.x * scale, spriteSize.y * scale)
+            setScale(scale)
+            setBounds(position.x, position.y, spriteSize.x , spriteSize.y )
             draw(batch)
         }
     }
