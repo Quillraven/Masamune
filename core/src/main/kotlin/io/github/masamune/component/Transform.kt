@@ -6,7 +6,7 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 
 /**
- * Component for [position], [scale] and [rotation] values of an entity.
+ * Component for [position], [size], [scale] and [rotation] values of an entity.
  * The default scale value is one world unit (=1).
  * The rotation is in degrees.
  */
@@ -26,7 +26,8 @@ data class Transform(
             position.y > other.position.y -> 1
             position.y < other.position.y -> -1
             position.x > other.position.x -> 1
-            else -> -1
+            position.x < other.position.x -> -1
+            else -> 0
         }
     }
 
