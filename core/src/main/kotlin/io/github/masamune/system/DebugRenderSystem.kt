@@ -19,22 +19,41 @@ class DebugRenderSystem(
 
     override fun onTick() {
         gameViewport.apply()
-        shapeRenderer.use(ShapeRenderer.ShapeType.Line, gameViewport.camera) {
-            shapeRenderer.color = Color.RED
-            super.onTick()
+        shapeRenderer.use(ShapeRenderer.ShapeType.Line, gameViewport.camera) { renderer ->
+            renderer.color = Color.RED
+            family.forEach { drawEntityBoundary(it, withScale = true) }
+        }
+
+        shapeRenderer.use(ShapeRenderer.ShapeType.Line, gameViewport.camera) { renderer ->
+            renderer.color = Color.BLUE
+            family.forEach { drawEntityBoundary(it, withScale = false) }
+        }
+
+        shapeRenderer.use(ShapeRenderer.ShapeType.Point, gameViewport.camera) { renderer ->
+            renderer.color = Color.GREEN
+            family.forEach { drawEntityPosition(it) }
         }
     }
 
-    override fun onTickEntity(entity: Entity) {
+    private fun drawEntityBoundary(entity: Entity, withScale: Boolean) {
         val (position, size, scale, rotation) = entity[Transform]
+        val scl = if (withScale) scale else 1f
+
         shapeRenderer.rect(
             position.x, position.y,
-            size.x * scale * 0.5f, size.y * scale * 0.5f,
-            size.x * scale, size.y * scale,
-            1f, 1f,
+            size.x * 0.5f, size.y * 0.5f,
+            size.x, size.y,
+            scl, scl,
             rotation
         )
     }
+
+    private fun drawEntityPosition(entity: Entity) {
+        val (position) = entity[Transform]
+        shapeRenderer.point(position.x, position.y, position.z)
+    }
+
+    override fun onTickEntity(entity: Entity) = Unit
 
     override fun onDispose() {
         shapeRenderer.disposeSafely()
