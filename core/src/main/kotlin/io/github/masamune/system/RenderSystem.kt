@@ -8,7 +8,6 @@ import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.compareEntityBy
-import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Transform
 import ktx.graphics.use
@@ -33,18 +32,20 @@ class RenderSystem(
      * and draw the sprite.
      */
     override fun onTickEntity(entity: Entity) {
-        val (sprite) = entity[Graphic]
+        val (texRegion, regionSize, color) = entity[Graphic]
         val (position, size, scale, rotationDeg) = entity[Transform]
 
-        with(sprite) {
-            // fill sprite inside transform size by keeping aspect ratio
-            val spriteSize = Scaling.fill.apply(regionWidth * UNIT_SCALE, regionHeight * UNIT_SCALE, size.x, size.y)
-            setOrigin(spriteSize.x * 0.5f, spriteSize.y * 0.5f)
-            rotation = rotationDeg
-            setScale(scale)
-            setBounds(position.x, position.y, spriteSize.x , spriteSize.y )
-            draw(batch)
-        }
+        // fill texture inside transform size by keeping aspect ratio
+        val realSize = Scaling.fill.apply(regionSize.x, regionSize.y, size.x, size.y)
+        batch.color = color
+        batch.draw(
+            texRegion,
+            position.x, position.y,
+            realSize.x * 0.5f, realSize.y * 0.5f,
+            realSize.x, realSize.y,
+            scale, scale,
+            rotationDeg
+        )
     }
 
 }

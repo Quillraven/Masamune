@@ -3,11 +3,12 @@ package io.github.masamune
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.ExtendViewport
@@ -24,6 +25,7 @@ import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
 import ktx.assets.toClasspathFile
+import ktx.graphics.color
 import ktx.math.vec2
 import ktx.math.vec3
 
@@ -77,6 +79,11 @@ class RenderTest : KtxApplicationAdapter {
         newSfx(1f, 6f, size = vec2(2f, 2f))
         newSfx(3.5f, 6.5f, size = vec2(1f, 1f), scale = 2f)
 
+        // test color
+        newCharacter(0f, 8f, size = vec2(1f, 1f), color = color(1f, 0f, 0f, 1f))
+        newCharacter(1f, 8f, size = vec2(1f, 1f), color = color(0f, 1f, 0f, 0.5f))
+        newCharacter(2f, 8f, size = vec2(1f, 1f), color = color(0f, 0f, 1f, 0.33f))
+
         // test sorting order (SFX before character)
         newCharacter(8f, 0f, size = vec2(1f, 1f))
         newSfx(8f, 0f, size = vec2(1f, 1f))
@@ -89,17 +96,28 @@ class RenderTest : KtxApplicationAdapter {
         rotateEntity = newCharacter(10f, 5f, size = vec2(1f, 1f))
     }
 
-    private fun newCharacter(x: Float, y: Float, size: Vector2, scale: Float = 1f, rotation: Float = 0f): Entity =
+    private fun newCharacter(
+        x: Float, y: Float,
+        size: Vector2,
+        scale: Float = 1f,
+        rotation: Float = 0f,
+        color: Color = color(1f, 1f, 1f, 1f)
+    ): Entity =
         world.entity {
-            it += Graphic(Sprite(texture))
+            it += Graphic(TextureRegion(texture), color)
             it += Transform(position = vec3(x, y, 0f), size = size, scale = scale, rotation = rotation)
         }
 
-    private fun newSfx(x: Float, y: Float, size: Vector2, scale: Float = 1f, rotation: Float = 0f) {
+    private fun newSfx(
+        x: Float, y: Float,
+        size: Vector2,
+        scale: Float = 1f,
+        rotation: Float = 0f
+    ) {
         world.entity {
             Animation.ofAtlasRegions(atlas, "shield-yellow/idle").also { animation ->
                 it += animation
-                it += Graphic(Sprite(animation.gdxAnimation.getKeyFrame(0f)))
+                it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
             }
             it += Transform(position = vec3(x, y, 1f), size = size, scale = scale, rotation = rotation)
         }

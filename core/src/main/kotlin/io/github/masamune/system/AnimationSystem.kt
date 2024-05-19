@@ -13,11 +13,8 @@ class AnimationSystem : IteratingSystem(family { all(Animation, Graphic) }) {
         stateTime += deltaTime * speed
         val keyFrame = gdxAnimation.getKeyFrame(stateTime)
 
-        // update sprite region
-        val (sprite) = entity[Graphic]
-        if (sprite.regionX != keyFrame.regionX || sprite.regionY != keyFrame.regionY) {
-            sprite.setRegion(keyFrame)
-        }
+        // update graphic region
+        entity[Graphic].region = keyFrame
     }
 
 }
