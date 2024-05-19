@@ -6,15 +6,18 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import io.github.masamune.asset.AssetService
 import io.github.masamune.screen.LoadingScreen
+import io.github.masamune.tiledmap.TiledService
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
+import ktx.log.logger
 
 class Masamune : KtxGame<KtxScreen>() {
 
     val batch: Batch by lazy { SpriteBatch() }
     val assetService: AssetService by lazy { AssetService() }
+    val tiledService: TiledService by lazy { TiledService(assetService) }
 
     override fun create() {
         Gdx.app.logLevel = Application.LOG_DEBUG
@@ -29,12 +32,16 @@ class Masamune : KtxGame<KtxScreen>() {
     }
 
     override fun dispose() {
+        log.info { "Maximum sprites in batch: ${(batch as SpriteBatch).maxSpritesInBatch}" }
+
         super.dispose()
         batch.disposeSafely()
         assetService.disposeSafely()
     }
 
     companion object {
+        private val log = logger<Masamune>()
+
         /**
          * pixels per meter for physic world and scaling value for tiled maps and graphics.
          */

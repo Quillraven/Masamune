@@ -20,7 +20,7 @@ class Graphic(
     private val color: Color = color(1f, 1f, 1f, 1f),
 ) : Component<Graphic> {
 
-    private val regionSize: Vector2 = vec2(region.regionWidth * UNIT_SCALE, region.regionHeight * UNIT_SCALE)
+    val regionSize: Vector2 = vec2(region.regionWidth * UNIT_SCALE, region.regionHeight * UNIT_SCALE)
     var region: TextureRegion = region
         set(value) {
             regionSize.x = value.regionWidth * UNIT_SCALE
