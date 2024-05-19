@@ -9,6 +9,12 @@ import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import ktx.graphics.color
 import ktx.math.vec2
 
+/**
+ * Component for graphical data of an entity to render it to the screen.
+ * The data consists of:
+ * - [region]: the [TextureRegion]
+ * - [color]: the tinting [Color]. Default value is white
+ */
 class Graphic(
     region: TextureRegion,
     private val color: Color = color(1f, 1f, 1f, 1f),
