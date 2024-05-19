@@ -1,0 +1,67 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "compatibilityVersion": 1100,
+    "extensionsPath": "extensions",
+    "folders": [
+        "."
+    ],
+    "properties": [
+    ],
+    "propertyTypes": [
+        {
+            "id": 3,
+            "name": "AtlasAsset",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "CHARACTERS",
+                "SFX",
+                "UNDEFINED"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 1,
+            "name": "MapObjectType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "HERO",
+                "UNDEFINED"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 2,
+            "members": [
+                {
+                    "name": "atlas",
+                    "propertyType": "AtlasAsset",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                },
+                {
+                    "name": "atlasRegionKey",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "objType",
+                    "propertyType": "MapObjectType",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                }
+            ],
+            "name": "MapObject",
+            "type": "class",
+            "useAs": [
+                "tile",
+                "project"
+            ]
+        }
+    ]
+}
