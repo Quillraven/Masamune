@@ -41,9 +41,12 @@ class RenderTest : KtxApplicationAdapter {
     private val atlas by lazy { TextureAtlas("sfx.atlas".toClasspathFile()) }
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
     private val world by lazy { gameWorld() }
-    private val scaleRotateEntity by lazy { newCharacter(7f, 5f, size = vec2(1f, 1f)) }
     private var alpha = 0f
     private var direction = 1f
+
+    private lateinit var scaleEntity: Entity
+    private lateinit var rotateEntity: Entity
+
 
     private fun gameWorld() = configureWorld {
         injectables {
@@ -62,21 +65,28 @@ class RenderTest : KtxApplicationAdapter {
         // test different sizes
         newCharacter(0f, 0f, size = vec2(1f, 1f))
         newCharacter(1f, 0f, size = vec2(2f, 2f))
-        newCharacter(3f, 0f, size = vec2(1f, 1f), scale = 2f)
+        newCharacter(3.5f, 0.5f, size = vec2(1f, 1f), scale = 2f)
 
         // test rotation
         newCharacter(0f, 3f, size = vec2(1f, 1f), rotation = 90f)
         newCharacter(1f, 3f, size = vec2(2f, 2f), rotation = 90f)
-        newCharacter(3f, 3f, size = vec2(1f, 1f), scale = 2f, rotation = 90f)
+        newCharacter(3.5f, 3.5f, size = vec2(1f, 1f), scale = 2f, rotation = 90f)
 
         // test animation which has an aspect ratio != 1:1
         newSfx(0f, 6f, size = vec2(1f, 1f))
         newSfx(1f, 6f, size = vec2(2f, 2f))
-        newSfx(3f, 6f, size = vec2(1f, 1f), scale = 2f)
+        newSfx(3.5f, 6.5f, size = vec2(1f, 1f), scale = 2f)
 
         // test sorting order (SFX before character)
         newCharacter(8f, 0f, size = vec2(1f, 1f))
         newSfx(8f, 0f, size = vec2(1f, 1f))
+
+        newCharacter(10.5f, 0.5f, size = vec2(1f, 1f))
+        newSfx(10.5f, 0.5f, size = vec2(1f, 1f), scale = 2f)
+
+        // test changes over time
+        scaleEntity = newCharacter(8f, 5f, size = vec2(1f, 1f))
+        rotateEntity = newCharacter(10f, 5f, size = vec2(1f, 1f))
     }
 
     private fun newCharacter(x: Float, y: Float, size: Vector2, scale: Float = 1f, rotation: Float = 0f): Entity =
@@ -114,8 +124,8 @@ class RenderTest : KtxApplicationAdapter {
             val rotation = MathUtils.lerp(0f, 360f, alpha)
             val scale = MathUtils.lerp(0.5f, 2f, alpha)
 
-            scaleRotateEntity[Transform].rotation = rotation
-            scaleRotateEntity[Transform].scale = scale
+            rotateEntity[Transform].rotation = rotation
+            scaleEntity[Transform].scale = scale
         }
     }
 
