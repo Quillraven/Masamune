@@ -1,0 +1,20 @@
+plugins {
+  id 'org.jetbrains.kotlin.plugin.serialization' version "${kotlinVersion}"
+}
+
+group = "io.github.masamune"
+version = "1.0-SNAPSHOT"
+
+dependencies {
+  implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion"
+}
+
+java.sourceCompatibility = 11
+
+tasks.register('genTiledEnums', JavaExec) {
+  setGroup("masamune")
+  setDescription("Runs the specified Kotlin main class")
+
+  mainClass.set("io.github.masamune.util.TiledKt")
+  setClasspath(sourceSets.main.runtimeClasspath)
+}
