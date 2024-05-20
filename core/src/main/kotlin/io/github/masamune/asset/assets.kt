@@ -25,9 +25,9 @@ enum class TiledMapAsset {
     val path = "maps/${name.lowercase()}.tmx"
 }
 
-class AssetService : Disposable {
+class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleResolver()) : Disposable {
 
-    private val manager = AssetManager().apply {
+    private val manager = AssetManager(fileHandleResolver).apply {
         setLoader(TiledMap::class.java, TmxMapLoader(this.fileHandleResolver))
     }
 
