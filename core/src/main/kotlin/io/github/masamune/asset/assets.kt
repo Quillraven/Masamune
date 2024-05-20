@@ -1,6 +1,8 @@
 package io.github.masamune.asset
 
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.assets.loaders.FileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
@@ -11,7 +13,7 @@ import ktx.assets.load
 import ktx.log.logger
 
 enum class AtlasAsset {
-    CHARACTERS,
+    CHARS_AND_PROPS,
     SFX;
 
     val path = "graphics/${name.lowercase()}.atlas"

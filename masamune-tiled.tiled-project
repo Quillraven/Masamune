@@ -16,7 +16,7 @@
             "storageType": "string",
             "type": "enum",
             "values": [
-                "CHARACTERS",
+                "CHARS_AND_PROPS",
                 "SFX",
                 "UNDEFINED"
             ],

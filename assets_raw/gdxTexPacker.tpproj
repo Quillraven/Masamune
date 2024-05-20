@@ -1,4 +1,4 @@
-name=characters
+name=chars_and_props
 filename=
 output=../assets/graphics
 
@@ -34,7 +34,7 @@ prettyPrint=false
 legacyOutput=false
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:characters,type:Input,dirFilePrefix:null,recursive:true,flattenPaths:false}]
+inputFiles=[{path:chars_and_props,type:Input,dirFilePrefix:null,recursive:true,flattenPaths:false}]
 keepInputFileExtensions=false
 
 
