@@ -57,8 +57,8 @@ class RenderTest : KtxApplicationAdapter {
         }
 
         systems {
-            add(RenderSystem())
             add(AnimationSystem())
+            add(RenderSystem())
             add(DebugRenderSystem())
         }
     }
