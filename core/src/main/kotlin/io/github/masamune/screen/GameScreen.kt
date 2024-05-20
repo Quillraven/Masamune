@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.asset.AssetService
-import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.TiledService
@@ -35,10 +34,6 @@ class GameScreen(
             add(AnimationSystem())
             add(RenderSystem())
         }
-    }
-
-    override fun show() {
-        tiledService.setMap(TiledMapAsset.TEST, world)
     }
 
     override fun resize(width: Int, height: Int) {
