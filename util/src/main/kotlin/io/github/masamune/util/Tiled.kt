@@ -2,16 +2,24 @@ package io.github.masamune.util
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
 import java.io.File
 
 @Serializable
 data class Member(
     val name: String,
     val type: String,
+    val value: JsonPrimitive,
 ) {
     val kotlinType: String = when (type) {
-        "string" -> "String"
+        "string", "color" -> "String"
+        "bool" -> "Boolean"
         else -> error("Unsupported type: $type")
+    }
+
+    val kotlinValue: String = when (type) {
+        "string", "color" -> "\"${value.content}\""
+        else -> value.content
     }
 }
 
@@ -100,7 +108,12 @@ fun createPropertyExtensions(properties: List<Member>) {
 
         properties.forEach { property ->
             append("val TiledMapTile.${property.name}: ${property.kotlinType}").append(newLine)
-            append("    get() = this.property<String>(\"${property.name}\")").append(newLine).append(newLine)
+            if (property.value.content.isBlank()) {
+                append("    get() = this.property<${property.kotlinType}>(\"${property.name}\")")
+            } else {
+                append("    get() = this.property<${property.kotlinType}>(\"${property.name}\", ${property.kotlinValue})")
+            }
+            append(newLine).append(newLine)
         }
         append(newLine)
     }
