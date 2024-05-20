@@ -13,12 +13,9 @@ import io.github.masamune.component.Graphic
 import io.github.masamune.component.Transform
 import ktx.log.logger
 import ktx.math.vec3
-import ktx.tiled.property
 import kotlin.system.measureTimeMillis
 
-class TiledService(
-    val assetService: AssetService
-) {
+class TiledService(private val assetService: AssetService) {
     private var currentMap: TiledMapAsset? = null
 
     fun setMap(asset: TiledMapAsset, world: World) {
@@ -48,11 +45,11 @@ class TiledService(
     private fun loadObject(mapObject: MapObject, world: World) {
         val tiledObj = mapObject as TiledMapTileMapObject
 
-        val objTypeStr = tiledObj.tile.property<String>("objType")
+        val objTypeStr = tiledObj.tile.objType
         val objType = TiledObjectType.valueOf(objTypeStr)
-        val atlasStr = tiledObj.tile.property<String>("atlas")
+        val atlasStr = tiledObj.tile.atlas
         val atlas = AtlasAsset.valueOf(atlasStr)
-        val atlasRegionKey = tiledObj.tile.property<String>("atlasRegionKey")
+        val atlasRegionKey = tiledObj.tile.atlasRegionKey
 
         world.entity {
             val texRegion = assetService[atlas].findRegion(atlasRegionKey)
