@@ -17,7 +17,7 @@ data class Animation(
     override fun type() = Animation
 
     companion object : ComponentType<Animation>() {
-        private const val DEFAULT_FRAME_DURATION = 1 / 12f
+        const val DEFAULT_FRAME_DURATION = 1 / 12f
 
         fun ofAtlasRegions(
             atlas: TextureAtlas,
