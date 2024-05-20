@@ -23,17 +23,6 @@
             "valuesAsFlags": false
         },
         {
-            "id": 1,
-            "name": "MapObjectType",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "HERO",
-                "UNDEFINED"
-            ],
-            "valuesAsFlags": false
-        },
-        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 2,
@@ -50,6 +39,16 @@
                     "value": ""
                 },
                 {
+                    "name": "color",
+                    "type": "color",
+                    "value": "#ffffffff"
+                },
+                {
+                    "name": "hasAnimation",
+                    "type": "bool",
+                    "value": false
+                },
+                {
                     "name": "objType",
                     "propertyType": "MapObjectType",
                     "type": "string",
@@ -62,6 +61,17 @@
                 "tile",
                 "project"
             ]
+        },
+        {
+            "id": 1,
+            "name": "MapObjectType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "HERO",
+                "UNDEFINED"
+            ],
+            "valuesAsFlags": false
         }
     ]
 }
