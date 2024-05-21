@@ -5,18 +5,16 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
-import io.github.masamune.asset.AssetService
+import io.github.masamune.event.EventService
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.RenderSystem
-import io.github.masamune.tiledmap.TiledService
 import ktx.app.KtxScreen
 import ktx.log.logger
 
 class GameScreen(
     private val masamune: Masamune,
-    private val batch: Batch = masamune.batch,
-    private val assetService: AssetService = masamune.assetService,
-    private val tiledService: TiledService = masamune.tiledService,
+    private val batch: Batch = masamune.serviceLocator.batch,
+    private val eventService: EventService = masamune.serviceLocator.eventService
 ) : KtxScreen {
     // game view
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
@@ -34,6 +32,14 @@ class GameScreen(
             add(AnimationSystem())
             add(RenderSystem())
         }
+    }
+
+    override fun show() {
+        eventService.registerSystems(world)
+    }
+
+    override fun hide() {
+        eventService.unregisterSystems(world)
     }
 
     override fun resize(width: Int, height: Int) {

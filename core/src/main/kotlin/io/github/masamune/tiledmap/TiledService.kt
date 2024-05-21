@@ -18,13 +18,18 @@ import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.component.*
 import io.github.masamune.component.Animation.Companion.DEFAULT_FRAME_DURATION
+import io.github.masamune.event.EventService
+import io.github.masamune.event.MapChangeEvent
 import ktx.app.gdxError
 import ktx.log.logger
 import ktx.math.vec3
 import ktx.tiled.id
 import kotlin.system.measureTimeMillis
 
-class TiledService(private val assetService: AssetService) {
+class TiledService(
+    private val assetService: AssetService,
+    private val eventService: EventService,
+) {
     private var currentMap: TiledMapAsset? = null
 
     fun setMap(asset: TiledMapAsset, world: World) {
@@ -41,6 +46,7 @@ class TiledService(private val assetService: AssetService) {
 
     fun setMap(tiledMap: TiledMap, world: World) {
         loadObjects(tiledMap, world)
+        eventService.fire(MapChangeEvent(tiledMap))
     }
 
     private fun loadObjects(tiledMap: TiledMap, world: World) {

@@ -17,6 +17,7 @@ import io.github.masamune.component.Animation
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Tiled
 import io.github.masamune.component.Transform
+import io.github.masamune.event.EventService
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.TiledObjectType
@@ -39,7 +40,8 @@ class TiledTest : KtxApplicationAdapter {
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
     private val world by lazy { gameWorld() }
     private val assetService by lazy { AssetService(ClasspathFileHandleResolver()) }
-    private val tiledService by lazy { TiledService(assetService) }
+    private val eventService by lazy { EventService() }
+    private val tiledService by lazy { TiledService(assetService, eventService) }
     private lateinit var tiledMap: TiledMap
 
     private fun gameWorld() = configureWorld {
@@ -55,6 +57,8 @@ class TiledTest : KtxApplicationAdapter {
     }
 
     override fun create() {
+        eventService.registerSystems(world)
+
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
         tiledMap = TmxMapLoader(ClasspathFileHandleResolver()).load("maps/test.tmx")
