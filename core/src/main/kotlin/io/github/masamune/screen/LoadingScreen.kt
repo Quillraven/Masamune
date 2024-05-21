@@ -1,6 +1,5 @@
 package io.github.masamune.screen
 
-import com.badlogic.gdx.graphics.g2d.Batch
 import io.github.masamune.Masamune
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
@@ -9,8 +8,7 @@ import ktx.assets.disposeSafely
 
 class LoadingScreen(
     private val masamune: Masamune,
-    private val batch: Batch = masamune.batch,
-    private val assetService: AssetService = masamune.assetService,
+    private val assetService: AssetService = masamune.serviceLocator.assetService,
 ) : KtxScreen {
 
     private var done = false
