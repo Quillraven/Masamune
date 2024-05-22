@@ -23,6 +23,8 @@ dependencies {
   testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
   testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+  testImplementation "io.kotest:kotest-assertions-core:$kotestVersion"
+  testImplementation "io.mockk:mockk:$mockkVersion"
 }
 
 test {

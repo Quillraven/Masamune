@@ -35,11 +35,11 @@ class GameScreen(
     }
 
     override fun show() {
-        eventService.registerSystems(world)
+        eventService += world
     }
 
     override fun hide() {
-        eventService.unregisterSystems(world)
+        eventService -= world
     }
 
     override fun resize(width: Int, height: Int) {
