@@ -2,6 +2,7 @@
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-up" width="10" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="3">
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="4097" source="objects.tsx"/>
+ <tileset firstgid="4099" source="tileset.tsx"/>
  <layer id="1" name="ground" width="10" height="10">
   <data encoding="base64" compression="zlib">
    eJxlj1kOgCAMRPkG4WRsei4wgRPbShsn+PHC9top2RqT3CITVYhw18i57Xd30N4DwS6P34rUsjOJk+jERQxwy+Zo/yZulvPL5mj+FC+BN2CmCPlcW+E/nOHd8rVPlj4F1ib1HfroDAGz3B/939jm39EMnukBzEgkeg==
@@ -9,7 +10,7 @@
  </layer>
  <layer id="2" name="ground_decoration" width="10" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYMAOrnPikKAhuEcHOwfCX7jADSxuAQDSugOJ
+   eJxjYMAOrnPikKAhuEcHO5H91S9GnJ7zRKojFdzA4l8Akp0FEw==
   </data>
  </layer>
  <objectgroup id="3" name="objects">
@@ -18,7 +19,7 @@
  </objectgroup>
  <layer id="4" name="foreground" width="10" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFgwkAAAGQAAE=
+   eJxjYBiZwFeUemYJiTMwCIsTVhcEVBNMQB0Ab08BiQ==
   </data>
  </layer>
 </map>

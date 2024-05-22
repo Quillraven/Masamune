@@ -57,7 +57,7 @@ class TiledTest : KtxApplicationAdapter {
     }
 
     override fun create() {
-        eventService.registerSystems(world)
+        eventService += world
 
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
