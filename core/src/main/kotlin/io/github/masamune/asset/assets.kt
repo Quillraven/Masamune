@@ -20,7 +20,7 @@ enum class AtlasAsset {
 }
 
 enum class TiledMapAsset {
-    TEST;
+    VILLAGE;
 
     val path = "maps/${name.lowercase()}.tmx"
 }

@@ -41,8 +41,8 @@ keepInputFileExtensions=false
 ---
 
 name=tileset
-filename=
-output=../assets/graphics
+filename=tileset-orig.atlas
+output=../assets/maps
 
 alias=false
 alphaThreshold=0

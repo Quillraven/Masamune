@@ -5,9 +5,14 @@
     },
     "activeFile": "assets/maps/objects.tsx",
     "expandedProjectPaths": [
+        "core/src/test/resources",
+        ".",
         "assets",
+        "core/src",
+        "core",
         "assets/maps",
-        "."
+        "core/src/test",
+        "core/src/test/resources/maps"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
@@ -19,32 +24,39 @@
             "scale": 7.19625,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 165.29442417926003,
-                "y": 112.90602744484973
+                "x": 165.016501650165,
+                "y": 112.48914365120721
             }
         },
         "assets/maps/tileset.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
+            "scaleInDock": 2,
             "scaleInEditor": 3
         },
+        "core/src/test/resources/maps/objects.tsx": {
+            "scaleInDock": 1
+        },
         "core/src/test/resources/maps/test.tmx": {
-            "scale": 7.19625,
+            "scale": 5.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 80.111169011638,
-                "y": 80.111169011638
+                "x": 77.9090909090909,
+                "y": 112.45454545454545
             }
+        },
+        "core/src/test/resources/maps/tileset.tsx": {
+            "scaleInDock": 1
         }
     },
+    "frame.defaultDuration": 200,
     "last.imagePath": "C:/Users/Simon/IdeaProjects/Masamune/assets/maps/objects",
-    "map.height": 10,
+    "map.height": 20,
     "map.lastUsedFormat": "tmx",
     "map.layerDataFormat": null,
     "map.renderOrder": null,
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 10,
+    "map.width": 20,
     "openFiles": [
         "assets/maps/test.tmx",
         "assets/maps/tileset.tsx",
@@ -53,9 +65,9 @@
     "project": "masamune-tiled.tiled-project",
     "property.type": "color",
     "recentFiles": [
-        "core/src/test/resources/maps/test.tmx",
         "assets/maps/test.tmx",
         "assets/maps/tileset.tsx",
+        "core/src/test/resources/maps/test.tmx",
         "assets/maps/objects.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
