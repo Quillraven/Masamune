@@ -79,14 +79,13 @@ class TiledService(
         val tile = tiledObj.tile
         val x = tiledObj.x * UNIT_SCALE
         val y = tiledObj.y * UNIT_SCALE
-        val physicWorld = world.inject<PhysicWorld>()
 
         world.entity {
             configureTiled(it, tiledObj, tile)
             val texRegionSize = configureGraphic(it, tile)
             it += Transform(position = vec3(x, y, 0f), size = texRegionSize)
             configureMove(it, tile)
-            configurePhysic(it, tile, physicWorld, x, y)
+            configurePhysic(it, tile, world, x, y)
 
             if (mapObject.name == "Player") {
                 configurePlayer(it)
@@ -143,7 +142,7 @@ class TiledService(
     private fun EntityCreateContext.configurePhysic(
         entity: Entity,
         tile: TiledMapTile,
-        physicWorld: PhysicWorld,
+        world: World,
         objX: Float,
         objY: Float
     ) {
@@ -156,6 +155,7 @@ class TiledService(
             gdxError("Physic object without defined 'bodyType' for tile ${tile.id}")
         }
 
+        val physicWorld = world.inject<PhysicWorld>()
         val fixtureDefs = tile.objects.map(::fixtureDefOf)
         val body = physicWorld.body(BodyType.valueOf(bodyTypeStr)) {
             position.set(objX, objY)
