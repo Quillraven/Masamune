@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
+import com.badlogic.gdx.maps.objects.PolygonMapObject
+import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
@@ -13,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
+import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.CircleShape
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
@@ -34,6 +37,8 @@ import ktx.log.logger
 import ktx.math.*
 import ktx.tiled.id
 import ktx.tiled.isEmpty
+import ktx.tiled.x
+import ktx.tiled.y
 import kotlin.system.measureTimeMillis
 
 class TiledService(
@@ -173,8 +178,8 @@ class TiledService(
         val fixtureDef = when (mapObject) {
             is RectangleMapObject -> rectangleFixtureDef(mapObject)
             is EllipseMapObject -> ellipseFixtureDef(mapObject)
-            //is PolygonMapObject -> polygonFixtureDef(mapObject)
-            //is PolylineMapObject -> polylineFixtureDef(mapObject)
+            is PolygonMapObject -> polygonFixtureDef(mapObject)
+            is PolylineMapObject -> polylineFixtureDef(mapObject)
             else -> gdxError("Unsupported MapObject $mapObject")
         }
 
@@ -229,6 +234,41 @@ class TiledService(
             FixtureDef().apply {
                 shape = PolygonShape().apply {
                     set(vertices)
+                }
+            }
+        }
+    }
+
+    private fun polylineFixtureDef(mapObject: PolylineMapObject): FixtureDef {
+        return polygonFixtureDef(mapObject.x, mapObject.y, mapObject.polyline.vertices, false)
+    }
+
+    private fun polygonFixtureDef(mapObject: PolygonMapObject): FixtureDef {
+        return polygonFixtureDef(mapObject.x, mapObject.y, mapObject.polygon.vertices, true)
+    }
+
+    private fun polygonFixtureDef(
+        polyX: Float,
+        polyY: Float,
+        polyVertices: FloatArray,
+        loop: Boolean,
+    ): FixtureDef {
+        val x = polyX * UNIT_SCALE
+        val y = polyY * UNIT_SCALE
+        val vertices = FloatArray(polyVertices.size) { vertexIdx ->
+            if (vertexIdx % 2 == 0) {
+                x + polyVertices[vertexIdx] * UNIT_SCALE
+            } else {
+                y + polyVertices[vertexIdx] * UNIT_SCALE
+            }
+        }
+
+        return FixtureDef().apply {
+            shape = ChainShape().apply {
+                if (loop) {
+                    createLoop(vertices)
+                } else {
+                    createChain(vertices)
                 }
             }
         }
