@@ -55,7 +55,7 @@
                     "name": "bodyType",
                     "propertyType": "BodyType",
                     "type": "string",
-                    "value": "DynamicBody"
+                    "value": "UNDEFINED"
                 },
                 {
                     "name": "color",
