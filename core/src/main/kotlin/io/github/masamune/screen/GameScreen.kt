@@ -20,8 +20,8 @@ class GameScreen(
     private val masamune: Masamune,
     private val batch: Batch = masamune.serviceLocator.batch,
     private val inputProcessor: InputMultiplexer = masamune.inputProcessor,
-    private val eventService: EventService = masamune.serviceLocator.eventService,
-    private val tiledService: TiledService = masamune.serviceLocator.tiledService,
+    private val eventService: EventService = masamune.serviceLocator.event,
+    private val tiledService: TiledService = masamune.serviceLocator.tiled,
 ) : KtxScreen {
     // game view
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)

@@ -10,14 +10,14 @@ import ktx.assets.disposeSafely
 
 class ServiceLocator(
     val batch: Batch = SpriteBatch(),
-    val assetService: AssetService = AssetService(),
-    val eventService: EventService = EventService(),
-    val tiledService: TiledService = TiledService(assetService, eventService),
+    val asset: AssetService = AssetService(),
+    val event: EventService = EventService(),
+    val tiled: TiledService = TiledService(asset, event),
 ) : Disposable {
 
     override fun dispose() {
         batch.disposeSafely()
-        assetService.disposeSafely()
+        asset.disposeSafely()
     }
 
 }
