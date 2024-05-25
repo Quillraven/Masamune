@@ -1,16 +1,19 @@
 package io.github.masamune.screen
 
+import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.event.EventService
-import io.github.masamune.system.AnimationSystem
-import io.github.masamune.system.RenderSystem
+import io.github.masamune.input.KeyboardController
+import io.github.masamune.system.*
 import io.github.masamune.tiledmap.TiledService
 import ktx.app.KtxScreen
+import ktx.box2d.createWorld
 import ktx.log.logger
 
 class GameScreen(
@@ -23,6 +26,11 @@ class GameScreen(
     // game view
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
 
+    // physic world
+    private val physicWorld = createWorld(Vector2.Zero, true).apply {
+        autoClearForces = false
+    }
+
     // ecs world
     private val world = gameWorld()
 
@@ -30,11 +38,16 @@ class GameScreen(
         injectables {
             add(batch)
             add(gameViewport)
+            add(physicWorld)
         }
 
         systems {
+            add(MoveSystem())
+            add(PhysicSystem())
+            add(CameraSystem())
             add(AnimationSystem())
             add(RenderSystem())
+            add(DebugPhysicRenderSystem())
         }
     }
 

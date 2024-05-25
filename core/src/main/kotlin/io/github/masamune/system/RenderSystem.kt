@@ -81,6 +81,8 @@ class RenderSystem(
                     activeLayers += layer
                 }
             }
+
+            else -> Unit
         }
     }
 

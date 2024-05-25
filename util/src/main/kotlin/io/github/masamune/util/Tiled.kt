@@ -14,11 +14,13 @@ data class Member(
     val kotlinType: String = when (type) {
         "string", "color" -> "String"
         "bool" -> "Boolean"
+        "float" -> "Float"
         else -> error("Unsupported type: $type")
     }
 
     val kotlinValue: String = when (type) {
         "string", "color" -> "\"${value.content}\""
+        "float" -> "${value.content}f"
         else -> value.content
     }
 }

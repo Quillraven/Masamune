@@ -23,6 +23,19 @@
             "valuesAsFlags": false
         },
         {
+            "id": 5,
+            "name": "BodyType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "UNDEFINED",
+                "StaticBody",
+                "KinematicBody",
+                "DynamicBody"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 2,
@@ -39,6 +52,12 @@
                     "value": ""
                 },
                 {
+                    "name": "bodyType",
+                    "propertyType": "BodyType",
+                    "type": "string",
+                    "value": "DynamicBody"
+                },
+                {
                     "name": "color",
                     "type": "color",
                     "value": "#ffffffff"
@@ -53,6 +72,11 @@
                     "propertyType": "MapObjectType",
                     "type": "string",
                     "value": "UNDEFINED"
+                },
+                {
+                    "name": "speed",
+                    "type": "float",
+                    "value": 0
                 }
             ],
             "name": "MapObject",

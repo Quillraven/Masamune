@@ -6,19 +6,19 @@
     "activeFile": "assets/maps/objects.tsx",
     "expandedProjectPaths": [
         "core/src/test/resources",
-        ".",
         "assets",
-        "core/src",
-        "core",
         "assets/maps",
+        "core/src/test/resources/maps",
+        "core",
+        ".",
         "core/src/test",
-        "core/src/test/resources/maps"
+        "core/src"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 1,
-            "scaleInEditor": 3
+            "scaleInEditor": 2
         },
         "assets/maps/test.tmx": {
             "scale": 7.19625,
@@ -30,8 +30,16 @@
         },
         "assets/maps/tileset.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 2,
-            "scaleInEditor": 3
+            "scaleInDock": 3,
+            "scaleInEditor": 2
+        },
+        "assets/maps/village.tmx": {
+            "scale": 4,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 201.875,
+                "y": 153.625
+            }
         },
         "core/src/test/resources/maps/objects.tsx": {
             "scaleInDock": 1
@@ -58,17 +66,18 @@
     "map.tileWidth": 16,
     "map.width": 20,
     "openFiles": [
-        "assets/maps/test.tmx",
         "assets/maps/tileset.tsx",
-        "assets/maps/objects.tsx"
+        "assets/maps/objects.tsx",
+        "assets/maps/village.tmx"
     ],
     "project": "masamune-tiled.tiled-project",
     "property.type": "color",
     "recentFiles": [
-        "assets/maps/test.tmx",
+        "assets/maps/village.tmx",
         "assets/maps/tileset.tsx",
-        "core/src/test/resources/maps/test.tmx",
-        "assets/maps/objects.tsx"
+        "assets/maps/objects.tsx",
+        "assets/maps/test.tmx",
+        "core/src/test/resources/maps/test.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.margin": 4,

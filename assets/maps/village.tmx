@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="2">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="3">
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="4097" source="objects.tsx"/>
  <layer id="1" name="ground" width="20" height="20">
@@ -24,6 +24,7 @@
  </layer>
  <objectgroup id="6" name="objects">
   <object id="1" name="Player" gid="4097" x="112" y="160" width="16" height="16"/>
+  <object id="2" gid="4098" x="128" y="128" width="48" height="48"/>
  </objectgroup>
  <layer id="5" name="foreground" width="20" height="20">
   <data encoding="base64" compression="zlib">

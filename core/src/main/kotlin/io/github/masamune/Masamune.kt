@@ -2,13 +2,17 @@ package io.github.masamune
 
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.physics.box2d.World
 import io.github.masamune.screen.LoadingScreen
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
 import ktx.log.logger
+
+typealias PhysicWorld = World
 
 class Masamune : KtxGame<KtxScreen>() {
 

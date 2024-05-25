@@ -11,6 +11,9 @@ val TiledMapTile.atlas: String
 val TiledMapTile.atlasRegionKey: String
     get() = this.property<String>("atlasRegionKey")
 
+val TiledMapTile.bodyType: String
+    get() = this.property<String>("bodyType", "UNDEFINED")
+
 val TiledMapTile.color: String
     get() = this.property<String>("color", "#ffffffff")
 
@@ -19,5 +22,8 @@ val TiledMapTile.hasAnimation: Boolean
 
 val TiledMapTile.objType: String
     get() = this.property<String>("objType", "UNDEFINED")
+
+val TiledMapTile.speed: Float
+    get() = this.property<Float>("speed", 0f)
 
 
