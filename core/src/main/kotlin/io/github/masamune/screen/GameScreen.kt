@@ -16,6 +16,7 @@ import ktx.log.logger
 class GameScreen(
     private val masamune: Masamune,
     private val batch: Batch = masamune.serviceLocator.batch,
+    private val inputProcessor: InputMultiplexer = masamune.inputProcessor,
     private val eventService: EventService = masamune.serviceLocator.eventService,
     private val tiledService: TiledService = masamune.serviceLocator.tiledService,
 ) : KtxScreen {
@@ -38,6 +39,8 @@ class GameScreen(
     }
 
     override fun show() {
+        inputProcessor.clear()
+        inputProcessor.addProcessor(KeyboardController(eventService))
         eventService += world
         tiledService.setMap(TiledMapAsset.VILLAGE, world)
     }

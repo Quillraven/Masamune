@@ -13,9 +13,12 @@ import ktx.log.logger
 class Masamune : KtxGame<KtxScreen>() {
 
     val serviceLocator: ServiceLocator by lazy { ServiceLocator() }
+    val inputProcessor: InputMultiplexer by lazy { InputMultiplexer() }
 
     override fun create() {
         Gdx.app.logLevel = Application.LOG_DEBUG
+
+        Gdx.input.inputProcessor = inputProcessor
 
         addScreen(LoadingScreen(this))
         setScreen<LoadingScreen>()
