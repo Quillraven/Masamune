@@ -23,8 +23,8 @@ data class Transform(
         return when {
             position.z > other.position.z -> 1
             position.z < other.position.z -> -1
-            position.y > other.position.y -> 1
-            position.y < other.position.y -> -1
+            position.y > other.position.y -> -1
+            position.y < other.position.y -> 1
             position.x > other.position.x -> 1
             position.x < other.position.x -> -1
             else -> 0
