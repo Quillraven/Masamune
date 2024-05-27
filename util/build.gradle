@@ -11,10 +11,10 @@ dependencies {
 
 java.sourceCompatibility = 11
 
-tasks.register('genTiledEnums', JavaExec) {
+tasks.register('genTiledEnumsAndExtensions', JavaExec) {
   setGroup("masamune")
-  setDescription("Runs the specified Kotlin main class")
+  setDescription("Generates enums and extension functions from Tiled project file.")
 
-  mainClass.set("io.github.masamune.util.TiledKt")
+  mainClass.set("io.github.masamune.util.TiledGeneratorKt")
   setClasspath(sourceSets.main.runtimeClasspath)
 }
