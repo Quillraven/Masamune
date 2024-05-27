@@ -5,25 +5,17 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
-import com.badlogic.gdx.maps.objects.EllipseMapObject
-import com.badlogic.gdx.maps.objects.PolygonMapObject
-import com.badlogic.gdx.maps.objects.PolylineMapObject
-import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
-import com.badlogic.gdx.physics.box2d.ChainShape
-import com.badlogic.gdx.physics.box2d.CircleShape
-import com.badlogic.gdx.physics.box2d.FixtureDef
-import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityCreateContext
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
-import io.github.masamune.PhysicWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
@@ -32,13 +24,10 @@ import io.github.masamune.component.Animation.Companion.DEFAULT_FRAME_DURATION
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MapChangeEvent
 import ktx.app.gdxError
-import ktx.box2d.body
 import ktx.log.logger
-import ktx.math.*
+import ktx.math.vec3
 import ktx.tiled.id
 import ktx.tiled.isEmpty
-import ktx.tiled.x
-import ktx.tiled.y
 import kotlin.system.measureTimeMillis
 
 class TiledService(
@@ -60,8 +49,31 @@ class TiledService(
     }
 
     fun setMap(tiledMap: TiledMap, world: World) {
+        loadGroundCollision(tiledMap, world)
         loadObjects(tiledMap, world)
         eventService.fire(MapChangeEvent(tiledMap))
+    }
+
+    private fun TiledMap.forEachCell(action: (cell: Cell, cellX: Int, cellY: Int) -> Unit) {
+        layers.filterIsInstance<TiledMapTileLayer>()
+            .forEach { layer ->
+                for (x in 0 until layer.width) {
+                    for (y in 0 until layer.height) {
+                        layer.getCell(x, y)?.let { action(it, x, y) }
+                    }
+                }
+            }
+    }
+
+    private fun loadGroundCollision(tiledMap: TiledMap, world: World) {
+        tiledMap.forEachCell { cell, cellX, cellY ->
+            if (cell.tile.objects.isEmpty()) {
+                // no collision objects -> nothing to do
+                return@forEachCell
+            }
+
+            cell.tile.toBody(world, cellX.toFloat(), cellY.toFloat(), BodyType.StaticBody)
+        }
     }
 
     private fun loadObjects(tiledMap: TiledMap, world: World) {
@@ -154,124 +166,15 @@ class TiledService(
         if (bodyTypeStr == "UNDEFINED") {
             gdxError("Physic object without defined 'bodyType' for tile ${tile.id}")
         }
+        val bodyType = BodyType.valueOf(bodyTypeStr)
 
-        val physicWorld = world.inject<PhysicWorld>()
-        val fixtureDefs = tile.objects.map(::fixtureDefOf)
-        val body = physicWorld.body(BodyType.valueOf(bodyTypeStr)) {
-            position.set(objX, objY)
-            fixedRotation = true
-            userData = entity
-        }
-        fixtureDefs.forEach {
-            body.createFixture(it)
-            it.shape.dispose()
-        }
+        val body = tile.toBody(world, objX, objY, bodyType, entity)
         entity += Physic(body)
     }
 
     private fun EntityCreateContext.configurePlayer(entity: Entity) {
         log.debug { "Configuring player" }
         entity += listOf(Tag.PLAYER, Tag.CAMERA_FOCUS)
-    }
-
-    private fun fixtureDefOf(mapObject: MapObject): FixtureDef {
-        val fixtureDef = when (mapObject) {
-            is RectangleMapObject -> rectangleFixtureDef(mapObject)
-            is EllipseMapObject -> ellipseFixtureDef(mapObject)
-            is PolygonMapObject -> polygonFixtureDef(mapObject)
-            is PolylineMapObject -> polylineFixtureDef(mapObject)
-            else -> gdxError("Unsupported MapObject $mapObject")
-        }
-
-        return fixtureDef
-    }
-
-    // box is centered around body position in Box2D, but we want to have it aligned in a way
-    // that the body position is the bottom left corner of the box.
-    // That's why we use a 'boxOffset' below.
-    private fun rectangleFixtureDef(mapObject: RectangleMapObject): FixtureDef {
-        val (rectX, rectY, rectW, rectH) = mapObject.rectangle
-        val boxX = rectX * UNIT_SCALE
-        val boxY = rectY * UNIT_SCALE
-
-        val boxW = rectW * UNIT_SCALE * 0.5f
-        val boxH = rectH * UNIT_SCALE * 0.5f
-        return FixtureDef().apply {
-            shape = PolygonShape().apply {
-                setAsBox(boxW, boxH, vec2(boxX + boxW, boxY + boxH), 0f)
-            }
-        }
-    }
-
-    private fun ellipseFixtureDef(mapObject: EllipseMapObject): FixtureDef {
-        val (x, y, w, h) = mapObject.ellipse
-        val ellipseX = x * UNIT_SCALE
-        val ellipseY = y * UNIT_SCALE
-        val ellipseW = w * UNIT_SCALE / 2f
-        val ellipseH = h * UNIT_SCALE / 2f
-
-        return if (MathUtils.isEqual(ellipseW, ellipseH, 0.1f)) {
-            // width and height are equal -> return a circle shape
-            FixtureDef().apply {
-                shape = CircleShape().apply {
-                    position = vec2(ellipseX + ellipseW, ellipseY + ellipseH)
-                    radius = ellipseW
-                }
-            }
-        } else {
-            // width and height are not equal -> return an ellipse shape (=polygon with 'numVertices' vertices)
-            // PolygonShape only supports 8 vertices
-            // ChainShape supports more but does not properly collide in some scenarios
-            val numVertices = 8
-            val angleStep = MathUtils.PI2 / numVertices
-            val vertices = Array(numVertices) { vertexIdx ->
-                val angle = vertexIdx * angleStep
-                val offsetX = ellipseW * MathUtils.cos(angle)
-                val offsetY = ellipseH * MathUtils.sin(angle)
-                vec2(ellipseX + ellipseW + offsetX, ellipseY + ellipseH + offsetY)
-            }
-
-            FixtureDef().apply {
-                shape = PolygonShape().apply {
-                    set(vertices)
-                }
-            }
-        }
-    }
-
-    private fun polylineFixtureDef(mapObject: PolylineMapObject): FixtureDef {
-        return polygonFixtureDef(mapObject.x, mapObject.y, mapObject.polyline.vertices, false)
-    }
-
-    private fun polygonFixtureDef(mapObject: PolygonMapObject): FixtureDef {
-        return polygonFixtureDef(mapObject.x, mapObject.y, mapObject.polygon.vertices, true)
-    }
-
-    private fun polygonFixtureDef(
-        polyX: Float,
-        polyY: Float,
-        polyVertices: FloatArray,
-        loop: Boolean,
-    ): FixtureDef {
-        val x = polyX * UNIT_SCALE
-        val y = polyY * UNIT_SCALE
-        val vertices = FloatArray(polyVertices.size) { vertexIdx ->
-            if (vertexIdx % 2 == 0) {
-                x + polyVertices[vertexIdx] * UNIT_SCALE
-            } else {
-                y + polyVertices[vertexIdx] * UNIT_SCALE
-            }
-        }
-
-        return FixtureDef().apply {
-            shape = ChainShape().apply {
-                if (loop) {
-                    createLoop(vertices)
-                } else {
-                    createChain(vertices)
-                }
-            }
-        }
     }
 
     companion object {
