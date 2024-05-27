@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
@@ -19,12 +21,14 @@ import io.github.masamune.component.Tiled
 import io.github.masamune.component.Transform
 import io.github.masamune.event.EventService
 import io.github.masamune.system.AnimationSystem
+import io.github.masamune.system.DebugPhysicRenderSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.tiledmap.TiledService
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
+import ktx.box2d.createWorld
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -48,11 +52,13 @@ class TiledTest : KtxApplicationAdapter {
         injectables {
             add(batch)
             add(gameViewport)
+            add(createWorld(gravity = Vector2.Zero))
         }
 
         systems {
-            add(RenderSystem())
             add(AnimationSystem())
+            add(RenderSystem())
+            add(DebugPhysicRenderSystem())
         }
     }
 
@@ -76,6 +82,8 @@ class TiledTest : KtxApplicationAdapter {
                 }
             }
         }
+
+        (gameViewport.camera as OrthographicCamera).zoom = 2f
     }
 
     override fun resize(width: Int, height: Int) {
