@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Body
@@ -17,11 +18,34 @@ import io.github.masamune.PhysicWorld
 import ktx.app.gdxError
 import ktx.box2d.FixtureDefinition
 import ktx.box2d.body
+import ktx.box2d.box
 import ktx.collections.GdxArray
 import ktx.math.*
-import ktx.tiled.isEmpty
-import ktx.tiled.x
-import ktx.tiled.y
+import ktx.tiled.*
+
+fun TiledMap.spawnBoundaryBodies(world: World) {
+    // create four boxes for the map boundary (left, right, bottom and top edge)
+    val physicWorld = world.inject<PhysicWorld>()
+    val mapW = width.toFloat()
+    val mapH = height.toFloat()
+    val halfW = width * 0.5f
+    val halfH = height * 0.5f
+    val boxThickness = 1f
+
+    physicWorld.body(BodyType.StaticBody) {
+        position.set(0f, 0f)
+
+        // left edge
+        box(boxThickness, mapH, vec2(-boxThickness * 0.5f, halfH))
+        // right edge
+        box(boxThickness, mapH, vec2(mapW + boxThickness * 0.5f, halfH))
+
+        // bottom edge
+        box(mapW, boxThickness, vec2(halfW, -boxThickness * 0.5f))
+        // top edge
+        box(mapW, boxThickness, vec2(halfW, mapH + boxThickness * 0.5f))
+    }
+}
 
 fun TiledMapTile.toBody(
     world: World,

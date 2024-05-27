@@ -49,6 +49,7 @@ class TiledService(
     }
 
     fun setMap(tiledMap: TiledMap, world: World) {
+        tiledMap.spawnBoundaryBodies(world)
         loadGroundCollision(tiledMap, world)
         loadObjects(tiledMap, world)
         eventService.fire(MapChangeEvent(tiledMap))
