@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-up" width="9" height="9" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="4">
+ <tileset firstgid="1" source="tileset.tsx"/>
+ <tileset firstgid="4097" source="objects.tsx"/>
+ <objectgroup id="3" name="objects">
+  <object id="3" name="Player" gid="4099" x="64" y="80" width="16" height="16"/>
+ </objectgroup>
+</map>
