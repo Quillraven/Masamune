@@ -39,7 +39,7 @@ fun main() {
     })
 }
 
-class TiledTest : KtxApplicationAdapter {
+private class TiledTest : KtxApplicationAdapter {
     private val batch: Batch by lazy { SpriteBatch() }
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
     private val world by lazy { gameWorld() }

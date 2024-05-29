@@ -36,7 +36,7 @@ fun main() {
     })
 }
 
-class RenderTest : KtxApplicationAdapter {
+private class RenderTest : KtxApplicationAdapter {
 
     private val batch: Batch by lazy { SpriteBatch() }
     private val texture by lazy { Texture("hero.png".toClasspathFile()) }
