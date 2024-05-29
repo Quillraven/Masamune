@@ -32,6 +32,13 @@ import ktx.box2d.createWorld
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+/**
+ * Test for [TiledService].
+ * It loads a map with background, object and foreground layer.
+ * Additionally, it creates map boundary rectangle physic shapes around
+ * the edges of the map.
+ */
+
 fun main() {
     Lwjgl3Application(TiledTest(), Lwjgl3ApplicationConfiguration().apply {
         setTitle("Tiled Test")

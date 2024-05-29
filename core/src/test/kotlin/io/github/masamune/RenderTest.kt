@@ -29,6 +29,23 @@ import ktx.graphics.color
 import ktx.math.vec2
 import ktx.math.vec3
 
+/**
+ * Test for [RenderSystem] and [AnimationSystem].
+ *
+ * Bottom left corner shows graphics with default size, bigger size and scaling greater than 1f.
+ * The sized and scaled version must be rendered identically. Scaling is done from the center of the graphic.
+ *
+ * Above those graphics there are rotated versions. They must look the same as before but with a 90° rotation.
+ *
+ * Above those graphics are animated versions of a special effect.
+ *
+ * Above those graphics are tinted versions of a graphic (red, green, transparent blue).
+ *
+ * The center of the screen shows a permanently scaling graphic and a permanently rotating graphic.
+ *
+ * Finally, at the bottom center you will see the combination of a graphic + animated version with and without scaling.
+ */
+
 fun main() {
     Lwjgl3Application(RenderTest(), Lwjgl3ApplicationConfiguration().apply {
         setTitle("Render Test")

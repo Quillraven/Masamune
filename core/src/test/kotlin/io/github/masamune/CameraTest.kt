@@ -31,6 +31,14 @@ import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 import ktx.math.vec2
 
+/**
+ * Test for [CameraSystem].
+ * Camera must stay within map boundaries unless camera viewport is too big.
+ * Camera must stay focused on player entity.
+ *
+ * Use mousewheel to zoom and touch/click to teleport the player entity.
+ */
+
 fun main() {
     Lwjgl3Application(CameraTest(), Lwjgl3ApplicationConfiguration().apply {
         setTitle("Camera Test (click to move; mousewheel to zoom)")
