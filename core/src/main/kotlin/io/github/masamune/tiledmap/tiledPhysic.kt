@@ -36,14 +36,14 @@ fun TiledMap.spawnBoundaryBodies(world: World) {
         position.set(0f, 0f)
 
         // left edge
-        box(boxThickness, mapH, vec2(-boxThickness * 0.5f, halfH))
+        box(boxThickness, mapH, vec2(-boxThickness * 0.5f, halfH)) { friction = 0f }
         // right edge
-        box(boxThickness, mapH, vec2(mapW + boxThickness * 0.5f, halfH))
+        box(boxThickness, mapH, vec2(mapW + boxThickness * 0.5f, halfH)) { friction = 0f }
 
         // bottom edge
-        box(mapW, boxThickness, vec2(halfW, -boxThickness * 0.5f))
+        box(mapW, boxThickness, vec2(halfW, -boxThickness * 0.5f)) { friction = 0f }
         // top edge
-        box(mapW, boxThickness, vec2(halfW, mapH + boxThickness * 0.5f))
+        box(mapW, boxThickness, vec2(halfW, mapH + boxThickness * 0.5f)) { friction = 0f }
     }
 }
 
@@ -97,6 +97,7 @@ private fun rectangleFixtureDef(mapObject: RectangleMapObject): FixtureDefinitio
         shape = PolygonShape().apply {
             setAsBox(boxW, boxH, vec2(boxX + boxW, boxY + boxH), 0f)
         }
+        friction = 0f
     }
 }
 
@@ -114,6 +115,7 @@ private fun ellipseFixtureDef(mapObject: EllipseMapObject): FixtureDefinition {
                 position = vec2(ellipseX + ellipseW, ellipseY + ellipseH)
                 radius = ellipseW
             }
+            friction = 0f
         }
     } else {
         // width and height are not equal -> return an ellipse shape (=polygon with 'numVertices' vertices)
@@ -132,6 +134,7 @@ private fun ellipseFixtureDef(mapObject: EllipseMapObject): FixtureDefinition {
             shape = PolygonShape().apply {
                 set(vertices)
             }
+            friction = 0f
         }
     }
 }
@@ -168,5 +171,6 @@ private fun polygonFixtureDef(
                 createChain(vertices)
             }
         }
+        friction = 0f
     }
 }
