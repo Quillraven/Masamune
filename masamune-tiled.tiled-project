@@ -38,6 +38,45 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
+            "id": 6,
+            "members": [
+                {
+                    "name": "density",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "friction",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "isSensor",
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "name": "restitution",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "userData",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "FixtureDefinition",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 2,
             "members": [
                 {
@@ -93,7 +132,11 @@
             "type": "enum",
             "values": [
                 "HERO",
-                "UNDEFINED"
+                "UNDEFINED",
+                "ELDER",
+                "FLOWER_GIRL",
+                "MERCHANT",
+                "SMITH"
             ],
             "valuesAsFlags": false
         }
