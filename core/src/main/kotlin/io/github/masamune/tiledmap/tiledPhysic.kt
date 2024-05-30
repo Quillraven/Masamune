@@ -1,5 +1,6 @@
 package io.github.masamune.tiledmap
 
+import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
@@ -74,8 +75,8 @@ fun TiledMapTile.toFixtureDefs(): GdxArray<FixtureDefinition> {
             when (mapObject) {
                 is RectangleMapObject -> rectangleFixtureDef(mapObject)
                 is EllipseMapObject -> ellipseFixtureDef(mapObject)
-                is PolygonMapObject -> polygonFixtureDef(mapObject)
-                is PolylineMapObject -> polylineFixtureDef(mapObject)
+                is PolygonMapObject -> polygonFixtureDef(mapObject, mapObject.polygon.vertices)
+                is PolylineMapObject -> polygonFixtureDef(mapObject, mapObject.polyline.vertices)
                 else -> gdxError("Unsupported MapObject $mapObject")
             }
         )
@@ -97,7 +98,11 @@ private fun rectangleFixtureDef(mapObject: RectangleMapObject): FixtureDefinitio
         shape = PolygonShape().apply {
             setAsBox(boxW, boxH, vec2(boxX + boxW, boxY + boxH), 0f)
         }
-        friction = 0f
+        friction = mapObject.friction
+        restitution = mapObject.restitution
+        density = mapObject.density
+        isSensor = mapObject.isSensor
+        userData = mapObject.userData
     }
 }
 
@@ -115,7 +120,11 @@ private fun ellipseFixtureDef(mapObject: EllipseMapObject): FixtureDefinition {
                 position = vec2(ellipseX + ellipseW, ellipseY + ellipseH)
                 radius = ellipseW
             }
-            friction = 0f
+            friction = mapObject.friction
+            restitution = mapObject.restitution
+            density = mapObject.density
+            isSensor = mapObject.isSensor
+            userData = mapObject.userData
         }
     } else {
         // width and height are not equal -> return an ellipse shape (=polygon with 'numVertices' vertices)
@@ -134,27 +143,21 @@ private fun ellipseFixtureDef(mapObject: EllipseMapObject): FixtureDefinition {
             shape = PolygonShape().apply {
                 set(vertices)
             }
-            friction = 0f
+            friction = mapObject.friction
+            restitution = mapObject.restitution
+            density = mapObject.density
+            isSensor = mapObject.isSensor
+            userData = mapObject.userData
         }
     }
 }
 
-private fun polylineFixtureDef(mapObject: PolylineMapObject): FixtureDefinition {
-    return polygonFixtureDef(mapObject.x, mapObject.y, mapObject.polyline.vertices, false)
-}
-
-private fun polygonFixtureDef(mapObject: PolygonMapObject): FixtureDefinition {
-    return polygonFixtureDef(mapObject.x, mapObject.y, mapObject.polygon.vertices, true)
-}
-
 private fun polygonFixtureDef(
-    polyX: Float,
-    polyY: Float,
+    mapObject: MapObject,
     polyVertices: FloatArray,
-    loop: Boolean,
 ): FixtureDefinition {
-    val x = polyX * UNIT_SCALE
-    val y = polyY * UNIT_SCALE
+    val x = mapObject.x * UNIT_SCALE
+    val y = mapObject.y * UNIT_SCALE
     val vertices = FloatArray(polyVertices.size) { vertexIdx ->
         if (vertexIdx % 2 == 0) {
             x + polyVertices[vertexIdx] * UNIT_SCALE
@@ -165,12 +168,16 @@ private fun polygonFixtureDef(
 
     return FixtureDefinition().apply {
         shape = ChainShape().apply {
-            if (loop) {
+            if (mapObject is PolygonMapObject) {
                 createLoop(vertices)
             } else {
                 createChain(vertices)
             }
         }
-        friction = 0f
+        friction = mapObject.friction
+        restitution = mapObject.restitution
+        density = mapObject.density
+        isSensor = mapObject.isSensor
+        userData = mapObject.userData
     }
 }
