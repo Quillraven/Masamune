@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
+import io.github.masamune.PhysicContactHandler
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
@@ -44,6 +45,7 @@ class GameScreen(
         systems {
             add(MoveSystem())
             add(PhysicSystem())
+            add(PlayerInteractSystem())
             add(CameraSystem())
             add(AnimationSystem())
             add(RenderSystem())
@@ -54,11 +56,13 @@ class GameScreen(
         inputProcessor.clear()
         inputProcessor.addProcessor(KeyboardController(eventService))
         eventService += world
+        physicWorld.setContactListener(PhysicContactHandler(eventService, world))
         tiledService.setMap(TiledMapAsset.VILLAGE, world)
     }
 
     override fun hide() {
         eventService -= world
+        physicWorld.setContactListener(null)
     }
 
     override fun resize(width: Int, height: Int) {
