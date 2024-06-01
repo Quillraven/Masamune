@@ -14,9 +14,10 @@ import ktx.log.logger
 
 typealias PhysicWorld = World
 
-class Masamune : KtxGame<KtxScreen>() {
+class Masamune(
+    private val serviceLocator: ServiceLocator = LazyServiceLocator(),
+) : KtxGame<KtxScreen>(), ServiceLocator by serviceLocator {
 
-    val serviceLocator: ServiceLocator by lazy { ServiceLocator() }
     val inputProcessor: InputMultiplexer by lazy { InputMultiplexer() }
 
     override fun create() {

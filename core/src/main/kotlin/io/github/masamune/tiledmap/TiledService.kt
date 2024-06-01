@@ -31,8 +31,8 @@ import ktx.tiled.isEmpty
 import kotlin.system.measureTimeMillis
 
 class TiledService(
-    private val assetService: AssetService,
-    private val eventService: EventService,
+    val assetService: AssetService,
+    val eventService: EventService,
 ) {
     private var currentMap: TiledMapAsset? = null
 

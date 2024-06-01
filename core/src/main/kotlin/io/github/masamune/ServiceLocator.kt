@@ -8,12 +8,26 @@ import io.github.masamune.event.EventService
 import io.github.masamune.tiledmap.TiledService
 import ktx.assets.disposeSafely
 
-class ServiceLocator(
-    val batch: Batch = SpriteBatch(),
-    val asset: AssetService = AssetService(),
-    val event: EventService = EventService(),
-    val tiled: TiledService = TiledService(asset, event),
-) : Disposable {
+interface ServiceLocator : Disposable {
+    val batch: Batch
+    val asset: AssetService
+    val event: EventService
+    val tiled: TiledService
+}
+
+class LazyServiceLocator(
+    batchInitializer: () -> Batch = { SpriteBatch() },
+    assetServiceInitializer: () -> AssetService = { AssetService() },
+    eventServiceInitializer: () -> EventService = { EventService() },
+    tiledServiceInitializer: (AssetService, EventService) -> TiledService = { assetService, eventService ->
+        TiledService(assetService, eventService)
+    },
+) : ServiceLocator {
+
+    override val batch: Batch by lazy(batchInitializer)
+    override val asset: AssetService by lazy(assetServiceInitializer)
+    override val event: EventService by lazy(eventServiceInitializer)
+    override val tiled: TiledService by lazy { tiledServiceInitializer(asset, event) }
 
     override fun dispose() {
         batch.disposeSafely()

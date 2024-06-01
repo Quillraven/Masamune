@@ -19,10 +19,10 @@ import ktx.log.logger
 
 class GameScreen(
     private val masamune: Masamune,
-    private val batch: Batch = masamune.serviceLocator.batch,
+    private val batch: Batch = masamune.batch,
     private val inputProcessor: InputMultiplexer = masamune.inputProcessor,
-    private val eventService: EventService = masamune.serviceLocator.event,
-    private val tiledService: TiledService = masamune.serviceLocator.tiled,
+    private val eventService: EventService = masamune.event,
+    private val tiledService: TiledService = masamune.tiled,
 ) : KtxScreen {
     // game view
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)

@@ -8,7 +8,7 @@ import ktx.assets.disposeSafely
 
 class LoadingScreen(
     private val masamune: Masamune,
-    private val assetService: AssetService = masamune.serviceLocator.asset,
+    private val assetService: AssetService = masamune.asset,
 ) : KtxScreen {
 
     private var done = false
