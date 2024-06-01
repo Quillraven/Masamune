@@ -17,6 +17,11 @@ data class Transform(
     var rotation: Float = 0f,
 ) : Component<Transform>, Comparable<Transform> {
 
+    fun centerTo(result: Vector2) {
+        result.x = position.x + size.x * 0.5f
+        result.y = position.y + size.y * 0.5f
+    }
+
     override fun type() = Transform
 
     override fun compareTo(other: Transform): Int {
