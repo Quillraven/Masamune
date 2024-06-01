@@ -15,6 +15,13 @@
    <object id="2" type="FixtureDefinition" x="2" y="13" width="12" height="3">
     <ellipse/>
    </object>
+   <object id="4" type="FixtureDefinition" x="-8" y="-8" width="32" height="32">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="interact"/>
+    </properties>
+    <ellipse/>
+   </object>
   </objectgroup>
  </tile>
  <tile id="1" type="MapObject">
