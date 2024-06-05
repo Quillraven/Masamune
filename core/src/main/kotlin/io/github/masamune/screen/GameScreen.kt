@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.PhysicContactHandler
+import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
@@ -23,6 +24,7 @@ class GameScreen(
     private val inputProcessor: InputMultiplexer = masamune.inputProcessor,
     private val eventService: EventService = masamune.event,
     private val tiledService: TiledService = masamune.tiled,
+    private val shaderService: ShaderService = masamune.shader,
 ) : KtxScreen {
     // game view
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
@@ -40,6 +42,7 @@ class GameScreen(
             add(batch)
             add(gameViewport)
             add(physicWorld)
+            add(shaderService)
         }
 
         systems {
