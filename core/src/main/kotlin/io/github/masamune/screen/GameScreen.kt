@@ -15,6 +15,7 @@ import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.*
 import io.github.masamune.tiledmap.TiledService
 import ktx.app.KtxScreen
+import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 import ktx.log.logger
 
@@ -79,6 +80,7 @@ class GameScreen(
     override fun dispose() {
         log.debug { "Disposing world with '${world.numEntities}' entities" }
         world.dispose()
+        physicWorld.disposeSafely()
     }
 
     companion object {
