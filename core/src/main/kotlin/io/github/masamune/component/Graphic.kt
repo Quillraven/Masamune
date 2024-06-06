@@ -30,9 +30,7 @@ class Graphic(
 
     operator fun component1() = region
 
-    operator fun component2() = regionSize
-
-    operator fun component3() = color
+    operator fun component2() = color
 
     override fun type() = Graphic
 
