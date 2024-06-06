@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
+import io.github.masamune.asset.ShaderService
 import io.github.masamune.event.EventService
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CameraSystem
@@ -57,6 +58,7 @@ private class TiledPhysicTest : KtxApplicationAdapter {
             add(batch)
             add(gameViewport)
             add(createWorld(gravity = Vector2.Zero))
+            add(ShaderService())
         }
 
         systems {

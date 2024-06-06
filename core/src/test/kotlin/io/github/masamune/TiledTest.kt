@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
+import io.github.masamune.asset.ShaderService
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Tiled
@@ -60,6 +61,7 @@ private class TiledTest : KtxApplicationAdapter {
             add(batch)
             add(gameViewport)
             add(createWorld(gravity = Vector2.Zero))
+            add(ShaderService())
         }
 
         systems {

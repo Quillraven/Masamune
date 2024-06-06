@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.configureWorld
+import io.github.masamune.asset.ShaderService
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Transform
@@ -71,6 +72,7 @@ private class RenderTest : KtxApplicationAdapter {
         injectables {
             add(batch)
             add(gameViewport)
+            add(ShaderService())
         }
 
         systems {

@@ -16,6 +16,7 @@ import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
+import io.github.masamune.asset.ShaderService
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Transform
 import io.github.masamune.event.EventService
@@ -81,6 +82,7 @@ class CameraTest : KtxApplicationAdapter {
         injectables {
             add(batch)
             add(gameViewport)
+            add(ShaderService())
             add(createWorld(gravity = Vector2.Zero))
         }
 
