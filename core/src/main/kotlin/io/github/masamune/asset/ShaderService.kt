@@ -1,15 +1,16 @@
 package io.github.masamune.asset
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.utils.Disposable
 import ktx.app.gdxError
 import ktx.assets.disposeSafely
-import ktx.assets.toInternalFile
 import ktx.graphics.use
 
-class ShaderService : Disposable {
+class ShaderService(private val fileHandleResolver: FileHandleResolver = InternalFileHandleResolver()) : Disposable {
 
     private lateinit var outlineShader: ShaderProgram
     private var outlineColorIdx = -1
@@ -20,8 +21,8 @@ class ShaderService : Disposable {
     }
 
     private fun loadShader(vertexFile: String, fragmentFile: String): ShaderProgram {
-        val vertexCode = "shader/$vertexFile".toInternalFile().readString()
-        val fragmentCode = "shader/$fragmentFile".toInternalFile().readString()
+        val vertexCode = fileHandleResolver.resolve("shader/$vertexFile").readString()
+        val fragmentCode = fileHandleResolver.resolve("shader/$fragmentFile").readString()
         val shader = ShaderProgram(vertexCode, fragmentCode)
         if (!shader.isCompiled) {
             gdxError("Could not compile shader $vertexFile/$fragmentFile! Log:\n${shader.log}")
@@ -31,7 +32,8 @@ class ShaderService : Disposable {
 
     fun useOutlineShader(batch: Batch, color: Color, block: () -> Unit) {
         // set outline shader and its uniforms
-        if (batch.shader != outlineShader) {
+        val origShader = batch.shader
+        if (origShader != outlineShader) {
             batch.shader = outlineShader
         }
         outlineShader.use { it.setUniformf(outlineColorIdx, color) }
@@ -40,7 +42,7 @@ class ShaderService : Disposable {
         block()
 
         // reset shader to default
-        batch.shader = null
+        batch.shader = origShader
     }
 
     override fun dispose() {
