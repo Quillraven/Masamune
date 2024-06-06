@@ -7,6 +7,8 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.collection.MutableEntityBag
+import com.github.quillraven.fleks.collection.compareEntity
 import io.github.masamune.component.Interact
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Transform
@@ -24,25 +26,43 @@ class PlayerInteractSystem : IteratingSystem(
 
     private val playerCenter = vec2()
     private val otherCenter = vec2()
+    private val filteredDirectionEntities = MutableEntityBag(4)
+    private val distanceComparator =
+        compareEntity { e1, e2 -> (euclideanDistance(e1).compareTo(euclideanDistance(e2))) }
 
     override fun onTickEntity(entity: Entity) = with(entity[Interact]) {
-        if (entities.isEmpty() || !trigger) {
-            // no entities to interact or interact input button not pressed yet
+        if (nearbyEntities.isEmpty()) {
+            // no entities to interact -> do nothing
+            return@with
+        }
+
+        // tag the closest entity within direction with an OUTLINE tag to render it with an outline
+        entity[Transform].centerTo(playerCenter)
+        filteredDirectionEntities.clear()
+        nearbyEntities.filterTo(filteredDirectionEntities) { other -> withinDirection(other, lastDirection) }
+        filteredDirectionEntities.sort(distanceComparator)
+        val closestEntity: Entity? = filteredDirectionEntities.firstOrNull()
+        if (closestEntity != null && closestEntity != interactEntity) {
+            closestEntity.configure { it += Tag.OUTLINE }
+            if (interactEntity != Entity.NONE) {
+                interactEntity.configure { it -= Tag.OUTLINE }
+            }
+            interactEntity = closestEntity
+        } else if (interactEntity != Entity.NONE && interactEntity !in filteredDirectionEntities) {
+            interactEntity.configure { it -= Tag.OUTLINE }
+            interactEntity = Entity.NONE
+        }
+
+        if (!trigger) {
+            // player did not press interact button yet -> do nothing
             return@with
         }
 
         trigger = false
-        entities.firstOrNull { other -> withinDirection(entity, other, lastDirection) }
-            ?.let {
-                log.debug { "INTERACT" }
-            }
-
-        return@with
     }
 
-    private fun withinDirection(player: Entity, other: Entity, lastPlayerDirection: Vector2): Boolean {
+    private fun withinDirection(other: Entity, lastPlayerDirection: Vector2): Boolean {
         other[Transform].centerTo(otherCenter)
-        player[Transform].centerTo(playerCenter)
         val (dirX, dirY) = lastPlayerDirection
 
         // calculate angle between player and other entities [0..360]
@@ -66,16 +86,29 @@ class PlayerInteractSystem : IteratingSystem(
         return difference <= INTERACT_ANG_TOLERANCE
     }
 
+    private fun euclideanDistance(other: Entity): Float {
+        other[Transform].centerTo(otherCenter)
+        val diffX = otherCenter.x - playerCenter.x
+        val diffY = otherCenter.y - playerCenter.y
+        return diffX * diffX + diffY * diffY
+    }
+
     private fun onPlayerBeginInteract(player: Entity, other: Entity) {
-        val (entities) = player[Interact]
-        entities += other
-        log.debug { "interact begin contact: ${entities.size} entities" }
+        val (nearbyEntities) = player[Interact]
+        nearbyEntities += other
+        log.debug { "interact begin contact: ${nearbyEntities.size} entities" }
     }
 
     private fun onPlayerEndInteract(player: Entity, other: Entity) {
-        val (entities) = player[Interact]
-        entities -= other
-        log.debug { "interact end contact: ${entities.size} entities" }
+        val interactCmp = player[Interact]
+        interactCmp.nearbyEntities -= other
+        if (other has Tag.OUTLINE) {
+            other.configure { it -= Tag.OUTLINE }
+        }
+        if (other == interactCmp.interactEntity) {
+            interactCmp.interactEntity = Entity.NONE
+        }
+        log.debug { "interact end contact: ${interactCmp.nearbyEntities.size} entities" }
     }
 
     override fun onEvent(event: Event) {

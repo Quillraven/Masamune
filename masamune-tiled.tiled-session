@@ -37,9 +37,12 @@
             "scale": 4,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 166.125,
-                "y": 160.625
+                "x": 290.625,
+                "y": 219.375
             }
+        },
+        "core/src/test/resources/maps/interactTestObjects.tsx": {
+            "dynamicWrapping": true
         },
         "core/src/test/resources/maps/objects.tsx": {
             "dynamicWrapping": true,
@@ -68,13 +71,13 @@
     },
     "frame.defaultDuration": 200,
     "last.imagePath": "C:/Users/Simon/IdeaProjects/Masamune/assets/maps/objects",
-    "map.height": 20,
+    "map.height": 10,
     "map.lastUsedFormat": "tmx",
     "map.layerDataFormat": null,
     "map.renderOrder": null,
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 20,
+    "map.width": 10,
     "openFiles": [
         "assets/maps/tileset.tsx",
         "assets/maps/objects.tsx",
