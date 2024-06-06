@@ -70,7 +70,7 @@ class RenderSystem(
 
         batch.drawEntity(graphic, transform, realSize)
         if (entity has Tag.OUTLINE) {
-            shaderService.useOutlineShader(batch, Color.WHITE) {
+            shaderService.useOutlineShader(batch, Color.WHITE, graphic.region.texture) {
                 batch.drawEntity(graphic, transform, realSize)
             }
         }

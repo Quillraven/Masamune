@@ -10,11 +10,10 @@ varying vec2 v_texCoords;
 
 uniform sampler2D u_texture;
 uniform vec4 u_outlineColor;
+uniform vec2 u_pixelSize;
 
 void main()
 {
-    vec2 pixelSize = 1.0 / textureSize(u_texture, 0).xy;
-
     // get alpha of surrounding pixels
     float surroundingA = 0.0;
     for (int x = -1; x<=1; x++) {
@@ -23,7 +22,7 @@ void main()
                 continue;
             }
 
-            surroundingA += texture2D(u_texture, v_texCoords + vec2(x, y) * pixelSize).a;
+            surroundingA += texture2D(u_texture, v_texCoords + vec2(x, y) * u_pixelSize).a;
         }
     }
 
