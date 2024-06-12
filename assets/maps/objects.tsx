@@ -40,6 +40,7 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="elder/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="dialogName" value="elder_00"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="ELDER"/>
    <property name="speed" type="float" value="2"/>
@@ -58,6 +59,7 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="flower_girl/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="dialogName" value="flower_girl_00"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="FLOWER_GIRL"/>
    <property name="speed" type="float" value="3.5"/>
@@ -76,6 +78,7 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="merchant/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="dialogName" value="merchant_00"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="MERCHANT"/>
    <property name="speed" type="float" value="3"/>
@@ -94,6 +97,7 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="smith/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="dialogName" value="smith_00"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="SMITH"/>
    <property name="speed" type="float" value="3"/>

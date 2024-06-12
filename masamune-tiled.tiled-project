@@ -102,6 +102,11 @@
                     "value": "#ffffffff"
                 },
                 {
+                    "name": "dialogName",
+                    "type": "string",
+                    "value": ""
+                },
+                {
                     "name": "hasAnimation",
                     "type": "bool",
                     "value": false

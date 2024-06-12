@@ -5,14 +5,14 @@
     },
     "activeFile": "assets/maps/objects.tsx",
     "expandedProjectPaths": [
+        "core/src/test",
         "assets",
-        "core/src",
-        "core/src/test/resources/maps",
-        "assets/maps",
-        "core/src/test/resources",
-        "core",
         ".",
-        "core/src/test"
+        "core",
+        "core/src/test/resources/maps",
+        "core/src",
+        "core/src/test/resources",
+        "assets/maps"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
@@ -37,8 +37,8 @@
             "scale": 4,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 290.625,
-                "y": 219.375
+                "x": 160,
+                "y": 159.875
             }
         },
         "core/src/test/resources/maps/interactTestObjects.tsx": {
@@ -84,7 +84,7 @@
         "assets/maps/village.tmx"
     ],
     "project": "masamune-tiled.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
         "assets/maps/tileset.tsx",
         "assets/maps/village.tmx",
