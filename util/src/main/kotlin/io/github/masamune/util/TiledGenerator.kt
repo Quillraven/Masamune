@@ -137,11 +137,7 @@ fun createPropertyExtensions(content: StringBuilder, properties: List<Member>, g
             }
 
             append("val $gdxClass.${property.name}: ${property.kotlinType}").append(newLine)
-            if (property.value.content.isBlank()) {
-                append("    get() = this.property<${property.kotlinType}>(\"${property.name}\")")
-            } else {
-                append("    get() = this.property<${property.kotlinType}>(\"${property.name}\", ${property.kotlinValue})")
-            }
+            append("    get() = this.property<${property.kotlinType}>(\"${property.name}\", ${property.kotlinValue})")
         }
     }
 }
