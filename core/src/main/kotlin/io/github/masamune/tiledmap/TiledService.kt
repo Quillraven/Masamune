@@ -99,6 +99,7 @@ class TiledService(
             it += Transform(position = vec3(x, y, 0f), size = texRegionSize)
             configureMove(it, tile)
             configurePhysic(it, tile, world, x, y)
+            configureDialog(it, tile)
 
             if (mapObject.name == "Player") {
                 configurePlayer(it)
@@ -120,6 +121,9 @@ class TiledService(
         val atlasStr = tile.atlas
         val atlasAsset = AtlasAsset.valueOf(atlasStr)
         val atlasRegionKey = tile.atlasRegionKey
+        if (atlasRegionKey.isBlank()) {
+            gdxError("Missing atlasRegionKey for tile ${tile.id}")
+        }
 
         val texRegions = assetService[atlasAsset].findRegions(atlasRegionKey)
         if (texRegions.isEmpty) {
@@ -171,6 +175,14 @@ class TiledService(
 
         val body = tile.toBody(world, objX, objY, bodyType, entity)
         entity += Physic(body)
+    }
+
+    private fun EntityCreateContext.configureDialog(entity: Entity, tile: TiledMapTile) {
+        if (tile.dialogName.isBlank()) {
+            return
+        }
+
+        entity += Dialog(tile.dialogName)
     }
 
     private fun EntityCreateContext.configurePlayer(entity: Entity) {
