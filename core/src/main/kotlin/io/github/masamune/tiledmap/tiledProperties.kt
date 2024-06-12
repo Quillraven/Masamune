@@ -12,13 +12,16 @@ val TiledMapTile.atlas: String
     get() = this.property<String>("atlas", "UNDEFINED")
 
 val TiledMapTile.atlasRegionKey: String
-    get() = this.property<String>("atlasRegionKey")
+    get() = this.property<String>("atlasRegionKey", "")
 
 val TiledMapTile.bodyType: String
     get() = this.property<String>("bodyType", "UNDEFINED")
 
 val TiledMapTile.color: String
     get() = this.property<String>("color", "#ffffffff")
+
+val TiledMapTile.dialogName: String
+    get() = this.property<String>("dialogName", "")
 
 val TiledMapTile.hasAnimation: Boolean
     get() = this.property<Boolean>("hasAnimation", false)
