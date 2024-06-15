@@ -1,0 +1,46 @@
+
+skin.png
+size: 512, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+dialog_choice_frame
+  rotate: false
+  xy: 2, 385
+  size: 64, 20
+  split: 5, 5, 5, 5
+  pad: 6, 6, 5, 5
+  orig: 64, 20
+  offset: 0, 0
+  index: -1
+dialog_face_frame
+  rotate: false
+  xy: 322, 421
+  size: 48, 48
+  split: 13, 6, 16, 6
+  pad: 0, 0, 0, 0
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+dialog_frame
+  rotate: false
+  xy: 2, 409
+  size: 316, 60
+  split: 9, 9, 9, 9
+  orig: 316, 60
+  offset: 0, 0
+  index: -1
+elder
+  rotate: false
+  xy: 2, 343
+  size: 38, 38
+  orig: 38, 38
+  offset: 0, 0
+  index: -1
+ninja_adventure_16
+  rotate: false
+  xy: 2, 473
+  size: 505, 30
+  orig: 505, 30
+  offset: 0, 0
+  index: -1

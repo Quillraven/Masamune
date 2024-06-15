@@ -1,0 +1,85 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	ninja_adventure_16: {
+		file: ninja_adventure_16.fnt
+		scaledSize: -1
+		markupEnabled: true
+		flip: false
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	bright: {
+		r: 0.9607843
+		g: 0.96862745
+		b: 0.92941177
+		a: 1
+	}
+	dark_grey: {
+		r: 0.4117647
+		g: 0.32941177
+		b: 0.32941177
+		a: 1
+	}
+	highlight_blue: {
+		r: 0.2627451
+		g: 0.35686275
+		b: 0.73333335
+		a: 1
+	}
+	highlight_purple: {
+		r: 0.73333335
+		g: 0.039215688
+		b: 0.7294118
+		a: 1
+	}
+	highlight_red: {
+		r: 0.69803923
+		g: 0
+		b: 0
+		a: 1
+	}
+	white: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+}
+io.github.masamune.ui.DialogWidgetStyle: {
+	default: {
+		background: dialog_frame
+		imageFrame: dialog_face_frame
+		imageCaptionStyle: dialog_image_caption
+		contentStyle: dialog_content
+		optionStyle: dialog_option
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: ninja_adventure_16
+		fontColor: white
+	}
+	dialog_title: {
+		font: ninja_adventure_16
+		fontColor: bright
+	}
+	dialog_content: {
+		font: ninja_adventure_16
+		fontColor: dark_grey
+	}
+	dialog_image_caption: {
+		font: ninja_adventure_16
+		fontColor: highlight_blue
+	}
+	dialog_option: {
+		font: ninja_adventure_16
+		fontColor: dark_grey
+		background: dialog_choice_frame
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+}
