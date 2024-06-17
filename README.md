@@ -19,3 +19,6 @@
   magick montage .\FlagBlue16x16.png .\FlagGray16x16.png -tile 1x2 -geometry 16x16+0+0< -background none Flags.png
   ```
 - [Ninja Adventure Asset Pack](https://pixel-boy.itch.io/ninja-adventure-asset-pack)
+- [Pixel Arial 11 font](https://www.dafont.com/de/search.php?q=pixel+arial+11)
+- [Fipps font](https://www.dafont.com/de/search.php?q=fipps)
+- [Typing label](https://github.com/rafaskb/typing-label)
