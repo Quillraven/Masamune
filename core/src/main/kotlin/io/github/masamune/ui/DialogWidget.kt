@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import ktx.actors.centerPosition
 import ktx.actors.txt
 
@@ -24,7 +25,7 @@ class DialogWidget(
 
     private val image: Image
     private val imageCaption: Label
-    private val contentLabel: Label
+    private val contentLabel: TypingLabel
     private val optionTable: Table
 
     init {
@@ -36,7 +37,7 @@ class DialogWidget(
         imageCaption = imgTable.findActor("caption")
 
         // main text label
-        contentLabel = Label("", skin, style.contentStyle).apply {
+        contentLabel = TypingLabel("", skin, style.contentStyle).apply {
             wrap = true
             setAlignment(Align.topLeft)
         }
@@ -49,14 +50,14 @@ class DialogWidget(
         // add everything into a single table
         actor = Table(skin).apply {
             background = style.background
-            add(imgTable).top().minWidth(86f)
+            add(imgTable).top().minWidth(110f)
             add(contentLabel).expand().fill().padLeft(20f).row()
             add()
             add(optionTable).left().padLeft(20f).padTop(10f)
         }
 
-        minSize(512f, 200f)
-        maxWidth(512f)
+        minSize(542f, 200f)
+        maxWidth(542f)
         pack()
     }
 
