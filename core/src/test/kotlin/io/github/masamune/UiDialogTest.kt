@@ -15,9 +15,17 @@ import ktx.app.clearScreen
 import ktx.assets.disposeSafely
 import ktx.assets.toClasspathFile
 
+/**
+ * Test for [DialogWidget].
+ * It loads a dialog with an image, caption, content and option. The test contains
+ * two different versions that can be changed by pressing:
+ * - '1': dialog with a lot of content, large caption text and multiple options
+ * - '2': dialog with small content, caption and just one option
+ */
+
 fun main() {
     Lwjgl3Application(UiDialogTest(), Lwjgl3ApplicationConfiguration().apply {
-        setTitle("UI Dialog Test")
+        setTitle("UI Dialog Test; 1=big dialog, 2=small dialog")
         setWindowedMode(1280, 960)
     })
 }
@@ -36,7 +44,7 @@ private class UiDialogTest : KtxApplicationAdapter {
 
     private fun loadBigDialog() {
         val contentStr = """
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+            {SLOW}{FADE}Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
             sed diam nonumy eirmod tempor invidunt ut labore et dolore
             magna aliquyam erat, sed diam voluptua. At vero eos et accusam
             et justo duo dolores et ea rebum. Stet clita kasd gubergren.
@@ -53,7 +61,7 @@ private class UiDialogTest : KtxApplicationAdapter {
     }
 
     private fun loadSmallDialog() {
-        val contentStr = "Lorem ipsum dolor sit amet"
+        val contentStr = "{SLOW}{FADE}Lorem ipsum dolor sit amet"
 
         val dialogWidget = DialogWidget(skin)
         dialogWidget.content(contentStr)
