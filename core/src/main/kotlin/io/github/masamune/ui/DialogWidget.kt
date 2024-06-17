@@ -2,12 +2,15 @@ package io.github.masamune.ui
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import ktx.actors.centerPosition
+import ktx.actors.plusAssign
+import ktx.actors.then
 import ktx.actors.txt
 
 data class DialogWidgetStyle(
@@ -16,21 +19,21 @@ data class DialogWidgetStyle(
     val imageCaptionStyle: String? = null,
     val contentStyle: String = "default",
     val optionStyle: String = "default",
+    val optionSelectImage: Drawable? = null,
 )
 
 class DialogWidget(
-    skin: Skin,
+    private val skin: Skin,
     styleName: String = "default"
 ) : Container<Actor>() {
 
+    private val style: DialogWidgetStyle = skin[styleName, DialogWidgetStyle::class.java]
     private val image: Image
     private val imageCaption: Label
     private val contentLabel: TypingLabel
     private val optionTable: Table
 
     init {
-        val style = skin[styleName, DialogWidgetStyle::class.java]
-
         // image + caption
         val imgTable = initImageAndCaption(skin, style)
         image = imgTable.findActor("image")
@@ -45,7 +48,7 @@ class DialogWidget(
         // options
         optionTable = Table(skin)
         optionTable.defaults().pad(1f)
-        optionTable.add(Label("", skin, style.optionStyle)).row()
+        optionTable.add(optionWidget("")).row()
 
         // add everything into a single table
         actor = Table(skin).apply {
@@ -59,6 +62,15 @@ class DialogWidget(
         minSize(542f, 200f)
         maxWidth(542f)
         pack()
+    }
+
+    private fun optionWidget(text: String): Actor {
+        val table = Table(skin)
+        val selectImg = Image(style.optionSelectImage)
+        table.add(selectImg).padRight(5f)
+        selectImg += forever(fadeOut(0.5f) then fadeIn(0.25f) then delay(0.25f))
+        table.add(Label(" $text ", skin, style.optionStyle))
+        return table
     }
 
     private fun initImageAndCaption(skin: Skin, style: DialogWidgetStyle): Table {
@@ -83,7 +95,7 @@ class DialogWidget(
     }
 
     fun option(text: String) {
-        val firstOption = optionTable.getChild(0) as Label
+        val firstOption = (optionTable.getChild(0) as Table).getChild(1) as Label
         if (firstOption.txt.isBlank()) {
             // first option has no text yet -> use it
             firstOption.txt = " $text "
@@ -92,7 +104,7 @@ class DialogWidget(
         }
 
         // first option already provided -> add a new one
-        optionTable.add(Label(" $text ", firstOption.style)).row()
+        optionTable.add(optionWidget(text)).row()
         pack()
     }
 
