@@ -4,6 +4,13 @@ size: 512, 512
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
+arrow
+  rotate: false
+  xy: 70, 310
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
 dialog_choice_frame
   rotate: false
   xy: 2, 302

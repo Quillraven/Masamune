@@ -58,6 +58,7 @@ io.github.masamune.ui.DialogWidgetStyle: {
 		imageCaptionStyle: dialog_image_caption
 		contentStyle: dialog_content
 		optionStyle: dialog_option
+		optionSelectImage: arrow
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
