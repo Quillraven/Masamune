@@ -1,7 +1,13 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: {
-	ninja_adventure_16: {
-		file: ninja_adventure_16.fnt
+	fipps_16: {
+		file: fipps_16.fnt
+		scaledSize: -1
+		markupEnabled: true
+		flip: false
+	}
+	pixel_arial_16: {
+		file: pixel_arial_16.fnt
 		scaledSize: -1
 		markupEnabled: true
 		flip: false
@@ -55,31 +61,18 @@ io.github.masamune.ui.DialogWidgetStyle: {
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-	default: {
-		font: ninja_adventure_16
-		fontColor: white
-	}
-	dialog_title: {
-		font: ninja_adventure_16
-		fontColor: bright
-	}
 	dialog_content: {
-		font: ninja_adventure_16
+		font: pixel_arial_16
 		fontColor: dark_grey
 	}
 	dialog_image_caption: {
-		font: ninja_adventure_16
+		font: fipps_16
 		fontColor: highlight_blue
 	}
 	dialog_option: {
-		font: ninja_adventure_16
+		font: pixel_arial_16
 		fontColor: dark_grey
 		background: dialog_choice_frame
-	}
-}
-com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
-	default: {
-		label: default
 	}
 }
 }
