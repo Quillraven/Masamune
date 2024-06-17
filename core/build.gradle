@@ -17,6 +17,7 @@ dependencies {
   api "io.github.libktx:ktx-preferences:$ktxVersion"
   api "io.github.libktx:ktx-tiled:$ktxVersion"
   api "io.github.quillraven.fleks:Fleks:$fleksVersion"
+  api "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
   api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
   testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
