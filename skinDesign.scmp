@@ -2020,6 +2020,10 @@ preferences: {
 		class: java.lang.String
 		value: C:/Users/Simon/IdeaProjects/Masamune/assets/ui/skin.json
 	}
+	export-hex: {
+		class: java.lang.Boolean
+		value: true
+	}
 	resources-relative: {
 		class: java.lang.Boolean
 		value: false

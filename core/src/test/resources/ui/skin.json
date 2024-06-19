@@ -15,40 +15,22 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 }
 com.badlogic.gdx.graphics.Color: {
 	bright: {
-		r: 0.9607843
-		g: 0.96862745
-		b: 0.92941177
-		a: 1
+		hex: f5f7edff
 	}
 	dark_grey: {
-		r: 0.4117647
-		g: 0.32941177
-		b: 0.32941177
-		a: 1
+		hex: 695454ff
 	}
 	highlight_blue: {
-		r: 0.2627451
-		g: 0.35686275
-		b: 0.73333335
-		a: 1
+		hex: 435bbbff
 	}
 	highlight_purple: {
-		r: 0.73333335
-		g: 0.039215688
-		b: 0.7294118
-		a: 1
+		hex: bb0abaff
 	}
 	highlight_red: {
-		r: 0.69803923
-		g: 0
-		b: 0
-		a: 1
+		hex: b20000ff
 	}
 	white: {
-		r: 1
-		g: 1
-		b: 1
-		a: 1
+		hex: ffffffff
 	}
 }
 io.github.masamune.ui.DialogWidgetStyle: {
