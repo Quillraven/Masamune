@@ -7,11 +7,11 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.collection.compareEntity
-import io.github.masamune.component.Interact
-import io.github.masamune.component.Tag
-import io.github.masamune.component.Transform
+import io.github.masamune.component.*
+import io.github.masamune.dialog.dialogOf
 import io.github.masamune.event.*
 import ktx.log.logger
 import ktx.math.component1
@@ -19,7 +19,9 @@ import ktx.math.component2
 import ktx.math.vec2
 import kotlin.math.abs
 
-class PlayerInteractSystem : IteratingSystem(
+class PlayerInteractSystem(
+    private val eventService: EventService = inject(),
+) : IteratingSystem(
     family = family { all(Interact, Tag.PLAYER) },
     interval = Fixed(1 / 20f)
 ), EventListener {
@@ -37,7 +39,27 @@ class PlayerInteractSystem : IteratingSystem(
         }
 
         // tag the closest entity within direction with an OUTLINE tag to render it with an outline
-        entity[Transform].centerTo(playerCenter)
+        tagClosestEntity(entity)
+
+        if (!trigger) {
+            // player did not press interact button yet -> do nothing
+            return@with
+        }
+
+        trigger = false
+        if (interactEntity == Entity.NONE) {
+            // no entity to interact
+            return@with
+        } else if (interactEntity has Dialog) {
+            val namedDialog = dialogOf(interactEntity[Dialog].dialogName)
+            eventService.fire(DialogBeginEvent(entity, interactEntity, namedDialog))
+            // stop player movement
+            entity[Move].direction.setZero()
+        }
+    }
+
+    private fun Interact.tagClosestEntity(player: Entity) {
+        player[Transform].centerTo(playerCenter)
         filteredDirectionEntities.clear()
         nearbyEntities.filterTo(filteredDirectionEntities) { other -> withinDirection(other, lastDirection) }
         filteredDirectionEntities.sort(distanceComparator)
@@ -52,13 +74,6 @@ class PlayerInteractSystem : IteratingSystem(
             interactEntity.configure { it -= Tag.OUTLINE }
             interactEntity = Entity.NONE
         }
-
-        if (!trigger) {
-            // player did not press interact button yet -> do nothing
-            return@with
-        }
-
-        trigger = false
     }
 
     private fun withinDirection(other: Entity, lastPlayerDirection: Vector2): Boolean {
@@ -93,13 +108,25 @@ class PlayerInteractSystem : IteratingSystem(
         return diffX * diffX + diffY * diffY
     }
 
+    private fun Entity.isNotInteractable(): Boolean {
+        return this hasNo Dialog
+    }
+
     private fun onPlayerBeginInteract(player: Entity, other: Entity) {
+        if (other.isNotInteractable()) {
+            return
+        }
+
         val (nearbyEntities) = player[Interact]
         nearbyEntities += other
         log.debug { "interact begin contact: ${nearbyEntities.size} entities" }
     }
 
     private fun onPlayerEndInteract(player: Entity, other: Entity) {
+        if (other.isNotInteractable()) {
+            return
+        }
+
         val interactCmp = player[Interact]
         interactCmp.nearbyEntities -= other
         if (other has Tag.OUTLINE) {
@@ -130,6 +157,6 @@ class PlayerInteractSystem : IteratingSystem(
 
     companion object {
         private val log = logger<PlayerInteractSystem>()
-        private const val INTERACT_ANG_TOLERANCE = 60f
+        private const val INTERACT_ANG_TOLERANCE = 100f
     }
 }
