@@ -57,11 +57,20 @@ io.github.masamune.ui.DialogWidgetStyle: {
 		imageFrame: dialog_face_frame
 		imageCaptionStyle: dialog_image_caption
 		contentStyle: dialog_content
-		optionStyle: dialog_option
-		optionSelectImage: arrow
+		optionStyle: default
+	}
+}
+io.github.masamune.ui.DialogOptionWidgetStyle: {
+	default: {
+		labelStyle: dialog_option
+		selectImage: arrow
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: pixel_arial_16
+		fontColor: white
+	}
 	dialog_content: {
 		font: pixel_arial_16
 		fontColor: dark_grey
@@ -74,6 +83,11 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		font: pixel_arial_16
 		fontColor: dark_grey
 		background: dialog_choice_frame
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
 	}
 }
 }

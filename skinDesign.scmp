@@ -1147,7 +1147,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: null
+						value: pixel_arial_16
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1924,12 +1924,7 @@ jsonData: {
 						{
 							name: optionStyle
 							type: STYLE
-							value: dialog_option
-						}
-						{
-							name: optionSelectImage
-							type: DRAWABLE
-							value: arrow
+							value: default
 						}
 					]
 					deletable: false
@@ -1963,8 +1958,42 @@ jsonData: {
 						type: STYLE
 						value: ""
 					}
+				]
+				deletable: true
+			}
+			declareAfterUIclasses: false
+		}
+		{
+			fullyQualifiedName: io.github.masamune.ui.DialogOptionWidgetStyle
+			displayName: MasamuneDialogOption
+			styles: [
+				{
+					name: default
+					properties: [
+						{
+							name: labelStyle
+							type: STYLE
+							value: dialog_option
+						}
+						{
+							name: selectImage
+							type: DRAWABLE
+							value: arrow
+						}
+					]
+					deletable: false
+				}
+			]
+			templateStyle: {
+				name: template
+				properties: [
 					{
-						name: optionSelectImage
+						name: labelStyle
+						type: STYLE
+						value: ""
+					}
+					{
+						name: selectImage
 						type: DRAWABLE
 						value: null
 					}
@@ -1979,6 +2008,13 @@ preferences: {
 	id: {
 		class: java.lang.Integer
 		value: 251914402
+	}
+	preview-bg-color: {
+		class: com.badlogic.gdx.graphics.Color
+		r: 0
+		g: 0
+		b: 0
+		a: 1
 	}
 	last-import-export-path: {
 		class: java.lang.String

@@ -25,7 +25,7 @@ import ktx.assets.toClasspathFile
 
 fun main() {
     Lwjgl3Application(UiDialogTest(), Lwjgl3ApplicationConfiguration().apply {
-        setTitle("UI Dialog Test; 1=big dialog, 2=small dialog")
+        setTitle("UI Dialog Test; 1=big dialog, 2=small dialog, W/S=change option")
         setWindowedMode(1280, 960)
     })
 }
@@ -36,10 +36,10 @@ private class UiDialogTest : KtxApplicationAdapter {
     private val stage by lazy { Stage(uiViewport, batch) }
     private val uiAtlas by lazy { TextureAtlas("ui/skin.atlas".toClasspathFile()) }
     private val skin by lazy { Skin("ui/skin.json".toClasspathFile(), uiAtlas) }
+    private lateinit var dialogWidget: DialogWidget
 
     override fun create() {
         loadBigDialog()
-        Gdx.input.inputProcessor = stage
     }
 
     private fun loadBigDialog() {
@@ -50,7 +50,7 @@ private class UiDialogTest : KtxApplicationAdapter {
             et justo duo dolores et ea rebum. Stet clita kasd gubergren.
         """.trimIndent()
 
-        val dialogWidget = DialogWidget(skin)
+        dialogWidget = DialogWidget(skin)
         dialogWidget.content(contentStr)
         dialogWidget.image(skin.getDrawable("elder"), "Flower Girl")
         dialogWidget.option("Option 1")
@@ -63,7 +63,7 @@ private class UiDialogTest : KtxApplicationAdapter {
     private fun loadSmallDialog() {
         val contentStr = "{SLOW}{FADE}Lorem ipsum dolor sit amet"
 
-        val dialogWidget = DialogWidget(skin)
+        dialogWidget = DialogWidget(skin)
         dialogWidget.content(contentStr)
         dialogWidget.image(skin.getDrawable("elder"), "Elder")
         dialogWidget.option("Option 1")
@@ -91,6 +91,16 @@ private class UiDialogTest : KtxApplicationAdapter {
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> {
                 stage.clear()
                 loadSmallDialog()
+            }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.W) -> {
+                dialogWidget.prevOption()
+                println(dialogWidget.selectedOption)
+            }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.S) -> {
+                dialogWidget.nextOption()
+                println(dialogWidget.selectedOption)
             }
         }
     }
