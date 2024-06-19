@@ -22,6 +22,7 @@ data class Page(
     val text: String,
     val options: List<Option>,
     val image: String? = null,
+    val imageCaption: String? = null,
 )
 
 data class Dialog(val name: String, val pages: List<Page>) {

@@ -38,7 +38,7 @@ class DialogTest {
     @Test
     fun `should create dialog with one page and an exit action`() {
         val dialog = dialog("testDialog") {
-            page("First") {
+            page("First", "image", "caption") {
                 option("Quit", ActionExit)
             }
         }
@@ -48,7 +48,8 @@ class DialogTest {
         val firstPage = dialog.pages.first()
         firstPage.pageIdx shouldBe 0
         firstPage.text shouldBe "First"
-        firstPage.image shouldBe null
+        firstPage.image shouldBe "image"
+        firstPage.imageCaption shouldBe "caption"
         firstPage.options.size shouldBe 1
         val firstOption = firstPage.options.first()
         firstOption.text shouldBe "Quit"

@@ -25,11 +25,11 @@ fun dialog(name: String, cfg: DialogCfg.() -> Unit): Dialog {
 
 @DialogDsl
 class DialogCfg(private val pages: MutableList<Page>) {
-    fun page(text: String, image: String? = null, cfg: PageCfg.() -> Unit): Page {
+    fun page(text: String, image: String? = null, caption: String? = null, cfg: PageCfg.() -> Unit): Page {
         val options = mutableListOf<Option>()
         val pageIdx = pages.size
         PageCfg(pageIdx, options).apply(cfg)
-        val page = Page(pageIdx, text, options, image)
+        val page = Page(pageIdx, text, options, image, caption)
         if (options.isEmpty()) {
             throw PageCfgException(page, "Page must have at least one option")
         }
