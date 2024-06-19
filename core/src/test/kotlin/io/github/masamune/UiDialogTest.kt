@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.viewport.FitViewport
-import io.github.masamune.ui.DialogWidget
+import io.github.masamune.ui.widget.DialogWidget
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -54,10 +54,10 @@ private class UiDialogTest : KtxApplicationAdapter {
         dialogWidget.content(contentStr)
         dialogWidget.image(skin.getDrawable("elder"), "Flower Girl")
         dialogWidget.option("Option 1")
-        dialogWidget.option("Option 2")
+        dialogWidget.option("Long Option 2")
         stage.clear()
         stage.addActor(dialogWidget)
-        stage.isDebugAll = false
+        stage.isDebugAll = true
     }
 
     private fun loadSmallDialog() {
@@ -69,7 +69,7 @@ private class UiDialogTest : KtxApplicationAdapter {
         dialogWidget.option("Option 1")
         stage.clear()
         stage.addActor(dialogWidget)
-        stage.isDebugAll = false
+        stage.isDebugAll = true
     }
 
     override fun resize(width: Int, height: Int) {

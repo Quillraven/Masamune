@@ -1,4 +1,4 @@
-package io.github.masamune.ui
+package io.github.masamune.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -47,7 +47,7 @@ class DialogWidget(
         optionTable = Table(skin)
         optionTable.defaults().pad(1f)
         selectedOption = DialogOptionWidget("", skin, style.optionStyle)
-        optionTable.add(selectedOption).row()
+        optionTable.add(selectedOption).fill().row()
 
         // add everything into a single table
         actor = Table(skin).apply {
@@ -84,6 +84,22 @@ class DialogWidget(
         }
     }
 
+    fun content(text: String) {
+        contentLabel.txt = text
+        // important to call pack, otherwise the background graphic is not properly resized for whatever reason
+        pack()
+    }
+
+    fun image(drawable: Drawable, caption: String? = null) {
+        image.drawable = drawable
+        caption?.let { imageCaption.txt = it }
+    }
+
+    fun clearImage() {
+        image.drawable = null
+        imageCaption.txt = ""
+    }
+
     fun option(text: String) {
         val firstOption = (optionTable.getChild(0) as DialogOptionWidget)
         if (firstOption.text.isBlank()) {
@@ -100,15 +116,14 @@ class DialogWidget(
         pack()
     }
 
-    fun content(text: String) {
-        contentLabel.txt = text
-        // important to call pack, otherwise the background graphic is not properly resized for whatever reason
+    fun clearOptions() {
+        for (childIdx in optionTable.children.size - 1 downTo 1) {
+            optionTable.removeActorAt(childIdx, true)
+        }
+        val firstOption = (optionTable.getChild(0) as DialogOptionWidget)
+        firstOption.text = ""
+        firstOption.select(true)
         pack()
-    }
-
-    fun image(drawable: Drawable, caption: String? = null) {
-        image.drawable = drawable
-        caption?.let { imageCaption.txt = it }
     }
 
     fun prevOption() {
@@ -129,7 +144,7 @@ class DialogWidget(
         }
     }
 
-    private fun selectOption(idx: Int) {
+    fun selectOption(idx: Int) {
         val realIdx = when {
             idx < 0 -> optionTable.children.size - 1
             idx >= optionTable.children.size -> 0

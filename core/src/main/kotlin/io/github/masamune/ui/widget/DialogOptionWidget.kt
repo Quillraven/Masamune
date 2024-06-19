@@ -1,4 +1,4 @@
-package io.github.masamune.ui
+package io.github.masamune.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -35,7 +35,7 @@ class DialogOptionWidget(
         add(image).padRight(5f)
         image += forever(fadeOut(0.5f) then fadeIn(0.25f) then delay(0.25f))
         label = Label(" $txt ", skin, style.labelStyle)
-        add(label)
+        add(label).expand().fill()
     }
 
     fun select(value: Boolean) {

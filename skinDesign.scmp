@@ -1895,7 +1895,7 @@ jsonData: {
 	}
 	customClasses: [
 		{
-			fullyQualifiedName: io.github.masamune.ui.DialogWidgetStyle
+			fullyQualifiedName: io.github.masamune.ui.widget.DialogWidgetStyle
 			displayName: MasamuneDialog
 			styles: [
 				{
@@ -1964,7 +1964,7 @@ jsonData: {
 			declareAfterUIclasses: false
 		}
 		{
-			fullyQualifiedName: io.github.masamune.ui.DialogOptionWidgetStyle
+			fullyQualifiedName: io.github.masamune.ui.widget.DialogOptionWidgetStyle
 			displayName: MasamuneDialogOption
 			styles: [
 				{
