@@ -26,7 +26,7 @@ fun dialogOf(name: String): Dialog {
 
 private fun dialogByName(name: String) = when (name) {
     "elder_00" -> dialog(name) {
-        page("{SLOW}{FADE}Hello hero", "elder", "Elder") {
+        page("Hello hero", "elder", "Elder") {
             option("OK", ActionExit)
             option("Quit", ActionExit)
         }

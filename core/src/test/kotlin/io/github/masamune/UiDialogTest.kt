@@ -44,7 +44,7 @@ private class UiDialogTest : KtxApplicationAdapter {
 
     private fun loadBigDialog() {
         val contentStr = """
-            {SLOW}{FADE}Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
             sed diam nonumy eirmod tempor invidunt ut labore et dolore
             magna aliquyam erat, sed diam voluptua. At vero eos et accusam
             et justo duo dolores et ea rebum. Stet clita kasd gubergren.
@@ -57,11 +57,11 @@ private class UiDialogTest : KtxApplicationAdapter {
         dialogWidget.option("Long Option 2")
         stage.clear()
         stage.addActor(dialogWidget)
-        stage.isDebugAll = true
+        stage.isDebugAll = false
     }
 
     private fun loadSmallDialog() {
-        val contentStr = "{SLOW}{FADE}Lorem ipsum dolor sit amet"
+        val contentStr = "Lorem ipsum dolor sit amet"
 
         dialogWidget = DialogWidget(skin)
         dialogWidget.content(contentStr)
@@ -69,7 +69,7 @@ private class UiDialogTest : KtxApplicationAdapter {
         dialogWidget.option("Option 1")
         stage.clear()
         stage.addActor(dialogWidget)
-        stage.isDebugAll = true
+        stage.isDebugAll = false
     }
 
     override fun resize(width: Int, height: Int) {

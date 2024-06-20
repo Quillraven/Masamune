@@ -85,7 +85,7 @@ class DialogWidget(
     }
 
     fun content(text: String) {
-        contentLabel.txt = text
+        contentLabel.txt = "{SLOW}{FADE}$text"
         // important to call pack, otherwise the background graphic is not properly resized for whatever reason
         pack()
     }
