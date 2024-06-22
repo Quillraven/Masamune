@@ -1,5 +1,7 @@
 package io.github.masamune.event
 
+import com.badlogic.gdx.Application
+import com.badlogic.gdx.Gdx
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.configureWorld
@@ -99,6 +101,9 @@ class EventServiceTest {
 
     @Test
     fun `fire an event`() {
+        val gdxApp = mockk<Application>()
+        every { gdxApp.logLevel } returns Application.LOG_NONE
+        Gdx.app = gdxApp
         val event = mockk<Event>()
         val listener = mockk<EventListener>()
         every { listener.onEvent(event) } returns Unit
