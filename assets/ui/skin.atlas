@@ -1,19 +1,19 @@
 
 skin.png
-size: 512, 512
+size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 52, 318
+  xy: 60, 760
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 dialog_choice_frame
   rotate: false
-  xy: 320, 372
+  xy: 842, 878
   size: 64, 20
   split: 5, 5, 5, 5
   pad: 6, 6, 5, 5
@@ -22,7 +22,7 @@ dialog_choice_frame
   index: -1
 dialog_face_frame
   rotate: false
-  xy: 2, 282
+  xy: 4, 724
   size: 48, 48
   split: 13, 6, 16, 6
   pad: 0, 0, 0, 0
@@ -31,7 +31,7 @@ dialog_face_frame
   index: -1
 dialog_frame
   rotate: false
-  xy: 2, 332
+  xy: 518, 838
   size: 316, 60
   split: 9, 9, 9, 9
   orig: 316, 60
@@ -39,21 +39,21 @@ dialog_frame
   index: -1
 elder
   rotate: false
-  xy: 2, 242
+  xy: 4, 678
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 fipps_16
   rotate: false
-  xy: 2, 437
+  xy: 4, 829
   size: 506, 69
   orig: 506, 69
   offset: 0, 0
   index: -1
 pixel_arial_16
   rotate: false
-  xy: 2, 394
+  xy: 4, 780
   size: 503, 41
   orig: 503, 41
   offset: 0, 0

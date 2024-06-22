@@ -33,7 +33,7 @@ com.badlogic.gdx.graphics.Color: {
 		hex: ffffffff
 	}
 }
-io.github.masamune.ui.widget.DialogWidgetStyle: {
+io.github.masamune.ui.view.DialogViewStyle: {
 	default: {
 		background: dialog_frame
 		imageFrame: dialog_face_frame
@@ -42,7 +42,7 @@ io.github.masamune.ui.widget.DialogWidgetStyle: {
 		optionStyle: default
 	}
 }
-io.github.masamune.ui.widget.DialogOptionWidgetStyle: {
+io.github.masamune.ui.widget.DialogOptionStyle: {
 	default: {
 		labelStyle: dialog_option
 		selectImage: arrow

@@ -19,11 +19,12 @@ import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.*
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.ui.model.DialogViewModel
-import io.github.masamune.ui.view.DialogView
+import io.github.masamune.ui.view.dialogView
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 import ktx.log.logger
+import ktx.scene2d.actors
 
 class GameScreen(
     private val masamune: Masamune,
@@ -76,10 +77,15 @@ class GameScreen(
         physicWorld.setContactListener(PhysicContactHandler(eventService, world))
         tiledService.setMap(TiledMapAsset.VILLAGE, world)
 
-        stage.clear()
         val dialogViewModel = DialogViewModel(eventService)
         eventService += dialogViewModel
-        stage.addActor(DialogView(dialogViewModel, skin))
+        stage.clear()
+        stage.actors {
+            dialogView(dialogViewModel, skin) {
+                isVisible = false
+                eventService += this
+            }
+        }
     }
 
     override fun hide() {

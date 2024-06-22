@@ -20,19 +20,15 @@ class DialogViewModel(private val eventService: EventService) : PropertyChangeSo
 
     private lateinit var activeDialog: Dialog
     var content: DialogUiContent by propertyNotify(EMPTY_CONTENT)
-    var selectedOptionIdx: Int by propertyNotify(-1)
 
     private var player: Entity = Entity.NONE
     private var other: Entity = Entity.NONE
 
-    private fun selectOption(idx: Int) {
-        val realIdx = when {
-            idx < 0 -> activeDialog.activePage.options.size - 1
-            idx >= activeDialog.activePage.options.size -> 0
-            else -> idx
+    fun triggerOption(optionIdx: Int) {
+        if (activeDialog.triggerOption(optionIdx)) {
+            content = EMPTY_CONTENT
+            eventService.fire(DialogEndEvent(player, other, activeDialog, optionIdx))
         }
-
-        selectedOptionIdx = realIdx
     }
 
     override fun onEvent(event: Event) {
@@ -49,18 +45,7 @@ class DialogViewModel(private val eventService: EventService) : PropertyChangeSo
                     image = activePage.image,
                     caption = activePage.imageCaption
                 )
-                selectedOptionIdx = 0
             }
-
-            is UiSelectEvent -> {
-                if (activeDialog.triggerOption(selectedOptionIdx)) {
-                    content = EMPTY_CONTENT
-                    eventService.fire(DialogEndEvent(player, other, activeDialog, selectedOptionIdx))
-                }
-            }
-
-            is UiUpEvent -> selectOption(selectedOptionIdx + 1)
-            is UiDownEvent -> selectOption(selectedOptionIdx - 1)
 
             else -> Unit
         }
