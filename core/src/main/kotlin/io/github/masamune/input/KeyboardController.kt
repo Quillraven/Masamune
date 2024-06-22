@@ -3,13 +3,18 @@ package io.github.masamune.input
 import com.badlogic.gdx.Input.Keys
 import io.github.masamune.event.*
 import ktx.app.KtxInputAdapter
+import ktx.app.gdxError
+import kotlin.reflect.KClass
 
-class KeyboardController(eventService: EventService) : KtxInputAdapter, EventListener {
+class KeyboardController(
+    eventService: EventService,
+    initialState: KClass<out ControllerState> = ControllerStateGame::class,
+) : KtxInputAdapter, EventListener {
 
     private val commandState = booleanArrayOf(*Command.entries.map { false }.toBooleanArray())
     private val gameState = ControllerStateGame(eventService)
     private val uiState = ControllerStateUI(eventService)
-    private var activeState: ControllerState = gameState
+    private var activeState: ControllerState = initialActiveState(initialState)
         set(value) {
             for (i in commandState.indices) {
                 commandState[i] = false
@@ -17,6 +22,12 @@ class KeyboardController(eventService: EventService) : KtxInputAdapter, EventLis
             value.onActive()
             field = value
         }
+
+    private fun initialActiveState(initialState: KClass<out ControllerState>): ControllerState = when (initialState) {
+        ControllerStateGame::class -> gameState
+        ControllerStateUI::class -> uiState
+        else -> gdxError("Unsupported initial state $initialState")
+    }
 
     private val keyMapping = mapOf(
         Keys.A to Command.LEFT,
