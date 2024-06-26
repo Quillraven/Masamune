@@ -26,9 +26,24 @@ class DialogViewModel(private val eventService: EventService) : PropertyChangeSo
 
     fun triggerOption(optionIdx: Int) {
         if (activeDialog.triggerOption(optionIdx)) {
+            // dialog finished
             content = EMPTY_CONTENT
             eventService.fire(DialogEndEvent(player, other, activeDialog, optionIdx))
+            return
         }
+
+        // go to next page
+        updateContent()
+    }
+
+    private fun updateContent() {
+        val activePage = activeDialog.activePage
+        content = DialogUiContent(
+            txt = activePage.text,
+            options = activePage.options.map { it.text },
+            image = activePage.image,
+            caption = activePage.imageCaption
+        )
     }
 
     override fun onEvent(event: Event) {
@@ -38,13 +53,7 @@ class DialogViewModel(private val eventService: EventService) : PropertyChangeSo
                 player = event.player
                 other = event.other
 
-                val activePage = activeDialog.activePage
-                content = DialogUiContent(
-                    txt = activePage.text,
-                    options = activePage.options.map { it.text },
-                    image = activePage.image,
-                    caption = activePage.imageCaption
-                )
+                updateContent()
             }
 
             else -> Unit
