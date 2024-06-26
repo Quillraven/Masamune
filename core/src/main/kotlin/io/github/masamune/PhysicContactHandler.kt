@@ -3,7 +3,7 @@ package io.github.masamune
 import com.badlogic.gdx.physics.box2d.*
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import io.github.masamune.component.Tag
+import io.github.masamune.component.Player
 import io.github.masamune.event.EventService
 import io.github.masamune.event.PlayerInteractBeginContactEvent
 import io.github.masamune.event.PlayerInteractEndContactEvent
@@ -49,12 +49,12 @@ class PhysicContactHandler(
 
     private fun Fixture.isPlayerEntity(): Boolean = with(world) {
         val userData = body.userData
-        return userData is Entity && userData has Tag.PLAYER
+        return userData is Entity && userData has Player
     }
 
     private fun Fixture.isNonPlayerEntity(): Boolean = with(world) {
         val userData = body.userData
-        return userData is Entity && userData hasNo Tag.PLAYER
+        return userData is Entity && userData hasNo Player
     }
 
     private val Contact.playerEntity: Entity

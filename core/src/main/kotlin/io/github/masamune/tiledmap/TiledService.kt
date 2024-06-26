@@ -187,7 +187,8 @@ class TiledService(
 
     private fun EntityCreateContext.configurePlayer(entity: Entity) {
         log.debug { "Configuring player" }
-        entity += listOf(Tag.PLAYER, Tag.CAMERA_FOCUS)
+        entity += Tag.CAMERA_FOCUS
+        entity += Player("Alexxius")
         entity += Interact()
     }
 
