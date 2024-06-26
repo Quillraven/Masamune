@@ -2,6 +2,7 @@ package io.github.masamune.asset
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
+import com.badlogic.gdx.assets.loaders.I18NBundleLoader.I18NBundleParameter
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
@@ -9,10 +10,12 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
+import com.badlogic.gdx.utils.I18NBundle
 import ktx.assets.disposeSafely
 import ktx.assets.getAsset
 import ktx.assets.load
 import ktx.log.logger
+import java.util.*
 
 enum class AtlasAsset(folder: String = "graphics") {
     CHARS_AND_PROPS,
@@ -33,6 +36,12 @@ enum class SkinAsset(skinName: String, atlas: AtlasAsset) {
 
     val path = "ui/$skinName.json"
     val atlasPath = atlas.path
+}
+
+enum class I18NAsset {
+    MESSAGES;
+
+    val path = "ui/${name.lowercase()}"
 }
 
 class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleResolver()) : Disposable {
@@ -62,6 +71,12 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
     }
 
     operator fun get(asset: SkinAsset): Skin = manager.getAsset<Skin>(asset.path)
+
+    fun load(asset: I18NAsset) {
+        manager.load<I18NBundle>(asset.path, I18NBundleParameter(Locale.getDefault(), Charsets.ISO_8859_1.name()))
+    }
+
+    operator fun get(asset: I18NAsset): I18NBundle = manager.getAsset<I18NBundle>(asset.path)
 
     fun update(): Boolean = manager.update(1 / 60 * 1000)
 

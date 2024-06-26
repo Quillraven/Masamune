@@ -1,10 +1,7 @@
 package io.github.masamune.screen
 
 import io.github.masamune.Masamune
-import io.github.masamune.asset.AssetService
-import io.github.masamune.asset.AtlasAsset
-import io.github.masamune.asset.ShaderService
-import io.github.masamune.asset.SkinAsset
+import io.github.masamune.asset.*
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
 
@@ -19,6 +16,7 @@ class LoadingScreen(
     override fun show() {
         // load default skin to be able to render basic UI with loading bar
         assetService.load(SkinAsset.DEFAULT)
+        assetService.load(I18NAsset.MESSAGES)
         assetService.finishLoading()
 
         // queue remaining assets to load
