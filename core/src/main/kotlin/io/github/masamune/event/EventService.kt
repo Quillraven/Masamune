@@ -39,6 +39,10 @@ class EventService {
         listeners -= listener
     }
 
+    fun clearListeners() {
+        listeners.clear()
+    }
+
     operator fun contains(listener: EventListener): Boolean = listener in listeners
 
     fun fire(event: Event) {
