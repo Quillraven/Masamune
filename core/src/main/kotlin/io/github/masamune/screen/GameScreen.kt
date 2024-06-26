@@ -10,15 +10,14 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.PhysicContactHandler
-import io.github.masamune.asset.AssetService
-import io.github.masamune.asset.ShaderService
-import io.github.masamune.asset.SkinAsset
-import io.github.masamune.asset.TiledMapAsset
+import io.github.masamune.asset.*
+import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.*
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.ui.model.DialogViewModel
+import io.github.masamune.ui.view.DialogView
 import io.github.masamune.ui.view.dialogView
 import ktx.app.KtxScreen
 import ktx.assets.disposeSafely
@@ -41,10 +40,18 @@ class GameScreen(
     private val stage = Stage(uiViewport, batch)
     private val skin = assetService[SkinAsset.DEFAULT]
 
+    // views and view models
+    private val dialogViewModel = DialogViewModel(eventService)
+    private lateinit var dialogView: DialogView
+
     // physic world
     private val physicWorld = createWorld(Vector2.Zero, true).apply {
         autoClearForces = false
     }
+
+    // other stuff
+    private val keyboardController = KeyboardController(eventService)
+    private val dialogConfigurator = DialogConfigurator(assetService[I18NAsset.MESSAGES])
 
     // ecs world
     private val world = gameWorld()
@@ -56,6 +63,7 @@ class GameScreen(
             add(physicWorld)
             add(shaderService)
             add(eventService)
+            add(dialogConfigurator)
         }
 
         systems {
@@ -69,27 +77,37 @@ class GameScreen(
     }
 
     override fun show() {
+        // set controller
         inputProcessor.clear()
-        val keyboardController = KeyboardController(eventService)
         inputProcessor.addProcessor(keyboardController)
-        eventService += world
-        eventService += keyboardController
-        physicWorld.setContactListener(PhysicContactHandler(eventService, world))
-        tiledService.setMap(TiledMapAsset.VILLAGE, world)
 
-        val dialogViewModel = DialogViewModel(eventService)
-        eventService += dialogViewModel
+        // set physic contact handler (needs to be done AFTER ECS world is created)
+        physicWorld.setContactListener(PhysicContactHandler(eventService, world))
+
+        // setup UI views
         stage.clear()
         stage.actors {
-            dialogView(dialogViewModel, skin) {
+            dialogView = dialogView(dialogViewModel, skin) {
                 isVisible = false
-                eventService += this
             }
         }
+
+        // register all event listeners
+        registerEventListeners()
+
+        // load map AFTER event listeners are registered
+        tiledService.setMap(TiledMapAsset.VILLAGE, world)
+    }
+
+    private fun registerEventListeners() {
+        eventService += world
+        eventService += dialogView
+        eventService += dialogViewModel
+        eventService += keyboardController
     }
 
     override fun hide() {
-        eventService -= world
+        eventService.clearListeners()
         physicWorld.setContactListener(null)
     }
 

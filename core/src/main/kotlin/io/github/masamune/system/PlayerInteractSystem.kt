@@ -11,7 +11,7 @@ import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.collection.compareEntity
 import io.github.masamune.component.*
-import io.github.masamune.dialog.dialogOf
+import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.*
 import ktx.log.logger
 import ktx.math.component1
@@ -21,8 +21,9 @@ import kotlin.math.abs
 
 class PlayerInteractSystem(
     private val eventService: EventService = inject(),
+    private val dialogConfigurator: DialogConfigurator = inject(),
 ) : IteratingSystem(
-    family = family { all(Interact, Tag.PLAYER) },
+    family = family { all(Interact, Player) },
     interval = Fixed(1 / 20f)
 ), EventListener {
 
@@ -51,8 +52,8 @@ class PlayerInteractSystem(
             // no entity to interact
             return@with
         } else if (interactEntity has Dialog) {
-            val namedDialog = dialogOf(interactEntity[Dialog].dialogName)
-            eventService.fire(DialogBeginEvent(entity, interactEntity, namedDialog))
+            val namedDialog = dialogConfigurator[interactEntity[Dialog].dialogName, world, entity]
+            eventService.fire(DialogBeginEvent(world, entity, interactEntity, namedDialog))
             // stop player movement
             entity[Move].direction.setZero()
         }
