@@ -11,7 +11,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.I18NBundle
-import ktx.assets.disposeSafely
 import ktx.assets.getAsset
 import ktx.assets.load
 import ktx.log.logger
@@ -141,7 +140,7 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
      */
     override fun dispose() {
         log.debug { "Disposing AssetService:\n${manager.diagnostics}" }
-        manager.disposeSafely()
+        manager.dispose()
     }
 
     companion object {

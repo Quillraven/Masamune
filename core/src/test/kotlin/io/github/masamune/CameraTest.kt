@@ -26,7 +26,6 @@ import io.github.masamune.tiledmap.TiledService
 import ktx.app.KtxApplicationAdapter
 import ktx.app.KtxInputAdapter
 import ktx.app.clearScreen
-import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 import ktx.math.vec2
 
@@ -110,10 +109,10 @@ class CameraTest : KtxApplicationAdapter {
     }
 
     override fun dispose() {
-        batch.disposeSafely()
+        batch.dispose()
         world.dispose()
-        assetService.disposeSafely()
-        tiledMap.disposeSafely()
+        assetService.dispose()
+        tiledMap.dispose()
     }
 
 }

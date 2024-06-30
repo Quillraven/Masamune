@@ -35,14 +35,24 @@
         },
         "assets/maps/village.tmx": {
             "scale": 4,
-            "selectedLayer": 4,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 160,
-                "y": 159.875
+                "x": 124.5,
+                "y": 84.625
+            }
+        },
+        "core/src/test/resources/maps/interactTest.tmx": {
+            "scale": 7.19625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 79.90272711481673,
+                "y": 79.97220774709048
             }
         },
         "core/src/test/resources/maps/interactTestObjects.tsx": {
-            "dynamicWrapping": true
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 8
         },
         "core/src/test/resources/maps/objects.tsx": {
             "dynamicWrapping": true,
@@ -70,8 +80,10 @@
         }
     },
     "frame.defaultDuration": 200,
+    "last.exportedFilePath": "C:/Users/Simon/IdeaProjects/Masamune/assets/maps",
     "last.imagePath": "C:/Users/Simon/IdeaProjects/Masamune/assets/maps/objects",
     "map.height": 10,
+    "map.lastUsedExportFilter": "All Files (*)",
     "map.lastUsedFormat": "tmx",
     "map.layerDataFormat": null,
     "map.renderOrder": null,
@@ -86,6 +98,8 @@
     "project": "masamune-tiled.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "core/src/test/resources/maps/interactTest.tmx",
+        "core/src/test/resources/maps/interactTestObjects.tsx",
         "assets/maps/tileset.tsx",
         "assets/maps/village.tmx",
         "assets/maps/objects.tsx",

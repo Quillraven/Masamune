@@ -23,7 +23,6 @@ import io.github.masamune.tiledmap.TiledService
 import io.mockk.mockk
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
-import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 
 /**
@@ -92,10 +91,10 @@ private class InteractTest : KtxApplicationAdapter {
 
     override fun dispose() {
         world.dispose()
-        batch.disposeSafely()
-        shaderService.disposeSafely()
-        assetService.disposeSafely()
-        physicWorld.disposeSafely()
+        batch.dispose()
+        shaderService.dispose()
+        assetService.dispose()
+        physicWorld.dispose()
     }
 
 }

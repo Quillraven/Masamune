@@ -22,7 +22,6 @@ import io.github.masamune.system.DebugRenderSystem
 import io.github.masamune.system.RenderSystem
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
-import ktx.assets.disposeSafely
 import ktx.assets.toClasspathFile
 import ktx.graphics.color
 import ktx.math.vec2
@@ -160,9 +159,9 @@ private class RenderTest : KtxApplicationAdapter {
     }
 
     override fun dispose() {
-        batch.disposeSafely()
-        texture.disposeSafely()
-        atlas.disposeSafely()
+        batch.dispose()
+        texture.dispose()
+        atlas.dispose()
         world.dispose()
     }
 

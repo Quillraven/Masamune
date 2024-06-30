@@ -9,7 +9,6 @@ import io.github.masamune.screen.LoadingScreen
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
-import ktx.assets.disposeSafely
 import ktx.log.logger
 
 typealias PhysicWorld = World
@@ -38,7 +37,7 @@ class Masamune(
         log.info { "Maximum sprites in batch: ${(serviceLocator.batch as SpriteBatch).maxSpritesInBatch}" }
 
         super.dispose()
-        serviceLocator.disposeSafely()
+        serviceLocator.dispose()
     }
 
     companion object {

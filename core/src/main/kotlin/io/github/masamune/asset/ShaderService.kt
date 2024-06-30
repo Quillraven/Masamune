@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.utils.Disposable
 import ktx.app.gdxError
-import ktx.assets.disposeSafely
 import ktx.graphics.use
 import ktx.math.vec2
 
@@ -76,7 +75,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
      * Disposes all shaders.
      */
     override fun dispose() {
-        outlineShader.disposeSafely()
+        outlineShader.dispose()
     }
 
     companion object {

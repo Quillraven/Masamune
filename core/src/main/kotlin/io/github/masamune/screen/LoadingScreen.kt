@@ -3,7 +3,6 @@ package io.github.masamune.screen
 import io.github.masamune.Masamune
 import io.github.masamune.asset.*
 import ktx.app.KtxScreen
-import ktx.assets.disposeSafely
 
 class LoadingScreen(
     private val masamune: Masamune,
@@ -36,7 +35,7 @@ class LoadingScreen(
     private fun onFinishLoading() {
         masamune.addScreen(GameScreen(masamune))
         masamune.removeScreen<LoadingScreen>()
-        disposeSafely()
+        dispose()
         masamune.setScreen<GameScreen>()
     }
 

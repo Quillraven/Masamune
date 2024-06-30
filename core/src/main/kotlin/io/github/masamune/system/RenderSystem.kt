@@ -22,7 +22,6 @@ import io.github.masamune.component.Transform
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.MapChangeEvent
-import ktx.assets.disposeSafely
 import ktx.math.component1
 import ktx.math.component2
 import ktx.tiled.use
@@ -114,7 +113,7 @@ class RenderSystem(
     }
 
     override fun onDispose() {
-        mapRenderer.disposeSafely()
+        mapRenderer.dispose()
     }
 
 }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.World.Companion.inject
 import io.github.masamune.PhysicWorld
-import ktx.assets.disposeSafely
 
 class DebugPhysicRenderSystem(
     private val physicWorld: PhysicWorld = inject(),
@@ -20,7 +19,7 @@ class DebugPhysicRenderSystem(
     }
 
     override fun onDispose() {
-        b2dRenderer.disposeSafely()
+        b2dRenderer.dispose()
     }
 
 }

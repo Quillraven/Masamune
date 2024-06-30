@@ -20,7 +20,6 @@ import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.view.DialogView
 import io.github.masamune.ui.view.dialogView
 import ktx.app.KtxScreen
-import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 import ktx.log.logger
 import ktx.scene2d.actors
@@ -127,8 +126,8 @@ class GameScreen(
     override fun dispose() {
         log.debug { "Disposing world with '${world.numEntities}' entities" }
         world.dispose()
-        physicWorld.disposeSafely()
-        stage.disposeSafely()
+        physicWorld.dispose()
+        stage.dispose()
     }
 
     companion object {

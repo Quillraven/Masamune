@@ -9,7 +9,6 @@ import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Transform
-import ktx.assets.disposeSafely
 import ktx.graphics.use
 
 class DebugRenderSystem(
@@ -56,7 +55,7 @@ class DebugRenderSystem(
     override fun onTickEntity(entity: Entity) = Unit
 
     override fun onDispose() {
-        shapeRenderer.disposeSafely()
+        shapeRenderer.dispose()
     }
 
 }

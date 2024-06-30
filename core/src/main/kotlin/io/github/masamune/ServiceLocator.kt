@@ -7,7 +7,6 @@ import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.event.EventService
 import io.github.masamune.tiledmap.TiledService
-import ktx.assets.disposeSafely
 
 interface ServiceLocator : Disposable {
     val batch: Batch
@@ -34,9 +33,9 @@ class LazyServiceLocator(
     override val shader: ShaderService by lazy { shaderServiceInitializer() }
 
     override fun dispose() {
-        batch.disposeSafely()
-        asset.disposeSafely()
-        shader.disposeSafely()
+        batch.dispose()
+        asset.dispose()
+        shader.dispose()
     }
 
 }

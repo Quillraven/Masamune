@@ -21,7 +21,6 @@ import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.TiledService
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
-import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 
 /**
@@ -83,10 +82,10 @@ private class TiledPhysicTest : KtxApplicationAdapter {
     }
 
     override fun dispose() {
-        batch.disposeSafely()
+        batch.dispose()
         world.dispose()
-        assetService.disposeSafely()
-        tiledMap.disposeSafely()
+        assetService.dispose()
+        tiledMap.dispose()
     }
 
 }
