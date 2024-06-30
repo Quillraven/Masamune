@@ -22,13 +22,12 @@ class DialogViewModel(private val eventService: EventService) : PropertyChangeSo
     var content: DialogUiContent by propertyNotify(EMPTY_CONTENT)
 
     private var player: Entity = Entity.NONE
-    private var other: Entity = Entity.NONE
 
     fun triggerOption(optionIdx: Int) {
         if (activeDialog.triggerOption(optionIdx)) {
             // dialog finished
             content = EMPTY_CONTENT
-            eventService.fire(DialogEndEvent(player, other, activeDialog, optionIdx))
+            eventService.fire(DialogEndEvent(player, activeDialog, optionIdx))
             return
         }
 
@@ -51,7 +50,6 @@ class DialogViewModel(private val eventService: EventService) : PropertyChangeSo
             is DialogBeginEvent -> {
                 activeDialog = event.dialog
                 player = event.player
-                other = event.other
 
                 updateContent()
             }

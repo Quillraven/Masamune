@@ -18,9 +18,9 @@ data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) 
 
 data object PlayerInteractEvent : Event
 
-data class DialogBeginEvent(val world: World, val player: Entity, val other: Entity, val dialog: Dialog) : Event
+data class DialogBeginEvent(val world: World, val player: Entity, val dialog: Dialog) : Event
 
-data class DialogEndEvent(val player: Entity, val other: Entity, val dialog: Dialog, val optionIdx: Int) : Event
+data class DialogEndEvent(val player: Entity, val dialog: Dialog, val optionIdx: Int) : Event
 
 data object UiUpEvent : Event
 
