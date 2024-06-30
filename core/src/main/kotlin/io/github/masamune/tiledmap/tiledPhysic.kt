@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.ChainShape
@@ -23,6 +24,8 @@ import ktx.box2d.box
 import ktx.collections.GdxArray
 import ktx.math.*
 import ktx.tiled.*
+
+private val TMP_RELATIVE_TO = vec2()
 
 fun TiledMap.spawnBoundaryBodies(world: World) {
     // create four boxes for the map boundary (left, right, bottom and top edge)
@@ -68,29 +71,49 @@ fun TiledMapTile.toBody(
     }
 }
 
+fun MapObject.toBody(
+    world: World,
+    x: Float,
+    y: Float,
+    data: Any? = null,
+): Body {
+    val physicWorld = world.inject<PhysicWorld>()
+    return physicWorld.body(BodyType.StaticBody) {
+        position.set(x, y)
+        fixedRotation = true
+        userData = data
+        fixtureDefinitions.add(this@toBody.toFixtureDef(TMP_RELATIVE_TO.set(x, y)))
+    }
+}
+
 fun TiledMapTile.toFixtureDefs(): GdxArray<FixtureDefinition> {
     val result = GdxArray<FixtureDefinition>()
     objects.forEach { mapObject ->
-        result.add(
-            when (mapObject) {
-                is RectangleMapObject -> rectangleFixtureDef(mapObject)
-                is EllipseMapObject -> ellipseFixtureDef(mapObject)
-                is PolygonMapObject -> polygonFixtureDef(mapObject, mapObject.polygon.vertices)
-                is PolylineMapObject -> polygonFixtureDef(mapObject, mapObject.polyline.vertices)
-                else -> gdxError("Unsupported MapObject $mapObject")
-            }
-        )
+        result.add(mapObject.toFixtureDef())
     }
     return result
+}
+
+// relativeTo is necessary for map objects that are directly placed on a layer because
+// their x/y is equal to the position of the object, but we need it relative to 0,0 like it
+// is in the collision editor of a tile.
+fun MapObject.toFixtureDef(relativeTo: Vector2 = Vector2.Zero): FixtureDefinition {
+    return when (this) {
+        is RectangleMapObject -> rectangleFixtureDef(this, relativeTo)
+        is EllipseMapObject -> ellipseFixtureDef(this, relativeTo)
+        is PolygonMapObject -> polygonFixtureDef(this, this.polygon.vertices, relativeTo)
+        is PolylineMapObject -> polygonFixtureDef(this, this.polyline.vertices, relativeTo)
+        else -> gdxError("Unsupported MapObject $this")
+    }
 }
 
 // box is centered around body position in Box2D, but we want to have it aligned in a way
 // that the body position is the bottom left corner of the box.
 // That's why we use a 'boxOffset' below.
-private fun rectangleFixtureDef(mapObject: RectangleMapObject): FixtureDefinition {
+private fun rectangleFixtureDef(mapObject: RectangleMapObject, relativeTo: Vector2): FixtureDefinition {
     val (rectX, rectY, rectW, rectH) = mapObject.rectangle
-    val boxX = rectX * UNIT_SCALE
-    val boxY = rectY * UNIT_SCALE
+    val boxX = rectX * UNIT_SCALE - relativeTo.x
+    val boxY = rectY * UNIT_SCALE - relativeTo.y
 
     val boxW = rectW * UNIT_SCALE * 0.5f
     val boxH = rectH * UNIT_SCALE * 0.5f
@@ -106,10 +129,10 @@ private fun rectangleFixtureDef(mapObject: RectangleMapObject): FixtureDefinitio
     }
 }
 
-private fun ellipseFixtureDef(mapObject: EllipseMapObject): FixtureDefinition {
+private fun ellipseFixtureDef(mapObject: EllipseMapObject, relativeTo: Vector2): FixtureDefinition {
     val (x, y, w, h) = mapObject.ellipse
-    val ellipseX = x * UNIT_SCALE
-    val ellipseY = y * UNIT_SCALE
+    val ellipseX = x * UNIT_SCALE - relativeTo.x
+    val ellipseY = y * UNIT_SCALE - relativeTo.y
     val ellipseW = w * UNIT_SCALE / 2f
     val ellipseH = h * UNIT_SCALE / 2f
 
@@ -155,9 +178,10 @@ private fun ellipseFixtureDef(mapObject: EllipseMapObject): FixtureDefinition {
 private fun polygonFixtureDef(
     mapObject: MapObject,
     polyVertices: FloatArray,
+    relativeTo: Vector2,
 ): FixtureDefinition {
-    val x = mapObject.x * UNIT_SCALE
-    val y = mapObject.y * UNIT_SCALE
+    val x = mapObject.x * UNIT_SCALE - relativeTo.x
+    val y = mapObject.y * UNIT_SCALE - relativeTo.y
     val vertices = FloatArray(polyVertices.size) { vertexIdx ->
         if (vertexIdx % 2 == 0) {
             x + polyVertices[vertexIdx] * UNIT_SCALE
