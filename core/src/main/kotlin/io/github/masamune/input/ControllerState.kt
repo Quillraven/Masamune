@@ -1,5 +1,6 @@
 package io.github.masamune.input
 
+import com.badlogic.gdx.math.Vector2
 import io.github.masamune.event.*
 import ktx.math.vec2
 
@@ -7,6 +8,7 @@ sealed interface ControllerState {
     fun keyDown(command: Command)
     fun keyUp(command: Command)
     fun onActive() = Unit
+    fun onInactive() = Unit
 }
 
 class ControllerStateGame(private val eventService: EventService) : ControllerState {
@@ -15,6 +17,11 @@ class ControllerStateGame(private val eventService: EventService) : ControllerSt
 
     override fun onActive() {
         direction.setZero()
+    }
+
+    override fun onInactive() {
+        // stop player movement
+        eventService.fire(PlayerMoveEvent(Vector2.Zero))
     }
 
     private fun updateMove(x: Float = 0f, y: Float = 0f) {

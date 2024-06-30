@@ -19,6 +19,7 @@ class KeyboardController(
             for (i in commandState.indices) {
                 commandState[i] = false
             }
+            field.onInactive()
             value.onActive()
             field = value
         }
