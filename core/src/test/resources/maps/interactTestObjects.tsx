@@ -25,6 +25,7 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="smith/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="dialogName" value="smith_00"/>
    <property name="objType" propertytype="MapObjectType" value="SMITH"/>
   </properties>
   <image width="16" height="16" source="objects/smith.png"/>
@@ -37,6 +38,7 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="merchant/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="dialogName" value="merchant_00"/>
    <property name="objType" propertytype="MapObjectType" value="MERCHANT"/>
   </properties>
   <image width="16" height="16" source="objects/merchant.png"/>
@@ -49,6 +51,7 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="flower_girl/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="dialogName" value="flower_girl_00"/>
    <property name="objType" propertytype="MapObjectType" value="FLOWER_GIRL"/>
   </properties>
   <image width="16" height="16" source="objects/flower_girl.png"/>

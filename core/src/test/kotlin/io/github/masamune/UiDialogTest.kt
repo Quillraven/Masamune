@@ -2,8 +2,6 @@ package io.github.masamune
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -29,12 +27,7 @@ import ktx.scene2d.actors
  * - '4': dialog without image
  */
 
-fun main() {
-    Lwjgl3Application(UiDialogTest(), Lwjgl3ApplicationConfiguration().apply {
-        setTitle("UI Dialog Test; 1-4=dialogs, W/S=change option")
-        setWindowedMode(1280, 960)
-    })
-}
+fun main() = gdxTest("UI Dialog Test; 1-4=dialogs, W/S=change option", UiDialogTest())
 
 private class UiDialogTest : KtxApplicationAdapter {
     private val uiViewport = FitViewport(928f, 522f)

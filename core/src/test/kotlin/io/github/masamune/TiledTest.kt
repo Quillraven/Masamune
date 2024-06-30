@@ -2,8 +2,6 @@ package io.github.masamune
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -40,12 +38,7 @@ import kotlin.test.assertTrue
  * the edges of the map.
  */
 
-fun main() {
-    Lwjgl3Application(TiledTest(), Lwjgl3ApplicationConfiguration().apply {
-        setTitle("Tiled Test")
-        setWindowedMode(1280, 960)
-    })
-}
+fun main() = gdxTest("Tiled Test", TiledTest())
 
 private class TiledTest : KtxApplicationAdapter {
     private val batch: Batch by lazy { SpriteBatch() }

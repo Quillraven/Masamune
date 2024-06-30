@@ -2,8 +2,6 @@ package io.github.masamune
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMap
@@ -37,12 +35,7 @@ import ktx.box2d.createWorld
  * Refer to tiledTest.tmx in src/test/resources/maps folder.
  */
 
-fun main() {
-    Lwjgl3Application(TiledPhysicTest(), Lwjgl3ApplicationConfiguration().apply {
-        setTitle("Tiled Physic Test")
-        setWindowedMode(1280, 960)
-    })
-}
+fun main() = gdxTest("Tiled Physic Test", TiledPhysicTest())
 
 private class TiledPhysicTest : KtxApplicationAdapter {
     private val batch: Batch by lazy { SpriteBatch() }

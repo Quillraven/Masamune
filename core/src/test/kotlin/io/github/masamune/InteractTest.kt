@@ -3,8 +3,6 @@ package io.github.masamune
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
@@ -15,12 +13,14 @@ import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.ShaderService
+import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.PhysicSystem
 import io.github.masamune.system.PlayerInteractSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.TiledService
+import io.mockk.mockk
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -33,12 +33,7 @@ import ktx.box2d.createWorld
  * within his direction must be picked for interaction (=outline highlighting).
  */
 
-fun main() {
-    Lwjgl3Application(InteractTest(), Lwjgl3ApplicationConfiguration().apply {
-        setTitle("Interact Test")
-        setWindowedMode(1280, 960)
-    })
-}
+fun main() = gdxTest("Interact Test", InteractTest())
 
 private class InteractTest : KtxApplicationAdapter {
     private val batch: Batch by lazy { SpriteBatch() }
@@ -58,6 +53,8 @@ private class InteractTest : KtxApplicationAdapter {
             add(gameViewport)
             add(physicWorld)
             add(shaderService)
+            add(EventService())
+            add(mockk<DialogConfigurator>())
         }
 
         systems {

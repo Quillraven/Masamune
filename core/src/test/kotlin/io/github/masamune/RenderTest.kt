@@ -1,8 +1,6 @@
 package io.github.masamune
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
@@ -47,12 +45,7 @@ import ktx.math.vec3
  * Finally, at the bottom center you will see the combination of a graphic + animated version with and without scaling.
  */
 
-fun main() {
-    Lwjgl3Application(RenderTest(), Lwjgl3ApplicationConfiguration().apply {
-        setTitle("Render Test")
-        setWindowedMode(1280, 960)
-    })
-}
+fun main() = gdxTest("Render Test", RenderTest())
 
 private class RenderTest : KtxApplicationAdapter {
 

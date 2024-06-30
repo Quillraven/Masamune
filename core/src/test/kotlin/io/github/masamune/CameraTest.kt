@@ -2,8 +2,6 @@ package io.github.masamune
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -40,12 +38,7 @@ import ktx.math.vec2
  * Use mousewheel to zoom and touch/click to teleport the player entity.
  */
 
-fun main() {
-    Lwjgl3Application(CameraTest(), Lwjgl3ApplicationConfiguration().apply {
-        setTitle("Camera Test (click to move; mousewheel to zoom)")
-        setWindowedMode(1280, 960)
-    })
-}
+fun main() = gdxTest("Camera Test (click to move; mousewheel to zoom)", CameraTest())
 
 private class CameraController(
     private val gameViewport: Viewport,
