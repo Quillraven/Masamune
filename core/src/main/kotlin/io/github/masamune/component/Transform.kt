@@ -1,5 +1,6 @@
 package io.github.masamune.component
 
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.github.quillraven.fleks.Component
@@ -22,6 +23,12 @@ data class Transform(
         result.y = position.y + size.y * 0.5f
     }
 
+    operator fun contains(location: Vector2): Boolean {
+        return TMP_RECT
+            .set(position.x, position.y, size.x, size.y)
+            .contains(location)
+    }
+
     override fun type() = Transform
 
     override fun compareTo(other: Transform): Int {
@@ -36,5 +43,7 @@ data class Transform(
         }
     }
 
-    companion object : ComponentType<Transform>()
+    companion object : ComponentType<Transform>() {
+        private val TMP_RECT = Rectangle()
+    }
 }
