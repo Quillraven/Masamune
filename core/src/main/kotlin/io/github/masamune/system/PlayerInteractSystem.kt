@@ -62,6 +62,9 @@ class PlayerInteractSystem(
         } else if (interactEntity has Dialog) {
             val namedDialog = dialogConfigurator[interactEntity[Dialog].dialogName, world, entity]
             eventService.fire(DialogBeginEvent(world, entity, namedDialog))
+        } else if (interactEntity has Trigger) {
+            interactEntity.configure { it += Tag.EXECUTE_TRIGGER }
+            interactEntity[Trigger].triggeringEntity = entity
         }
     }
 

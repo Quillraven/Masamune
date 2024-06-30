@@ -121,6 +121,11 @@
                     "name": "speed",
                     "type": "float",
                     "value": 0
+                },
+                {
+                    "name": "triggerName",
+                    "type": "string",
+                    "value": ""
                 }
             ],
             "name": "MapObject",

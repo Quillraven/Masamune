@@ -77,7 +77,8 @@ class TriggerScript(
 }
 
 enum class TriggerScriptType(val scriptFactory: TriggerScriptFactory) {
-    VILLAGE_EXIT(villageExitScript)
+    VILLAGE_EXIT(villageExitScript),
+    ELDER(elderScript),
 }
 
 private val villageExitScript: TriggerScriptFactory = { world, scriptEntity, triggeringEntity ->
@@ -86,5 +87,11 @@ private val villageExitScript: TriggerScriptFactory = { world, scriptEntity, tri
         actionDialog("elder_00") { selectedOptionIdx ->
             println("$selectedOptionIdx")
         }
+    }
+}
+
+private val elderScript: TriggerScriptFactory = { world, _, triggeringEntity ->
+    trigger(world, triggeringEntity) {
+        actionDialog("elder_00")
     }
 }

@@ -114,6 +114,7 @@ class TiledService(
             configureMove(it, tile)
             configurePhysic(it, tile, world, x, y)
             configureDialog(it, tile)
+            configureTrigger(it, tile)
 
             if (mapObject.name == "Player") {
                 configurePlayer(it)
@@ -197,6 +198,14 @@ class TiledService(
         }
 
         entity += Dialog(tile.dialogName)
+    }
+
+    private fun EntityCreateContext.configureTrigger(entity: Entity, tile: TiledMapTile) {
+        if (tile.triggerName.isBlank()) {
+            return
+        }
+
+        entity += Trigger(tile.triggerName)
     }
 
     private fun EntityCreateContext.configurePlayer(entity: Entity) {

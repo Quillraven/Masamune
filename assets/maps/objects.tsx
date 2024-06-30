@@ -40,10 +40,11 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="elder/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
-   <property name="dialogName" value="elder_00"/>
+   <property name="dialogName" value=""/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="ELDER"/>
    <property name="speed" type="float" value="2"/>
+   <property name="triggerName" value="ELDER"/>
   </properties>
   <image width="16" height="16" source="objects/elder.png"/>
   <objectgroup draworder="index" id="2">

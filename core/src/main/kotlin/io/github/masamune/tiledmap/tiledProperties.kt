@@ -32,6 +32,9 @@ val TiledMapTile.objType: String
 val TiledMapTile.speed: Float
     get() = this.property<Float>("speed", 0f)
 
+val TiledMapTile.triggerName: String
+    get() = this.property<String>("triggerName", "")
+
 val MapObject.density: Float
     get() = this.property<Float>("density", 0f)
 
