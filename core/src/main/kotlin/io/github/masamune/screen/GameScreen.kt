@@ -72,6 +72,7 @@ class GameScreen(
             add(CameraSystem())
             add(AnimationSystem())
             add(RenderSystem())
+            add(TriggerSystem())
         }
     }
 

@@ -3,7 +3,6 @@ package io.github.masamune.tiledmap
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
@@ -25,9 +24,9 @@ import io.github.masamune.event.EventService
 import io.github.masamune.event.MapChangeEvent
 import ktx.app.gdxError
 import ktx.log.logger
+import ktx.math.vec2
 import ktx.math.vec3
-import ktx.tiled.id
-import ktx.tiled.isEmpty
+import ktx.tiled.*
 import kotlin.system.measureTimeMillis
 
 class TiledService(
@@ -78,13 +77,28 @@ class TiledService(
     }
 
     private fun loadObjects(tiledMap: TiledMap, world: World) {
-        tiledMap.layers
-            // filter for object layers
-            .filter { it::class == MapLayer::class }
-            .map { it.objects }
-            .forEach { mapObjects ->
-                mapObjects.forEach { loadObject(it, world) }
-            }
+        tiledMap.layers["objects"].objects.forEach { loadObject(it, world) }
+        tiledMap.layers["trigger"].objects.forEach { loadTrigger(it, world) }
+    }
+
+    private fun loadTrigger(mapObject: MapObject, world: World) {
+        val x = mapObject.x * UNIT_SCALE
+        val y = mapObject.y * UNIT_SCALE
+        val triggerName = mapObject.name ?: ""
+        if (triggerName.isBlank()) {
+            gdxError("Missing name for trigger: ${mapObject.id}")
+        }
+
+        world.entity { entity ->
+            entity += Trigger(triggerName)
+            entity += Transform(
+                position = vec3(x, y, 0f),
+                size = vec2(mapObject.width * UNIT_SCALE, mapObject.height * UNIT_SCALE)
+            )
+
+            val body = mapObject.toBody(world, x, y, data = entity)
+            entity += Physic(body)
+        }
     }
 
     private fun loadObject(mapObject: MapObject, world: World) {
@@ -173,7 +187,7 @@ class TiledService(
         }
         val bodyType = BodyType.valueOf(bodyTypeStr)
 
-        val body = tile.toBody(world, objX, objY, bodyType, entity)
+        val body = tile.toBody(world, objX, objY, bodyType, data = entity)
         entity += Physic(body)
     }
 

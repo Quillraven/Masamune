@@ -34,8 +34,16 @@ class PlayerInteractSystem(
         compareEntity { e1, e2 -> (euclideanDistance(e1).compareTo(euclideanDistance(e2))) }
 
     override fun onTickEntity(entity: Entity) = with(entity[Interact]) {
+
         if (nearbyEntities.isEmpty()) {
             // no entities to interact -> do nothing
+            return@with
+        }
+
+        // check for map trigger entities (=entities that are not rendered/visible to the player)
+        handleMapTrigger(entity)
+        if (nearbyEntities.isEmpty()) {
+            // no other entities to interact -> nothing else to do
             return@with
         }
 
@@ -53,17 +61,31 @@ class PlayerInteractSystem(
             return@with
         } else if (interactEntity has Dialog) {
             val namedDialog = dialogConfigurator[interactEntity[Dialog].dialogName, world, entity]
-            eventService.fire(DialogBeginEvent(world, entity, interactEntity, namedDialog))
-            // stop player movement
-            entity[Move].direction.setZero()
+            eventService.fire(DialogBeginEvent(world, entity, namedDialog))
+        }
+    }
+
+    private fun Entity.isMapTrigger(): Boolean {
+        return this has Trigger && this hasNo Graphic
+    }
+
+    private fun Interact.handleMapTrigger(player: Entity) {
+        nearbyEntities.firstOrNull { it.isMapTrigger() }?.let { mapTrigger ->
+            mapTrigger[Trigger].triggeringEntity = player
+            mapTrigger.configure { it += Tag.EXECUTE_TRIGGER }
         }
     }
 
     private fun Interact.tagClosestEntity(player: Entity) {
         player[Transform].centerTo(playerCenter)
+
+        // filter for closest entity in player direction
         filteredDirectionEntities.clear()
-        nearbyEntities.filterTo(filteredDirectionEntities) { other -> withinDirection(other, lastDirection) }
+        nearbyEntities.filterTo(filteredDirectionEntities) { other ->
+            !other.isMapTrigger() && withinDirection(other, lastDirection)
+        }
         filteredDirectionEntities.sort(distanceComparator)
+
         val closestEntity: Entity? = filteredDirectionEntities.firstOrNull()
         if (closestEntity != null && closestEntity != interactEntity) {
             closestEntity.configure { it += Tag.OUTLINE }
@@ -110,7 +132,7 @@ class PlayerInteractSystem(
     }
 
     private fun Entity.isNotInteractable(): Boolean {
-        return this hasNo Dialog
+        return this hasNo Dialog && this hasNo Trigger
     }
 
     private fun onPlayerBeginInteract(player: Entity, other: Entity) {
@@ -124,10 +146,9 @@ class PlayerInteractSystem(
     }
 
     private fun onPlayerEndInteract(player: Entity, other: Entity) {
-        if (other.isNotInteractable()) {
-            return
-        }
-
+        // calling isNotInteractable will not work here because
+        // a removed entity will trigger this event, but it won't have any components anymore
+        // -> just execute the logic all the time
         val interactCmp = player[Interact]
         interactCmp.nearbyEntities -= other
         if (other has Tag.OUTLINE) {
