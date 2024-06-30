@@ -17,8 +17,10 @@ data class Physic(
     override fun type() = Physic
 
     override fun World.onRemove(entity: Entity) {
-        body.userData = null
         body.world.destroyBody(body)
+        // set userData to null after calling destroyBody to still
+        // have access to the entity when endContact is triggered in the PhysicContactHandler
+        body.userData = null
     }
 
     companion object : ComponentType<Physic>()
