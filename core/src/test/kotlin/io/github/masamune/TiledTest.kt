@@ -26,7 +26,6 @@ import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.tiledmap.TiledService
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
-import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -100,10 +99,10 @@ private class TiledTest : KtxApplicationAdapter {
     }
 
     override fun dispose() {
-        batch.disposeSafely()
+        batch.dispose()
         world.dispose()
-        assetService.disposeSafely()
-        tiledMap.disposeSafely()
+        assetService.dispose()
+        tiledMap.dispose()
     }
 
 }
