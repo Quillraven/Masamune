@@ -29,13 +29,24 @@ data class Dialog(val name: String, val pages: List<Page>) {
     var activePage = pages.first()
         private set
 
+    var isFinished = false
+        private set
+
+    var lastOptionIdx: Int = -1
+        private set
+
     fun triggerOption(optionIdx: Int): Boolean {
         if (optionIdx !in activePage.options.indices) {
             gdxError("Dialog $name with page ${activePage.pageIdx} has no option with index $optionIdx")
         }
 
+        lastOptionIdx = optionIdx
         when (val triggerAction = activePage.options[optionIdx].action) {
-            is ActionExit -> return true
+            is ActionExit -> {
+                isFinished = true
+                return true
+            }
+
             is ActionNext -> goToPage(activePage.pageIdx + 1)
             is ActionPrevious -> goToPage(activePage.pageIdx - 1)
             is ActionGoTo -> goToPage(triggerAction.pageIdx)
