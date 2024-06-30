@@ -30,8 +30,7 @@ class PlayerInteractSystem(
     private val playerCenter = vec2()
     private val otherCenter = vec2()
     private val filteredDirectionEntities = MutableEntityBag(4)
-    private val distanceComparator =
-        compareEntity { e1, e2 -> (euclideanDistance(e1).compareTo(euclideanDistance(e2))) }
+    private val distanceComparator = compareEntity { e1, e2 -> (euclideanDist(e1).compareTo(euclideanDist(e2))) }
 
     override fun onTickEntity(entity: Entity) = with(entity[Interact]) {
 
@@ -40,15 +39,12 @@ class PlayerInteractSystem(
             return@with
         }
 
+        // playerCenter is used in handleMapTrigger and tagClosestEntity below
+        entity[Transform].centerTo(playerCenter)
         // check for map trigger entities (=entities that are not rendered/visible to the player)
         handleMapTrigger(entity)
-        if (nearbyEntities.isEmpty()) {
-            // no other entities to interact -> nothing else to do
-            return@with
-        }
-
         // tag the closest entity within direction with an OUTLINE tag to render it with an outline
-        tagClosestEntity(entity)
+        tagClosestEntity()
 
         if (!trigger) {
             // player did not press interact button yet -> do nothing
@@ -74,14 +70,17 @@ class PlayerInteractSystem(
 
     private fun Interact.handleMapTrigger(player: Entity) {
         nearbyEntities.firstOrNull { it.isMapTrigger() }?.let { mapTrigger ->
+            if (playerCenter !in mapTrigger[Transform]) {
+                // player is not inside trigger area yet -> ignore the trigger
+                return
+            }
+
             mapTrigger[Trigger].triggeringEntity = player
             mapTrigger.configure { it += Tag.EXECUTE_TRIGGER }
         }
     }
 
-    private fun Interact.tagClosestEntity(player: Entity) {
-        player[Transform].centerTo(playerCenter)
-
+    private fun Interact.tagClosestEntity() {
         // filter for closest entity in player direction
         filteredDirectionEntities.clear()
         nearbyEntities.filterTo(filteredDirectionEntities) { other ->
@@ -127,7 +126,7 @@ class PlayerInteractSystem(
         return difference <= INTERACT_ANG_TOLERANCE
     }
 
-    private fun euclideanDistance(other: Entity): Float {
+    private fun euclideanDist(other: Entity): Float {
         other[Transform].centerTo(otherCenter)
         val diffX = otherCenter.x - playerCenter.x
         val diffY = otherCenter.y - playerCenter.y
