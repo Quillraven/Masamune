@@ -13,7 +13,6 @@ import io.github.masamune.ui.view.DialogView
 import io.github.masamune.ui.view.dialogView
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
-import ktx.assets.disposeSafely
 import ktx.assets.toClasspathFile
 import ktx.scene2d.actors
 
@@ -114,9 +113,9 @@ private class UiDialogTest : KtxApplicationAdapter {
     }
 
     override fun dispose() {
-        stage.disposeSafely()
-        batch.disposeSafely()
-        skin.disposeSafely()
+        stage.dispose()
+        batch.dispose()
+        skin.dispose()
     }
 
     companion object {
