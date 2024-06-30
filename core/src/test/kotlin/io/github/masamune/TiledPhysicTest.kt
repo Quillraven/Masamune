@@ -24,12 +24,16 @@ import ktx.app.clearScreen
 import ktx.box2d.createWorld
 
 /**
- * Test for tiledPhysic.kt. It loads a single map object with all possible collision shapes:
+ * Test for tiledPhysic.kt.
+ *
+ * It loads a map object with all possible collision shapes (Tile MapObject):
  * - rect
  * - circle
  * - ellipse
  * - polyline
  * - polygon
+ *
+ * It also loads trigger map objects with those shapes (=no Tile, no collision editor).
  *
  * Refer to tiledTest.tmx in src/test/resources/maps folder.
  */
@@ -38,7 +42,7 @@ fun main() = gdxTest("Tiled Physic Test", TiledPhysicTest())
 
 private class TiledPhysicTest : KtxApplicationAdapter {
     private val batch: Batch by lazy { SpriteBatch() }
-    private val gameViewport: Viewport = ExtendViewport(4f, 2.25f)
+    private val gameViewport: Viewport = ExtendViewport(6f, 3.375f)
     private val world by lazy { gameWorld() }
     private val assetService by lazy { AssetService(ClasspathFileHandleResolver()) }
     private val eventService by lazy { EventService() }
