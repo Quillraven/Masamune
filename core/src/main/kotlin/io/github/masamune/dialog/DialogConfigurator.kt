@@ -16,17 +16,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
         log.debug { "Creating new dialog $name" }
 
         return when (name) {
-            "elder_00" -> dialog(name) {
-                val playerName = entityName(world, triggeringEntity)
-                val elderTitle = bundle["npc.elder.title"]
-
-                page(bundle.format("dialog.elder_00.page1", playerName), "elder", elderTitle) {
-                    option(dialogOptionNext, ActionNext)
-                }
-                page(bundle["dialog.elder_00.page2"], "elder", elderTitle) {
-                    option(dialogOptionOk, ActionExit)
-                }
-            }
+            "elder_00" -> elderDialog(name, world, triggeringEntity)
 
             else -> gdxError("There is no dialog configured for name $name")
         }
@@ -34,6 +24,18 @@ class DialogConfigurator(private val bundle: I18NBundle) {
 
     private fun entityName(world: World, entity: Entity): String = with(world) {
         entity[Player].name
+    }
+
+    private fun elderDialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+        val playerName = entityName(world, triggeringEntity)
+        val elderTitle = bundle["npc.elder.title"]
+
+        page(bundle.format("dialog.elder_00.page1", playerName), "elder", elderTitle) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(bundle["dialog.elder_00.page2"], "elder", elderTitle) {
+            option(dialogOptionOk, ActionExit)
+        }
     }
 
     companion object {
