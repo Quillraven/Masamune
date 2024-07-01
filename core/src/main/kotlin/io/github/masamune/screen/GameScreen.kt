@@ -16,6 +16,7 @@ import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.*
 import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.view.DialogView
 import io.github.masamune.ui.view.dialogView
@@ -51,6 +52,7 @@ class GameScreen(
     // other stuff
     private val keyboardController = KeyboardController(eventService)
     private val dialogConfigurator = DialogConfigurator(assetService[I18NAsset.MESSAGES])
+    private val triggerConfigurator = TriggerConfigurator()
 
     // ecs world
     private val world = gameWorld()
@@ -63,6 +65,7 @@ class GameScreen(
             add(shaderService)
             add(eventService)
             add(dialogConfigurator)
+            add(triggerConfigurator)
         }
 
         systems {

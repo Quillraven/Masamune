@@ -3,46 +3,43 @@ package io.github.masamune.system
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Trigger
+import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.trigger.TriggerScript
-import io.github.masamune.trigger.TriggerScriptType
-import ktx.app.gdxError
 import ktx.log.logger
 
-class TriggerSystem : IteratingSystem(family { all(Trigger, Tag.EXECUTE_TRIGGER) }) {
+class TriggerSystem(
+    private val triggerConfigurator: TriggerConfigurator = inject(),
+) : IteratingSystem(family { all(Trigger, Tag.EXECUTE_TRIGGER) }) {
 
-    private val activeTriggers = mutableMapOf<TriggerScriptType, TriggerScript>()
-    private val finishedTriggers = mutableListOf<TriggerScriptType>()
+    private val activeTriggers = mutableListOf<TriggerScript>()
 
     override fun onTick() {
         super.onTick()
-        activeTriggers.forEach { (triggerType, triggerScript) ->
-            if (triggerScript.onUpdate()) {
-                // script finished -> remove it
-                finishedTriggers += triggerType
+
+        // run active triggers
+        if (activeTriggers.isNotEmpty()) {
+            val triggerIterator = activeTriggers.iterator()
+            while (triggerIterator.hasNext()) {
+                val script = triggerIterator.next()
+                if (script.onUpdate()) {
+                    // script finished -> remove it
+                    triggerIterator.remove()
+                    log.debug { "Finished trigger ${script.name}. Remaining active triggers: ${activeTriggers.size}" }
+                }
             }
         }
-        finishedTriggers.forEach {
-            log.debug { "Removing trigger $it" }
-            activeTriggers -= it
-        }
-        finishedTriggers.clear()
     }
 
-    // this method only gets called for entities that have a trigger that just got triggered
+    // this method only gets called for entities that have a trigger that just got triggered (=Tag.EXECUTE_TRIGGER)
     override fun onTickEntity(entity: Entity) {
         val (triggerName, triggeringEntity) = entity[Trigger]
         entity.configure { it -= Tag.EXECUTE_TRIGGER }
 
-        val scriptType = TriggerScriptType.entries.firstOrNull { it.name == triggerName }
-            ?: gdxError("There is no trigger for name $triggerName")
-        if (scriptType !in activeTriggers) {
-            // script type not active yet -> create it
-            log.debug { "Creating trigger $scriptType" }
-            val script = scriptType.scriptFactory(world, entity, triggeringEntity)
-            activeTriggers[scriptType] = script
-        }
+        val script = triggerConfigurator[triggerName, world, entity, triggeringEntity]
+        activeTriggers += script
     }
 
     companion object {

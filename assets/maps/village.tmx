@@ -34,7 +34,7 @@
   <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
-  <object id="7" name="VILLAGE_EXIT" type="FixtureDefinition" x="48" y="0" width="48" height="16">
+  <object id="7" name="villageExit" type="FixtureDefinition" x="48" y="0" width="48" height="16">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
    </properties>

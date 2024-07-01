@@ -6,8 +6,6 @@ import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.EventService
 
-typealias TriggerScriptFactory = (world: World, scriptEntity: Entity, triggeringEntity: Entity) -> TriggerScript
-
 sealed interface TriggerAction {
     fun World.onStart() = Unit
 
@@ -47,51 +45,5 @@ class TriggerActionDialog(
 
     companion object {
         val NO_CLOSE_ACTION: (Int) -> Unit = {}
-    }
-}
-
-class TriggerScript(
-    val world: World,
-    private val actions: MutableList<TriggerAction>
-) {
-
-    init {
-        actions.first().run { world.onStart() }
-    }
-
-    fun onUpdate(): Boolean {
-        actions.first().run {
-            if (world.onUpdate()) {
-                // action finished -> go to next action or end script if there are no other actions
-                actions.removeFirst()
-                if (actions.isEmpty()) {
-                    return true
-                }
-                actions.first().run { world.onStart() }
-            }
-        }
-
-        return false
-    }
-
-}
-
-enum class TriggerScriptType(val scriptFactory: TriggerScriptFactory) {
-    VILLAGE_EXIT(villageExitScript),
-    ELDER(elderScript),
-}
-
-private val villageExitScript: TriggerScriptFactory = { world, scriptEntity, triggeringEntity ->
-    trigger(world, triggeringEntity) {
-        actionRemove(scriptEntity)
-        actionDialog("elder_00") { selectedOptionIdx ->
-            println("$selectedOptionIdx")
-        }
-    }
-}
-
-private val elderScript: TriggerScriptFactory = { world, _, triggeringEntity ->
-    trigger(world, triggeringEntity) {
-        actionDialog("elder_00")
     }
 }

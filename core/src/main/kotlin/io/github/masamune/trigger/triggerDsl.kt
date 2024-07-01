@@ -29,6 +29,7 @@ class TriggerCfg(
 }
 
 fun trigger(
+    name: String,
     world: World,
     triggeringEntity: Entity,
     cfg: TriggerCfg.() -> Unit
@@ -36,8 +37,8 @@ fun trigger(
     val actions = mutableListOf<TriggerAction>()
     TriggerCfg(world, triggeringEntity, actions).apply(cfg)
     if (actions.isEmpty()) {
-        gdxError("Trigger must have at least one action")
+        gdxError("Trigger $name must have at least one action")
     }
 
-    return TriggerScript(world, actions)
+    return TriggerScript(name, world, actions)
 }

@@ -44,7 +44,7 @@
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="ELDER"/>
    <property name="speed" type="float" value="2"/>
-   <property name="triggerName" value="ELDER"/>
+   <property name="triggerName" value="elder"/>
   </properties>
   <image width="16" height="16" source="objects/elder.png"/>
   <objectgroup draworder="index" id="2">
