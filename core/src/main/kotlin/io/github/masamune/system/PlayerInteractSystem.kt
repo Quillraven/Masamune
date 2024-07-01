@@ -69,14 +69,15 @@ class PlayerInteractSystem(
     }
 
     private fun Interact.handleMapTrigger(player: Entity) {
-        nearbyEntities.firstOrNull { it.isMapTrigger() }?.let { mapTrigger ->
-            if (playerCenter !in mapTrigger[Transform]) {
-                // player is not inside trigger area yet -> ignore the trigger
-                return
+        nearbyEntities.firstOrNull { it.isMapTrigger() }?.let { mapTriggerEntity ->
+            mapTriggerEntity[Physic].body.fixtureList.forEach { fixture ->
+                if (fixture.testPoint(playerCenter)) {
+                    // player is inside trigger area -> execute trigger
+                    mapTriggerEntity[Trigger].triggeringEntity = player
+                    mapTriggerEntity.configure { it += Tag.EXECUTE_TRIGGER }
+                    return
+                }
             }
-
-            mapTrigger[Trigger].triggeringEntity = player
-            mapTrigger.configure { it += Tag.EXECUTE_TRIGGER }
         }
     }
 

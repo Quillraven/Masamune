@@ -24,9 +24,11 @@ import io.github.masamune.event.EventService
 import io.github.masamune.event.MapChangeEvent
 import ktx.app.gdxError
 import ktx.log.logger
-import ktx.math.vec2
 import ktx.math.vec3
-import ktx.tiled.*
+import ktx.tiled.id
+import ktx.tiled.isEmpty
+import ktx.tiled.x
+import ktx.tiled.y
 import kotlin.system.measureTimeMillis
 
 class TiledService(
@@ -91,11 +93,6 @@ class TiledService(
 
         world.entity { entity ->
             entity += Trigger(triggerName)
-            entity += Transform(
-                position = vec3(x, y, 0f),
-                size = vec2(mapObject.width * UNIT_SCALE, mapObject.height * UNIT_SCALE)
-            )
-
             val body = mapObject.toBody(world, x, y, data = entity)
             entity += Physic(body)
         }
