@@ -45,6 +45,8 @@ class DialogTest {
 
         dialog.name shouldBe "testDialog"
         dialog.pages.size shouldBe 1
+        dialog.isFinished shouldBe false
+        dialog.lastOptionIdx shouldBe -1
         val firstPage = dialog.pages.first()
         firstPage.pageIdx shouldBe 0
         firstPage.text shouldBe "First"
@@ -165,6 +167,8 @@ class DialogTest {
         val actual = dialog.triggerOption(0)
 
         dialog.activePage.pageIdx shouldBe 0
+        dialog.isFinished shouldBe true
+        dialog.lastOptionIdx shouldBe 0
         actual shouldBe true
     }
 
