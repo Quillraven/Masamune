@@ -129,7 +129,7 @@ class DialogView(
     }
 
     fun image(drawableName: String?, caption: String? = null) {
-        if (drawableName?.isBlank() == true) {
+        if (drawableName.isNullOrBlank()) {
             imageGroup.isVisible = false
             imageGroup.inCell.width(0f)
         } else {
