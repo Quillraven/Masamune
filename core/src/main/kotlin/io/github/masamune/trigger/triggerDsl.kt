@@ -13,8 +13,8 @@ annotation class TriggerDsl
 
 @TriggerDsl
 class TriggerCfg(
-    private val world: World,
-    private val triggeringEntity: Entity,
+    val world: World,
+    val triggeringEntity: Entity,
     private val actions: MutableList<TriggerAction>,
 ) {
     fun actionRemove(entity: Entity) {

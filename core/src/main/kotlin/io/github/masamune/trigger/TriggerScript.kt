@@ -5,11 +5,19 @@ import com.github.quillraven.fleks.World
 class TriggerScript(
     val name: String,
     val world: World,
-    private val actions: MutableList<TriggerAction>
+    @PublishedApi
+    internal val actions: MutableList<TriggerAction>
 ) {
+
+    val numActions: Int
+        get() = actions.size
 
     init {
         actions.first().run { world.onStart() }
+    }
+
+    inline fun <reified T : TriggerAction> getAction(actionIdx: Int): T {
+        return actions[actionIdx] as T
     }
 
     fun onUpdate(): Boolean {
@@ -26,4 +34,9 @@ class TriggerScript(
 
         return false
     }
+
+    override fun toString(): String {
+        return "TriggerScript(name='$name', numActions=$numActions)"
+    }
+
 }

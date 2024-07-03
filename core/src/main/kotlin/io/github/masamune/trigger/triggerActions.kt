@@ -12,7 +12,7 @@ sealed interface TriggerAction {
     fun World.onUpdate(): Boolean
 }
 
-data class TriggerActionRemoveEntity(private val entity: Entity) : TriggerAction {
+data class TriggerActionRemoveEntity(val entity: Entity) : TriggerAction {
     override fun World.onUpdate(): Boolean {
         entity.remove()
         return true
@@ -23,8 +23,8 @@ class TriggerActionDialog(
     dialogConfigurator: DialogConfigurator,
     dialogName: String,
     world: World,
-    private val triggeringEntity: Entity,
-    private val eventService: EventService,
+    val triggeringEntity: Entity,
+    val eventService: EventService,
     private val closeAction: (selectedOptionIdx: Int) -> Unit
 ) : TriggerAction {
     private val namedDialog = dialogConfigurator[dialogName, world, triggeringEntity]
