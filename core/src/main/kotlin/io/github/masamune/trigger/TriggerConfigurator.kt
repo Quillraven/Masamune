@@ -21,9 +21,7 @@ class TriggerConfigurator {
     private fun World.villageExitTrigger(name: String, scriptEntity: Entity, triggeringEntity: Entity) =
         trigger(name, this, triggeringEntity) {
             actionRemove(scriptEntity)
-            actionDialog("elder_00") { selectedOptionIdx ->
-                println("$selectedOptionIdx")
-            }
+            actionDialog("villageExit")
         }
 
     private fun World.elderTrigger(name: String, triggeringEntity: Entity) =
