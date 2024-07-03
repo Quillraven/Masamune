@@ -75,11 +75,15 @@ class TriggerTest {
 
     @Test
     fun `test dialog action`() {
+        val dialogCloseAction: (Int) -> Unit = {}
+
         val script = trigger(testTriggerName, testWorld, testTriggeringEntity) {
-            actionDialog("dialog")
+            actionDialog("dialog", dialogCloseAction)
         }
 
-        script.getAction<TriggerActionDialog>(0).triggeringEntity shouldBe testTriggeringEntity
-        script.getAction<TriggerActionDialog>(0).eventService shouldBe eventServiceMock
+        val action = script.getAction<TriggerActionDialog>(0)
+        action.triggeringEntity shouldBe testTriggeringEntity
+        action.eventService shouldBe eventServiceMock
+        action.closeAction shouldBe dialogCloseAction
     }
 }

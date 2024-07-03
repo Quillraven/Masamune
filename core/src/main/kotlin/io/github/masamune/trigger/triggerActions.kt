@@ -25,7 +25,7 @@ class TriggerActionDialog(
     world: World,
     val triggeringEntity: Entity,
     val eventService: EventService,
-    private val closeAction: (selectedOptionIdx: Int) -> Unit
+    val closeAction: (selectedOptionIdx: Int) -> Unit
 ) : TriggerAction {
     private val namedDialog = dialogConfigurator[dialogName, world, triggeringEntity]
 
