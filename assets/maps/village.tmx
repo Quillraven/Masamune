@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="10">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="11">
  <editorsettings>
   <export target="village..tmx" format="tmx"/>
  </editorsettings>
@@ -34,7 +34,7 @@
   <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
-  <object id="7" name="villageExit" type="FixtureDefinition" x="48" y="0" width="48" height="16">
+  <object id="7" name="villageExit" x="48" y="0" width="48" height="16">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
    </properties>
