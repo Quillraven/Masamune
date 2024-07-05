@@ -80,7 +80,7 @@ class DialogView(
                 }
 
                 this@DialogView.imageCaption = label("", this@DialogView.style.imageCaptionStyle, skin) {
-                    setAlignment(Align.center)
+                    setAlignment(Align.top, Align.center)
                     wrap = true
                 }
 
