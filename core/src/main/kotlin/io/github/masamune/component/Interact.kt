@@ -9,7 +9,7 @@ import ktx.math.vec2
 
 data class Interact(
     val nearbyEntities: MutableEntityBag = MutableEntityBag(4),
-    var trigger: Boolean = false,
+    var triggerTimer: Float = 0f,
     val lastDirection: Vector2 = vec2(),
     var interactEntity: Entity = Entity.NONE,
 ) : Component<Interact> {

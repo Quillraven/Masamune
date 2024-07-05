@@ -33,6 +33,7 @@ class PlayerInteractSystem(
     private val distanceComparator = compareEntity { e1, e2 -> (euclideanDist(e1).compareTo(euclideanDist(e2))) }
 
     override fun onTickEntity(entity: Entity) = with(entity[Interact]) {
+        triggerTimer = (triggerTimer - deltaTime).coerceAtLeast(0f)
 
         if (nearbyEntities.isEmpty()) {
             // no entities to interact -> do nothing
@@ -46,12 +47,12 @@ class PlayerInteractSystem(
         // tag the closest entity within direction with an OUTLINE tag to render it with an outline
         tagClosestEntity()
 
-        if (!trigger) {
+        if (triggerTimer == 0f) {
             // player did not press interact button yet -> do nothing
             return@with
         }
 
-        trigger = false
+        triggerTimer = 0f
         if (interactEntity == Entity.NONE) {
             // no entity to interact
             return@with
@@ -173,7 +174,7 @@ class PlayerInteractSystem(
                 }
             }
 
-            is PlayerInteractEvent -> family.forEach { it[Interact].trigger = true }
+            is PlayerInteractEvent -> family.forEach { it[Interact].triggerTimer = 0.1f }
             is PlayerInteractBeginContactEvent -> onPlayerBeginInteract(event.player, event.other)
             is PlayerInteractEndContactEvent -> onPlayerEndInteract(event.player, event.other)
             else -> Unit
