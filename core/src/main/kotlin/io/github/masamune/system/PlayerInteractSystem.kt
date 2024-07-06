@@ -10,6 +10,7 @@ import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.collection.compareEntity
+import io.github.masamune.PhysicContactHandler.Companion.testPoint
 import io.github.masamune.component.*
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.*
@@ -44,6 +45,8 @@ class PlayerInteractSystem(
         entity[Transform].centerTo(playerCenter)
         // check for map trigger entities (=entities that are not rendered/visible to the player)
         handleMapTrigger(entity)
+        // check for map portal entities
+        handlePortals(entity)
         // tag the closest entity within direction with an OUTLINE tag to render it with an outline
         tagClosestEntity()
 
@@ -65,19 +68,30 @@ class PlayerInteractSystem(
         }
     }
 
+    private fun Entity.isPortal(): Boolean = this has Portal
+
+    private fun Interact.handlePortals(player: Entity) {
+        nearbyEntities.firstOrNull { it.isPortal() }?.let { portalEntity ->
+            if (portalEntity[Physic].body.testPoint(playerCenter)) {
+                // player is inside portal area -> start map transition
+                eventService.fire(PlayerPortalEvent(player, portalEntity))
+            }
+        }
+    }
+
     private fun Entity.isMapTrigger(): Boolean {
+        // graphic check is needed because trigger can also be part of a NPC entity, and
+        // in for those entities it needs to be triggered via player input
         return this has Trigger && this hasNo Graphic
     }
 
     private fun Interact.handleMapTrigger(player: Entity) {
         nearbyEntities.firstOrNull { it.isMapTrigger() }?.let { mapTriggerEntity ->
-            mapTriggerEntity[Physic].body.fixtureList.forEach { fixture ->
-                if (fixture.testPoint(playerCenter)) {
-                    // player is inside trigger area -> execute trigger
-                    mapTriggerEntity[Trigger].triggeringEntity = player
-                    mapTriggerEntity.configure { it += Tag.EXECUTE_TRIGGER }
-                    return
-                }
+            if (mapTriggerEntity[Physic].body.testPoint(playerCenter)) {
+                // player is inside trigger area -> execute trigger
+                mapTriggerEntity[Trigger].triggeringEntity = player
+                mapTriggerEntity.configure { it += Tag.EXECUTE_TRIGGER }
+                return
             }
         }
     }
@@ -86,7 +100,7 @@ class PlayerInteractSystem(
         // filter for closest entity in player direction
         filteredDirectionEntities.clear()
         nearbyEntities.filterTo(filteredDirectionEntities) { other ->
-            !other.isMapTrigger() && withinDirection(other, lastDirection)
+            !other.isMapTrigger() && !other.isPortal() && withinDirection(other, lastDirection)
         }
         filteredDirectionEntities.sort(distanceComparator)
 
@@ -136,7 +150,7 @@ class PlayerInteractSystem(
     }
 
     private fun Entity.isNotInteractable(): Boolean {
-        return this hasNo Dialog && this hasNo Trigger
+        return this hasNo Dialog && this hasNo Trigger && this hasNo Portal
     }
 
     private fun onPlayerBeginInteract(player: Entity, other: Entity) {

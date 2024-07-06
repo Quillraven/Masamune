@@ -66,16 +66,20 @@ class GameScreen(
             add(eventService)
             add(dialogConfigurator)
             add(triggerConfigurator)
+            add(tiledService)
         }
 
         systems {
             add(MoveSystem())
             add(PhysicSystem())
             add(PlayerInteractSystem())
+            add(PortalSystem())
+            add(TeleportSystem())
             add(CameraSystem())
             add(AnimationSystem())
             add(RenderSystem())
             add(TriggerSystem())
+            add(DebugPhysicRenderSystem())
         }
     }
 

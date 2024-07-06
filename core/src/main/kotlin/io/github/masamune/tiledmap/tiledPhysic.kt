@@ -27,7 +27,7 @@ import ktx.tiled.*
 
 private val TMP_RELATIVE_TO = vec2()
 
-fun TiledMap.spawnBoundaryBodies(world: World) {
+fun TiledMap.spawnBoundaryBody(world: World): Body {
     // create four boxes for the map boundary (left, right, bottom and top edge)
     val physicWorld = world.inject<PhysicWorld>()
     val mapW = width.toFloat()
@@ -36,7 +36,7 @@ fun TiledMap.spawnBoundaryBodies(world: World) {
     val halfH = height * 0.5f
     val boxThickness = 1f
 
-    physicWorld.body(BodyType.StaticBody) {
+    return physicWorld.body(BodyType.StaticBody) {
         position.set(0f, 0f)
 
         // left edge
