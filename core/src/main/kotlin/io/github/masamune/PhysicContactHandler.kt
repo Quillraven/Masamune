@@ -1,5 +1,6 @@
 package io.github.masamune
 
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
@@ -62,4 +63,10 @@ class PhysicContactHandler(
 
     private val Contact.interactEntity: Entity
         get() = if (fixtureA.isNonPlayerEntity()) fixtureA.body.userData as Entity else fixtureB.body.userData as Entity
+
+    companion object {
+        fun Body.testPoint(point: Vector2): Boolean {
+            return fixtureList.any { it.testPoint(point) }
+        }
+    }
 }
