@@ -79,7 +79,6 @@ class GameScreen(
             add(AnimationSystem())
             add(RenderSystem())
             add(TriggerSystem())
-            add(DebugPhysicRenderSystem())
         }
     }
 
