@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="16" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="12">
+ <tileset firstgid="1" source="tileset.tsx"/>
+ <tileset firstgid="4097" source="objects.tsx"/>
+ <layer id="1" name="ground" width="16" height="44">
+  <data encoding="base64" compression="zlib">
+   eJydVltOwzAQTEE2X1yy4Y9TpPnjGASpXIO0hXvQSnAM1qqHTNZe2/AxivqYfe9s+vuu+xa8CJ7j880LXNcN8twJfHjK59Fdfwv/2wseBVNE4H0KLpG/EdwIPqKdd3ne+oX/Ff1O0RZ4Gpto4+CW74Kf1wbu0S+5MJ9tWNwDf87wYSPHZQzCu/Nr/qz+M/r8b+By7RinBr8Wt2Srxh0b/M7uOjeYGYujaxFqHfxidnJ1L/aLOQV+4pf4mHfdt2QujNx3fslB1y9Xh5F8W7wmGPmauRb4pdkq8bnnLehlhx5IM6yeczxcwylqya+dP8ZwJi0JGoYYWm1sSccC/+TbbKAn4ILPtYT2sg09P3sVP89hmKXSDoVZvkTdX/l3tPuVHexj/tDhRO+If8zwpwx3pTsV/xx3qHuyO5U+nAs3APwh04cSRsVHH/QdrYFridysudI7bmm4rpGpZ65+OzT3pPj/1aLczWwB3/sQ+5NL653TteQ7t9S8tMdba24od9jQuUA3Srlb7y+sOUldqW+DS+8Yc6dc/Or+6XuEdz/oprUv1h3jd0y8P82Kr+cO+4TYofd9Jf7RrTUHOsfx/wDJSuI8
+  </data>
+ </layer>
+ <layer id="2" name="decoration" width="16" height="44">
+  <data encoding="base64" compression="zlib">
+   eJxjYEAF05kZGGYA8UwgngXEG7gY8AJNblT+daCeG0B8E4hvMePXiw2IszAwSACxJBBLsZCuHxmsB7pdlZuwujvspJt9HY8eZSLsBAElItXBwH0ywpMYgM8vOPUwAeOZiXw7xYF+kUDyDzHxRAq4QYKfSI0HWoB7ZMTtEg7s4jE4xEEAOW0+waOO3uA2GWmQ2mmGEnCTDPcPFEBO77cGyN2wMofYcMOXpgcSkFN30ArQqz65R8NymxBALr9IKeOpDdDLq8FUFhEDkPMdveo/bHkFOQ7JqQORwUGgPw4h4cPcmOUGensVAF16JL4=
+  </data>
+ </layer>
+ <layer id="3" name="decoration 2" width="16" height="44">
+  <data encoding="base64" compression="zlib">
+   eJzt0zkOgDAMRNGRUjhHYTky1KxHgpr1EoyUIjVOQST8JMvV72wgH40DWhf3Wwub1cVtTO5GASbOLLr+ZHdxbmVfeqDi1F7XG/OFQcLvaB0Sfker8OF3jEnR8Qb7hDvc2O4J/d89evISRg==
+  </data>
+ </layer>
+ <objectgroup id="4" name="object">
+  <object id="1" gid="4098" x="176" y="32" width="48" height="48"/>
+  <object id="2" gid="4098" x="160" y="48" width="48" height="48"/>
+  <object id="3" gid="4098" x="192" y="64" width="48" height="48"/>
+  <object id="4" gid="4098" x="112" y="624" width="48" height="48"/>
+  <object id="5" gid="4098" x="48" y="464" width="48" height="48"/>
+  <object id="6" gid="4098" x="160" y="320" width="48" height="48"/>
+  <object id="7" gid="4098" x="32" y="128" width="48" height="48"/>
+  <object id="8" gid="4103" x="128" y="64" width="16" height="16"/>
+  <object id="9" gid="4104" x="128" y="32" width="16" height="16"/>
+  <object id="10" gid="4105" x="144" y="16" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup color="#ffaa00" id="6" name="portal">
+  <object id="11" name="village" x="64" y="688" width="48" height="16">
+   <properties>
+    <property name="isSensor" type="bool" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer id="5" name="foreground" width="16" height="44">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwSgYBaNgYEAjNwNDExJu5qa9nQA0NALC
+  </data>
+ </layer>
+</map>

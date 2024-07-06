@@ -3,22 +3,34 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "assets/maps/objects.tsx",
+    "activeFile": "assets/maps/village.tmx",
     "expandedProjectPaths": [
-        "assets",
-        "core/src",
         "core/src/test",
-        ".",
-        "core",
-        "assets/maps",
+        "core/src",
+        "core/src/test/resources",
         "core/src/test/resources/maps",
-        "core/src/test/resources"
+        "assets",
+        "assets/maps",
+        ".",
+        "core"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 1,
             "scaleInEditor": 2
+        },
+        "assets/maps/path_to_forest.tmx": {
+            "expandedObjectLayers": [
+                4,
+                6
+            ],
+            "scale": 5.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 101.27272727272728,
+                "y": 683.3636363636364
+            }
         },
         "assets/maps/test.tmx": {
             "scale": 7.19625,
@@ -36,18 +48,19 @@
         "assets/maps/village.tmx": {
             "expandedObjectLayers": [
                 7,
+                8,
                 6
             ],
-            "scale": 23,
-            "selectedLayer": 5,
+            "scale": 5.5,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 160.02173913043478,
-                "y": 160.02173913043478
+                "x": 105.0909090909091,
+                "y": 28.454545454545453
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
             "scale": 7.19625,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 79.90272711481673,
                 "y": 79.97220774709048
@@ -67,15 +80,15 @@
             "scale": 5.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 77.72727272727272,
+                "x": 77.63636363636364,
                 "y": 112.09090909090911
             }
         },
         "core/src/test/resources/maps/tiledTest.tmx": {
             "scale": 7.19625,
-            "selectedLayer": -1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 67.32673267326732,
+                "x": 67.25725204099358,
                 "y": 79.97220774709048
             }
         },
@@ -86,30 +99,30 @@
     "frame.defaultDuration": 200,
     "last.exportedFilePath": "C:/Users/Simon/IdeaProjects/Masamune/assets/maps",
     "last.imagePath": "C:/Users/Simon/IdeaProjects/Masamune/assets/maps/objects",
-    "map.height": 10,
+    "map.height": 64,
     "map.lastUsedExportFilter": "All Files (*)",
     "map.lastUsedFormat": "tmx",
-    "map.layerDataFormat": null,
+    "map.layerDataFormat": "3",
     "map.renderOrder": null,
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 10,
+    "map.width": 16,
     "openFiles": [
         "assets/maps/tileset.tsx",
         "assets/maps/objects.tsx",
         "assets/maps/village.tmx"
     ],
     "project": "masamune-tiled.tiled-project",
-    "property.type": "string",
+    "property.type": "bool",
     "recentFiles": [
-        "assets/maps/tileset.tsx",
-        "assets/maps/village.tmx",
-        "assets/maps/objects.tsx",
-        "core/src/test/resources/maps/interactTest.tmx",
-        "core/src/test/resources/maps/interactTestObjects.tsx",
         "core/src/test/resources/maps/tiledTest.tmx",
-        "core/src/test/resources/maps/objects.tsx",
         "core/src/test/resources/maps/test.tmx",
+        "core/src/test/resources/maps/interactTest.tmx",
+        "assets/maps/tileset.tsx",
+        "assets/maps/objects.tsx",
+        "assets/maps/village.tmx",
+        "core/src/test/resources/maps/interactTestObjects.tsx",
+        "core/src/test/resources/maps/objects.tsx",
         "assets/maps/test.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",

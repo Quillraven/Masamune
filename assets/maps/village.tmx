@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="11">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="12">
  <editorsettings>
   <export target="village..tmx" format="tmx"/>
  </editorsettings>
@@ -25,7 +25,7 @@
    eJztzLcRgDAQBdHfgERAhqmKDNMYgsZkemF7uIsY7cxLV/pHOUgFFS3Yf1OUZixYo/238zhw4nL43TwSHrwOv8yjoKI5/Hq9nr1x8P1tzr8PiQQMvw==
   </data>
  </layer>
- <objectgroup id="6" name="objects">
+ <objectgroup id="6" name="object">
   <object id="1" name="Player" gid="4097" x="112" y="160" width="16" height="16"/>
   <object id="2" gid="4098" x="128" y="128" width="48" height="48"/>
   <object id="3" name="Elder" gid="4099" x="176" y="112" width="16" height="16"/>
@@ -34,7 +34,14 @@
   <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
-  <object id="7" name="villageExit" x="48" y="0" width="48" height="16">
+  <object id="7" name="villageExit" x="32" y="7" width="96" height="16">
+   <properties>
+    <property name="isSensor" type="bool" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup color="#ffaa00" id="8" name="portal">
+  <object id="11" name="path_to_forest" x="48" y="0" width="48" height="16">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
    </properties>

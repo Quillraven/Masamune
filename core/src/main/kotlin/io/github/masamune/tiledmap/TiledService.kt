@@ -79,7 +79,7 @@ class TiledService(
     }
 
     private fun loadObjects(tiledMap: TiledMap, world: World) {
-        tiledMap.layers["objects"].objects.forEach { loadObject(it, world) }
+        tiledMap.layers["object"].objects.forEach { loadObject(it, world) }
         tiledMap.layers["trigger"].objects.forEach { loadTrigger(it, world) }
     }
 

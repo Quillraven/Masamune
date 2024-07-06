@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="48" tileheight="48" tilecount="6" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="9" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="MapObject">
   <properties>
@@ -10,7 +10,7 @@
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
    <property name="speed" type="float" value="5"/>
   </properties>
-  <image width="16" height="16" source="objects/hero.png"/>
+  <image source="objects/hero.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
    <object id="2" type="FixtureDefinition" x="2" y="13" width="12" height="3">
     <ellipse/>
@@ -30,7 +30,7 @@
    <property name="atlasRegionKey" value="tree_green"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
   </properties>
-  <image width="48" height="48" source="objects/tree_green.png"/>
+  <image source="objects/tree_green.png" width="48" height="48"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="16" y="36" width="16" height="12"/>
   </objectgroup>
@@ -46,7 +46,7 @@
    <property name="speed" type="float" value="2"/>
    <property name="triggerName" value="elder"/>
   </properties>
-  <image width="16" height="16" source="objects/elder.png"/>
+  <image source="objects/elder.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
    <object id="1" type="FixtureDefinition" x="1" y="12" width="14" height="4">
     <properties>
@@ -65,7 +65,7 @@
    <property name="objType" propertytype="MapObjectType" value="FLOWER_GIRL"/>
    <property name="speed" type="float" value="3.5"/>
   </properties>
-  <image width="16" height="16" source="objects/flower_girl.png"/>
+  <image source="objects/flower_girl.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
    <object id="1" type="FixtureDefinition" x="2" y="13" width="12" height="3">
     <properties>
@@ -84,7 +84,7 @@
    <property name="objType" propertytype="MapObjectType" value="MERCHANT"/>
    <property name="speed" type="float" value="3"/>
   </properties>
-  <image width="16" height="16" source="objects/merchant.png"/>
+  <image source="objects/merchant.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
    <object id="1" type="FixtureDefinition" x="2" y="12" width="12" height="4">
     <properties>
@@ -103,7 +103,7 @@
    <property name="objType" propertytype="MapObjectType" value="SMITH"/>
    <property name="speed" type="float" value="3"/>
   </properties>
-  <image width="16" height="16" source="objects/smith.png"/>
+  <image source="objects/smith.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
    <object id="1" type="FixtureDefinition" x="2" y="13" width="12" height="3">
     <properties>
@@ -111,5 +111,14 @@
     </properties>
    </object>
   </objectgroup>
+ </tile>
+ <tile id="6">
+  <image source="objects/butterfly.png" width="16" height="16"/>
+ </tile>
+ <tile id="7">
+  <image source="objects/larva.png" width="16" height="16"/>
+ </tile>
+ <tile id="8">
+  <image source="objects/mushroom.png" width="16" height="16"/>
  </tile>
 </tileset>
