@@ -6,6 +6,7 @@ enum class TiledObjectType {
     FLOWER_GIRL,
     HERO,
     MERCHANT,
+    PORTAL,
     SMITH,
     UNDEFINED
 }
