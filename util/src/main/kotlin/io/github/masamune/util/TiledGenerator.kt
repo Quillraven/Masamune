@@ -15,6 +15,7 @@ data class Member(
         "string", "color" -> "String"
         "bool" -> "Boolean"
         "float" -> "Float"
+        "int" -> "Int"
         else -> error("Unsupported type: $type")
     }
 
@@ -59,7 +60,11 @@ fun main() {
     println("Generating property extensions")
     val extensionContent = createPropertyExtensionsHeader()
     // name of tiled classes to process
-    listOf("MapObject" to "TiledMapTile", "FixtureDefinition" to "MapObject").forEach { (tiledClass, gdxClass) ->
+    listOf(
+        "MapObject" to "TiledMapTile",
+        "FixtureDefinition" to "MapObject",
+        "Portal" to "MapObject",
+    ).forEach { (tiledClass, gdxClass) ->
         val properties = tiledProject.propertyTypes
             .first { it.name == tiledClass && it.members.isNotEmpty() }
             .members
@@ -121,6 +126,8 @@ fun createPropertyExtensionsFile(content: StringBuilder) {
     targetFile.writeText(content.toString())
 }
 
+private val alreadyProcessedProperties = mutableSetOf<String>()
+
 fun createPropertyExtensions(content: StringBuilder, properties: List<Member>, gdxClass: String) {
     println("Creating property extensions for ${properties.map(Member::name)} and class $gdxClass")
 
@@ -128,6 +135,10 @@ fun createPropertyExtensions(content: StringBuilder, properties: List<Member>, g
         val newLine = System.lineSeparator()
 
         properties.forEach { property ->
+            if (!alreadyProcessedProperties.add(property.name)) {
+                return@forEach
+            }
+
             append(newLine).append(newLine)
             if (property.name == "userData") {
                 // special case with String? and propertyOrNull ktx call
