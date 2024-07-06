@@ -26,7 +26,7 @@
   </data>
  </layer>
  <objectgroup id="6" name="object">
-  <object id="1" name="Player" gid="4097" x="112" y="160" width="16" height="16"/>
+  <object id="1" name="Player" gid="4097" x="64" y="44" width="16" height="16"/>
   <object id="2" gid="4098" x="128" y="128" width="48" height="48"/>
   <object id="3" name="Elder" gid="4099" x="176" y="112" width="16" height="16"/>
   <object id="4" name="Merchant" gid="4101" x="288" y="240" width="16" height="16"/>
@@ -34,16 +34,17 @@
   <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
-  <object id="7" name="villageExit" x="32" y="7" width="96" height="16">
+  <object id="7" name="villageExit" x="205" y="12" width="96" height="16">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup color="#ffaa00" id="8" name="portal">
-  <object id="11" name="path_to_forest" x="48" y="0" width="48" height="16">
+  <object id="11" name="PATH_TO_FOREST" type="Portal" x="48" y="0" width="48" height="16">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
+    <property name="targetPortalId" type="int" value="11"/>
    </properties>
   </object>
  </objectgroup>

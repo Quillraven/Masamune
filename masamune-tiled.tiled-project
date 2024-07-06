@@ -146,9 +146,33 @@
                 "ELDER",
                 "FLOWER_GIRL",
                 "MERCHANT",
-                "SMITH"
+                "SMITH",
+                "PORTAL"
             ],
             "valuesAsFlags": false
+        },
+        {
+            "color": "#ffffaa00",
+            "drawFill": false,
+            "id": 7,
+            "members": [
+                {
+                    "name": "isSensor",
+                    "type": "bool",
+                    "value": true
+                },
+                {
+                    "name": "targetPortalId",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "Portal",
+            "type": "class",
+            "useAs": [
+                "object",
+                "project"
+            ]
         }
     ]
 }

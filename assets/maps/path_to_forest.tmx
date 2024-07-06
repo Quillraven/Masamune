@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="16" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="12">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="16" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="13">
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="4097" source="objects.tsx"/>
  <layer id="1" name="ground" width="16" height="44">
@@ -28,11 +28,14 @@
   <object id="8" gid="4103" x="128" y="64" width="16" height="16"/>
   <object id="9" gid="4104" x="128" y="32" width="16" height="16"/>
   <object id="10" gid="4105" x="144" y="16" width="16" height="16"/>
+  <object id="12" name="Player" gid="4097" x="80" y="656" width="16" height="16"/>
  </objectgroup>
+ <objectgroup id="7" name="trigger"/>
  <objectgroup color="#ffaa00" id="6" name="portal">
-  <object id="11" name="village" x="64" y="688" width="48" height="16">
+  <object id="11" name="VILLAGE" type="Portal" x="64" y="688" width="48" height="16">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
+    <property name="targetPortalId" type="int" value="11"/>
    </properties>
   </object>
  </objectgroup>

@@ -112,13 +112,28 @@
    </object>
   </objectgroup>
  </tile>
- <tile id="6">
+ <tile id="6" type="MapObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="atlasRegionKey" value="butterfly/idle_down"/>
+   <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
+  </properties>
   <image source="objects/butterfly.png" width="16" height="16"/>
  </tile>
- <tile id="7">
+ <tile id="7" type="MapObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="atlasRegionKey" value="larva/idle_down"/>
+   <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
+  </properties>
   <image source="objects/larva.png" width="16" height="16"/>
  </tile>
- <tile id="8">
+ <tile id="8" type="MapObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="atlasRegionKey" value="mushroom/idle_down"/>
+   <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
+  </properties>
   <image source="objects/mushroom.png" width="16" height="16"/>
  </tile>
 </tileset>

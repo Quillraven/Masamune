@@ -25,11 +25,11 @@
                 4,
                 6
             ],
-            "scale": 5.5,
-            "selectedLayer": 4,
+            "scale": 4,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 101.27272727272728,
-                "y": 683.3636363636364
+                "x": 74.25,
+                "y": 569.375
             }
         },
         "assets/maps/test.tmx": {
@@ -51,11 +51,11 @@
                 8,
                 6
             ],
-            "scale": 5.5,
+            "scale": 3,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 105.0909090909091,
-                "y": 28.454545454545453
+                "x": 149,
+                "y": 155.83333333333331
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
@@ -113,7 +113,7 @@
         "assets/maps/village.tmx"
     ],
     "project": "masamune-tiled.tiled-project",
-    "property.type": "bool",
+    "property.type": "int",
     "recentFiles": [
         "core/src/test/resources/maps/tiledTest.tmx",
         "core/src/test/resources/maps/test.tmx",
