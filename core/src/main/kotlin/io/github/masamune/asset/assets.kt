@@ -31,7 +31,8 @@ enum class AtlasAsset(folder: String = "graphics") {
  * Asset type for [TiledMap] instances. Used by [AssetService].
  */
 enum class TiledMapAsset {
-    VILLAGE;
+    VILLAGE,
+    PATH_TO_FOREST;
 
     val path = "maps/${name.lowercase()}.tmx"
 }
