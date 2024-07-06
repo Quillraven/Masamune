@@ -94,9 +94,9 @@ class TiledService(
     }
 
     private fun loadObjects(tiledMap: TiledMap, world: World) {
-        tiledMap.layers["object"].objects.forEach { loadObject(it, world) }
-        tiledMap.layers["trigger"].objects.forEach { loadTrigger(it, world) }
-        tiledMap.layers["portal"].objects.forEach { loadPortal(it, world) }
+        tiledMap.layers["object"]?.objects?.forEach { loadObject(it, world) }
+        tiledMap.layers["trigger"]?.objects?.forEach { loadTrigger(it, world) }
+        tiledMap.layers["portal"]?.objects?.forEach { loadPortal(it, world) }
     }
 
     private fun loadPortal(mapObject: MapObject, world: World) {
