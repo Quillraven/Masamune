@@ -49,3 +49,6 @@ val MapObject.restitution: Float
 
 val MapObject.userData: String?
     get() = this.propertyOrNull<String>("userData")
+
+val MapObject.targetPortalId: Int
+    get() = this.property<Int>("targetPortalId", 0)
