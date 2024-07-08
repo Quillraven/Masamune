@@ -34,20 +34,40 @@ class TiledService(
     val assetService: AssetService,
     val eventService: EventService,
 ) {
-    private var currentMap: TiledMapAsset? = null
+    private var currentMap: TiledMap? = null
     private val staticCollisionBodies = mutableListOf<Body>()
 
-    fun setMap(asset: TiledMapAsset, world: World) {
+    fun loadMap(asset: TiledMapAsset): TiledMap {
         val loadingTime = measureTimeMillis {
-            currentMap?.let { assetService.unload(it) }
             assetService.load(asset)
             assetService.finishLoading()
         }
+        log.debug { "Loading of map $asset took $loadingTime ms" }
 
-        log.debug { "Unloading of map $currentMap and loading of map $asset took $loadingTime ms" }
-        currentMap?.let { unloadObjects(world) }
-        currentMap = asset
-        setMap(assetService[asset], world)
+        return assetService[asset].also {
+            it.properties["tiledMapAsset"] = asset
+        }
+    }
+
+    fun setMap(tiledMap: TiledMap, world: World) {
+        currentMap?.let { unloadMap(it, world) }
+        currentMap = tiledMap
+
+        staticCollisionBodies += tiledMap.spawnBoundaryBody(world)
+        loadGroundCollision(tiledMap, world)
+        loadObjects(tiledMap, world)
+        eventService.fire(MapChangeEvent(tiledMap))
+    }
+
+    private fun unloadMap(tiledMap: TiledMap, world: World) {
+        val tiledMapAsset = tiledMap.property<TiledMapAsset>("tiledMapAsset")
+        val unloadingTime = measureTimeMillis {
+            assetService.unload(tiledMapAsset)
+            assetService.finishLoading()
+        }
+        log.debug { "Unloading of map $tiledMapAsset took $unloadingTime ms" }
+
+        unloadObjects(world)
     }
 
     private fun unloadObjects(world: World) {
@@ -55,19 +75,12 @@ class TiledService(
         staticCollisionBodies.forEach { it.world.destroyBody(it) }
         staticCollisionBodies.clear()
 
-        // unloading entities
+        // unloading non-player entities (player entities are taken over to new map)
         val nonPlayerEntities = world.family { none(Player) }
         log.debug { "Unloading ${nonPlayerEntities.numEntities} entities" }
         nonPlayerEntities.forEach { entity ->
             entity.remove()
         }
-    }
-
-    fun setMap(tiledMap: TiledMap, world: World) {
-        staticCollisionBodies += tiledMap.spawnBoundaryBody(world)
-        loadGroundCollision(tiledMap, world)
-        loadObjects(tiledMap, world)
-        eventService.fire(MapChangeEvent(tiledMap))
     }
 
     private inline fun TiledMap.forEachCell(action: (cell: Cell, cellX: Int, cellY: Int) -> Unit) {
@@ -104,14 +117,16 @@ class TiledService(
         val y = mapObject.y * UNIT_SCALE
         val w = mapObject.width * UNIT_SCALE
         val h = mapObject.height * UNIT_SCALE
-        val toMap = mapObject.name ?: ""
-        if (toMap.isBlank()) {
+        val toMapName = mapObject.name ?: ""
+        if (toMapName.isBlank()) {
             gdxError("Missing name for portal: ${mapObject.id}")
         }
+        val toMapAsset = TiledMapAsset.entries.firstOrNull { it.name == toMapName }
+            ?: gdxError("There is no TiledMapAsset of name $toMapName")
 
         world.entity { entity ->
             entity += Tiled(mapObject.id, TiledObjectType.PORTAL)
-            entity += Portal(toMap, mapObject.targetPortalId)
+            entity += Portal(toMapAsset, mapObject.targetPortalId)
             val body = mapObject.toBody(world, x, y, data = entity)
             entity += Physic(body)
             entity += Transform(vec3(body.position, 0f), vec2(w, h))
@@ -257,6 +272,12 @@ class TiledService(
 
     companion object {
         private val log = logger<TiledService>()
+
+        fun TiledMap.portal(portalId: Int): MapObject {
+            return layer("portal").objects
+                .firstOrNull { it.id == portalId }
+                ?: gdxError("There is no portal of id $portalId")
+        }
     }
 
 }

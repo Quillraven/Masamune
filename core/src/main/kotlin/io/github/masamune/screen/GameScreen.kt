@@ -102,7 +102,9 @@ class GameScreen(
         registerEventListeners()
 
         // load map AFTER event listeners are registered
-        tiledService.setMap(TiledMapAsset.VILLAGE, world)
+        tiledService.loadMap(TiledMapAsset.VILLAGE).also {
+            tiledService.setMap(it, world)
+        }
     }
 
     private fun registerEventListeners() {

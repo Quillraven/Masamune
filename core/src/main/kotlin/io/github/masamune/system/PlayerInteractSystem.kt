@@ -14,6 +14,8 @@ import io.github.masamune.PhysicContactHandler.Companion.testPoint
 import io.github.masamune.component.*
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.*
+import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.tiledmap.TiledService.Companion.portal
 import ktx.log.logger
 import ktx.math.component1
 import ktx.math.component2
@@ -23,6 +25,7 @@ import kotlin.math.abs
 class PlayerInteractSystem(
     private val eventService: EventService = inject(),
     private val dialogConfigurator: DialogConfigurator = inject(),
+    private val tiledService: TiledService = inject(),
 ) : IteratingSystem(
     family = family { all(Interact, Player) },
     interval = Fixed(1 / 20f)
@@ -46,7 +49,10 @@ class PlayerInteractSystem(
         // check for map trigger entities (=entities that are not rendered/visible to the player)
         handleMapTrigger(entity)
         // check for map portal entities
-        handlePortals(entity)
+        if (handlePortals(entity)) {
+            // player entered portal to a new map -> skip remaining system logic
+            return@with
+        }
         // tag the closest entity within direction with an OUTLINE tag to render it with an outline
         tagClosestEntity()
 
@@ -70,13 +76,21 @@ class PlayerInteractSystem(
 
     private fun Entity.isPortal(): Boolean = this has Portal
 
-    private fun Interact.handlePortals(player: Entity) {
+    private fun Interact.handlePortals(player: Entity): Boolean {
         nearbyEntities.firstOrNull { it.isPortal() }?.let { portalEntity ->
             if (portalEntity[Physic].body.testPoint(playerCenter)) {
                 // player is inside portal area -> start map transition
-                eventService.fire(PlayerPortalEvent(player, portalEntity))
+                val (toMapAsset, toPortalId) = portalEntity[Portal]
+                val toTiledMap = tiledService.loadMap(toMapAsset)
+                val portalMapObject = toTiledMap.portal(toPortalId)
+
+                log.debug { "Entering portal to $toMapAsset" }
+                eventService.fire(PlayerPortalEvent(player, portalEntity, portalMapObject, toTiledMap))
+                return true
             }
         }
+
+        return false
     }
 
     private fun Entity.isMapTrigger(): Boolean {

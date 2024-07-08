@@ -1,5 +1,6 @@
 package io.github.masamune.event
 
+import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
@@ -18,7 +19,7 @@ data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) 
 
 data object PlayerInteractEvent : Event
 
-data class PlayerPortalEvent(val player: Entity, val portalEntity: Entity) : Event
+data class PlayerPortalEvent(val player: Entity, val fromPortalEntity: Entity, val toPortalMapObject: MapObject, val toTiledMap: TiledMap) : Event
 
 data class DialogBeginEvent(val world: World, val player: Entity, val dialog: Dialog) : Event
 

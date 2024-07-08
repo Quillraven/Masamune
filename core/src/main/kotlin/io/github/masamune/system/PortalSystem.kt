@@ -1,37 +1,26 @@
 package io.github.masamune.system
 
-import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.World.Companion.inject
-import io.github.masamune.PhysicContactHandler.Companion.testPoint
-import io.github.masamune.asset.TiledMapAsset
-import io.github.masamune.component.*
+import io.github.masamune.Masamune.Companion.UNIT_SCALE
+import io.github.masamune.component.Teleport
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.PlayerPortalEvent
 import io.github.masamune.tiledmap.TiledService
-import ktx.app.gdxError
 import ktx.log.logger
-import ktx.math.component1
-import ktx.math.component2
 import ktx.math.vec2
+import ktx.tiled.height
+import ktx.tiled.width
+import ktx.tiled.x
+import ktx.tiled.y
 
 class PortalSystem(
     private val tiledService: TiledService = inject(),
 ) : IntervalSystem(interval = Fixed(1 / 20f), enabled = false), EventListener {
 
-    private val portalEntities = world.family { all(Portal) }
-    private var lastEnteredPortal: Entity = Entity.NONE
-    private var enteredPlayer: Entity = Entity.NONE
-    private var playerCenter = vec2()
-
-    override fun onTick() {
-        enteredPlayer[Transform].centerTo(playerCenter)
-        if (!lastEnteredPortal[Physic].body.testPoint(playerCenter)) {
-            enabled = false
-        }
-    }
+    override fun onTick() = Unit
 
     override fun onEvent(event: Event) {
         if (enabled) {
@@ -41,27 +30,21 @@ class PortalSystem(
 
         when (event) {
             is PlayerPortalEvent -> {
-                val (player, fromPortalEntity) = event
-                val (toMapName, toPortalId) = fromPortalEntity[Portal]
+                val (player, _, portalMapObject, toTiledMap) = event
 
-                // load new map
-                log.debug { "Entering portal to $toMapName" }
-                val toMapAsset = TiledMapAsset.entries.firstOrNull { it.name == toMapName }
-                    ?: gdxError("There is no TiledMapAsset of name $toMapName")
-                tiledService.setMap(toMapAsset, world)
+                // unload current map and set new already loaded map
+                tiledService.setMap(toTiledMap, world)
 
-                // move player to correct location ...
-                val toPortalEntity = portalEntities.entities.firstOrNull { entity ->
-                    entity[Tiled].id == toPortalId && entity.id != fromPortalEntity.id
-                } ?: gdxError("There is no portal of id $toPortalId in map $toMapName")
-                val (width, height) = toPortalEntity[Transform].size
+                // move player to correct location
+                val x = portalMapObject.x * UNIT_SCALE
+                val y = portalMapObject.y * UNIT_SCALE
+                val width = portalMapObject.width * UNIT_SCALE
+                val height = portalMapObject.height * UNIT_SCALE
                 player.configure {
-                    it += Teleport(toPortalEntity[Physic].body.position.cpy().add(width * 0.5f, height * 0.5f))
+                    log.debug { "Teleporting player to $x/$y" }
+                    val targetY = if (y < toTiledMap.height * 0.5f) y + 2f else y - 2f
+                    it += Teleport(vec2(x + width * 0.5f, targetY + height * 0.5f))
                 }
-                // ... and don't trigger the new portal until the player left its area
-                enabled = true
-                enteredPlayer = player
-                lastEnteredPortal = toPortalEntity
             }
 
             else -> Unit
