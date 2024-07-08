@@ -17,7 +17,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
 
         return when (name) {
             "elder_00" -> elderDialog(name, world, triggeringEntity)
-            "villageExit" -> villageExitDialog(name, world)
+            "villageExit" -> villageExitDialog(name)
 
             else -> gdxError("There is no dialog configured for name $name")
         }
@@ -39,7 +39,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
         }
     }
 
-    private fun villageExitDialog(name: String, world: World): Dialog = dialog(name) {
+    private fun villageExitDialog(name: String): Dialog = dialog(name) {
         page(bundle["dialog.villageExit.page1"]) {
             option(dialogOptionOk, ActionExit)
         }
