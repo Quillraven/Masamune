@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.event.EventService
+import io.github.masamune.tiledmap.ImmediateMapTransitionService
+import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -20,23 +22,27 @@ class LazyServiceLocatorTest {
         val eventServiceInitializer = mockk<() -> EventService>()
         val tiledServiceInitializer = mockk<(AssetService, EventService) -> TiledService>()
         val shaderServiceInitializer = mockk<() -> ShaderService>()
+        val mapTransitionServiceInitializer = mockk<(TiledService) -> MapTransitionService>()
         val batch = mockk<Batch>()
         val assetService = mockk<AssetService>()
         val eventService = mockk<EventService>()
         val tiledService = mockk<TiledService>()
         val shaderService = mockk<ShaderService>()
+        val mapTransitionService = mockk<MapTransitionService>()
         every { batchInitializer.invoke() } returns batch
         every { assetServiceInitializer.invoke() } returns assetService
         every { eventServiceInitializer.invoke() } returns eventService
         every { tiledServiceInitializer.invoke(assetService, eventService) } returns tiledService
         every { shaderServiceInitializer.invoke() } returns shaderService
+        every { mapTransitionServiceInitializer.invoke(tiledService) } returns mapTransitionService
 
         val serviceLocator = LazyServiceLocator(
             batchInitializer,
             assetServiceInitializer,
             eventServiceInitializer,
             tiledServiceInitializer,
-            shaderServiceInitializer
+            shaderServiceInitializer,
+            mapTransitionServiceInitializer
         )
 
         batch shouldBeSameInstanceAs serviceLocator.batch
@@ -44,6 +50,7 @@ class LazyServiceLocatorTest {
         eventService shouldBeSameInstanceAs serviceLocator.event
         tiledService shouldBeSameInstanceAs serviceLocator.tiled
         shaderService shouldBeSameInstanceAs serviceLocator.shader
+        mapTransitionService shouldBeSameInstanceAs serviceLocator.mapTransition
     }
 
     @Test
@@ -64,6 +71,17 @@ class LazyServiceLocatorTest {
         serviceLocator.tiled shouldNotBe null
         serviceLocator.tiled.assetService shouldBeSameInstanceAs serviceLocator.asset
         serviceLocator.tiled.eventService shouldBeSameInstanceAs serviceLocator.event
+    }
+
+    @Test
+    fun `verify MapTransitionService gets correct tiled service instance`() {
+        val serviceLocator = LazyServiceLocator(
+            tiledServiceInitializer = { asset, event -> TiledService(asset, event) },
+            mapTransitionServiceInitializer = { tiled -> ImmediateMapTransitionService(tiled) }
+        )
+
+        serviceLocator.mapTransition shouldNotBe null
+        serviceLocator.mapTransition.tiledService shouldBeSameInstanceAs serviceLocator.tiled
     }
 
 }
