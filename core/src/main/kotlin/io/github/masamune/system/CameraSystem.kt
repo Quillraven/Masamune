@@ -12,7 +12,7 @@ import io.github.masamune.component.Transform
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.MapChangeEvent
-import io.github.masamune.event.MapTransitionEvent
+import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.tiledmap.MapTransitionType
 import ktx.math.vec2
 import ktx.tiled.height
@@ -81,7 +81,7 @@ class CameraSystem(
                 mapBoundaries.set(event.tiledMap.width.toFloat(), event.tiledMap.height.toFloat())
             }
 
-            is MapTransitionEvent -> {
+            is MapTransitionBeginEvent -> {
                 val (fromMap, _, time, interpolation, type, offset) = event
                 val halfCamW = camera.viewportWidth * 0.5f
                 val halfCamH = camera.viewportHeight * 0.5f
