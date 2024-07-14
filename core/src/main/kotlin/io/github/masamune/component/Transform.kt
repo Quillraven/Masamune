@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
+import ktx.math.vec2
 
 /**
  * Component for [position], [size], [scale] and [rotation] values of an entity.
@@ -16,6 +17,11 @@ data class Transform(
     var scale: Float = 1f,
     var rotation: Float = 0f,
 ) : Component<Transform>, Comparable<Transform> {
+
+    fun center(): Vector2 = vec2(
+        position.x + size.x * 0.5f,
+        position.y + size.y * 0.5f
+    )
 
     fun centerTo(result: Vector2) {
         result.x = position.x + size.x * 0.5f
