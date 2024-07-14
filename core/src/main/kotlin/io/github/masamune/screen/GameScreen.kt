@@ -15,6 +15,7 @@ import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.*
+import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.ui.model.DialogViewModel
@@ -32,6 +33,7 @@ class GameScreen(
     private val eventService: EventService = masamune.event,
     private val tiledService: TiledService = masamune.tiled,
     private val shaderService: ShaderService = masamune.shader,
+    private val mapTransitionService: MapTransitionService = masamune.mapTransition,
     assetService: AssetService = masamune.asset,
 ) : KtxScreen {
     // viewports and stage
@@ -67,13 +69,14 @@ class GameScreen(
             add(dialogConfigurator)
             add(triggerConfigurator)
             add(tiledService)
+            add<MapTransitionService>(mapTransitionService)
         }
 
         systems {
             add(MoveSystem())
+            add(MoveToSystem())
             add(PhysicSystem())
             add(PlayerInteractSystem())
-            add(PortalSystem())
             add(TeleportSystem())
             add(CameraSystem())
             add(AnimationSystem())
@@ -130,6 +133,8 @@ class GameScreen(
         uiViewport.apply()
         stage.act(delta)
         stage.draw()
+
+        mapTransitionService.update(world, delta)
     }
 
     override fun dispose() {
