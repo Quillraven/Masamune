@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.maps.MapLayer
+import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector2
@@ -22,9 +23,14 @@ import io.github.masamune.component.Transform
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.MapChangeEvent
+import io.github.masamune.event.MapTransitionBeginEvent
+import io.github.masamune.tiledmap.MapTransitionType
 import ktx.math.component1
 import ktx.math.component2
+import ktx.math.vec2
+import ktx.tiled.height
 import ktx.tiled.use
+import ktx.tiled.width
 
 class RenderSystem(
     private val batch: Batch = inject(),
@@ -40,10 +46,16 @@ class RenderSystem(
     private val background = mutableListOf<TiledMapTileLayer>()
     private val foreground = mutableListOf<TiledMapTileLayer>()
 
+    // optional map layers for map transition
+    private val transitionBackground = mutableListOf<TiledMapTileLayer>()
+    private val transitionForeground = mutableListOf<TiledMapTileLayer>()
+    private val transitionOffset = vec2()
+
     override fun onTick() {
         gameViewport.apply()
         mapRenderer.use(camera) { renderer ->
-            background.forEach { renderer.renderTileLayer(it) }
+            background.forEach(renderer::renderTileLayer)
+            renderer.renderTransitionMapLayers(transitionBackground)
 
             // render all entities
             val origColor = batch.color
@@ -51,7 +63,30 @@ class RenderSystem(
             batch.color = origColor
 
             foreground.forEach { renderer.renderTileLayer(it) }
+            renderer.renderTransitionMapLayers(transitionForeground)
         }
+    }
+
+    private fun OrthogonalTiledMapRenderer.renderTransitionMapLayers(layers: List<TiledMapTileLayer>) {
+        if (layers.isEmpty()) {
+            return
+        }
+
+        // temporarily update camera position to render the next map next to the current map
+        // both maps are connected via their edges (e.g. active map's top edge is connected to next map's bottom edge)
+        val origX = camera.position.x
+        val origY = camera.position.y
+        camera.position.x += transitionOffset.x
+        camera.position.y += transitionOffset.y
+        camera.update()
+        setView(camera)
+        layers.forEach(this::renderTileLayer)
+
+        // reset camera position to its original location for the normal active map rendering
+        camera.position.x = origX
+        camera.position.y = origY
+        camera.update()
+        setView(camera)
     }
 
     /**
@@ -90,22 +125,72 @@ class RenderSystem(
         )
     }
 
+    private fun updateMapLayers(
+        fgdLayers: MutableList<TiledMapTileLayer>,
+        bgdLayers: MutableList<TiledMapTileLayer>,
+        tiledMap: TiledMap
+    ) {
+        bgdLayers.clear()
+        fgdLayers.clear()
+        var activeLayers = bgdLayers
+        tiledMap.layers.forEach { layer ->
+            if (layer::class == MapLayer::class) {
+                activeLayers = fgdLayers
+            }
+            if (layer !is TiledMapTileLayer) {
+                return@forEach
+            }
+
+            activeLayers += layer
+        }
+    }
+
+    private fun onMapTransition(
+        offset: Vector2,
+        fromTiledMap: TiledMap,
+        toTiledMap: TiledMap,
+        type: MapTransitionType
+    ) {
+        updateMapLayers(transitionForeground, transitionBackground, toTiledMap)
+
+        transitionOffset.setZero()
+        when (type) {
+            MapTransitionType.LEFT_TO_RIGHT -> {
+                // portal on left edge of map
+                transitionOffset.x = toTiledMap.width.toFloat()
+                transitionOffset.y = offset.y
+            }
+
+            MapTransitionType.BOTTOM_TO_TOP -> {
+                // portal on bottom edge of map
+                transitionOffset.x = offset.x
+                transitionOffset.y = toTiledMap.height.toFloat()
+            }
+
+            MapTransitionType.TOP_TO_BOTTOM -> {
+                // portal on top edge of map
+                transitionOffset.x = offset.x
+                transitionOffset.y = -fromTiledMap.height.toFloat()
+            }
+
+            else -> {
+                // portal on right edge of map
+                transitionOffset.x = fromTiledMap.width.toFloat()
+                transitionOffset.y = offset.y
+            }
+        }
+    }
+
     override fun onEvent(event: Event) {
         when (event) {
             is MapChangeEvent -> {
-                background.clear()
-                foreground.clear()
-                var activeLayers = background
-                event.tiledMap.layers.forEach { layer ->
-                    if (layer::class == MapLayer::class) {
-                        activeLayers = foreground
-                    }
-                    if (layer !is TiledMapTileLayer) {
-                        return@forEach
-                    }
+                transitionBackground.clear()
+                transitionForeground.clear()
+                updateMapLayers(foreground, background, event.tiledMap)
+            }
 
-                    activeLayers += layer
-                }
+            is MapTransitionBeginEvent -> {
+                onMapTransition(event.mapOffset, event.fromTiledMap, event.toTiledMap, event.type)
             }
 
             else -> Unit
@@ -115,5 +200,4 @@ class RenderSystem(
     override fun onDispose() {
         mapRenderer.dispose()
     }
-
 }
