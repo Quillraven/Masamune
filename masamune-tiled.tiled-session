@@ -25,11 +25,11 @@
                 4,
                 6
             ],
-            "scale": 4,
+            "scale": 11,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 74.25,
-                "y": 569.375
+                "x": 81.63636363636364,
+                "y": 690.5909090909091
             }
         },
         "assets/maps/test.tmx": {
@@ -47,9 +47,9 @@
         },
         "assets/maps/village.tmx": {
             "expandedObjectLayers": [
+                6,
                 7,
-                8,
-                6
+                8
             ],
             "scale": 3,
             "selectedLayer": 6,

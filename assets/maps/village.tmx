@@ -41,7 +41,7 @@
   </object>
  </objectgroup>
  <objectgroup color="#ffaa00" id="8" name="portal">
-  <object id="11" name="PATH_TO_FOREST" type="Portal" x="48" y="0" width="48" height="16">
+  <object id="11" name="PATH_TO_FOREST" type="Portal" x="48" y="-12" width="48" height="28">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
     <property name="targetPortalId" type="int" value="11"/>
