@@ -14,8 +14,7 @@ import io.github.masamune.PhysicContactHandler.Companion.testPoint
 import io.github.masamune.component.*
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.*
-import io.github.masamune.tiledmap.TiledService
-import io.github.masamune.tiledmap.TiledService.Companion.portal
+import io.github.masamune.tiledmap.MapTransitionService
 import ktx.log.logger
 import ktx.math.component1
 import ktx.math.component2
@@ -25,7 +24,7 @@ import kotlin.math.abs
 class PlayerInteractSystem(
     private val eventService: EventService = inject(),
     private val dialogConfigurator: DialogConfigurator = inject(),
-    private val tiledService: TiledService = inject(),
+    private val mapTransitionService: MapTransitionService = inject(),
 ) : IteratingSystem(
     family = family { all(Interact, Player) },
     interval = Fixed(1 / 20f)
@@ -80,12 +79,8 @@ class PlayerInteractSystem(
         nearbyEntities.firstOrNull { it.isPortal() }?.let { portalEntity ->
             if (portalEntity[Physic].body.testPoint(playerCenter)) {
                 // player is inside portal area -> start map transition
-                val (toMapAsset, toPortalId) = portalEntity[Portal]
-                val toTiledMap = tiledService.loadMap(toMapAsset)
-                val portalMapObject = toTiledMap.portal(toPortalId)
-
-                log.debug { "Entering portal to $toMapAsset" }
-                eventService.fire(PlayerPortalEvent(player, portalEntity, portalMapObject, toTiledMap))
+                mapTransitionService.startTransition(world, player, portalEntity)
+                portalEntity.remove()
                 return true
             }
         }
