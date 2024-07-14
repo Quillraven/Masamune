@@ -1,11 +1,12 @@
 package io.github.masamune.event
 
-import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.dialog.Dialog
+import io.github.masamune.tiledmap.MapTransitionType
 
 sealed interface Event
 
@@ -19,8 +20,6 @@ data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) 
 
 data object PlayerInteractEvent : Event
 
-data class PlayerPortalEvent(val player: Entity, val fromPortalEntity: Entity, val toPortalMapObject: MapObject, val toTiledMap: TiledMap) : Event
-
 data class DialogBeginEvent(val world: World, val player: Entity, val dialog: Dialog) : Event
 
 data class DialogEndEvent(val player: Entity, val dialog: Dialog, val optionIdx: Int) : Event
@@ -30,3 +29,14 @@ data object UiUpEvent : Event
 data object UiDownEvent : Event
 
 data object UiSelectEvent : Event
+
+data class MapTransitionBeginEvent(
+    val fromTiledMap: TiledMap,
+    val toTiledMap: TiledMap,
+    val time: Float,
+    val interpolation: Interpolation,
+    val type: MapTransitionType,
+    val mapOffset: Vector2,
+) : Event
+
+data object MapTransitionEndEvent : Event
