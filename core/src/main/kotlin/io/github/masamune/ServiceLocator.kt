@@ -6,6 +6,8 @@ import com.badlogic.gdx.utils.Disposable
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.event.EventService
+import io.github.masamune.tiledmap.ImmediateMapTransitionService
+import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
 
 interface ServiceLocator : Disposable {
@@ -14,6 +16,7 @@ interface ServiceLocator : Disposable {
     val event: EventService
     val tiled: TiledService
     val shader: ShaderService
+    val mapTransition: MapTransitionService
 }
 
 class LazyServiceLocator(
@@ -24,6 +27,9 @@ class LazyServiceLocator(
         TiledService(assetService, eventService)
     },
     shaderServiceInitializer: () -> ShaderService = { ShaderService() },
+    mapTransitionServiceInitializer: (TiledService) -> MapTransitionService = { tiledService ->
+        ImmediateMapTransitionService(tiledService)
+    },
 ) : ServiceLocator {
 
     override val batch: Batch by lazy(batchInitializer)
@@ -31,6 +37,7 @@ class LazyServiceLocator(
     override val event: EventService by lazy(eventServiceInitializer)
     override val tiled: TiledService by lazy { tiledServiceInitializer(asset, event) }
     override val shader: ShaderService by lazy { shaderServiceInitializer() }
+    override val mapTransition: MapTransitionService by lazy { mapTransitionServiceInitializer(tiled) }
 
     override fun dispose() {
         batch.dispose()
