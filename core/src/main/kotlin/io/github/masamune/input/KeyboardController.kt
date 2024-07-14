@@ -12,6 +12,7 @@ class KeyboardController(
 ) : KtxInputAdapter, EventListener {
 
     private val commandState = booleanArrayOf(*Command.entries.map { false }.toBooleanArray())
+    private val disabledState = ControllerStateDisabled
     private val gameState = ControllerStateGame(eventService)
     private val uiState = ControllerStateUI(eventService)
     private var activeState: ControllerState = initialActiveState(initialState)
@@ -65,6 +66,8 @@ class KeyboardController(
         when (event) {
             is DialogBeginEvent -> activeState = uiState
             is DialogEndEvent -> activeState = gameState
+            is MapTransitionBeginEvent -> activeState = disabledState
+            is MapTransitionEndEvent -> activeState = gameState
             else -> Unit
         }
     }

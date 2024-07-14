@@ -11,6 +11,12 @@ sealed interface ControllerState {
     fun onInactive() = Unit
 }
 
+data object ControllerStateDisabled : ControllerState {
+    override fun keyDown(command: Command) = Unit
+
+    override fun keyUp(command: Command) = Unit
+}
+
 class ControllerStateGame(private val eventService: EventService) : ControllerState {
 
     private val direction = vec2()
