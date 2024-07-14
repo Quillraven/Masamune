@@ -37,6 +37,9 @@ class TiledService(
     private var currentMap: TiledMap? = null
     private val staticCollisionBodies = mutableListOf<Body>()
 
+    val activeMap: TiledMap
+        get() = currentMap ?: gdxError("Trying to access active map before loading any map")
+
     fun loadMap(asset: TiledMapAsset): TiledMap {
         val loadingTime = measureTimeMillis {
             assetService.load(asset)
