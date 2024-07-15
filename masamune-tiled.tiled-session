@@ -5,14 +5,14 @@
     },
     "activeFile": "assets/maps/village.tmx",
     "expandedProjectPaths": [
-        "core/src/test",
-        "core/src",
-        "core/src/test/resources",
-        "core/src/test/resources/maps",
-        "assets",
-        "assets/maps",
         ".",
-        "core"
+        "core/src",
+        "core/src/test",
+        "assets/maps",
+        "core/src/test/resources/maps",
+        "core",
+        "core/src/test/resources",
+        "assets"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
@@ -26,10 +26,10 @@
                 6
             ],
             "scale": 11,
-            "selectedLayer": 5,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 81.63636363636364,
-                "y": 690.5909090909091
+                "x": 56.00000000000001,
+                "y": 152.04545454545456
             }
         },
         "assets/maps/test.tmx": {
@@ -47,15 +47,15 @@
         },
         "assets/maps/village.tmx": {
             "expandedObjectLayers": [
-                6,
+                8,
                 7,
-                8
+                6
             ],
-            "scale": 3,
-            "selectedLayer": 6,
+            "scale": 4,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 149,
-                "y": 155.83333333333331
+                "x": 152,
+                "y": 152.125
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
@@ -110,17 +110,19 @@
     "openFiles": [
         "assets/maps/tileset.tsx",
         "assets/maps/objects.tsx",
-        "assets/maps/village.tmx"
+        "assets/maps/village.tmx",
+        "assets/maps/path_to_forest.tmx"
     ],
     "project": "masamune-tiled.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "assets/maps/tileset.tsx",
+        "assets/maps/objects.tsx",
+        "assets/maps/path_to_forest.tmx",
+        "assets/maps/village.tmx",
         "core/src/test/resources/maps/tiledTest.tmx",
         "core/src/test/resources/maps/test.tmx",
         "core/src/test/resources/maps/interactTest.tmx",
-        "assets/maps/tileset.tsx",
-        "assets/maps/objects.tsx",
-        "assets/maps/village.tmx",
         "core/src/test/resources/maps/interactTestObjects.tsx",
         "core/src/test/resources/maps/objects.tsx",
         "assets/maps/test.tmx"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="tileset" tilewidth="16" tileheight="16" spacing="8" margin="4" tilecount="4096" columns="64">
+<tileset version="1.10" tiledversion="1.11.0" name="tileset" tilewidth="16" tileheight="16" spacing="8" margin="4" tilecount="4096" columns="64">
  <image source="tileset.png" width="1536" height="1536"/>
  <tile id="1046">
   <objectgroup draworder="index" id="2">
@@ -43,6 +43,21 @@
  <tile id="1741" probability="0.33"/>
  <tile id="1742" probability="0.33"/>
  <tile id="1743" probability="0.33"/>
+ <tile id="2585">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="8" y="0" width="8" height="7"/>
+  </objectgroup>
+ </tile>
+ <tile id="2586">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="16"/>
+  </objectgroup>
+ </tile>
+ <tile id="2587">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="7"/>
+  </objectgroup>
+ </tile>
  <tile id="2670">
   <animation>
    <frame tileid="2670" duration="200"/>

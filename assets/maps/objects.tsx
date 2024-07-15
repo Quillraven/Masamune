@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="9" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="16" tileheight="16" tilecount="8" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="MapObject">
   <properties>
@@ -22,17 +22,6 @@
     </properties>
     <ellipse/>
    </object>
-  </objectgroup>
- </tile>
- <tile id="1" type="MapObject">
-  <properties>
-   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="tree_green"/>
-   <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
-  </properties>
-  <image source="objects/tree_green.png" width="48" height="48"/>
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="16" y="36" width="16" height="12"/>
   </objectgroup>
  </tile>
  <tile id="2" type="MapObject">

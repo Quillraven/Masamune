@@ -12,7 +12,7 @@
  </layer>
  <layer id="2" name="decoration" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJzV1EsOwVAYhuG/Wkx6MXDfDRbAABOrwQIYuLMblylB4roDm/B2IE2Eo0nPxJc8o/7n6+l1boos8C0njp1xwVUx98qNmbtiLmeJ5FFA0frdp0orxH78PCKe558T9h6FzSkZ0JF/eTb+Ps+arllnrhr2ZNgiMZh28Dyi9JboKaNiR9+bnzY9HXSR9kQyyKLqiNScz2vGvPcTTDFTfAN1ehpookdX/61vyzl3drj/4JG1A3qGGGHvihxwdIMZj5mUo/c/qMoaGyyx0tAXN0QSMGHhCdFoJ6w=
+   eJzV1EuuwWAYxvGXFom0dQbubMY5C2CAidVgAQzc2Y3L1IkjcTl2YBP+HUgT0c+XtIl4kt+o7/f063VuiCzglwPHjjjhrJi755+Zi2IuZ4rkUUDRfN2nSktjP26uAc/zydG9R7o5JDzPUkyKlFBO6vV9yrNx93n0ueZ35hzCniKWSBSG5T2PIL0Ver7xYwXfm5s2PR10kU6JZJBF1Rap2c/XjHnvJ5hipvgG6vQ00ESPrv5D35Zz/lp6/8E9awf0DDHCzhH5w97xZlLMfNnh/gdVWWODJVYh9MUiInEYMHEDhLQoGw==
   </data>
  </layer>
  <layer id="3" name="decoration2" width="20" height="20">
@@ -27,7 +27,6 @@
  </layer>
  <objectgroup id="6" name="object">
   <object id="1" name="Player" gid="4097" x="64" y="44" width="16" height="16"/>
-  <object id="2" gid="4098" x="128" y="128" width="48" height="48"/>
   <object id="3" name="Elder" gid="4099" x="176" y="112" width="16" height="16"/>
   <object id="4" name="Merchant" gid="4101" x="288" y="240" width="16" height="16"/>
   <object id="5" name="Smith" gid="4102" x="16" y="288" width="16" height="16"/>
@@ -50,7 +49,7 @@
  </objectgroup>
  <layer id="5" name="foreground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApIBwAGQAAB
+   eJxjYBgFQwnM4mRgmA3EczipY94toDm3gfgOlcwbBaNgFIwcAAAUhgSZ
   </data>
  </layer>
 </map>
