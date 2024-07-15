@@ -18,6 +18,7 @@ class Masamune(
     private val serviceLocator: ServiceLocator = LazyServiceLocator(
         // replace with ImmediateMapTransitionService to change maps without any special effect
         mapTransitionServiceInitializer = { tiled -> DefaultMapTransitionService(tiled) }
+        // mapTransitionServiceInitializer = { tiled -> ImmediateMapTransitionService(tiled) }
     ),
 ) : KtxGame<KtxScreen>(), ServiceLocator by serviceLocator {
 
