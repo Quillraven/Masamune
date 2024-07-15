@@ -45,6 +45,7 @@ class RenderSystem(
     private val mapRenderer = OrthogonalTiledMapRenderer(null, UNIT_SCALE, batch)
     private val background = mutableListOf<TiledMapTileLayer>()
     private val foreground = mutableListOf<TiledMapTileLayer>()
+    private val batchOrigColor = Color()
 
     // optional map layers for map transition
     private val transitionBackground = mutableListOf<TiledMapTileLayer>()
@@ -58,9 +59,9 @@ class RenderSystem(
             renderer.renderTransitionMapLayers(transitionBackground)
 
             // render all entities
-            val origColor = batch.color
+            batchOrigColor.set(batch.color)
             super.onTick()
-            batch.color = origColor
+            batch.setColor(batchOrigColor.r, batchOrigColor.g, batchOrigColor.b, batchOrigColor.a)
 
             foreground.forEach { renderer.renderTileLayer(it) }
             renderer.renderTransitionMapLayers(transitionForeground)
@@ -114,7 +115,7 @@ class RenderSystem(
         val (texRegion, color) = graphic
         val (position, _, scale, rotationDeg) = transform
 
-        this.color = color
+        batch.setColor(color.r, color.g, color.b, color.a)
         this.draw(
             texRegion,
             position.x, position.y,
