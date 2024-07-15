@@ -3,13 +3,14 @@ package io.github.masamune.tiledmap
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.github.quillraven.fleks.Entity
@@ -29,6 +30,12 @@ import ktx.math.vec2
 import ktx.math.vec3
 import ktx.tiled.*
 import kotlin.system.measureTimeMillis
+
+enum class ObjectLayerName {
+    OBJECT, PORTAL, TRIGGER;
+
+    val tiledName: String = this.name.lowercase()
+}
 
 class TiledService(
     val assetService: AssetService,
@@ -52,14 +59,19 @@ class TiledService(
         }
     }
 
-    fun setMap(tiledMap: TiledMap, world: World) {
+    fun setMap(tiledMap: TiledMap, world: World, fadeIn: Boolean) {
         currentMap?.let { unloadMap(it, world) }
         currentMap = tiledMap
 
         staticCollisionBodies += tiledMap.spawnBoundaryBody(world)
         loadGroundCollision(tiledMap, world)
-        loadObjects(tiledMap, world)
+        loadObjects(tiledMap, world, fadeIn)
         eventService.fire(MapChangeEvent(tiledMap))
+    }
+
+    fun unloadBoundaryAndGroundCollision() {
+        staticCollisionBodies.forEach { it.world.destroyBody(it) }
+        staticCollisionBodies.clear()
     }
 
     private fun unloadMap(tiledMap: TiledMap, world: World) {
@@ -75,8 +87,7 @@ class TiledService(
 
     private fun unloadObjects(world: World) {
         // unloading static collision bodies
-        staticCollisionBodies.forEach { it.world.destroyBody(it) }
-        staticCollisionBodies.clear()
+        unloadBoundaryAndGroundCollision()
 
         // unloading non-player entities (player entities are taken over to new map)
         val nonPlayerEntities = world.family { none(Player) }
@@ -109,10 +120,25 @@ class TiledService(
         }
     }
 
-    private fun loadObjects(tiledMap: TiledMap, world: World) {
-        tiledMap.layers["object"]?.objects?.forEach { loadObject(it, world) }
-        tiledMap.layers["trigger"]?.objects?.forEach { loadTrigger(it, world) }
-        tiledMap.layers["portal"]?.objects?.forEach { loadPortal(it, world) }
+    private fun loadObjects(tiledMap: TiledMap, world: World, fadeIn: Boolean) {
+        loadObjectsOfLayer(ObjectLayerName.OBJECT, tiledMap, world, fadeIn)
+        loadObjectsOfLayer(ObjectLayerName.TRIGGER, tiledMap, world, fadeIn)
+        loadObjectsOfLayer(ObjectLayerName.PORTAL, tiledMap, world, fadeIn)
+    }
+
+    private fun loadObjectsOfLayer(layerName: ObjectLayerName, tiledMap: TiledMap, world: World, fadeIn: Boolean) {
+        val layer: MapLayer? = tiledMap.layers[layerName.tiledName]
+        if (layer?.property("objects-loaded", false) == true) {
+            log.debug { "Loading of objects for layer $layerName is ignored because it is already loaded." }
+            return
+        }
+
+        when (layerName) {
+            ObjectLayerName.OBJECT -> layer?.objects?.forEach { loadObject(it, world, fadeIn) }
+            ObjectLayerName.TRIGGER -> layer?.objects?.forEach { loadTrigger(it, world) }
+            ObjectLayerName.PORTAL -> layer?.objects?.forEach { loadPortal(it, world) }
+        }
+        layer?.properties?.put("objects-loaded", true)
     }
 
     private fun loadPortal(mapObject: MapObject, world: World) {
@@ -151,7 +177,7 @@ class TiledService(
         }
     }
 
-    private fun loadObject(mapObject: MapObject, world: World) {
+    private fun loadObject(mapObject: MapObject, world: World, fadeIn: Boolean) {
         val tiledObj = mapObject as TiledMapTileMapObject
         val isPlayerObj = mapObject.name == "Player"
         if (isPlayerObj && world.family { all(Player) }.isNotEmpty) {
@@ -166,8 +192,8 @@ class TiledService(
 
         world.entity {
             configureTiled(it, tiledObj, tile)
-            val texRegionSize = configureGraphic(it, tile)
-            it += Transform(position = vec3(x, y, 0f), size = texRegionSize)
+            val graphicCmp = configureGraphic(it, tile)
+            it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
             configureMove(it, tile)
             configurePhysic(it, tile, world, x, y)
             configureDialog(it, tile)
@@ -175,6 +201,9 @@ class TiledService(
 
             if (isPlayerObj) {
                 configurePlayer(it)
+            } else if (fadeIn) {
+                // fade non-player entities in
+                it += Fade(from = 0f, to = graphicCmp.color.a, time = 2f, interpolation = Interpolation.fade)
             }
         }
     }
@@ -189,7 +218,7 @@ class TiledService(
         entity += Tiled(tiledObj.id, objType)
     }
 
-    private fun EntityCreateContext.configureGraphic(entity: Entity, tile: TiledMapTile): Vector2 {
+    private fun EntityCreateContext.configureGraphic(entity: Entity, tile: TiledMapTile): Graphic {
         val atlasStr = tile.atlas
         val atlasAsset = AtlasAsset.entries.firstOrNull { it.name == atlasStr }
             ?: gdxError("There is no atlas of name $atlasStr")
@@ -219,7 +248,7 @@ class TiledService(
         val color = Color.valueOf(tile.color)
         val graphicCmp = Graphic(graphicCmpRegion, color)
         entity += graphicCmp
-        return graphicCmp.regionSize
+        return graphicCmp
     }
 
     private fun EntityCreateContext.configureMove(entity: Entity, tile: TiledMapTile) {

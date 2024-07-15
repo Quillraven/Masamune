@@ -47,7 +47,7 @@ class ImmediateMapTransitionService(
         val portalMapObject = toTiledMap.portal(toPortalId)
 
         // unload current map and set new already loaded map
-        tiledService.setMap(toTiledMap, world)
+        tiledService.setMap(toTiledMap, world, fadeIn = false)
 
         // move player to correct location
         val x = portalMapObject.x * UNIT_SCALE
@@ -108,7 +108,7 @@ class DefaultMapTransitionService(
 
             // transition is finished -> update active map
             transitionTime = 0f
-            tiledService.setMap(nextMap, world)
+            tiledService.setMap(nextMap, world, fadeIn = true)
             tiledService.eventService.fire(MapTransitionEndEvent)
         }
     }
@@ -119,6 +119,8 @@ class DefaultMapTransitionService(
         // load new map but don't set it as active yet to not spawn any objects
         val (toMapAsset, toPortalId) = portalEntity[Portal]
         val toTiledMap = tiledService.loadMap(toMapAsset)
+        // remove map boundaries and ground collisions to not block the player's transition movement effect
+        tiledService.unloadBoundaryAndGroundCollision()
 
         // set transition time and the map that will be set at the end of the transition
         // + some additional properties that are necessary for the MapTransitionEvent
