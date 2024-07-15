@@ -80,6 +80,7 @@ class GameScreen(
             add(TeleportSystem())
             add(CameraSystem())
             add(AnimationSystem())
+            add(FadeSystem())
             add(RenderSystem())
             add(TriggerSystem())
         }
@@ -106,7 +107,7 @@ class GameScreen(
 
         // load map AFTER event listeners are registered
         tiledService.loadMap(TiledMapAsset.VILLAGE).also {
-            tiledService.setMap(it, world)
+            tiledService.setMap(it, world, fadeIn=false)
         }
     }
 
