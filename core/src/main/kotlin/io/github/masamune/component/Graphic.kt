@@ -17,7 +17,7 @@ import ktx.math.vec2
  */
 class Graphic(
     region: TextureRegion,
-    private val color: Color = color(1f, 1f, 1f, 1f),
+    val color: Color = color(1f, 1f, 1f, 1f),
 ) : Component<Graphic> {
 
     val regionSize: Vector2 = vec2(region.regionWidth * UNIT_SCALE, region.regionHeight * UNIT_SCALE)
