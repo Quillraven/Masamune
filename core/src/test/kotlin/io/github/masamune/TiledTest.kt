@@ -69,7 +69,7 @@ private class TiledTest : KtxApplicationAdapter {
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
         tiledMap = TmxMapLoader(ClasspathFileHandleResolver()).load("maps/test.tmx")
-        tiledService.setMap(tiledMap, world)
+        tiledService.setMap(tiledMap, world, fadeIn = false)
 
         // assertions
         with(world) {

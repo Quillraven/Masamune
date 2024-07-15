@@ -71,7 +71,7 @@ private class TiledPhysicTest : KtxApplicationAdapter {
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
         tiledMap = TmxMapLoader(ClasspathFileHandleResolver()).load("maps/tiledTest.tmx")
-        tiledService.setMap(tiledMap, world)
+        tiledService.setMap(tiledMap, world, fadeIn = false)
     }
 
     override fun resize(width: Int, height: Int) {
