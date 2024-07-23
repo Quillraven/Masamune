@@ -128,17 +128,11 @@ class TiledService(
 
     private fun loadObjectsOfLayer(layerName: ObjectLayerName, tiledMap: TiledMap, world: World, fadeIn: Boolean) {
         val layer: MapLayer? = tiledMap.layers[layerName.tiledName]
-        if (layer?.property("objects-loaded", false) == true) {
-            log.debug { "Loading of objects for layer $layerName is ignored because it is already loaded." }
-            return
-        }
-
         when (layerName) {
             ObjectLayerName.OBJECT -> layer?.objects?.forEach { loadObject(it, world, fadeIn) }
             ObjectLayerName.TRIGGER -> layer?.objects?.forEach { loadTrigger(it, world) }
             ObjectLayerName.PORTAL -> layer?.objects?.forEach { loadPortal(it, world) }
         }
-        layer?.properties?.put("objects-loaded", true)
     }
 
     private fun loadPortal(mapObject: MapObject, world: World) {
