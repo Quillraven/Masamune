@@ -184,14 +184,20 @@ class TiledService(
         val y = tiledObj.y * UNIT_SCALE
         log.debug { "Loading object ${mapObject.id}" }
 
+        val objTypeStr = tile.objType
+        val objType = TiledObjectType.valueOf(objTypeStr)
+
         world.entity {
-            configureTiled(it, tiledObj, tile)
+            configureTiled(it, tiledObj, objType)
             val graphicCmp = configureGraphic(it, tile)
             it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
             configureMove(it, tile)
             configurePhysic(it, tile, world, x, y)
             configureDialog(it, tile)
             configureTrigger(it, tile)
+            if (objType == TiledObjectType.ENEMY) {
+                it += Tag.ENEMY
+            }
 
             if (isPlayerObj) {
                 configurePlayer(it)
@@ -205,11 +211,9 @@ class TiledService(
     private fun EntityCreateContext.configureTiled(
         entity: Entity,
         tiledObj: TiledMapTileMapObject,
-        tile: TiledMapTile
+        objectType: TiledObjectType
     ) {
-        val objTypeStr = tile.objType
-        val objType = TiledObjectType.valueOf(objTypeStr)
-        entity += Tiled(tiledObj.id, objType)
+        entity += Tiled(tiledObj.id, objectType)
     }
 
     private fun EntityCreateContext.configureGraphic(entity: Entity, tile: TiledMapTile): Graphic {

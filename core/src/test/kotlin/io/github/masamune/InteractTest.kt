@@ -19,6 +19,7 @@ import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.PhysicSystem
 import io.github.masamune.system.PlayerInteractSystem
 import io.github.masamune.system.RenderSystem
+import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
 import io.mockk.mockk
 import ktx.app.KtxApplicationAdapter
@@ -30,6 +31,8 @@ import ktx.box2d.createWorld
  * One entity must be rendered with an outline shader. Per default, it is the bottom one.
  * Press 'A', 'D' or 'S' to switch outline entities. Always the closest one to the player
  * within his direction must be picked for interaction (=outline highlighting).
+ *
+ * Mushroom is rendered with a red outline (=enemy). Other entities are rendered with a white outline.
  */
 
 fun main() = gdxTest("Interact Test", InteractTest())
@@ -54,6 +57,7 @@ private class InteractTest : KtxApplicationAdapter {
             add(shaderService)
             add(EventService())
             add(mockk<DialogConfigurator>())
+            add(mockk<MapTransitionService>())
         }
 
         systems {

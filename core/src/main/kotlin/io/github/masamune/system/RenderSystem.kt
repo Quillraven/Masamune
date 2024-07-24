@@ -18,7 +18,7 @@ import com.github.quillraven.fleks.collection.compareEntityBy
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.component.Graphic
-import io.github.masamune.component.Tag
+import io.github.masamune.component.Outline
 import io.github.masamune.component.Transform
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
@@ -104,8 +104,8 @@ class RenderSystem(
         val realSize = Scaling.fill.apply(regSizeX, regSizeY, sizeX, sizeY)
 
         batch.drawEntity(graphic, transform, realSize)
-        if (entity has Tag.OUTLINE) {
-            shaderService.useOutlineShader(batch, Color.WHITE, graphic.region.texture) {
+        entity.getOrNull(Outline)?.let { outline ->
+            shaderService.useOutlineShader(batch, outline.color, graphic.region.texture) {
                 batch.drawEntity(graphic, transform, realSize)
             }
         }

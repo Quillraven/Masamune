@@ -147,7 +147,8 @@
                 "FLOWER_GIRL",
                 "MERCHANT",
                 "SMITH",
-                "PORTAL"
+                "PORTAL",
+                "ENEMY"
             ],
             "valuesAsFlags": false
         },

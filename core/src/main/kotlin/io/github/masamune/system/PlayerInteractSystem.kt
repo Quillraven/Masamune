@@ -115,13 +115,14 @@ class PlayerInteractSystem(
 
         val closestEntity: Entity? = filteredDirectionEntities.firstOrNull()
         if (closestEntity != null && closestEntity != interactEntity) {
-            closestEntity.configure { it += Tag.OUTLINE }
+            val outlineColor = if (closestEntity has Tag.ENEMY) Outline.COLOR_ENEMY else Outline.COLOR_NEUTRAL
+            closestEntity.configure { it += Outline(outlineColor) }
             if (interactEntity != Entity.NONE) {
-                interactEntity.configure { it -= Tag.OUTLINE }
+                interactEntity.configure { it -= Outline }
             }
             interactEntity = closestEntity
         } else if (interactEntity != Entity.NONE && interactEntity !in filteredDirectionEntities) {
-            interactEntity.configure { it -= Tag.OUTLINE }
+            interactEntity.configure { it -= Outline }
             interactEntity = Entity.NONE
         }
     }
@@ -159,7 +160,7 @@ class PlayerInteractSystem(
     }
 
     private fun Entity.isNotInteractable(): Boolean {
-        return this hasNo Dialog && this hasNo Trigger && this hasNo Portal
+        return this hasNo Dialog && this hasNo Trigger && this hasNo Portal && this hasNo Tag.ENEMY
     }
 
     private fun onPlayerBeginInteract(player: Entity, other: Entity) {
@@ -178,8 +179,8 @@ class PlayerInteractSystem(
         // -> just execute the logic all the time
         val interactCmp = player[Interact]
         interactCmp.nearbyEntities -= other
-        if (other has Tag.OUTLINE) {
-            other.configure { it -= Tag.OUTLINE }
+        if (other has Outline) {
+            other.configure { it -= Outline }
         }
         if (other == interactCmp.interactEntity) {
             interactCmp.interactEntity = Entity.NONE
