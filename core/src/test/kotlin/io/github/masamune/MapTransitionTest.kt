@@ -28,16 +28,31 @@ import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.box2d.createWorld
 
+/**
+ * Test for [MapTransitionService].
+ *
+ * Change the 'mapTransitionService' value in the test below to switch between DefaultMapTransitionService
+ * and ImmediateMapTransitionService.
+ *
+ * The test has two maps:
+ * - one map smaller than the camera viewport without portal offsets
+ * - one map bigger than the camera viewport with portal offsets
+ *
+ * Press 1 to transition to the small map and 2 to transition to the large map. A transition is:
+ * - panning the camera
+ * - moving the player to the new map and teleport him at the end of the transition to the correct location
+ * - render the target map temporarily for a nice transition effect
+ */
 fun main() {
     // we misuse the VILLAGE constant for this test to avoid adding the test maps to our
     // TiledMapAsset enum. By mocking the VILLAGE's path value we can transition to an arbitrary map.
     mockkObject(TiledMapAsset.VILLAGE)
     every { TiledMapAsset.VILLAGE.path } returns "maps/transition_test_small.tmx"
 
-    gdxTest("Map Transition Test", MapTransitionTest())
+    gdxTest("Map Transition Test, 1=small map without offset, 2=large map with offset", MapTransitionTest())
 }
 
-private class MapTransitionTest : KtxApplicationAdapter {
+private class MapTransitionTest() : KtxApplicationAdapter {
     private val batch: Batch by lazy { SpriteBatch() }
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
     private val physicWorld = createWorld(gravity = Vector2.Zero)
@@ -46,6 +61,8 @@ private class MapTransitionTest : KtxApplicationAdapter {
     private val eventService by lazy { EventService() }
     private val tiledService by lazy { TiledService(assetService, eventService) }
     private val mapTransitionService by lazy { DefaultMapTransitionService(tiledService) }
+
+    // private val mapTransitionService by lazy { ImmediateMapTransitionService(tiledService) }
     private lateinit var tiledMap: TiledMap
 
     private fun gameWorld() = configureWorld {
@@ -70,7 +87,6 @@ private class MapTransitionTest : KtxApplicationAdapter {
             add(AnimationSystem())
             add(FadeSystem())
             add(RenderSystem())
-            add(DebugPhysicRenderSystem())
         }
     }
 

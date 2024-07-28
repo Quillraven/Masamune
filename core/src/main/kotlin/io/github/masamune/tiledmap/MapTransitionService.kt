@@ -13,6 +13,7 @@ import io.github.masamune.component.Teleport
 import io.github.masamune.component.Transform
 import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.event.MapTransitionEndEvent
+import io.github.masamune.tiledmap.MapTransitionService.Companion.PLAYER_MAP_EDGE_OFFSET
 import io.github.masamune.tiledmap.TiledService.Companion.portal
 import ktx.log.logger
 import ktx.math.component1
@@ -28,6 +29,21 @@ interface MapTransitionService {
 
     fun startTransition(world: World, player: Entity, portalEntity: Entity)
     fun update(world: World, deltaTime: Float)
+
+    fun transitionType(portalCenter: Vector2, portalTiledMap: TiledMap): MapTransitionType {
+        return when {
+            portalCenter.x < 3f -> MapTransitionType.LEFT_TO_RIGHT
+            portalCenter.y < 3f -> MapTransitionType.BOTTOM_TO_TOP
+            portalCenter.y > portalTiledMap.height - 3f -> MapTransitionType.TOP_TO_BOTTOM
+            else -> MapTransitionType.RIGHT_TO_LEFT
+        }
+    }
+
+    companion object {
+        // offset of player from the next map's edge
+        // e.g. if player leaves a map at the top  then he will be at location (x, OFFSET) on the new map.
+        const val PLAYER_MAP_EDGE_OFFSET = 2.5f
+    }
 }
 
 enum class MapTransitionType {
@@ -50,13 +66,23 @@ class ImmediateMapTransitionService(
         tiledService.setMap(toTiledMap, world, fadeIn = false)
 
         // move player to correct location
+        val fromCenter = portalEntity[Transform].center()
+        val fromTiledMap = tiledService.activeMap
+        val transitionType = transitionType(fromCenter, fromTiledMap)
         val x = portalMapObject.x * UNIT_SCALE
         val y = portalMapObject.y * UNIT_SCALE
         val width = portalMapObject.width * UNIT_SCALE
         val height = portalMapObject.height * UNIT_SCALE
+        val centerX = x + width * 0.5f
+        val centerY = y + height * 0.5f
+        val targetXY = when (transitionType) {
+            MapTransitionType.RIGHT_TO_LEFT -> vec2(centerX + PLAYER_MAP_EDGE_OFFSET, centerY)
+            MapTransitionType.LEFT_TO_RIGHT -> vec2(centerX - PLAYER_MAP_EDGE_OFFSET, centerY)
+            MapTransitionType.TOP_TO_BOTTOM -> vec2(centerX, centerY + PLAYER_MAP_EDGE_OFFSET)
+            MapTransitionType.BOTTOM_TO_TOP -> vec2(centerX, centerY - PLAYER_MAP_EDGE_OFFSET)
+        }
         player.configure {
-            val targetY = if (y < toTiledMap.height * 0.5f) y + 2f else y - 2f
-            it += Teleport(vec2(x + width * 0.5f, targetY + height * 0.5f))
+            it += Teleport(targetXY)
         }
     }
 
@@ -186,15 +212,6 @@ class DefaultMapTransitionService(
         }
     }
 
-    private fun transitionType(portalCenter: Vector2, portalTiledMap: TiledMap): MapTransitionType {
-        return when {
-            portalCenter.x < 3f -> MapTransitionType.LEFT_TO_RIGHT
-            portalCenter.y < 3f -> MapTransitionType.BOTTOM_TO_TOP
-            portalCenter.y > portalTiledMap.height - 3f -> MapTransitionType.TOP_TO_BOTTOM
-            else -> MapTransitionType.RIGHT_TO_LEFT
-        }
-    }
-
     private fun MapObject.center(): Vector2 = vec2(
         x * UNIT_SCALE + width * 0.5f * UNIT_SCALE,
         y * UNIT_SCALE + height * 0.5f * UNIT_SCALE
@@ -202,10 +219,6 @@ class DefaultMapTransitionService(
 
     companion object {
         private val log = logger<DefaultMapTransitionService>()
-
-        // offset of player from the next map's edge
-        // e.g. if player leaves a map at the top  then he will be at location (x, OFFSET) on the new map.
-        private const val PLAYER_MAP_EDGE_OFFSET = 2.5f
     }
 
 }
