@@ -97,8 +97,15 @@ class DefaultMapTransitionService(
                         y = nextMap.height - PLAYER_MAP_EDGE_OFFSET
                     }
 
-                    MapTransitionType.LEFT_TO_RIGHT -> x = nextMap.width - PLAYER_MAP_EDGE_OFFSET
-                    else -> x = PLAYER_MAP_EDGE_OFFSET
+                    MapTransitionType.LEFT_TO_RIGHT -> {
+                        x = nextMap.width - PLAYER_MAP_EDGE_OFFSET
+                        y += mapOffset.y
+                    }
+
+                    MapTransitionType.RIGHT_TO_LEFT -> {
+                        x = PLAYER_MAP_EDGE_OFFSET
+                        y += mapOffset.y
+                    }
                 }
 
                 playerEntity.configure {
@@ -166,12 +173,12 @@ class DefaultMapTransitionService(
                 }
 
                 MapTransitionType.LEFT_TO_RIGHT -> {
-                    val diffX = fromTiledMap.width - playerX
-                    vec2(playerX + diffX + PLAYER_MAP_EDGE_OFFSET, playerY)
+                    vec2(-PLAYER_MAP_EDGE_OFFSET, playerY)
                 }
 
-                else -> {
-                    vec2(PLAYER_MAP_EDGE_OFFSET, playerY)
+                MapTransitionType.RIGHT_TO_LEFT -> {
+                    val diffX = fromTiledMap.width - playerX
+                    vec2(playerX + diffX + PLAYER_MAP_EDGE_OFFSET, playerY)
                 }
 
             }

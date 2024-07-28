@@ -3,33 +3,33 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "assets/maps/village.tmx",
+    "activeFile": "core/src/test/resources/maps/transition_test.tmx",
     "expandedProjectPaths": [
-        ".",
+        "assets",
+        "core",
         "core/src",
+        "core/src/test/resources",
+        "core/src/test/resources/maps",
         "core/src/test",
         "assets/maps",
-        "core/src/test/resources/maps",
-        "core",
-        "core/src/test/resources",
-        "assets"
+        "."
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 1,
-            "scaleInEditor": 2
+            "scaleInEditor": 4
         },
         "assets/maps/path_to_forest.tmx": {
             "expandedObjectLayers": [
                 4,
                 6
             ],
-            "scale": 11,
-            "selectedLayer": 3,
+            "scale": 4,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 56.00000000000001,
-                "y": 152.04545454545456
+                "x": 128.125,
+                "y": 352.125
             }
         },
         "assets/maps/test.tmx": {
@@ -42,28 +42,31 @@
         },
         "assets/maps/tileset.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 2,
+            "scaleInDock": 3,
             "scaleInEditor": 2
         },
         "assets/maps/village.tmx": {
             "expandedObjectLayers": [
                 8,
-                7,
-                6
+                6,
+                7
             ],
             "scale": 4,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 152,
-                "y": 152.125
+                "x": 160.125,
+                "y": 160.125
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
             "scale": 7.19625,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 79.90272711481673,
-                "y": 79.97220774709048
+                "x": 45.440333507034914,
+                "y": 104.2904290429043
             }
         },
         "core/src/test/resources/maps/interactTestObjects.tsx": {
@@ -80,8 +83,8 @@
             "scale": 5.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 77.63636363636364,
-                "y": 112.09090909090911
+                "x": 80.0909090909091,
+                "y": 80.0909090909091
             }
         },
         "core/src/test/resources/maps/tiledTest.tmx": {
@@ -93,7 +96,64 @@
             }
         },
         "core/src/test/resources/maps/tileset.tsx": {
-            "scaleInDock": 1
+            "dynamicWrapping": false,
+            "scaleInDock": 2
+        },
+        "core/src/test/resources/maps/transitionTest.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 4,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 52.25,
+                "y": 88.875
+            }
+        },
+        "core/src/test/resources/maps/transition_test.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 5.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 65.27272727272728,
+                "y": 56.81818181818183
+            }
+        },
+        "core/src/test/resources/maps/transition_test_large.tmx": {
+            "expandedObjectLayers": [
+                6,
+                5
+            ],
+            "scale": 3,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 184.66666666666663,
+                "y": 157.83333333333331
+            }
+        },
+        "core/src/test/resources/maps/transition_test_large2.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 3.598125,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 160.0833767587285,
+                "y": 159.94441549418096
+            }
+        },
+        "core/src/test/resources/maps/transition_test_small.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 5.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 84.90909090909092,
+                "y": 45.000000000000014
+            }
         }
     },
     "frame.defaultDuration": 200,
@@ -108,24 +168,23 @@
     "map.tileWidth": 16,
     "map.width": 16,
     "openFiles": [
-        "assets/maps/tileset.tsx",
-        "assets/maps/objects.tsx",
-        "assets/maps/village.tmx",
-        "assets/maps/path_to_forest.tmx"
+        "core/src/test/resources/maps/transition_test.tmx"
     ],
     "project": "masamune-tiled.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "core/src/test/resources/maps/transition_test_large2.tmx",
+        "core/src/test/resources/maps/transition_test.tmx",
+        "core/src/test/resources/maps/objects.tsx",
         "assets/maps/tileset.tsx",
         "assets/maps/objects.tsx",
-        "assets/maps/path_to_forest.tmx",
         "assets/maps/village.tmx",
-        "core/src/test/resources/maps/tiledTest.tmx",
+        "assets/maps/path_to_forest.tmx",
         "core/src/test/resources/maps/test.tmx",
         "core/src/test/resources/maps/interactTest.tmx",
-        "core/src/test/resources/maps/interactTestObjects.tsx",
-        "core/src/test/resources/maps/objects.tsx",
-        "assets/maps/test.tmx"
+        "core/src/test/resources/maps/transitionTest.tmx",
+        "core/src/test/resources/maps/tiledTest.tmx",
+        "core/src/test/resources/maps/interactTestObjects.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.margin": 4,

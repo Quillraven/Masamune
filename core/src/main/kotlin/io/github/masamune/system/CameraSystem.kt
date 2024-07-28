@@ -17,7 +17,9 @@ import io.github.masamune.tiledmap.MapTransitionType
 import ktx.math.vec2
 import ktx.tiled.height
 import ktx.tiled.width
+import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 
 class CameraSystem(
     gameViewport: Viewport = inject(),
@@ -82,14 +84,40 @@ class CameraSystem(
             }
 
             is MapTransitionBeginEvent -> {
-                val (fromMap, _, time, interpolation, type, offset) = event
+                val (fromMap, toMap, time, interpolation, type, offset) = event
                 val halfCamW = camera.viewportWidth * 0.5f
                 val halfCamH = camera.viewportHeight * 0.5f
+
                 val cameraTargetLoc = when (type) {
-                    MapTransitionType.TOP_TO_BOTTOM -> vec2(camera.position.x - offset.x, fromMap.height + halfCamH)
-                    MapTransitionType.BOTTOM_TO_TOP -> vec2(camera.position.x - offset.x, -halfCamH)
-                    MapTransitionType.LEFT_TO_RIGHT -> vec2(-halfCamW, camera.position.y - offset.y)
-                    else -> vec2(fromMap.width + halfCamH, camera.position.y - offset.y)
+                    MapTransitionType.TOP_TO_BOTTOM -> {
+                        val shownTilesX = toMap.width - abs(offset.x)
+                        val maxTilesX = min(toMap.width.toFloat(), camera.viewportWidth)
+                        val panOffsetX = maxTilesX - shownTilesX
+                        vec2(camera.position.x + panOffsetX, fromMap.height + halfCamH)
+                    }
+
+                    MapTransitionType.BOTTOM_TO_TOP -> {
+                        val shownTilesX = toMap.width - abs(offset.x)
+                        val maxTilesX = min(toMap.width.toFloat(), camera.viewportWidth)
+                        val panOffsetX = maxTilesX - shownTilesX
+                        val panOffsetY = min(toMap.height.toFloat(), camera.viewportHeight)
+                        vec2(camera.position.x - panOffsetX, camera.position.y - panOffsetY)
+                    }
+
+                    MapTransitionType.LEFT_TO_RIGHT -> {
+                        val panOffsetX = min(toMap.width.toFloat(), camera.viewportWidth)
+                        val shownTilesY = toMap.height - abs(offset.y)
+                        val maxTilesY = min(toMap.height.toFloat(), camera.viewportHeight)
+                        val panOffsetY = maxTilesY - shownTilesY
+                        vec2(camera.position.x - panOffsetX, camera.position.y - panOffsetY)
+                    }
+
+                    MapTransitionType.RIGHT_TO_LEFT -> {
+                        val shownTilesY = toMap.height - abs(offset.y)
+                        val maxTilesY = min(toMap.height.toFloat(), camera.viewportHeight)
+                        val panOffsetY = maxTilesY - shownTilesY
+                        vec2(fromMap.width + halfCamW, camera.position.y + panOffsetY)
+                    }
                 }
 
                 panTo(cameraTargetLoc, time, interpolation)

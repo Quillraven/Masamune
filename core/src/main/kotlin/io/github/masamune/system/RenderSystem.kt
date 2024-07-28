@@ -174,9 +174,9 @@ class RenderSystem(
                 transitionOffset.y = -fromTiledMap.height.toFloat()
             }
 
-            else -> {
+            MapTransitionType.RIGHT_TO_LEFT -> {
                 // portal on right edge of map
-                transitionOffset.x = fromTiledMap.width.toFloat()
+                transitionOffset.x = -fromTiledMap.width.toFloat()
                 transitionOffset.y = offset.y
             }
         }
