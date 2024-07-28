@@ -14,13 +14,12 @@ import io.github.masamune.event.EventListener
 import io.github.masamune.event.MapChangeEvent
 import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.tiledmap.MapTransitionType
+import ktx.math.component1
+import ktx.math.component2
 import ktx.math.vec2
 import ktx.tiled.height
 import ktx.tiled.width
-import kotlin.math.abs
 import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sign
 
 class CameraSystem(
     gameViewport: Viewport = inject(),
@@ -28,6 +27,7 @@ class CameraSystem(
 
     private val camera = gameViewport.camera
     private val mapBoundaries = vec2(0f, 0f)
+    private val tmpVec2 = vec2()
 
     // pan properties
     private val panFrom = vec2()
@@ -57,17 +57,22 @@ class CameraSystem(
         val halfW = size.x * 0.5f
         val halfH = size.y * 0.5f
 
-        var newCamX = position.x + halfW
-        var newCamY = position.y + halfH
+        tmpVec2.set(position.x + halfW, position.y + halfH)
         if (!mapBoundaries.isZero) {
-            val viewportW = camera.viewportWidth * 0.5f
-            val viewportH = camera.viewportHeight * 0.5f
-
-            newCamX = newCamX.coerceIn(viewportW, max(viewportW, mapBoundaries.x - viewportW))
-            newCamY = newCamY.coerceIn(viewportH, max(viewportH, mapBoundaries.y - viewportH))
+            tmpVec2.coerceInMap(mapBoundaries)
         }
-        camera.position.set(newCamX, newCamY, camera.position.z)
+        camera.position.set(tmpVec2, camera.position.z)
         camera.update()
+    }
+
+    private fun Vector2.coerceInMap(mapBoundary: Vector2): Vector2 {
+        val viewportW = camera.viewportWidth * 0.5f
+        val viewportH = camera.viewportHeight * 0.5f
+
+        x = x.coerceIn(viewportW, max(viewportW, mapBoundary.x - viewportW))
+        y = y.coerceIn(viewportH, max(viewportH, mapBoundary.y - viewportH))
+
+        return this
     }
 
     private fun panTo(to: Vector2, time: Float, interpolation: Interpolation) {
@@ -85,51 +90,18 @@ class CameraSystem(
             }
 
             is MapTransitionBeginEvent -> {
-                val (fromMap, toMap, time, interpolation, type, offset) = event
-                val halfCamW = camera.viewportWidth * 0.5f
-                val halfCamH = camera.viewportHeight * 0.5f
+                val (fromMap, toMap, time, interpolation, type, offset, playerPos) = event
+                val panTarget = playerPos.cpy().coerceInMap(vec2(toMap.width.toFloat(), toMap.height.toFloat()))
+                val (panX, panY) = panTarget
 
-                val cameraTargetLoc = when (type) {
-                    MapTransitionType.TOP_TO_BOTTOM -> {
-                        val shownTilesX = fromMap.width - abs(offset.x)
-                        val maxTilesX = min(fromMap.width.toFloat(), camera.viewportWidth)
-                        val panOffsetX = maxTilesX - shownTilesX
-                        var sign = sign(fromMap.width.toFloat() - toMap.width.toFloat())
-                        sign = if (sign == 0f) 1f else sign
-                        vec2(camera.position.x + panOffsetX * sign, fromMap.height + halfCamH)
-                    }
-
-                    MapTransitionType.BOTTOM_TO_TOP -> {
-                        val shownTilesX = toMap.width - abs(offset.x)
-                        val maxTilesX = min(toMap.width.toFloat(), camera.viewportWidth)
-                        val panOffsetX = maxTilesX - shownTilesX
-                        val panOffsetY = min(toMap.height.toFloat(), camera.viewportHeight)
-                        var sign = sign(toMap.width.toFloat() - fromMap.width.toFloat())
-                        sign = if (sign == 0f) 1f else sign
-                        vec2(camera.position.x - panOffsetX * sign, camera.position.y - panOffsetY)
-                    }
-
-                    MapTransitionType.LEFT_TO_RIGHT -> {
-                        val panOffsetX = min(toMap.width.toFloat(), camera.viewportWidth)
-                        val shownTilesY = toMap.height - abs(offset.y)
-                        val maxTilesY = min(toMap.height.toFloat(), camera.viewportHeight)
-                        val panOffsetY = maxTilesY - shownTilesY
-                        var sign = sign(toMap.height.toFloat() - fromMap.height.toFloat())
-                        sign = if (sign == 0f) 1f else sign
-                        vec2(camera.position.x - panOffsetX, camera.position.y - panOffsetY * sign)
-                    }
-
-                    MapTransitionType.RIGHT_TO_LEFT -> {
-                        val shownTilesY = fromMap.height - abs(offset.y)
-                        val maxTilesY = min(fromMap.height.toFloat(), camera.viewportHeight)
-                        val panOffsetY = maxTilesY - shownTilesY
-                        var sign = sign(fromMap.height.toFloat() - toMap.height.toFloat())
-                        sign = if (sign == 0f) 1f else sign
-                        vec2(fromMap.width + halfCamW, camera.position.y + panOffsetY * sign)
-                    }
+                when (type) {
+                    MapTransitionType.TOP_TO_BOTTOM -> panTarget.set(panX - offset.x, panY + fromMap.height)
+                    MapTransitionType.BOTTOM_TO_TOP -> panTarget.set(panX - offset.x, panY - toMap.height)
+                    MapTransitionType.LEFT_TO_RIGHT -> panTarget.set(panX - toMap.width, panY - offset.y)
+                    MapTransitionType.RIGHT_TO_LEFT -> panTarget.set(panX + fromMap.width, panY - offset.y)
                 }
 
-                panTo(cameraTargetLoc, time, interpolation)
+                panTo(panTarget, time, interpolation)
             }
 
             else -> Unit

@@ -13,7 +13,7 @@ import io.github.masamune.component.Teleport
 import io.github.masamune.component.Transform
 import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.event.MapTransitionEndEvent
-import io.github.masamune.tiledmap.MapTransitionService.Companion.PLAYER_MAP_EDGE_OFFSET
+import io.github.masamune.tiledmap.MapTransitionService.Companion.EDGE_OFFSET
 import io.github.masamune.tiledmap.TiledService.Companion.portal
 import ktx.log.logger
 import ktx.math.component1
@@ -42,7 +42,7 @@ interface MapTransitionService {
     companion object {
         // offset of player from the next map's edge
         // e.g. if player leaves a map at the top  then he will be at location (x, OFFSET) on the new map.
-        const val PLAYER_MAP_EDGE_OFFSET = 2.5f
+        const val EDGE_OFFSET = 2.5f
     }
 }
 
@@ -76,10 +76,10 @@ class ImmediateMapTransitionService(
         val centerX = x + width * 0.5f
         val centerY = y + height * 0.5f
         val targetXY = when (transitionType) {
-            MapTransitionType.RIGHT_TO_LEFT -> vec2(centerX + PLAYER_MAP_EDGE_OFFSET, centerY)
-            MapTransitionType.LEFT_TO_RIGHT -> vec2(centerX - PLAYER_MAP_EDGE_OFFSET, centerY)
-            MapTransitionType.TOP_TO_BOTTOM -> vec2(centerX, centerY + PLAYER_MAP_EDGE_OFFSET)
-            MapTransitionType.BOTTOM_TO_TOP -> vec2(centerX, centerY - PLAYER_MAP_EDGE_OFFSET)
+            MapTransitionType.RIGHT_TO_LEFT -> vec2(centerX + EDGE_OFFSET, centerY)
+            MapTransitionType.LEFT_TO_RIGHT -> vec2(centerX - EDGE_OFFSET, centerY)
+            MapTransitionType.TOP_TO_BOTTOM -> vec2(centerX, centerY + EDGE_OFFSET)
+            MapTransitionType.BOTTOM_TO_TOP -> vec2(centerX, centerY - EDGE_OFFSET)
         }
         player.configure {
             it += Teleport(targetXY)
@@ -96,6 +96,7 @@ class DefaultMapTransitionService(
     private var transitionTime = 0f
     private var nextMap = TiledMap()
     private var playerEntity = Entity.NONE
+    private val playerTargetPosition = vec2() // real position in new map after map transition
     private var transitionType = MapTransitionType.TOP_TO_BOTTOM
     private val mapOffset = vec2()
 
@@ -111,31 +112,8 @@ class DefaultMapTransitionService(
             // teleport player to correct location -> because of map transition he is currently out of bounds
             // and needs to be set to the correct location of the new map
             with(world) {
-                var (x, y) = playerEntity[Transform].position
-                when (transitionType) {
-                    MapTransitionType.TOP_TO_BOTTOM -> {
-                        x += mapOffset.x
-                        y = PLAYER_MAP_EDGE_OFFSET
-                    }
-
-                    MapTransitionType.BOTTOM_TO_TOP -> {
-                        x += mapOffset.x
-                        y = nextMap.height - PLAYER_MAP_EDGE_OFFSET
-                    }
-
-                    MapTransitionType.LEFT_TO_RIGHT -> {
-                        x = nextMap.width - PLAYER_MAP_EDGE_OFFSET
-                        y += mapOffset.y
-                    }
-
-                    MapTransitionType.RIGHT_TO_LEFT -> {
-                        x = PLAYER_MAP_EDGE_OFFSET
-                        y += mapOffset.y
-                    }
-                }
-
                 playerEntity.configure {
-                    it += Teleport(vec2(x, y))
+                    it += Teleport(playerTargetPosition)
                 }
             }
 
@@ -168,6 +146,11 @@ class DefaultMapTransitionService(
         mapOffset.set(toCenter.x - fromCenter.x, toCenter.y - fromCenter.y)
         log.debug { "Transition of type $transitionType and offset $mapOffset" }
         val transitionInterpolation = Interpolation.fade
+
+        val (playerX, playerY) = playerEntity[Transform].position
+        val playerTransitionTargetPos = playerTransitionTargetPos(fromTiledMap, playerY, playerX)
+        playerTargetPosition.set(playerRealTargetPos(playerTransitionTargetPos, transitionType, mapOffset, nextMap))
+
         tiledService.eventService.fire(
             MapTransitionBeginEvent(
                 fromTiledMap,
@@ -175,7 +158,8 @@ class DefaultMapTransitionService(
                 transitionTime,
                 transitionInterpolation,
                 transitionType,
-                mapOffset
+                mapOffset,
+                playerTargetPosition
             )
         )
 
@@ -185,30 +169,42 @@ class DefaultMapTransitionService(
         movePlayerOutOfBounds(fromTiledMap, transitionInterpolation)
     }
 
+    private fun playerRealTargetPos(
+        transitionTo: Vector2,
+        transitionType: MapTransitionType,
+        offset: Vector2, // map render offset
+        toMap: TiledMap
+    ): Vector2 = when (transitionType) {
+        MapTransitionType.TOP_TO_BOTTOM -> vec2(transitionTo.x + offset.x, EDGE_OFFSET)
+        MapTransitionType.BOTTOM_TO_TOP -> vec2(transitionTo.x + offset.x, toMap.height - EDGE_OFFSET)
+        MapTransitionType.LEFT_TO_RIGHT -> vec2(toMap.width - EDGE_OFFSET, transitionTo.y + offset.y)
+        MapTransitionType.RIGHT_TO_LEFT -> vec2(EDGE_OFFSET, transitionTo.y + offset.y)
+    }
+
     private fun World.movePlayerOutOfBounds(fromTiledMap: TiledMap, interpolation: Interpolation) {
         playerEntity.configure {
             val (playerX, playerY) = it[Transform].position
-            val to = when (transitionType) {
-                MapTransitionType.TOP_TO_BOTTOM -> {
-                    val diffY = fromTiledMap.height - playerY
-                    vec2(playerX, playerY + diffY + PLAYER_MAP_EDGE_OFFSET)
-                }
-
-                MapTransitionType.BOTTOM_TO_TOP -> {
-                    vec2(playerX, -PLAYER_MAP_EDGE_OFFSET)
-                }
-
-                MapTransitionType.LEFT_TO_RIGHT -> {
-                    vec2(-PLAYER_MAP_EDGE_OFFSET, playerY)
-                }
-
-                MapTransitionType.RIGHT_TO_LEFT -> {
-                    val diffX = fromTiledMap.width - playerX
-                    vec2(playerX + diffX + PLAYER_MAP_EDGE_OFFSET, playerY)
-                }
-
-            }
+            val to = playerTransitionTargetPos(fromTiledMap, playerY, playerX)
             it += MoveTo(to, transitionTime, interpolation)
+        }
+    }
+
+    // position outside of map boundaries for map transition effect
+    private fun playerTransitionTargetPos(
+        fromTiledMap: TiledMap,
+        playerY: Float,
+        playerX: Float
+    ): Vector2 = when (transitionType) {
+        MapTransitionType.TOP_TO_BOTTOM -> {
+            val diffY = fromTiledMap.height - playerY
+            vec2(playerX, playerY + diffY + EDGE_OFFSET)
+        }
+
+        MapTransitionType.BOTTOM_TO_TOP -> vec2(playerX, -EDGE_OFFSET)
+        MapTransitionType.LEFT_TO_RIGHT -> vec2(-EDGE_OFFSET, playerY)
+        MapTransitionType.RIGHT_TO_LEFT -> {
+            val diffX = fromTiledMap.width - playerX
+            vec2(playerX + diffX + EDGE_OFFSET, playerY)
         }
     }
 

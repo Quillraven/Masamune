@@ -37,6 +37,7 @@ data class MapTransitionBeginEvent(
     val interpolation: Interpolation,
     val type: MapTransitionType,
     val mapOffset: Vector2,
+    val newPlayerPos: Vector2, // position in new map (=toTiledMap)
 ) : Event
 
 data object MapTransitionEndEvent : Event
