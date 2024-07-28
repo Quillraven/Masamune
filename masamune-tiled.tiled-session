@@ -3,16 +3,16 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "core/src/test/resources/maps/transition_test.tmx",
+    "activeFile": "core/src/test/resources/maps/transition_test_small.tmx",
     "expandedProjectPaths": [
-        "assets",
-        "core",
-        "core/src",
         "core/src/test/resources",
+        ".",
+        "assets",
+        "core/src",
+        "core",
         "core/src/test/resources/maps",
         "core/src/test",
-        "assets/maps",
-        "."
+        "assets/maps"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
@@ -22,14 +22,14 @@
         },
         "assets/maps/path_to_forest.tmx": {
             "expandedObjectLayers": [
-                4,
-                6
+                6,
+                4
             ],
             "scale": 4,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 128.125,
-                "y": 352.125
+                "x": 128,
+                "y": 661.875
             }
         },
         "assets/maps/test.tmx": {
@@ -54,8 +54,8 @@
             "scale": 4,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 160.125,
-                "y": 160.125
+                "x": 111.5,
+                "y": 37.125
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
@@ -123,8 +123,8 @@
         },
         "core/src/test/resources/maps/transition_test_large.tmx": {
             "expandedObjectLayers": [
-                6,
-                5
+                5,
+                6
             ],
             "scale": 3,
             "selectedLayer": 0,
@@ -168,11 +168,14 @@
     "map.tileWidth": 16,
     "map.width": 16,
     "openFiles": [
-        "core/src/test/resources/maps/transition_test.tmx"
+        "core/src/test/resources/maps/transition_test_small.tmx",
+        "core/src/test/resources/maps/transition_test_large.tmx"
     ],
     "project": "masamune-tiled.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "core/src/test/resources/maps/transition_test_large.tmx",
+        "core/src/test/resources/maps/transition_test_small.tmx",
         "core/src/test/resources/maps/transition_test_large2.tmx",
         "core/src/test/resources/maps/transition_test.tmx",
         "core/src/test/resources/maps/objects.tsx",
@@ -182,9 +185,7 @@
         "assets/maps/path_to_forest.tmx",
         "core/src/test/resources/maps/test.tmx",
         "core/src/test/resources/maps/interactTest.tmx",
-        "core/src/test/resources/maps/transitionTest.tmx",
-        "core/src/test/resources/maps/tiledTest.tmx",
-        "core/src/test/resources/maps/interactTestObjects.tsx"
+        "core/src/test/resources/maps/transitionTest.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.margin": 4,
