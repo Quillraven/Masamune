@@ -1,5 +1,6 @@
 package io.github.masamune.teavm
 
+import com.github.xpenatan.gdx.backends.teavm.config.AssetFileHandle
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuildConfiguration
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuilder
 import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSupplier
@@ -17,7 +18,7 @@ object TeaVMBuilder {
     @JvmStatic
     fun main(arguments: Array<String>) {
         val teaBuildConfiguration = TeaBuildConfiguration().apply {
-            assetsPath.add(File("../assets"))
+            assetsPath.add(AssetFileHandle("../assets"))
             webappPath = File("build/dist").canonicalPath
             // Register any extra classpath assets here:
             // additionalAssetsClasspathFiles += "io/github/masamune/asset.extension"
