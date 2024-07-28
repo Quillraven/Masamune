@@ -1,5 +1,6 @@
 package io.github.masamune
 
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
@@ -91,6 +92,7 @@ private class MapTransitionTest() : KtxApplicationAdapter {
     }
 
     override fun create() {
+        Gdx.app.logLevel = Application.LOG_DEBUG
         eventService += world
 
         physicWorld.setContactListener(PhysicContactHandler(eventService, world))
