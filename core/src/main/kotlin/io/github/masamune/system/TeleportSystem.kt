@@ -9,6 +9,7 @@ import io.github.masamune.component.Physic
 import io.github.masamune.component.Teleport
 import io.github.masamune.component.Transform
 import ktx.box2d.body
+import ktx.log.logger
 
 class TeleportSystem : IteratingSystem(family { all(Teleport, Physic) }) {
 
@@ -16,6 +17,7 @@ class TeleportSystem : IteratingSystem(family { all(Teleport, Physic) }) {
         val toPosition = entity[Teleport].toPosition
 
         // teleport physic body to new location by destroying it and recreating it at the new location
+        log.debug { "Teleporting entity $entity to $toPosition" }
         body = body.cpy(toPosition)
         prevPosition.set(toPosition)
         entity.getOrNull(Transform)?.position?.set(body.position, 0f)
@@ -44,6 +46,10 @@ class TeleportSystem : IteratingSystem(family { all(Teleport, Physic) }) {
 
         physicWorld.destroyBody(origBody)
         return newBody
+    }
+
+    companion object {
+        private val log = logger<TeleportSystem>()
     }
 
 }
