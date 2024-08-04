@@ -132,6 +132,11 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
     fun update(): Boolean = manager.update(1 / 60 * 1000)
 
     /**
+     * Returns the loading progress in percent of completion.
+     */
+    fun progress(): Float = manager.progress
+
+    /**
      * Immediately finishes loading of any queued asset.
      */
     fun finishLoading() = manager.finishLoading()
