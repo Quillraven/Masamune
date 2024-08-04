@@ -102,6 +102,46 @@ atlasData: {
 			type: TEXTURE
 			hidden: false
 		}
+		{
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/nine_path_bg.9.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: nine_path_bg
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: NINE_PATCH
+			hidden: false
+		}
+		{
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress.9.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: slider_progress
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: NINE_PATCH
+			hidden: false
+		}
 	]
 	fontDrawables: [
 		{
@@ -2001,6 +2041,45 @@ jsonData: {
 				deletable: true
 			}
 			declareAfterUIclasses: false
+		}
+		{
+			fullyQualifiedName: io.github.masamune.ui.widget.ProgressBarStyle
+			displayName: MasamuneProgressBar
+			styles: [
+				{
+					name: default
+					properties: [
+						{
+							name: background
+							type: DRAWABLE
+							value: nine_path_bg
+						}
+						{
+							name: progress
+							type: DRAWABLE
+							value: slider_progress
+						}
+					]
+					deletable: false
+				}
+			]
+			templateStyle: {
+				name: template
+				properties: [
+					{
+						name: background
+						type: DRAWABLE
+						value: null
+					}
+					{
+						name: progress
+						type: DRAWABLE
+						value: null
+					}
+				]
+				deletable: true
+			}
+			declareAfterUIclasses: true
 		}
 	]
 }

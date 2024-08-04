@@ -6,14 +6,14 @@ filter: Nearest, Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 60, 760
+  xy: 914, 906
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 dialog_choice_frame
   rotate: false
-  xy: 842, 878
+  xy: 842, 898
   size: 64, 20
   split: 5, 5, 5, 5
   pad: 6, 6, 5, 5
@@ -22,7 +22,7 @@ dialog_choice_frame
   index: -1
 dialog_face_frame
   rotate: false
-  xy: 4, 724
+  xy: 4, 744
   size: 48, 48
   split: 13, 6, 16, 6
   pad: 0, 0, 0, 0
@@ -31,7 +31,7 @@ dialog_face_frame
   index: -1
 dialog_frame
   rotate: false
-  xy: 518, 838
+  xy: 518, 858
   size: 316, 60
   split: 9, 9, 9, 9
   orig: 316, 60
@@ -39,22 +39,40 @@ dialog_frame
   index: -1
 elder
   rotate: false
-  xy: 4, 678
+  xy: 4, 698
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 fipps_16
   rotate: false
-  xy: 4, 829
+  xy: 4, 849
   size: 506, 69
   orig: 506, 69
   offset: 0, 0
   index: -1
+nine_path_bg
+  rotate: false
+  xy: 60, 776
+  size: 16, 16
+  split: 3, 3, 3, 3
+  pad: 0, 0, 0, 0
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 pixel_arial_16
   rotate: false
-  xy: 4, 780
+  xy: 4, 800
   size: 503, 41
   orig: 503, 41
+  offset: 0, 0
+  index: -1
+slider_progress
+  rotate: false
+  xy: 842, 874
+  size: 16, 16
+  split: 4, 4, 4, 4
+  pad: 0, 0, 0, 0
+  orig: 16, 16
   offset: 0, 0
   index: -1
