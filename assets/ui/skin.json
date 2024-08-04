@@ -72,4 +72,10 @@ com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 		label: default
 	}
 }
+io.github.masamune.ui.widget.ProgressBarStyle: {
+	default: {
+		background: nine_path_bg
+		progress: slider_progress
+	}
+}
 }
