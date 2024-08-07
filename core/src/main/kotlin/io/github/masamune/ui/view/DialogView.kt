@@ -81,7 +81,7 @@ class DialogView(
 
                 this@DialogView.imageCaption = label("", this@DialogView.style.imageCaptionStyle, skin) {
                     setAlignment(Align.top, Align.center)
-                    wrap = true
+                    wrap = false
                 }
 
                 vGroupCell.padLeft(5f).padRight(15f).fill().minWidth(MIN_IMAGE_WIDTH)
@@ -135,7 +135,7 @@ class DialogView(
         } else {
             imageGroup.isVisible = true
             image.drawable = skin.getDrawable(drawableName)
-            imageCaption.txt = caption ?: ""
+            imageCaption.txt = caption?.replace(' ', '\n') ?: ""
             imageGroup.inCell.minWidth(MIN_IMAGE_WIDTH)
         }
     }
