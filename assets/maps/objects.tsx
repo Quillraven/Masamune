@@ -68,10 +68,11 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="merchant/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
-   <property name="dialogName" value="merchant_00"/>
+   <property name="dialogName" value=""/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="MERCHANT"/>
    <property name="speed" type="float" value="3"/>
+   <property name="triggerName" value="merchant"/>
   </properties>
   <image source="objects/merchant.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
@@ -87,10 +88,11 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="smith/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
-   <property name="dialogName" value="smith_00"/>
+   <property name="dialogName" value=""/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="SMITH"/>
    <property name="speed" type="float" value="3"/>
+   <property name="triggerName" value="smith"/>
   </properties>
   <image source="objects/smith.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">

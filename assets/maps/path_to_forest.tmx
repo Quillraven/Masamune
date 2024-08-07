@@ -4,12 +4,12 @@
  <tileset firstgid="4097" source="objects.tsx"/>
  <layer id="1" name="ground" width="16" height="44">
   <data encoding="base64" compression="zlib">
-   eJydVltOwzAQTEE2X1yy4Y9TpPnjGASpXIO0hXvQSnAM1qqHTNZe2/AxivqYfe9s+vuu+xa8CJ7j880LXNcN8twJfHjK59Fdfwv/2wseBVNE4H0KLpG/EdwIPqKdd3ne+oX/Ff1O0RZ4Gpto4+CW74Kf1wbu0S+5MJ9tWNwDf87wYSPHZQzCu/Nr/qz+M/r8b+By7RinBr8Wt2Srxh0b/M7uOjeYGYujaxFqHfxidnJ1L/aLOQV+4pf4mHfdt2QujNx3fslB1y9Xh5F8W7wmGPmauRb4pdkq8bnnLehlhx5IM6yeczxcwylqya+dP8ZwJi0JGoYYWm1sSccC/+TbbKAn4ILPtYT2sg09P3sVP89hmKXSDoVZvkTdX/l3tPuVHexj/tDhRO+If8zwpwx3pTsV/xx3qHuyO5U+nAs3APwh04cSRsVHH/QdrYFridysudI7bmm4rpGpZ65+OzT3pPj/1aLczWwB3/sQ+5NL653TteQ7t9S8tMdba24od9jQuUA3Srlb7y+sOUldqW+DS+8Yc6dc/Or+6XuEdz/oprUv1h3jd0y8P82Kr+cO+4TYofd9Jf7RrTUHOsfx/wDJSuI8
+   eJydVktuwkAMDa1musolA7ueImTXY5BK9BoF0t4DkOAYtcW4eXHsybSLpyjA89/PrOuquhPeCbv0/IyEUFUtPbeEyE9678LjO/7dnvBK6BOYdyZcE39FeCJ8Jztf9HyOI/+W/PbJlvA0VsnGMYyfsZ+PAu4pjrkgH2143CO+G3yxYXERLfFe4pR/UL/pov2dcLF2iKHAr8fN2VridgV+D+ExNzIzHkfXgmvNfmV2rLpn+4WcDH/mF/gy77pvs7lwct/GMQddP6sOHfj2eEVw8nVzzfBzs5XjY89LsKYd2oBmeD3HeLCGfdKSXzt/jOECWsIaJjGU2mhAx5g/xDIb0hPhCh9rKdqLNvT87FX8OIc8S7kd4lm+Jt2f+A+w+ws7uE75iw7P9A74J4PfG9yJ7iz4x7i57rPdWejDJXMDhN8afcihU3zpg76jS8BaSm7eXOkd9zRc18jVs7B8OzR3UPz/apF1M73dw3e89xz7W5jXewDuvTbihthXTr0bmHmvdhK72JD3Ru1LLnf9/wW1RjRvVlfoWxumd0z2HGHFjvcP75HwOfZLgsX37t8OYt8YsXszK/t0rke91vnjrub0RuyIZv4AjojiZA==
   </data>
  </layer>
  <layer id="2" name="decoration" width="16" height="44">
   <data encoding="base64" compression="zlib">
-   eJzFlk0OgjAQhRsg0cgBQHSlceGdvJc/a/d6BfUQCBrceBCfiyZDpWNbKHzJW9B2Jp3OdIoQdbahEDtoDx2g80SwrOP6dw6bO1RAZVify+BrBs0Zn0kkRApNoSyys1U5Ye1K2V+Tn+fI3KckZ2yWsX6OsjBcJ3mF+jmX85FwsWhtAuQ5sLeTJIglJfGoeWrL3SIm2zz4oGJyq+M4bh7faMa/0Np8M+v65uFQgzY10+Z+mFA47H8oaL2XA+1b9hzTc+NquitcasTl7fBFl+8JR+Wxb/+D9i+bHt81ar/ycQ4+exa9d329f013hebQ5Q2kXBDHlegW//YN9X/1A7WyJ8c=
+   eJzFlkkOwjAMRa0OAtEDtBRWIBbciXsxCHbs4QrAITqAyoaD4EhEcqvEStKBJ/1Fk9iKE8cuQJ2tD7BD7VEH1HUCLOuo/p2hTY4qUKVfn0vR1ww1Z3zGAUCCmqLSwM62yQXXrhr7U/l5jcx9SjLGZhnp5ygLw3WSt6+fczkfCReL1sbDe/bs7SQxxpKQeJr31JbcIibbe+iDirlbHeexenyjGRfQ3Pww64bm6ZCDNjnT5n2YUDjs/1/QfC//tG9Zc0zPjcvprnDJEZfe0Rdd9hOOqoO6bVOfKaa9dWi67l8CXT661EoV8u0N2f/oexH/jjIPXPof5Ya+7kSPX0yibhxDgFOotvsCyEQpCg==
   </data>
  </layer>
  <layer id="3" name="decoration 2" width="16" height="44">
@@ -25,7 +25,7 @@
  </objectgroup>
  <objectgroup id="7" name="trigger"/>
  <objectgroup color="#ffaa00" id="6" name="portal">
-  <object id="11" name="VILLAGE" type="Portal" x="64" y="688" width="48" height="16">
+  <object id="11" name="VILLAGE" type="Portal" x="48" y="688" width="48" height="16">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
     <property name="targetPortalId" type="int" value="11"/>
@@ -34,7 +34,7 @@
  </objectgroup>
  <layer id="5" name="foreground" width="16" height="44">
   <data encoding="base64" compression="zlib">
-   eJxjYCAe3OJkYLgNxHc4SdA0QsAsYJjMBuI5ZIbNaNiOguEMRvPHKCAERtPIKBhMYDQ90hc0cjMwNCHhZm7a2wkAPJcXzg==
+   eJxjYCAe3OJkYLgNxHc4SdA0QsAsYJjMBuI5ZIbNaNiOguEMRvPHKCAERtPIKBhMYDQ90g80cjMwNCHhZm762AsAR5sXzg==
   </data>
  </layer>
  <layer id="8" name="foreground2" width="16" height="44">
