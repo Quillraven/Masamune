@@ -14,6 +14,7 @@ class TriggerConfigurator {
             "villageExit" -> world.villageExitTrigger(name, scriptEntity, triggeringEntity)
             "elder" -> world.elderTrigger(name, triggeringEntity)
             "merchant" -> world.merchantTrigger(name, triggeringEntity)
+            "smith" -> world.smithTrigger(name, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }
@@ -34,11 +35,19 @@ class TriggerConfigurator {
         trigger(name, this, triggeringEntity) {
             actionDialog("merchant_00") { selectedOptionIdx ->
                 if (selectedOptionIdx == 0) {
-                    println("TODO open shop UI")
+                    println("TODO open shop merchant UI")
                 }
             }
         }
 
+    private fun World.smithTrigger(name: String, triggeringEntity: Entity) =
+        trigger(name, this, triggeringEntity) {
+            actionDialog("smith_00") { selectedOptionIdx ->
+                if (selectedOptionIdx == 0) {
+                    println("TODO open shop smith UI")
+                }
+            }
+        }
 
     companion object {
         private val log = logger<TriggerConfigurator>()

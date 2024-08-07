@@ -18,6 +18,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
         return when (name) {
             "elder_00" -> elderDialog(name, world, triggeringEntity)
             "merchant_00" -> merchantDialog(name)
+            "smith_00" -> smithDialog(name, world, triggeringEntity)
             "villageExit" -> villageExitDialog(name)
 
             else -> gdxError("There is no dialog configured for name $name")
@@ -47,6 +48,14 @@ class DialogConfigurator(private val bundle: I18NBundle) {
         }
     }
 
+    private fun smithDialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+        val playerName = entityName(world, triggeringEntity)
+
+        page(bundle.format("dialog.smith_00.page1", playerName), "smith", bundle["npc.smith.title"]) {
+            option(bundle["dialog.option.buy"], ActionExit)
+            option(bundle["dialog.option.exit"], ActionExit)
+        }
+    }
 
     private fun villageExitDialog(name: String): Dialog = dialog(name) {
         page(bundle["dialog.villageExit.page1"]) {
