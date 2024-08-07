@@ -13,6 +13,7 @@ class TriggerConfigurator {
         return when (name) {
             "villageExit" -> world.villageExitTrigger(name, scriptEntity, triggeringEntity)
             "elder" -> world.elderTrigger(name, triggeringEntity)
+            "merchant" -> world.merchantTrigger(name, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }
@@ -28,6 +29,16 @@ class TriggerConfigurator {
         trigger(name, this, triggeringEntity) {
             actionDialog("elder_00")
         }
+
+    private fun World.merchantTrigger(name: String, triggeringEntity: Entity) =
+        trigger(name, this, triggeringEntity) {
+            actionDialog("merchant_00") { selectedOptionIdx ->
+                if (selectedOptionIdx == 0) {
+                    println("TODO open shop UI")
+                }
+            }
+        }
+
 
     companion object {
         private val log = logger<TriggerConfigurator>()
