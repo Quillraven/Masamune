@@ -1,5 +1,6 @@
 package io.github.masamune.ui.view
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -89,6 +90,10 @@ class DialogView(
 
             // second cell is the main content label
             this@DialogView.content = typingLabel("", this@DialogView.style.contentStyle, skin) { contentCell ->
+                val defaultTextColor = "#695454"
+                defaultToken = "{COLOR=$defaultTextColor}"
+                clearColor.set(Color.valueOf(defaultTextColor))
+
                 setAlignment(Align.topLeft)
                 wrap = true
                 contentCell.grow().minWidth(MIN_CONTENT_WIDTH).minHeight(MIN_CONTENT_HEIGHT).padBottom(10f)
