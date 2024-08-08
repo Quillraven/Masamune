@@ -3,15 +3,15 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "core/src/test/resources/maps/transition_test_small.tmx",
+    "activeFile": "assets/maps/objects.tsx",
     "expandedProjectPaths": [
+        "core/src/test/resources/maps",
         "core/src/test/resources",
         ".",
-        "assets",
         "core/src",
-        "core",
-        "core/src/test/resources/maps",
         "core/src/test",
+        "assets",
+        "core",
         "assets/maps"
     ],
     "fileStates": {
@@ -42,20 +42,18 @@
         },
         "assets/maps/tileset.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 3,
+            "scaleInDock": 2,
             "scaleInEditor": 2
         },
         "assets/maps/village.tmx": {
             "expandedObjectLayers": [
-                6,
-                7,
-                8
+                6
             ],
             "scale": 3,
-            "selectedLayer": 0,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 148.33333333333334,
-                "y": 43.16666666666666
+                "x": 160.16666666666666,
+                "y": 159.83333333333331
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
@@ -168,21 +166,22 @@
     "map.tileWidth": 16,
     "map.width": 16,
     "openFiles": [
-        "core/src/test/resources/maps/transition_test_small.tmx",
-        "core/src/test/resources/maps/transition_test_large.tmx"
+        "assets/maps/village.tmx",
+        "assets/maps/path_to_forest.tmx",
+        "assets/maps/objects.tsx"
     ],
     "project": "masamune-tiled.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "assets/maps/village.tmx",
+        "assets/maps/path_to_forest.tmx",
+        "assets/maps/objects.tsx",
         "core/src/test/resources/maps/transition_test_large.tmx",
         "core/src/test/resources/maps/transition_test_small.tmx",
         "core/src/test/resources/maps/transition_test_large2.tmx",
         "core/src/test/resources/maps/transition_test.tmx",
         "core/src/test/resources/maps/objects.tsx",
         "assets/maps/tileset.tsx",
-        "assets/maps/objects.tsx",
-        "assets/maps/village.tmx",
-        "assets/maps/path_to_forest.tmx",
         "core/src/test/resources/maps/test.tmx",
         "core/src/test/resources/maps/interactTest.tmx",
         "core/src/test/resources/maps/transitionTest.tmx"

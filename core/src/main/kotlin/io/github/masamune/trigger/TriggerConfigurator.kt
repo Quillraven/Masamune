@@ -15,6 +15,7 @@ class TriggerConfigurator {
             "elder" -> world.elderTrigger(name, triggeringEntity)
             "merchant" -> world.merchantTrigger(name, triggeringEntity)
             "smith" -> world.smithTrigger(name, triggeringEntity)
+            "flower_girl" -> world.flowerGirlTrigger(name, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }
@@ -45,6 +46,15 @@ class TriggerConfigurator {
             actionDialog("smith_00") { selectedOptionIdx ->
                 if (selectedOptionIdx == 0) {
                     println("TODO open shop smith UI")
+                }
+            }
+        }
+
+    private fun World.flowerGirlTrigger(name: String, triggeringEntity: Entity) =
+        trigger(name, this, triggeringEntity) {
+            actionDialog("flower_girl_00") { selectedOptionIdx ->
+                if (selectedOptionIdx == 0) {
+                    println("TODO add flower quest")
                 }
             }
         }
