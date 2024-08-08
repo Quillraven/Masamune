@@ -56,5 +56,5 @@ val MapObject.targetPortalId: Int
 val TiledMapTile.itemName: String
     get() = this.property<String>("itemName", "")
 
-val TiledMapTile.stats: Stats?
-    get() = this.propertyOrNull<Stats>("stats")
+val TiledMapTile.stats: TiledStats
+    get() = this.property<TiledStats>("stats")
