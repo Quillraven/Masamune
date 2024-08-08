@@ -6,13 +6,13 @@
     "activeFile": "assets/maps/objects.tsx",
     "expandedProjectPaths": [
         "core/src/test/resources/maps",
-        "core/src/test/resources",
-        ".",
-        "core/src",
-        "core/src/test",
         "assets",
         "core",
-        "assets/maps"
+        "core/src",
+        "assets/maps",
+        "core/src/test",
+        ".",
+        "core/src/test/resources"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
@@ -22,14 +22,14 @@
         },
         "assets/maps/path_to_forest.tmx": {
             "expandedObjectLayers": [
-                6,
-                4
+                4,
+                6
             ],
             "scale": 4,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 123.75,
-                "y": 642.125
+                "x": 128.125,
+                "y": 352.125
             }
         },
         "assets/maps/test.tmx": {
