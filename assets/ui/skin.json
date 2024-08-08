@@ -7,7 +7,7 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 		flip: false
 	}
 	pixel_arial_16: {
-		file: pixel_arial_16.fnt
+		file: PIXEARG_.fnt
 		scaledSize: -1
 		markupEnabled: true
 		flip: false
@@ -55,7 +55,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	}
 	dialog_content: {
 		font: pixel_arial_16
-		fontColor: dark_grey
+		fontColor: white
 	}
 	dialog_image_caption: {
 		font: fipps_16
