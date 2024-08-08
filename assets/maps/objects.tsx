@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="16" tileheight="16" tilecount="8" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="16" tileheight="16" tilecount="9" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="MapObject">
   <properties>
@@ -127,5 +127,19 @@
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
   </properties>
   <image source="objects/mushroom.png" width="16" height="16"/>
+ </tile>
+ <tile id="9" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="atlasRegionKey" value="items/elder_sword"/>
+   <property name="itemName" value="elder_sword"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="intelligence" type="float" value="1"/>
+     <property name="physicalDamage" type="float" value="3"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/elder_sword.png" width="6" height="15"/>
  </tile>
 </tileset>

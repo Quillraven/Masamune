@@ -77,6 +77,49 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
+            "id": 9,
+            "members": [
+                {
+                    "name": "atlas",
+                    "propertyType": "AtlasAsset",
+                    "type": "string",
+                    "value": "CHARS_AND_PROPS"
+                },
+                {
+                    "name": "atlasRegionKey",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "itemName",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "stats",
+                    "propertyType": "Stats",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "ItemObject",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 2,
             "members": [
                 {
@@ -148,7 +191,8 @@
                 "MERCHANT",
                 "SMITH",
                 "PORTAL",
-                "ENEMY"
+                "ENEMY",
+                "ITEM"
             ],
             "valuesAsFlags": false
         },
@@ -172,6 +216,55 @@
             "type": "class",
             "useAs": [
                 "object",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 8,
+            "members": [
+                {
+                    "name": "agility",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "armor",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "intelligence",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "magicalDamage",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "physicalDamage",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "resistance",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "strength",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "Stats",
+            "type": "class",
+            "useAs": [
+                "property",
+                "tile",
                 "project"
             ]
         }
