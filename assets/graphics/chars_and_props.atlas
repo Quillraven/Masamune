@@ -177,6 +177,8 @@ bounds:56,142,16,16
 hero/walk_up
 index:1
 bounds:146,124,16,16
+items/elder_sword
+bounds:164,143,6,15
 larva/idle_down
 bounds:110,88,16,16
 merchant/idle_down
