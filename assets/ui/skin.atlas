@@ -4,6 +4,13 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
+PIXEARG_
+  rotate: false
+  xy: 4, 804
+  size: 505, 41
+  orig: 505, 41
+  offset: 0, 0
+  index: -1
 arrow
   rotate: false
   xy: 152, 784
@@ -79,13 +86,6 @@ nine_path_bg
   split: 3, 3, 3, 3
   pad: 0, 0, 0, 0
   orig: 16, 16
-  offset: 0, 0
-  index: -1
-pixel_arial_16
-  rotate: false
-  xy: 4, 804
-  size: 503, 41
-  orig: 503, 41
   offset: 0, 0
   index: -1
 slider_progress

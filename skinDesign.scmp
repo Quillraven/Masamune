@@ -225,26 +225,6 @@ atlasData: {
 	]
 	fontDrawables: [
 		{
-			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_16.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: pixel_arial_16
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: FONT
-			hidden: false
-		}
-		{
 			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/fipps_16.png
 			bgColor: {
 				r: 1
@@ -255,6 +235,26 @@ atlasData: {
 			tint: null
 			tintName: null
 			name: fipps_16
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: FONT
+			hidden: false
+		}
+		{
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/PIXEARG_.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: PIXEARG_
 			tiled: false
 			minWidth: -1
 			minHeight: -1
@@ -344,7 +344,7 @@ jsonData: {
 			flip: false
 			markupEnabled: true
 			scaling: -1
-			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_16.fnt
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/PIXEARG_.fnt
 		}
 	]
 	freeTypeFonts: []
@@ -1300,7 +1300,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.Color
 						name: fontColor
 						optional: true
-						value: dark_grey
+						value: white
 					}
 					background: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
