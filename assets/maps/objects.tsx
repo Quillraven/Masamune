@@ -49,10 +49,11 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="flower_girl/idle_down"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
-   <property name="dialogName" value="flower_girl_00"/>
+   <property name="dialogName" value=""/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="FLOWER_GIRL"/>
    <property name="speed" type="float" value="3.5"/>
+   <property name="triggerName" value="flower_girl"/>
   </properties>
   <image source="objects/flower_girl.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
