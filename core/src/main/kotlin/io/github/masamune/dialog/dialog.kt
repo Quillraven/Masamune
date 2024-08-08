@@ -62,4 +62,9 @@ data class Dialog(val name: String, val pages: List<Page>) {
 
         activePage = pages[pageIdx]
     }
+
+    override fun toString(): String {
+        return "Dialog(name='$name', isFinished=$isFinished, lastOptionIdx=$lastOptionIdx)"
+    }
+
 }
