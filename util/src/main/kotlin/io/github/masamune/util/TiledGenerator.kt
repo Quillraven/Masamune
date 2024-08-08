@@ -65,9 +65,10 @@ fun main() {
 
     println("Generating classes")
     // name of tiled classes for which Masamune Kotlin classes should be created (Tiled name to Masamune Kotlin name)
-    listOf(
-        "Stats" to "Stats"
-    ).forEach { (tiledClass, masamuneClass) ->
+    val tiledClassToMasamuneClass = listOf(
+        "Stats" to "TiledStats",
+    )
+    tiledClassToMasamuneClass.forEach { (tiledClass, masamuneClass) ->
         val members = tiledProject.propertyTypes
             .first { it.name == tiledClass && it.members.isNotEmpty() }
             .members
@@ -86,7 +87,7 @@ fun main() {
         val properties = tiledProject.propertyTypes
             .first { it.name == tiledClass && it.members.isNotEmpty() }
             .members
-        createPropertyExtensions(extensionContent, properties, gdxClass)
+        createPropertyExtensions(extensionContent, properties, gdxClass, tiledClassToMasamuneClass)
     }
     createPropertyExtensionsFile(extensionContent)
 }
@@ -169,7 +170,12 @@ fun createPropertyExtensionsFile(content: StringBuilder) {
 
 private val alreadyProcessedProperties = mutableSetOf<String>()
 
-fun createPropertyExtensions(content: StringBuilder, properties: List<Member>, gdxClass: String) {
+fun createPropertyExtensions(
+    content: StringBuilder,
+    properties: List<Member>,
+    gdxClass: String,
+    tiledClassToMasamuneClass: List<Pair<String, String>>
+) {
     println("Creating property extensions for ${properties.map(Member::name)} and class $gdxClass")
 
     with(content) {
@@ -187,9 +193,10 @@ fun createPropertyExtensions(content: StringBuilder, properties: List<Member>, g
                 append("    get() = this.propertyOrNull<${property.kotlinType}>(\"${property.name}\")")
                 return@forEach
             } else if ("class" == property.type) {
-                // special case for class types which also default to null values
-                append("val $gdxClass.${property.name}: ${property.kotlinType}?").append(newLine)
-                append("    get() = this.propertyOrNull<${property.kotlinType}>(\"${property.name}\")")
+                // special case for class types
+                val masamuneClass = tiledClassToMasamuneClass.first { it.first == property.kotlinType }.second
+                append("val $gdxClass.${property.name}: $masamuneClass").append(newLine)
+                append("    get() = this.property<$masamuneClass>(\"${property.name}\")")
                 return@forEach
             }
 
