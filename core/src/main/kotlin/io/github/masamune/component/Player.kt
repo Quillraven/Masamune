@@ -4,7 +4,6 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 
 data class Player(
-    val name: String,
     val gameProgress: Int = 0,
 ) : Component<Player> {
     override fun type() = Player

@@ -296,8 +296,29 @@ class TiledService(
     private fun EntityCreateContext.configurePlayer(entity: Entity) {
         log.debug { "Configuring player" }
         entity += Tag.CAMERA_FOCUS
-        entity += Player("Alexxius")
+        entity += Player(gameProgress = 0)
+        entity += Name("Alexxius")
         entity += Interact()
+        entity += Inventory()
+    }
+
+    fun loadItem(world: World, itemName: String): Entity {
+        val objectsTileSet = currentMap?.tileSets?.getTileSet("objects")
+            ?: gdxError("Objects TileSet is not available")
+
+        objectsTileSet.iterator().forEach { tile ->
+            if (tile.itemName != itemName) {
+                return@forEach
+            }
+
+            return world.entity {
+                it += Name(tile.itemName)
+                it += Stats(tile.stats)
+                configureGraphic(it, tile)
+            }
+        }
+
+        gdxError("There is no item with name $itemName")
     }
 
     companion object {

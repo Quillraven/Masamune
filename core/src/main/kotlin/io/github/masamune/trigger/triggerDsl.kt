@@ -4,6 +4,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
+import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerActionDialog.Companion.NO_CLOSE_ACTION
 import ktx.app.gdxError
 
@@ -25,6 +26,11 @@ class TriggerCfg(
         val configurator = world.inject<DialogConfigurator>()
         val eventService = world.inject<EventService>()
         actions += TriggerActionDialog(configurator, dialogName, world, triggeringEntity, eventService, closeAction)
+    }
+
+    fun actionAddItem(entity: Entity, itemName: String) {
+        val tiledService = world.inject<TiledService>()
+        actions += TriggerActionAddItem(entity, itemName, tiledService)
     }
 }
 

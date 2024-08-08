@@ -30,6 +30,7 @@ class TriggerConfigurator {
     private fun World.elderTrigger(name: String, triggeringEntity: Entity) =
         trigger(name, this, triggeringEntity) {
             actionDialog("elder_00")
+            actionAddItem(triggeringEntity, "elder_sword")
         }
 
     private fun World.merchantTrigger(name: String, triggeringEntity: Entity) =

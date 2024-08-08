@@ -3,7 +3,7 @@ package io.github.masamune.dialog
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import io.github.masamune.component.Player
+import io.github.masamune.component.Name
 import ktx.app.gdxError
 import ktx.log.logger
 
@@ -29,7 +29,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
     }
 
     private fun entityName(world: World, entity: Entity): String = with(world) {
-        entity[Player].name
+        entity[Name].name
     }
 
     private fun elderDialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {

@@ -2,9 +2,11 @@ package io.github.masamune.trigger
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.component.Inventory
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.EventService
+import io.github.masamune.tiledmap.TiledService
 
 sealed interface TriggerAction {
     fun World.onStart() = Unit
@@ -45,5 +47,17 @@ class TriggerActionDialog(
 
     companion object {
         val NO_CLOSE_ACTION: (Int) -> Unit = {}
+    }
+}
+
+class TriggerActionAddItem(
+    private val entity: Entity,
+    private val itemName: String,
+    private val tiledService: TiledService
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        val item: Entity = tiledService.loadItem(this, itemName)
+        entity[Inventory].items += item
+        return true
     }
 }
