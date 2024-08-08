@@ -7,10 +7,10 @@ import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.I18NBundle
+import io.github.masamune.tiledmap.TiledMapLoader
 import ktx.assets.getAsset
 import ktx.assets.load
 import ktx.log.logger
@@ -68,7 +68,7 @@ enum class I18NAsset {
 class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleResolver()) : Disposable {
 
     private val manager = AssetManager(fileHandleResolver).apply {
-        setLoader(TiledMap::class.java, TmxMapLoader(this.fileHandleResolver))
+        setLoader(TiledMap::class.java, TiledMapLoader(this.fileHandleResolver))
     }
 
     /**
