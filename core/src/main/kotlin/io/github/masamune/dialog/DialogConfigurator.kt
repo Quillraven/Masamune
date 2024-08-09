@@ -40,7 +40,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             option(dialogOptionNext, ActionNext)
         }
         page(bundle.format("dialog.elder_00.page2", playerName), "elder", elderTitle) {
-            option(dialogOptionOk, ActionNext)
+            option(dialogOptionNext, ActionNext)
         }
         page(bundle["dialog.elder_00.page3"], "elder", elderTitle) {
             option(dialogOptionOk, ActionExit)
