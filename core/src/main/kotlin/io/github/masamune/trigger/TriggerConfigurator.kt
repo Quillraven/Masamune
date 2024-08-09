@@ -2,6 +2,8 @@ package io.github.masamune.trigger
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.component.QuestLog
+import io.github.masamune.quest.MainQuest
 import ktx.app.gdxError
 import ktx.log.logger
 
@@ -27,11 +29,24 @@ class TriggerConfigurator {
             actionDialog("villageExit")
         }
 
-    private fun World.elderTrigger(name: String, triggeringEntity: Entity) =
-        trigger(name, this, triggeringEntity) {
-            actionDialog("elder_00")
-            actionAddItem(triggeringEntity, "elder_sword")
+    private fun World.elderTrigger(name: String, triggeringEntity: Entity): TriggerScript {
+        val mainQuest = triggeringEntity[QuestLog].getOrNull<MainQuest>()
+        return when (mainQuest) {
+            null -> {
+                trigger(name, this, triggeringEntity) {
+                    actionDialog("elder_00")
+                    actionAddItem(triggeringEntity, "elder_sword")
+                    actionAddQuest(triggeringEntity, MainQuest())
+                }
+            }
+
+            else -> {
+                trigger(name, this, triggeringEntity) {
+                    actionDialog("elder_10")
+                }
+            }
         }
+    }
 
     private fun World.merchantTrigger(name: String, triggeringEntity: Entity) =
         trigger(name, this, triggeringEntity) {
@@ -64,3 +79,4 @@ class TriggerConfigurator {
         private val log = logger<TriggerConfigurator>()
     }
 }
+

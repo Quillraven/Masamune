@@ -18,7 +18,8 @@ class DialogConfigurator(private val bundle: I18NBundle) {
         log.debug { "Creating new dialog $name" }
 
         return when (name) {
-            "elder_00" -> elderDialog(name, world, triggeringEntity)
+            "elder_00" -> elder00Dialog(name, world, triggeringEntity)
+            "elder_10" -> elder10Dialog(name)
             "merchant_00" -> merchantDialog(name)
             "smith_00" -> smithDialog(name, world, triggeringEntity)
             "flower_girl_00" -> flowerGirlDialog(name, world, triggeringEntity)
@@ -32,7 +33,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
         entity[Name].name
     }
 
-    private fun elderDialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+    private fun elder00Dialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
         val playerName = entityName(world, triggeringEntity)
         val elderTitle = bundle["npc.elder.title"]
 
@@ -43,6 +44,14 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             option(dialogOptionNext, ActionNext)
         }
         page(bundle["dialog.elder_00.page3"], "elder", elderTitle) {
+            option(dialogOptionOk, ActionExit)
+        }
+    }
+
+    private fun elder10Dialog(name: String): Dialog = dialog(name) {
+        val elderTitle = bundle["npc.elder.title"]
+
+        page(bundle["dialog.elder_10.page1"], "elder", elderTitle) {
             option(dialogOptionOk, ActionExit)
         }
     }

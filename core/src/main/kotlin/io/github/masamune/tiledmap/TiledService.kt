@@ -20,15 +20,40 @@ import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
-import io.github.masamune.component.*
+import io.github.masamune.component.Animation
 import io.github.masamune.component.Animation.Companion.DEFAULT_FRAME_DURATION
+import io.github.masamune.component.Dialog
+import io.github.masamune.component.Fade
+import io.github.masamune.component.GdxAnimation
+import io.github.masamune.component.Graphic
+import io.github.masamune.component.Interact
+import io.github.masamune.component.Inventory
+import io.github.masamune.component.Move
+import io.github.masamune.component.Name
+import io.github.masamune.component.Physic
+import io.github.masamune.component.Player
+import io.github.masamune.component.Portal
+import io.github.masamune.component.QuestLog
+import io.github.masamune.component.Stats
+import io.github.masamune.component.Tag
+import io.github.masamune.component.Tiled
+import io.github.masamune.component.Transform
+import io.github.masamune.component.Trigger
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MapChangeEvent
 import ktx.app.gdxError
 import ktx.log.logger
 import ktx.math.vec2
 import ktx.math.vec3
-import ktx.tiled.*
+import ktx.tiled.height
+import ktx.tiled.id
+import ktx.tiled.isEmpty
+import ktx.tiled.layer
+import ktx.tiled.property
+import ktx.tiled.set
+import ktx.tiled.width
+import ktx.tiled.x
+import ktx.tiled.y
 import kotlin.system.measureTimeMillis
 
 enum class ObjectLayerName {
@@ -300,6 +325,7 @@ class TiledService(
         entity += Name("Alexxius")
         entity += Interact()
         entity += Inventory()
+        entity += QuestLog()
     }
 
     fun loadItem(world: World, itemName: String): Entity {
