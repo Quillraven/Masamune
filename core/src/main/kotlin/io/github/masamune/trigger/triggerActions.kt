@@ -75,6 +75,7 @@ class TriggerActionAddItem(
 class TriggerActionAddQuest(
     private val entity: Entity,
     private val quest: Quest,
+    private val eventService: EventService,
 ) : TriggerAction {
     override fun World.onUpdate(): Boolean {
         val quests = entity[QuestLog].quests
@@ -82,6 +83,7 @@ class TriggerActionAddQuest(
             log.info { "Quest $quest is already part of the QuestLog" }
         } else {
             log.info { "Adding quest $quest" }
+            eventService += quest
             entity[QuestLog].quests += quest
         }
         return true
