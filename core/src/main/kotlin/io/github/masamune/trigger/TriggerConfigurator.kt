@@ -3,6 +3,7 @@ package io.github.masamune.trigger
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.component.QuestLog
+import io.github.masamune.quest.FlowerGirlQuest
 import io.github.masamune.quest.MainQuest
 import ktx.app.gdxError
 import ktx.log.logger
@@ -23,14 +24,26 @@ class TriggerConfigurator {
         }
     }
 
-    private fun World.villageExitTrigger(name: String, scriptEntity: Entity, triggeringEntity: Entity) =
-        trigger(name, this, triggeringEntity) {
-            actionRemove(scriptEntity)
-            actionDialog("villageExit")
+    private fun World.villageExitTrigger(name: String, scriptEntity: Entity, triggeringEntity: Entity): TriggerScript {
+        val mainQuest = triggeringEntity[QuestLog].getOrNull<MainQuest>()
+
+        return when (mainQuest) {
+            null -> trigger(name, this, triggeringEntity) {
+                // push player away to not trigger dialog begin event in an endless loop
+                actionMoveBack(triggeringEntity, distance = 0.5f, timeInSeconds = 0.25f, wait = true)
+                actionDialog("villageExit")
+            }
+
+            else -> trigger(name, this, triggeringEntity) {
+                actionRemove(scriptEntity)
+            }
         }
+    }
+
 
     private fun World.elderTrigger(name: String, triggeringEntity: Entity): TriggerScript {
         val mainQuest = triggeringEntity[QuestLog].getOrNull<MainQuest>()
+
         return when (mainQuest) {
             null -> {
                 trigger(name, this, triggeringEntity) {
@@ -66,14 +79,24 @@ class TriggerConfigurator {
             }
         }
 
-    private fun World.flowerGirlTrigger(name: String, triggeringEntity: Entity) =
-        trigger(name, this, triggeringEntity) {
-            actionDialog("flower_girl_00") { selectedOptionIdx ->
-                if (selectedOptionIdx == 0) {
-                    println("TODO add flower quest")
+    private fun World.flowerGirlTrigger(name: String, triggeringEntity: Entity): TriggerScript {
+        val flowerGirlQuest = triggeringEntity[QuestLog].getOrNull<FlowerGirlQuest>()
+
+        return when (flowerGirlQuest) {
+            null -> trigger(name, this, triggeringEntity) {
+                actionDialog("flower_girl_00") { selectedOptionIdx ->
+                    if (selectedOptionIdx == 0) {
+                        println("TODO add flower quest")
+                    }
                 }
+                actionAddQuest(triggeringEntity, FlowerGirlQuest())
+            }
+
+            else -> trigger(name, this, triggeringEntity) {
+                actionDialog("flower_girl_10")
             }
         }
+    }
 
     companion object {
         private val log = logger<TriggerConfigurator>()

@@ -1,15 +1,22 @@
 package io.github.masamune.trigger
 
+import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.component.Inventory
+import io.github.masamune.component.Move
+import io.github.masamune.component.MoveTo
 import io.github.masamune.component.QuestLog
+import io.github.masamune.component.Transform
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.quest.Quest
 import io.github.masamune.tiledmap.TiledService
 import ktx.log.logger
+import ktx.math.component1
+import ktx.math.component2
+import ktx.math.vec2
 
 sealed interface TriggerAction {
     fun World.onStart() = Unit
@@ -82,5 +89,26 @@ class TriggerActionAddQuest(
 
     companion object {
         private val log = logger<TriggerActionAddQuest>()
+    }
+}
+
+class TriggerActionMoveBack(
+    private val entity: Entity,
+    private val distance: Float,
+    private var durationInSeconds: Float,
+    private val wait: Boolean,
+) : TriggerAction {
+    override fun World.onStart() {
+        val (x, y) = entity[Transform].position
+        val (dirX, dirY) = entity[Move].direction
+
+        entity.configure {
+            it += MoveTo(vec2(x - distance * dirX, y - distance * dirY), durationInSeconds, Interpolation.linear)
+        }
+    }
+
+    override fun World.onUpdate(): Boolean {
+        durationInSeconds -= this.deltaTime
+        return !wait || durationInSeconds <= 0f
     }
 }

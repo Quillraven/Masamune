@@ -22,7 +22,8 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             "elder_10" -> elder10Dialog(name)
             "merchant_00" -> merchantDialog(name)
             "smith_00" -> smithDialog(name, world, triggeringEntity)
-            "flower_girl_00" -> flowerGirlDialog(name, world, triggeringEntity)
+            "flower_girl_00" -> flowerGirl00Dialog(name, world, triggeringEntity)
+            "flower_girl_10" -> flowerGirl10Dialog(name, world, triggeringEntity)
             "villageExit" -> villageExitDialog(name)
 
             else -> gdxError("There is no dialog configured for name $name")
@@ -72,21 +73,29 @@ class DialogConfigurator(private val bundle: I18NBundle) {
         }
     }
 
-    private fun flowerGirlDialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+    private fun flowerGirl00Dialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
         val playerName = entityName(world, triggeringEntity)
+        val flowerGirlTitle = bundle["npc.flower_girl.title"]
 
-        page(bundle.format("dialog.flower_girl_00.page1", playerName), "flower_girl", bundle["npc.flower_girl.title"]) {
+        page(bundle.format("dialog.flower_girl_00.page1", playerName), "flower_girl", flowerGirlTitle) {
             option(dialogOptionNext, ActionNext)
         }
-        page(bundle.format("dialog.flower_girl_00.page2", playerName), "flower_girl", bundle["npc.flower_girl.title"]) {
+        page(bundle.format("dialog.flower_girl_00.page2", playerName), "flower_girl", flowerGirlTitle) {
             option(dialogOptionOk, ActionNext)
             option(dialogOptionExit, ActionExit)
         }
-        page(bundle.format("dialog.flower_girl_00.page3", playerName), "flower_girl", bundle["npc.flower_girl.title"]) {
+        page(bundle.format("dialog.flower_girl_00.page3", playerName), "flower_girl", flowerGirlTitle) {
             option(dialogOptionOk, ActionExit)
         }
     }
 
+    private fun flowerGirl10Dialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+        val playerName = entityName(world, triggeringEntity)
+
+        page(bundle.format("dialog.flower_girl_10.page1", playerName), "flower_girl", bundle["npc.flower_girl.title"]) {
+            option(dialogOptionOk, ActionExit)
+        }
+    }
 
     private fun villageExitDialog(name: String): Dialog = dialog(name) {
         page(bundle["dialog.villageExit.page1"]) {

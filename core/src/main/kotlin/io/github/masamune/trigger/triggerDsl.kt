@@ -37,6 +37,11 @@ class TriggerCfg(
     fun actionAddQuest(entity: Entity, quest: Quest) {
         actions += TriggerActionAddQuest(entity, quest)
     }
+
+    fun actionMoveBack(entity: Entity, distance: Float, timeInSeconds: Float = 0f, wait: Boolean = true) {
+        actions += TriggerActionMoveBack(entity, distance, timeInSeconds, wait)
+    }
+
 }
 
 fun trigger(

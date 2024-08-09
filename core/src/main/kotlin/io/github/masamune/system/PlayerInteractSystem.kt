@@ -11,9 +11,25 @@ import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.collection.compareEntity
 import io.github.masamune.PhysicContactHandler.Companion.testPoint
-import io.github.masamune.component.*
+import io.github.masamune.component.Dialog
+import io.github.masamune.component.Graphic
+import io.github.masamune.component.Interact
+import io.github.masamune.component.Outline
+import io.github.masamune.component.Physic
+import io.github.masamune.component.Player
+import io.github.masamune.component.Portal
+import io.github.masamune.component.Tag
+import io.github.masamune.component.Transform
+import io.github.masamune.component.Trigger
 import io.github.masamune.dialog.DialogConfigurator
-import io.github.masamune.event.*
+import io.github.masamune.event.DialogBeginEvent
+import io.github.masamune.event.Event
+import io.github.masamune.event.EventListener
+import io.github.masamune.event.EventService
+import io.github.masamune.event.PlayerInteractBeginContactEvent
+import io.github.masamune.event.PlayerInteractEndContactEvent
+import io.github.masamune.event.PlayerInteractEvent
+import io.github.masamune.event.PlayerMoveEvent
 import io.github.masamune.tiledmap.MapTransitionService
 import ktx.log.logger
 import ktx.math.component1
@@ -46,7 +62,10 @@ class PlayerInteractSystem(
         // playerCenter is used in handleMapTrigger and tagClosestEntity below
         entity[Transform].centerTo(playerCenter)
         // check for map trigger entities (=entities that are not rendered/visible to the player)
-        handleMapTrigger(entity)
+        if (handleMapTrigger(entity)) {
+            return@with
+        }
+
         // check for map portal entities
         if (handlePortals(entity)) {
             // player entered portal to a new map -> skip remaining system logic
@@ -94,15 +113,17 @@ class PlayerInteractSystem(
         return this has Trigger && this hasNo Graphic
     }
 
-    private fun Interact.handleMapTrigger(player: Entity) {
+    private fun Interact.handleMapTrigger(player: Entity): Boolean {
         nearbyEntities.firstOrNull { it.isMapTrigger() }?.let { mapTriggerEntity ->
             if (mapTriggerEntity[Physic].body.testPoint(playerCenter)) {
                 // player is inside trigger area -> execute trigger
                 mapTriggerEntity[Trigger].triggeringEntity = player
                 mapTriggerEntity.configure { it += Tag.EXECUTE_TRIGGER }
-                return
+                return true
             }
         }
+
+        return false
     }
 
     private fun Interact.tagClosestEntity() {
