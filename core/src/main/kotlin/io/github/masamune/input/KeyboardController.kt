@@ -1,7 +1,14 @@
 package io.github.masamune.input
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
-import io.github.masamune.event.*
+import io.github.masamune.event.DialogBeginEvent
+import io.github.masamune.event.DialogEndEvent
+import io.github.masamune.event.Event
+import io.github.masamune.event.EventListener
+import io.github.masamune.event.EventService
+import io.github.masamune.event.MapTransitionBeginEvent
+import io.github.masamune.event.MapTransitionEndEvent
 import ktx.app.KtxInputAdapter
 import ktx.app.gdxError
 import kotlin.reflect.KClass
@@ -23,7 +30,21 @@ class KeyboardController(
             field.onInactive()
             value.onActive()
             field = value
+            if (value == gameState) {
+                initMoveCommands()
+            }
         }
+
+    private fun initMoveCommands() {
+        keyMapping
+            .filterValues { it in listOf(Command.LEFT, Command.RIGHT, Command.UP, Command.DOWN) }
+            .keys
+            .forEach { key ->
+                if (Gdx.input.isKeyPressed(key)) {
+                    keyDown(key)
+                }
+            }
+    }
 
     private fun initialActiveState(initialState: KClass<out ControllerState>): ControllerState = when (initialState) {
         ControllerStateGame::class -> gameState
