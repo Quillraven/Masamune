@@ -33,6 +33,28 @@ com.badlogic.gdx.graphics.Color: {
 		hex: ffffffff
 	}
 }
+com.ray3k.tenpatch.TenPatchDrawable: {
+	slider_progress_10: {
+		region: slider_progress
+		horizontalStretchAreas: [ 4, 10 ]
+		verticalStretchAreas: [ 4, 11 ]
+		tiling: true
+		minWidth: 0
+		minHeight: 16
+		rightWidth: 3
+		leftWidth: 3
+		bottomHeight: 3
+		topHeight: 3
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+}
 io.github.masamune.ui.view.DialogViewStyle: {
 	default: {
 		background: dialog_frame
@@ -67,15 +89,15 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		background: dialog_choice_frame
 	}
 }
+com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
+	default-horizontal: {
+		background: nine_path_bg
+		knobBefore: slider_progress_10
+	}
+}
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 	default: {
 		label: default
-	}
-}
-io.github.masamune.ui.widget.ProgressBarStyle: {
-	default: {
-		background: nine_path_bg
-		progress: slider_progress
 	}
 }
 }

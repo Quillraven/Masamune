@@ -7,9 +7,9 @@ import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSuppli
 import com.github.xpenatan.gdx.backends.teavm.gen.SkipClass
 import com.rafaskoberg.gdx.typinglabel.TypingGlyph
 import com.rafaskoberg.gdx.typinglabel.effects.FadeEffect
+import com.ray3k.tenpatch.TenPatchDrawable
 import io.github.masamune.ui.view.DialogViewStyle
 import io.github.masamune.ui.widget.DialogOptionStyle
-import io.github.masamune.ui.widget.ProgressBarStyle
 import org.teavm.vm.TeaVMOptimizationLevel
 import java.io.File
 
@@ -32,7 +32,7 @@ object TeaVMBuilder {
         // Scene2D style classes require reflection
         TeaReflectionSupplier.addReflectionClass(DialogViewStyle::class.java)
         TeaReflectionSupplier.addReflectionClass(DialogOptionStyle::class.java)
-        TeaReflectionSupplier.addReflectionClass(ProgressBarStyle::class.java)
+        TeaReflectionSupplier.addReflectionClass(TenPatchDrawable::class.java)
         // Typing label effects require reflection
         TeaReflectionSupplier.addReflectionClass(TypingGlyph::class.java)
         TeaReflectionSupplier.addReflectionClass(FadeEffect::class.java)

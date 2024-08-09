@@ -222,6 +222,55 @@ atlasData: {
 			type: TEXTURE
 			hidden: false
 		}
+		{
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress.9.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: slider_progress_10
+			tiled: false
+			minWidth: 0
+			minHeight: -1
+			customized: false
+			tenPatchData: {
+				horizontalStretchAreas: {
+					items: [ 4, 10 ]
+					size: 2
+					ordered: true
+				}
+				verticalStretchAreas: {
+					items: [ 4, 11 ]
+					size: 2
+					ordered: true
+				}
+				contentLeft: 3
+				contentRight: 3
+				contentTop: 3
+				contentBottom: 3
+				tile: true
+				colorName: null
+				color1Name: null
+				color2Name: null
+				color3Name: null
+				color4Name: null
+				offsetX: 0
+				offsetY: 0
+				offsetXspeed: 0
+				offsetYspeed: 0
+				frameDuration: 0.03
+				regionNames: []
+				playMode: 2
+				crushMode: 0
+			}
+			tvgData: null
+			type: TENPATCH
+			hidden: false
+		}
 	]
 	fontDrawables: [
 		{
@@ -1681,7 +1730,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
 						optional: false
-						value: null
+						value: nine_path_bg
 					}
 					disabledBackground: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -1705,7 +1754,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: knobBefore
 						optional: true
-						value: null
+						value: slider_progress_10
 					}
 					disabledKnobBefore: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -2121,45 +2170,6 @@ jsonData: {
 				deletable: true
 			}
 			declareAfterUIclasses: false
-		}
-		{
-			fullyQualifiedName: io.github.masamune.ui.widget.ProgressBarStyle
-			displayName: MasamuneProgressBar
-			styles: [
-				{
-					name: default
-					properties: [
-						{
-							name: background
-							type: DRAWABLE
-							value: nine_path_bg
-						}
-						{
-							name: progress
-							type: DRAWABLE
-							value: slider_progress
-						}
-					]
-					deletable: false
-				}
-			]
-			templateStyle: {
-				name: template
-				properties: [
-					{
-						name: background
-						type: DRAWABLE
-						value: null
-					}
-					{
-						name: progress
-						type: DRAWABLE
-						value: null
-					}
-				]
-				deletable: true
-			}
-			declareAfterUIclasses: true
 		}
 	]
 }

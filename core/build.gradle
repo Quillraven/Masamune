@@ -20,6 +20,7 @@ dependencies {
   api "io.github.quillraven.fleks:Fleks:$fleksVersion"
   api "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
   api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  api "com.github.raeleus.TenPatch:tenpatch:$tenPatchVersion"
 
   testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
