@@ -20,7 +20,7 @@ i:d:/ui:0:1
 i:b:/ui/fipps_16.fnt:8935:1
 i:b:/ui/skin.png:19874:1
 i:b:/ui/PIXEARG_.fnt:9259:1
-i:b:/ui/skin.json:1387:1
+i:b:/ui/skin.json:1820:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 i:b:/ui/skin.atlas:1535:1
 i:b:/ui/messages.properties:2203:1
