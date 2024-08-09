@@ -5,6 +5,7 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.component.QuestLog
 import io.github.masamune.quest.FlowerGirlQuest
 import io.github.masamune.quest.MainQuest
+import io.github.masamune.tiledmap.ItemType
 import ktx.app.gdxError
 import ktx.log.logger
 
@@ -48,7 +49,7 @@ class TriggerConfigurator {
             null -> {
                 trigger(name, this, triggeringEntity) {
                     actionDialog("elder_00")
-                    actionAddItem(triggeringEntity, "elder_sword")
+                    actionAddItem(triggeringEntity, ItemType.ELDER_SWORD)
                     actionAddQuest(triggeringEntity, MainQuest())
                 }
             }

@@ -171,7 +171,7 @@
         "assets/maps/objects.tsx"
     ],
     "project": "masamune-tiled.tiled-project",
-    "property.type": "float",
+    "property.type": "ItemType",
     "recentFiles": [
         "assets/maps/village.tmx",
         "assets/maps/path_to_forest.tmx",

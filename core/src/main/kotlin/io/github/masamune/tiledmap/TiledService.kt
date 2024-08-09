@@ -328,23 +328,23 @@ class TiledService(
         entity += QuestLog()
     }
 
-    fun loadItem(world: World, itemName: String): Entity {
+    fun loadItem(world: World, itemType: ItemType): Entity {
         val objectsTileSet = currentMap?.tileSets?.getTileSet("objects")
             ?: gdxError("Objects TileSet is not available")
 
         objectsTileSet.iterator().forEach { tile ->
-            if (tile.itemName != itemName) {
+            if (tile.itemType != itemType.name) {
                 return@forEach
             }
 
             return world.entity {
-                it += Name(tile.itemName)
+                it += Name(tile.itemType)
                 it += Stats(tile.stats)
                 configureGraphic(it, tile)
             }
         }
 
-        gdxError("There is no item with name $itemName")
+        gdxError("There is no item with type $itemType")
     }
 
     companion object {

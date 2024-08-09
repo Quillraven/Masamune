@@ -91,9 +91,10 @@
                     "value": ""
                 },
                 {
-                    "name": "itemName",
+                    "name": "itemType",
+                    "propertyType": "ItemType",
                     "type": "string",
-                    "value": ""
+                    "value": "UNDEFINED"
                 },
                 {
                     "name": "stats",
@@ -116,6 +117,17 @@
                 "wangset",
                 "project"
             ]
+        },
+        {
+            "id": 10,
+            "name": "ItemType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "ELDER_SWORD",
+                "UNDEFINED"
+            ],
+            "valuesAsFlags": false
         },
         {
             "color": "#ffa0a0a4",

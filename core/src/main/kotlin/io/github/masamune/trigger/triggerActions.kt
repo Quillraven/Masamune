@@ -12,6 +12,7 @@ import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.quest.Quest
+import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
 import ktx.log.logger
 import ktx.math.component1
@@ -62,11 +63,11 @@ class TriggerActionDialog(
 
 class TriggerActionAddItem(
     private val entity: Entity,
-    private val itemName: String,
+    private val itemType: ItemType,
     private val tiledService: TiledService
 ) : TriggerAction {
     override fun World.onUpdate(): Boolean {
-        val item: Entity = tiledService.loadItem(this, itemName)
+        val item: Entity = tiledService.loadItem(this, itemType)
         entity[Inventory].items += item
         return true
     }
