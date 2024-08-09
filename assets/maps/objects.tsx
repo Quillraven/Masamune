@@ -132,7 +132,7 @@
   <properties>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="items/elder_sword"/>
-   <property name="itemName" value="elder_sword"/>
+   <property name="itemType" propertytype="ItemType" value="ELDER_SWORD"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
      <property name="intelligence" type="float" value="1"/>

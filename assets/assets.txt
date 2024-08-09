@@ -13,7 +13,7 @@ i:b:/maps/objects/smith.png:533:1
 i:b:/maps/objects/butterfly.png:437:1
 i:b:/maps/village.tmx:3092:1
 i:b:/maps/tileset.png:473544:1
-i:b:/maps/objects.tsx:6292:1
+i:b:/maps/objects.tsx:6316:1
 i:b:/maps/tileset.tsx:9032:1
 i:b:/maps/path_to_forest.tmx:3140:1
 i:d:/ui:0:1
@@ -23,8 +23,8 @@ i:b:/ui/PIXEARG_.fnt:9259:1
 i:b:/ui/skin.json:1820:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 i:b:/ui/skin.atlas:1535:1
-i:b:/ui/messages.properties:2203:1
-i:b:/ui/messages_de.properties:2506:1
+i:b:/ui/messages.properties:2450:1
+i:b:/ui/messages_de.properties:2770:1
 i:d:/graphics:0:1
 i:b:/graphics/chars_and_props.png:24827:1
 i:b:/graphics/chars_and_props.atlas:4699:1
