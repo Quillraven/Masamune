@@ -2,17 +2,24 @@ package io.github.masamune.component
 
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import ktx.app.gdxError
 
-typealias GdxAnimation = com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>
+typealias GdxAnimation = com.badlogic.gdx.graphics.g2d.Animation<AtlasRegion>
+
+enum class AnimationType {
+    UNKNOWN, IDLE, WALK;
+
+    val atlasKey: String = this.name.lowercase()
+}
 
 data class Animation(
     var gdxAnimation: GdxAnimation,
     var stateTime: Float = 0f,
     var speed: Float = 1f,
+    var changeTo: AnimationType = AnimationType.UNKNOWN,
 ) : Component<Animation> {
     override fun type() = Animation
 

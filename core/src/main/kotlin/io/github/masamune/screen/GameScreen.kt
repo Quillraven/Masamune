@@ -34,7 +34,7 @@ class GameScreen(
     private val tiledService: TiledService = masamune.tiled,
     private val shaderService: ShaderService = masamune.shader,
     private val mapTransitionService: MapTransitionService = masamune.mapTransition,
-    assetService: AssetService = masamune.asset,
+    private val assetService: AssetService = masamune.asset,
 ) : KtxScreen {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
@@ -70,6 +70,7 @@ class GameScreen(
             add(triggerConfigurator)
             add(tiledService)
             add<MapTransitionService>(mapTransitionService)
+            add(assetService)
         }
 
         systems {
@@ -79,6 +80,7 @@ class GameScreen(
             add(PlayerInteractSystem())
             add(TeleportSystem())
             add(CameraSystem())
+            add(StateSystem())
             add(AnimationSystem())
             add(FadeSystem())
             add(RenderSystem())
@@ -107,7 +109,7 @@ class GameScreen(
 
         // load map AFTER event listeners are registered
         tiledService.loadMap(TiledMapAsset.VILLAGE).also {
-            tiledService.setMap(it, world, fadeIn=false)
+            tiledService.setMap(it, world, fadeIn = false)
         }
     }
 
