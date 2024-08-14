@@ -3,9 +3,8 @@ package io.github.masamune.ai
 import State
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import io.github.masamune.component.Animation
-import io.github.masamune.component.AnimationType
-import io.github.masamune.component.Move
+import com.github.quillraven.fleks.collection.bag
+import io.github.masamune.component.*
 
 data object AnimationStateIdle : FsmState {
     override fun World.onEnter(entity: Entity) {
@@ -27,6 +26,23 @@ data object AnimationStateWalk : FsmState {
     override fun World.onUpdate(entity: Entity) {
         if (entity[Move].direction.isZero) {
             entity[State].animationFsm.changeState(AnimationStateIdle)
+        }
+    }
+}
+
+data object GlobalAnimationStateFacing : FsmState {
+
+    private val previousEntityFacing = bag<FacingDirection>(100)
+
+    override fun World.onUpdate(entity: Entity) {
+        val currentFacing = entity[Facing].direction
+        val previousFacing = previousEntityFacing.getOrNull(entity.id)
+        if (previousFacing == null) {
+            previousEntityFacing[entity.id] = currentFacing
+            return
+        } else if (previousFacing != currentFacing) {
+            entity[Animation].changeFacingTo = currentFacing
+            previousEntityFacing[entity.id] = currentFacing
         }
     }
 }

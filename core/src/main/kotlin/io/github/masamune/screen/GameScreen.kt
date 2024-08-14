@@ -76,6 +76,7 @@ class GameScreen(
         systems {
             add(MoveSystem())
             add(MoveToSystem())
+            add(FacingSystem())
             add(PhysicSystem())
             add(PlayerInteractSystem())
             add(TeleportSystem())

@@ -20,6 +20,7 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.ai.AnimationStateIdle
 import io.github.masamune.ai.FleksStateMachine
+import io.github.masamune.ai.GlobalAnimationStateFacing
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
@@ -192,6 +193,7 @@ class TiledService(
 
         world.entity {
             configureTiled(it, tiledObj, objType)
+            it += Facing(FacingDirection.DOWN)
             val graphicCmp = configureGraphic(it, tile)
             it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
             configureMove(it, tile)
@@ -228,7 +230,8 @@ class TiledService(
             gdxError("Missing atlasRegionKey for tile ${tile.id}")
         }
 
-        val texRegions = assetService[atlasAsset].findRegions(atlasRegionKey)
+        val atlas = assetService[atlasAsset]
+        val texRegions = atlas.findRegions(atlasRegionKey)
         if (texRegions.isEmpty) {
             gdxError("No regions in atlas $atlasStr for key $atlasRegionKey")
         }
@@ -237,7 +240,7 @@ class TiledService(
         val graphicCmpRegion: TextureRegion = if (tile.hasAnimation) {
             // add animation component
             val gdxAnimation = GdxAnimation(DEFAULT_FRAME_DURATION, texRegions, PlayMode.LOOP)
-            entity += Animation(gdxAnimation)
+            entity += Animation(atlas, gdxAnimation)
             // use first frame for graphic component
             gdxAnimation.getKeyFrame(0f)
         } else {
@@ -304,7 +307,7 @@ class TiledService(
         entity += Interact()
         entity += Inventory()
         entity += QuestLog()
-        entity += State(FleksStateMachine(world, entity, AnimationStateIdle))
+        entity += State(FleksStateMachine(world, entity, AnimationStateIdle, GlobalAnimationStateFacing))
     }
 
     fun loadItem(world: World, itemType: ItemType): Entity {

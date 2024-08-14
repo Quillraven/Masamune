@@ -16,10 +16,12 @@ enum class AnimationType {
 }
 
 data class Animation(
+    val atlas: TextureAtlas,
     var gdxAnimation: GdxAnimation,
     var stateTime: Float = 0f,
     var speed: Float = 1f,
     var changeTo: AnimationType = AnimationType.UNKNOWN,
+    var changeFacingTo: FacingDirection = FacingDirection.UNKNOWN,
 ) : Component<Animation> {
     override fun type() = Animation
 
@@ -38,7 +40,7 @@ data class Animation(
             }
 
             val gdxAnimation = GdxAnimation(DEFAULT_FRAME_DURATION, regions, playMode)
-            return Animation(gdxAnimation, speed = speed)
+            return Animation(atlas, gdxAnimation, speed = speed)
         }
     }
 }
