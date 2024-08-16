@@ -69,19 +69,20 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
 
     private val manager = AssetManager(fileHandleResolver).apply {
         setLoader(TiledMap::class.java, TiledMapLoader(this.fileHandleResolver))
+        setLoader(CachingAtlas::class.java, CachingAtlasLoader(this.fileHandleResolver))
     }
 
     /**
      * Queues an [AtlasAsset] for loading.
      */
     fun load(asset: AtlasAsset) {
-        manager.load<TextureAtlas>(asset.path)
+        manager.load<CachingAtlas>(asset.path, CachingAtlasParameter(asset))
     }
 
     /**
      * Gets a loaded [AtlasAsset] as [TextureAtlas].
      */
-    operator fun get(asset: AtlasAsset): TextureAtlas = manager.getAsset<TextureAtlas>(asset.path)
+    operator fun get(asset: AtlasAsset): CachingAtlas = manager.getAsset<CachingAtlas>(asset.path)
 
     /**
      * Queues a [TiledMapAsset] for loading.
