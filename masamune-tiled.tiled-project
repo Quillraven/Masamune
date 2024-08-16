@@ -11,6 +11,21 @@
     ],
     "propertyTypes": [
         {
+            "id": 11,
+            "name": "AnimationType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "UNDEFINED",
+                "IDLE",
+                "WALK",
+                "ITEM",
+                "SPECIAL1",
+                "SPECIAL2"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "id": 3,
             "name": "AtlasAsset",
             "storageType": "string",
@@ -135,6 +150,12 @@
             "id": 2,
             "members": [
                 {
+                    "name": "animationType",
+                    "propertyType": "AnimationType",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                },
+                {
                     "name": "atlas",
                     "propertyType": "AtlasAsset",
                     "type": "string",
@@ -160,11 +181,6 @@
                     "name": "dialogName",
                     "type": "string",
                     "value": ""
-                },
-                {
-                    "name": "hasAnimation",
-                    "type": "bool",
-                    "value": false
                 },
                 {
                     "name": "objType",

@@ -3,10 +3,10 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="IDLE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="hero/idle_down"/>
+   <property name="atlasRegionKey" value="hero"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
-   <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
    <property name="speed" type="float" value="5"/>
   </properties>
@@ -26,11 +26,11 @@
  </tile>
  <tile id="2" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="WALK"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="elder/idle_down"/>
+   <property name="atlasRegionKey" value="elder"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="dialogName" value=""/>
-   <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="ELDER"/>
    <property name="speed" type="float" value="2"/>
    <property name="triggerName" value="elder"/>
@@ -46,11 +46,11 @@
  </tile>
  <tile id="3" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="WALK"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="flower_girl/idle_down"/>
+   <property name="atlasRegionKey" value="flower_girl"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="dialogName" value=""/>
-   <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="FLOWER_GIRL"/>
    <property name="speed" type="float" value="3.5"/>
    <property name="triggerName" value="flower_girl"/>
@@ -66,11 +66,11 @@
  </tile>
  <tile id="4" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="WALK"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="merchant/idle_down"/>
+   <property name="atlasRegionKey" value="merchant"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="dialogName" value=""/>
-   <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="MERCHANT"/>
    <property name="speed" type="float" value="3"/>
    <property name="triggerName" value="merchant"/>
@@ -86,11 +86,11 @@
  </tile>
  <tile id="5" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="WALK"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="smith/idle_down"/>
+   <property name="atlasRegionKey" value="smith"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="dialogName" value=""/>
-   <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="SMITH"/>
    <property name="speed" type="float" value="3"/>
    <property name="triggerName" value="smith"/>
@@ -106,27 +106,54 @@
  </tile>
  <tile id="6" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="WALK"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="butterfly/idle_down"/>
+   <property name="atlasRegionKey" value="butterfly"/>
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
+   <property name="objType" propertytype="MapObjectType" value="ENEMY"/>
   </properties>
   <image source="objects/butterfly.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="0" y="1" width="16" height="15">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="7" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="WALK"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="larva/idle_down"/>
+   <property name="atlasRegionKey" value="larva"/>
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
+   <property name="objType" propertytype="MapObjectType" value="ENEMY"/>
   </properties>
   <image source="objects/larva.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="1" y="0" width="14" height="15">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="8" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="WALK"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="mushroom/idle_down"/>
+   <property name="atlasRegionKey" value="mushroom"/>
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
+   <property name="objType" propertytype="MapObjectType" value="ENEMY"/>
   </properties>
   <image source="objects/mushroom.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="0" y="0" width="16" height="16">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="9" type="ItemObject">
   <properties>
