@@ -65,6 +65,7 @@ fun main() {
     val supportedEnums = mapOf(
         "MapObjectType" to "TiledObjectType",
         "ItemType" to "ItemType",
+        "AnimationType" to "AnimationType",
     )
     supportedEnums.forEach { (tiledEnum, masamuneEnum) ->
         tiledProject.propertyTypes
@@ -115,7 +116,13 @@ fun createEnum(enumName: String, values: List<String>) {
         append("package io.github.masamune.tiledmap").append(newLine).append(newLine)
         append("// $AUTO_GEN_INFO_TEXT").append(newLine)
         append("enum class $enumName {").append(newLine)
-        append(values.sorted().joinToString(separator = ",$newLine    ", prefix = "    ")).append(newLine)
+        append(values.sorted().joinToString(separator = ",$newLine    ", prefix = "    ", postfix = ";"))
+        append(newLine)
+
+        if (enumName == "AnimationType") {
+            append(newLine).append("    val atlasKey: String = this.name.lowercase()").append(newLine)
+        }
+
         append("}").append(newLine)
     }
 
