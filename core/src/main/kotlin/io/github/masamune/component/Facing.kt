@@ -5,7 +5,7 @@ import com.github.quillraven.fleks.ComponentType
 
 
 enum class FacingDirection {
-    UNKNOWN, DOWN, LEFT, RIGHT, UP;
+    UNDEFINED, DOWN, LEFT, RIGHT, UP;
 
     val atlasKey: String = this.name.lowercase()
 }

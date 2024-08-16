@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.configureWorld
+import io.github.masamune.asset.AtlasAsset
+import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Graphic
@@ -20,6 +22,7 @@ import io.github.masamune.component.Transform
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.DebugRenderSystem
 import io.github.masamune.system.RenderSystem
+import io.github.masamune.tiledmap.AnimationType
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.assets.toClasspathFile
@@ -50,7 +53,7 @@ private class RenderTest : KtxApplicationAdapter {
 
     private val batch: Batch by lazy { SpriteBatch() }
     private val texture by lazy { Texture("hero.png".toClasspathFile()) }
-    private val atlas by lazy { TextureAtlas("sfx.atlas".toClasspathFile()) }
+    private val atlas by lazy { CachingAtlas(AtlasAsset.SFX, TextureAtlas("sfx.atlas".toClasspathFile())) }
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
     private val world by lazy { gameWorld() }
     private var alpha = 0f
@@ -126,7 +129,7 @@ private class RenderTest : KtxApplicationAdapter {
         rotation: Float = 0f
     ) {
         world.entity {
-            Animation.ofAtlasRegions(atlas, "shield-yellow/idle").also { animation ->
+            Animation.ofAtlas(atlas, "shield-yellow", AnimationType.IDLE).also { animation ->
                 it += animation
                 it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
             }

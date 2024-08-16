@@ -5,6 +5,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.bag
 import io.github.masamune.component.*
+import io.github.masamune.tiledmap.AnimationType
 
 data object AnimationStateIdle : FsmState {
     override fun World.onEnter(entity: Entity) {

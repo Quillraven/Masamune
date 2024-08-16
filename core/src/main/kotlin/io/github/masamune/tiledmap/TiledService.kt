@@ -2,7 +2,6 @@ package io.github.masamune.tiledmap
 
 import State
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
@@ -24,15 +23,40 @@ import io.github.masamune.ai.GlobalAnimationStateFacing
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
-import io.github.masamune.component.*
-import io.github.masamune.component.Animation.Companion.DEFAULT_FRAME_DURATION
+import io.github.masamune.component.Animation
+import io.github.masamune.component.Dialog
+import io.github.masamune.component.Facing
+import io.github.masamune.component.FacingDirection
+import io.github.masamune.component.Fade
+import io.github.masamune.component.Graphic
+import io.github.masamune.component.Interact
+import io.github.masamune.component.Inventory
+import io.github.masamune.component.Move
+import io.github.masamune.component.Name
+import io.github.masamune.component.Physic
+import io.github.masamune.component.Player
+import io.github.masamune.component.Portal
+import io.github.masamune.component.QuestLog
+import io.github.masamune.component.Stats
+import io.github.masamune.component.Tag
+import io.github.masamune.component.Tiled
+import io.github.masamune.component.Transform
+import io.github.masamune.component.Trigger
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MapChangeEvent
 import ktx.app.gdxError
 import ktx.log.logger
 import ktx.math.vec2
 import ktx.math.vec3
-import ktx.tiled.*
+import ktx.tiled.height
+import ktx.tiled.id
+import ktx.tiled.isEmpty
+import ktx.tiled.layer
+import ktx.tiled.property
+import ktx.tiled.set
+import ktx.tiled.width
+import ktx.tiled.x
+import ktx.tiled.y
 import kotlin.system.measureTimeMillis
 
 enum class ObjectLayerName {
@@ -229,22 +253,24 @@ class TiledService(
         if (atlasRegionKey.isBlank()) {
             gdxError("Missing atlasRegionKey for tile ${tile.id}")
         }
-
         val atlas = assetService[atlasAsset]
-        val texRegions = atlas.findRegions(atlasRegionKey)
-        if (texRegions.isEmpty) {
-            gdxError("No regions in atlas $atlasStr for key $atlasRegionKey")
-        }
+        val animationTypeStr = tile.animationType
+        val aniType = AnimationType.entries.firstOrNull { it.name == animationTypeStr }
+            ?: gdxError("There is no animation type of name $animationTypeStr")
 
-        // optional animation component
-        val graphicCmpRegion: TextureRegion = if (tile.hasAnimation) {
+        // optional animation componentw
+        val graphicCmpRegion: TextureRegion = if (aniType != AnimationType.UNDEFINED) {
             // add animation component
-            val gdxAnimation = GdxAnimation(DEFAULT_FRAME_DURATION, texRegions, PlayMode.LOOP)
-            entity += Animation(atlas, gdxAnimation)
+            val animationCmp = Animation.ofAtlas(atlas, atlasRegionKey, aniType, FacingDirection.DOWN)
+            entity += animationCmp
             // use first frame for graphic component
-            gdxAnimation.getKeyFrame(0f)
+            animationCmp.gdxAnimation.getKeyFrame(0f)
         } else {
             // no animation; use region for graphic component
+            val texRegions = atlas.findRegions(atlasRegionKey)
+            if (texRegions.isEmpty) {
+                gdxError("No regions in atlas $atlasStr for key $atlasRegionKey")
+            }
             texRegions.first()
         }
 
