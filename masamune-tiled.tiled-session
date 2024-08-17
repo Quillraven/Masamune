@@ -47,8 +47,8 @@
         },
         "assets/maps/village.tmx": {
             "expandedObjectLayers": [
-                6,
-                7
+                7,
+                6
             ],
             "scale": 3,
             "selectedLayer": 5,
@@ -122,8 +122,8 @@
         },
         "core/src/test/resources/maps/transition_test_large.tmx": {
             "expandedObjectLayers": [
-                6,
-                5
+                5,
+                6
             ],
             "scale": 3,
             "selectedLayer": 0,

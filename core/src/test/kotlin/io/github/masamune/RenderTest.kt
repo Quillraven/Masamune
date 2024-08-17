@@ -129,7 +129,7 @@ private class RenderTest : KtxApplicationAdapter {
         rotation: Float = 0f
     ) {
         world.entity {
-            Animation.ofAtlas(atlas, "shield-yellow", AnimationType.IDLE).also { animation ->
+            Animation.ofAtlas(atlas, "shield-yellow", AnimationType.IDLE, speed = 3f).also { animation ->
                 it += animation
                 it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
             }

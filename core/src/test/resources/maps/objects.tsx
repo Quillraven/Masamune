@@ -3,9 +3,9 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="IDLE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="hero/idle_down"/>
-   <property name="hasAnimation" type="bool" value="true"/>
+   <property name="atlasRegionKey" value="hero"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
   </properties>
   <image source="objects/hero.png" width="16" height="16"/>
@@ -19,10 +19,10 @@
  </tile>
  <tile id="2" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="IDLE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="hero/idle_down"/>
+   <property name="atlasRegionKey" value="hero"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
-   <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
   </properties>
   <image source="objects/hero.png" width="16" height="16"/>
@@ -44,10 +44,10 @@
  </tile>
  <tile id="3" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="IDLE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="hero/idle_down"/>
+   <property name="atlasRegionKey" value="hero"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
-   <property name="hasAnimation" type="bool" value="true"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
    <property name="speed" type="float" value="7"/>
   </properties>
@@ -67,10 +67,10 @@
  </tile>
  <tile id="4" type="MapObject">
   <properties>
+   <property name="animationType" propertytype="AnimationType" value="IDLE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="mushroom/idle_down"/>
+   <property name="atlasRegionKey" value="mushroom"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
-   <property name="hasAnimation" type="bool" value="true"/>
    <property name="numEnemies" type="int" value="1"/>
    <property name="objType" propertytype="MapObjectType" value="ENEMY"/>
   </properties>

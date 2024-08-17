@@ -18,7 +18,15 @@ import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
-import io.github.masamune.system.*
+import io.github.masamune.system.CameraSystem
+import io.github.masamune.system.FadeSystem
+import io.github.masamune.system.MoveSystem
+import io.github.masamune.system.MoveToSystem
+import io.github.masamune.system.PhysicSystem
+import io.github.masamune.system.PlayerInteractSystem
+import io.github.masamune.system.RenderSystem
+import io.github.masamune.system.StateSystem
+import io.github.masamune.system.TeleportSystem
 import io.github.masamune.tiledmap.DefaultMapTransitionService
 import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
@@ -85,7 +93,7 @@ private class MapTransitionTest : KtxApplicationAdapter {
             add(PlayerInteractSystem())
             add(TeleportSystem())
             add(CameraSystem())
-            add(AnimationSystem())
+            add(StateSystem())
             add(FadeSystem())
             add(RenderSystem())
         }
