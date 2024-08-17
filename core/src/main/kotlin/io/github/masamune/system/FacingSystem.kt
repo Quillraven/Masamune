@@ -13,7 +13,9 @@ import io.github.masamune.event.PlayerMoveEvent
 class FacingSystem : IteratingSystem(family { all(Facing) }), EventListener {
     private val playerEntities = family { all(Facing, Player) }
 
-    override fun onTickEntity(entity: Entity) = Unit
+    override fun onTickEntity(entity: Entity) = with(entity[Facing]) {
+        lastDirection = direction
+    }
 
     override fun onEvent(event: Event) {
         if (event is PlayerMoveEvent) {
@@ -21,8 +23,10 @@ class FacingSystem : IteratingSystem(family { all(Facing) }), EventListener {
                 event.direction.y > 0f -> FacingDirection.UP
                 event.direction.y < 0f -> FacingDirection.DOWN
                 event.direction.x > 0f -> FacingDirection.RIGHT
-                else -> FacingDirection.LEFT
+                event.direction.x < 0f -> FacingDirection.LEFT
+                else -> return // no facing update needed
             }
+
             playerEntities.forEach { entity ->
                 entity[Facing].direction = newDirection
             }

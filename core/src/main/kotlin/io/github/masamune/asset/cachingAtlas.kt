@@ -8,7 +8,6 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.TextureAtlasLoader
 import com.badlogic.gdx.assets.loaders.TextureAtlasLoader.TextureAtlasParameter
 import com.badlogic.gdx.files.FileHandle
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
@@ -40,14 +39,13 @@ data class CachingAtlas(
         }
     }
 
-
     fun gdxAnimation(
-        mainKey: String,
+        atlasMainKey: String,
         animationType: AnimationType,
         direction: FacingDirection = FacingDirection.UNDEFINED
     ): GdxAnimation {
         stringBuilder.clear()
-        stringBuilder.append(mainKey)
+        stringBuilder.append(atlasMainKey)
             .append("/")
             .append(animationType.atlasKey)
         if (direction != FacingDirection.UNDEFINED) {
@@ -61,7 +59,7 @@ data class CachingAtlas(
                 gdxError("No regions in atlas $type for key $stringBuilder")
             }
 
-            GdxAnimation(DEFAULT_FRAME_DURATION, texRegions, PlayMode.LOOP)
+            GdxAnimation(DEFAULT_FRAME_DURATION, texRegions, atlasMainKey, animationType)
         }
     }
 

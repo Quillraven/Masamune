@@ -10,7 +10,13 @@ enum class FacingDirection {
     val atlasKey: String = this.name.lowercase()
 }
 
-data class Facing(var direction: FacingDirection) : Component<Facing> {
+data class Facing(
+    var direction: FacingDirection,
+    var lastDirection: FacingDirection = direction,
+) : Component<Facing> {
+
+    fun hasChanged(): Boolean = direction != lastDirection
+
     override fun type() = Facing
 
     companion object : ComponentType<Facing>()

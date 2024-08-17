@@ -1,6 +1,6 @@
 package io.github.masamune.tiledmap
 
-import State
+import io.github.masamune.component.State
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapLayer
@@ -19,7 +19,6 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.ai.AnimationStateIdle
 import io.github.masamune.ai.FleksStateMachine
-import io.github.masamune.ai.GlobalAnimationStateFacing
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
@@ -333,7 +332,7 @@ class TiledService(
         entity += Interact()
         entity += Inventory()
         entity += QuestLog()
-        entity += State(FleksStateMachine(world, entity, AnimationStateIdle, GlobalAnimationStateFacing))
+        entity += State(FleksStateMachine(world, entity, AnimationStateIdle))
     }
 
     fun loadItem(world: World, itemType: ItemType): Entity {

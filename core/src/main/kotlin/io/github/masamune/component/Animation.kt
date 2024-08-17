@@ -1,22 +1,27 @@
 package io.github.masamune.component
 
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.tiledmap.AnimationType
+import ktx.collections.GdxArray
 
-typealias GdxAnimation = com.badlogic.gdx.graphics.g2d.Animation<AtlasRegion>
+class GdxAnimation(
+    frameDuration: Float,
+    keyFrames: GdxArray<AtlasRegion>,
+    val atlasKey: String,
+    val type: AnimationType,
+) : com.badlogic.gdx.graphics.g2d.Animation<AtlasRegion>(frameDuration, keyFrames)
 
 data class Animation(
     val atlas: CachingAtlas,
-    val atlasKey: String,
-    var animationType: AnimationType,
     var gdxAnimation: GdxAnimation,
     var stateTime: Float = 0f,
     var speed: Float = 1f,
+    var playMode: PlayMode = PlayMode.LOOP,
     var changeTo: AnimationType = AnimationType.UNDEFINED,
-    var changeFacingTo: FacingDirection = FacingDirection.UNDEFINED,
 ) : Component<Animation> {
     override fun type() = Animation
 
@@ -31,7 +36,7 @@ data class Animation(
             speed: Float = 1f
         ): Animation {
             val gdxAnimation = atlas.gdxAnimation(mainKey, animationType, direction)
-            return Animation(atlas, mainKey, animationType, gdxAnimation, speed = speed)
+            return Animation(atlas, gdxAnimation, speed = speed)
         }
     }
 }

@@ -53,7 +53,7 @@ fun main() {
     gdxTest("Map Transition Test, 1=small map without offset, 2=large map with offset", MapTransitionTest())
 }
 
-private class MapTransitionTest() : KtxApplicationAdapter {
+private class MapTransitionTest : KtxApplicationAdapter {
     private val batch: Batch by lazy { SpriteBatch() }
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
     private val physicWorld = createWorld(gravity = Vector2.Zero)

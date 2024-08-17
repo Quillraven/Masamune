@@ -12,23 +12,24 @@ import io.github.masamune.tiledmap.AnimationType
 class AnimationSystem : IteratingSystem(family { all(Animation, Graphic) }) {
 
     override fun onTickEntity(entity: Entity) = with(entity[Animation]) {
+        val facing = entity.getOrNull(Facing)
         if (changeTo != AnimationType.UNDEFINED) {
             // change animation and reset state timer
-            gdxAnimation = atlas.gdxAnimation(atlasKey, changeTo, entity[Facing].direction)
-            stateTime = 0f
-            animationType = changeTo
+            val direction = facing?.direction ?: FacingDirection.UNDEFINED
+            gdxAnimation = atlas.gdxAnimation(gdxAnimation.atlasKey, changeTo, direction)
             changeTo = AnimationType.UNDEFINED
-        } else if (changeFacingTo != FacingDirection.UNDEFINED) {
-            // change animation and reset state timer
-            gdxAnimation = atlas.gdxAnimation(atlasKey, animationType, changeFacingTo)
             stateTime = 0f
-            changeFacingTo = FacingDirection.UNDEFINED
+        } else if (facing != null && facing.hasChanged()) {
+            // change animation and reset state timer
+            gdxAnimation = atlas.gdxAnimation(gdxAnimation.atlasKey, gdxAnimation.type, facing.direction)
+            stateTime = 0f
         } else {
             // update animation
             stateTime += deltaTime * speed
         }
 
         // update graphic region
+        gdxAnimation.playMode = playMode
         val keyFrame = gdxAnimation.getKeyFrame(stateTime)
         entity[Graphic].region = keyFrame
     }

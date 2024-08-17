@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
+import io.github.masamune.component.Move
 import io.github.masamune.component.MoveTo
 import io.github.masamune.component.Portal
 import io.github.masamune.component.Teleport
@@ -115,6 +116,9 @@ class DefaultMapTransitionService(
                 playerEntity.configure {
                     it += Teleport(playerTargetPosition)
                 }
+                // Reset direction to 0/0 to return to IDLE animation if no button is pressed.
+                // We set the direction in movePlayerOutOfBounds function.
+                playerEntity[Move].direction.setZero()
             }
 
             // transition is finished -> update active map
@@ -166,7 +170,7 @@ class DefaultMapTransitionService(
         // move player to target location of new map
         // this is equal to a position outside the current active map which will be fixed at the end of the transition
         // to move the player in bounds again
-        movePlayerOutOfBounds(fromTiledMap, transitionInterpolation)
+        movePlayerOutOfBounds(fromTiledMap, transitionInterpolation, transitionType)
     }
 
     private fun playerRealTargetPos(
@@ -181,11 +185,24 @@ class DefaultMapTransitionService(
         MapTransitionType.RIGHT_TO_LEFT -> vec2(EDGE_OFFSET, transitionTo.y + offset.y)
     }
 
-    private fun World.movePlayerOutOfBounds(fromTiledMap: TiledMap, interpolation: Interpolation) {
+    private fun World.movePlayerOutOfBounds(
+        fromTiledMap: TiledMap,
+        interpolation: Interpolation,
+        type: MapTransitionType
+    ) {
         playerEntity.configure {
             val (playerX, playerY) = it[Transform].position
             val to = playerTransitionTargetPos(fromTiledMap, playerY, playerX)
             it += MoveTo(to, transitionTime, interpolation)
+        }
+
+        // play walk animation of player during transition by settings its direction very close to 0/0
+        // 0/0 results in IDLE animation due to animation state handling
+        when (type) {
+            MapTransitionType.TOP_TO_BOTTOM -> playerEntity[Move].direction.y = -0.01f
+            MapTransitionType.BOTTOM_TO_TOP -> playerEntity[Move].direction.y = 0.01f
+            MapTransitionType.LEFT_TO_RIGHT -> playerEntity[Move].direction.x = 0.01f
+            MapTransitionType.RIGHT_TO_LEFT -> playerEntity[Move].direction.x = -0.01f
         }
     }
 
