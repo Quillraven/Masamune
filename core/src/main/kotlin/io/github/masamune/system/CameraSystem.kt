@@ -1,6 +1,7 @@
 package io.github.masamune.system
 
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.Entity
@@ -21,6 +22,10 @@ import ktx.tiled.height
 import ktx.tiled.width
 import kotlin.math.max
 
+private enum class CameraMode {
+    INSTANT, STATIONARY, FOLLOW
+}
+
 class CameraSystem(
     gameViewport: Viewport = inject(),
 ) : IteratingSystem(family { all(Transform, Tag.CAMERA_FOCUS) }), EventListener {
@@ -28,6 +33,9 @@ class CameraSystem(
     private val camera = gameViewport.camera
     private val mapBoundaries = vec2(0f, 0f)
     private val tmpVec2 = vec2()
+    private var cameraMode = CameraMode.INSTANT
+    private var lastCamDistance = 0f
+    private var camFollowSpeedMultiplier = 1f
 
     // pan properties
     private val panFrom = vec2()
@@ -61,8 +69,58 @@ class CameraSystem(
         if (!mapBoundaries.isZero) {
             tmpVec2.coerceInMap(mapBoundaries)
         }
-        camera.position.set(tmpVec2, camera.position.z)
-        camera.update()
+
+        when (cameraMode) {
+            CameraMode.INSTANT -> {
+                // instant = map change -> teleport camera immediately to camera focused entity
+                cameraMode = CameraMode.STATIONARY
+                camera.position.set(tmpVec2, camera.position.z)
+                camera.update()
+                return
+            }
+
+            CameraMode.STATIONARY -> {
+                // stationary = don't move camera unless entity is out of stationary range
+                val (newCamX, newCamY) = camera.position
+                if (!tmpVec2.inRange(newCamX, newCamY, CAM_STATIONARY_RANGE)) {
+                    cameraMode = CameraMode.FOLLOW
+                    camFollowSpeedMultiplier = 1f
+                    lastCamDistance = tmpVec2.distanceTo(newCamX, newCamY)
+                }
+            }
+
+            CameraMode.FOLLOW -> {
+                // follow = interpolate camera position towards entity until entity position is reached
+                var (newCamX, newCamY) = camera.position
+                if (tmpVec2.epsilonEquals(newCamX, newCamY, 0.01f)) {
+                    cameraMode = CameraMode.STATIONARY
+                    return
+                }
+
+                val camDistance = tmpVec2.distanceTo(newCamX, newCamY)
+                if (!MathUtils.isEqual(camDistance, lastCamDistance, 0.2f)) {
+                    // entity is moving away from camera -> fasten up follow speed
+                    camFollowSpeedMultiplier *= 1.1f
+                }
+                lastCamDistance = camDistance
+
+                val progress = CAM_FOLLOW_SPEED * camFollowSpeedMultiplier * deltaTime
+                newCamX = MathUtils.lerp(newCamX, tmpVec2.x, progress)
+                newCamY = MathUtils.lerp(newCamY, tmpVec2.y, progress)
+                camera.position.set(newCamX, newCamY, camera.position.z)
+                camera.update()
+            }
+        }
+    }
+
+    private fun Vector2.inRange(otherX: Float, otherY: Float, range: Float): Boolean {
+        return distanceTo(otherX, otherY) <= range * range
+    }
+
+    private fun Vector2.distanceTo(otherX: Float, otherY: Float): Float {
+        val diffX = otherX - x
+        val diffY = otherY - y
+        return diffX * diffX + diffY * diffY
     }
 
     private fun Vector2.coerceInMap(mapBoundary: Vector2): Vector2 {
@@ -87,6 +145,7 @@ class CameraSystem(
         when (event) {
             is MapChangeEvent -> {
                 mapBoundaries.set(event.tiledMap.width.toFloat(), event.tiledMap.height.toFloat())
+                cameraMode = CameraMode.INSTANT
             }
 
             is MapTransitionBeginEvent -> {
@@ -108,4 +167,8 @@ class CameraSystem(
         }
     }
 
+    companion object {
+        private const val CAM_FOLLOW_SPEED = 3f
+        private const val CAM_STATIONARY_RANGE = 1.5f
+    }
 }
