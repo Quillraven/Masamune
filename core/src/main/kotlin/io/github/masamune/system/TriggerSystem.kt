@@ -15,6 +15,7 @@ class TriggerSystem(
 ) : IteratingSystem(family { all(Trigger, Tag.EXECUTE_TRIGGER) }) {
 
     private val activeTriggers = mutableListOf<TriggerScript>()
+    private var lastTriggerEntity = Entity.NONE
 
     override fun onTick() {
         super.onTick()
@@ -30,16 +31,23 @@ class TriggerSystem(
                     log.debug { "Finished trigger ${script.name}. Remaining active triggers: ${activeTriggers.size}" }
                 }
             }
+            return
         }
+
+        lastTriggerEntity = Entity.NONE
     }
 
     // this method only gets called for entities that have a trigger that just got triggered (=Tag.EXECUTE_TRIGGER)
     override fun onTickEntity(entity: Entity) {
         val (triggerName, triggeringEntity) = entity[Trigger]
         entity.configure { it -= Tag.EXECUTE_TRIGGER }
+        if (lastTriggerEntity == entity) {
+            return
+        }
 
         val script = triggerConfigurator[triggerName, world, entity, triggeringEntity]
         activeTriggers += script
+        lastTriggerEntity = entity
     }
 
     companion object {
