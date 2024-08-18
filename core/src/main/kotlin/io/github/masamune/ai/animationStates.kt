@@ -1,10 +1,10 @@
 package io.github.masamune.ai
 
-import io.github.masamune.component.State
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Move
+import io.github.masamune.component.State
 import io.github.masamune.tiledmap.AnimationType
 
 data object AnimationStateIdle : FsmState {

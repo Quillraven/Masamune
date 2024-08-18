@@ -1,7 +1,11 @@
 package io.github.masamune.ui.view
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
@@ -12,7 +16,17 @@ import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.widget.DialogOptionWidget
 import io.github.masamune.ui.widget.dialogOption
 import ktx.actors.txt
-import ktx.scene2d.*
+import ktx.scene2d.KTable
+import ktx.scene2d.KWidget
+import ktx.scene2d.Scene2dDsl
+import ktx.scene2d.actor
+import ktx.scene2d.defaultStyle
+import ktx.scene2d.image
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
+import ktx.scene2d.stack
+import ktx.scene2d.table
+import ktx.scene2d.verticalGroup
 
 data class DialogViewStyle(
     val background: Drawable = BaseDrawable(),

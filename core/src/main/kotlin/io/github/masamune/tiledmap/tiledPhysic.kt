@@ -22,8 +22,16 @@ import ktx.box2d.FixtureDefinition
 import ktx.box2d.body
 import ktx.box2d.box
 import ktx.collections.GdxArray
-import ktx.math.*
-import ktx.tiled.*
+import ktx.math.component1
+import ktx.math.component2
+import ktx.math.component3
+import ktx.math.component4
+import ktx.math.vec2
+import ktx.tiled.height
+import ktx.tiled.isEmpty
+import ktx.tiled.width
+import ktx.tiled.x
+import ktx.tiled.y
 
 private val TMP_RELATIVE_TO = vec2()
 

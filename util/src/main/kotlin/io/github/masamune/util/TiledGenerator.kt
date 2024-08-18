@@ -142,7 +142,7 @@ fun createClass(className: String, members: List<Member>) {
         val newLine = System.lineSeparator()
         append("package io.github.masamune.tiledmap").append(newLine).append(newLine)
         append("// $AUTO_GEN_INFO_TEXT").append(newLine)
-        append("data class $className (").append(newLine)
+        append("data class $className(").append(newLine)
         append(members.joinToString(
             separator = ",$newLine    ",
             prefix = "    ",

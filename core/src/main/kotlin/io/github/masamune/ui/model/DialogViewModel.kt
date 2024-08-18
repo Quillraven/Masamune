@@ -2,7 +2,11 @@ package io.github.masamune.ui.model
 
 import com.github.quillraven.fleks.Entity
 import io.github.masamune.dialog.Dialog
-import io.github.masamune.event.*
+import io.github.masamune.event.DialogBeginEvent
+import io.github.masamune.event.DialogEndEvent
+import io.github.masamune.event.Event
+import io.github.masamune.event.EventListener
+import io.github.masamune.event.EventService
 import io.github.masamune.ui.model.DialogUiContent.Companion.EMPTY_CONTENT
 
 data class DialogUiContent(
