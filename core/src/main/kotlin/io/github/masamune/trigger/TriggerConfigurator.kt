@@ -31,7 +31,7 @@ class TriggerConfigurator {
         return when (mainQuest) {
             null -> trigger(name, this, triggeringEntity) {
                 // push player away to not trigger dialog begin event in an endless loop
-                actionMoveBack(triggeringEntity, distance = 0.5f, timeInSeconds = 0.25f, wait = true)
+                actionMoveBack(triggeringEntity, distance = 0.75f, timeInSeconds = 0.25f, wait = true)
                 actionDialog("villageExit")
             }
 
