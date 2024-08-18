@@ -1,6 +1,5 @@
 package io.github.masamune.tiledmap
 
-import io.github.masamune.component.State
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapLayer
@@ -36,6 +35,7 @@ import io.github.masamune.component.Physic
 import io.github.masamune.component.Player
 import io.github.masamune.component.Portal
 import io.github.masamune.component.QuestLog
+import io.github.masamune.component.State
 import io.github.masamune.component.Stats
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Tiled
