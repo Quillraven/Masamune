@@ -5,7 +5,21 @@
 [![LibKTX](https://img.shields.io/badge/LibKTX-1.12.1--SNAPSHOT-blue.svg)](https://github.com/libktx/ktx)
 [![Tiled](https://img.shields.io/badge/Tiled-1.11.0-teal.svg)](https://www.mapeditor.org/)
 
-# TBD
+# Masamune
+
+Imagine an epic story here. Will be updated later.
+
+### Controls
+
+- Move with W/A/S/D
+- Interact with SPACE
+
+### Screenshots
+
+![image](https://github.com/user-attachments/assets/ac47d508-1ce7-40bb-90e3-a4faa4378b5b)
+![image](https://github.com/user-attachments/assets/1a2200d2-22de-4738-9f1e-fa286e9b8f71)
+![image](https://github.com/user-attachments/assets/7a2eceb5-9542-4b50-8f1a-8823c0438cfb)
+
 
 ### Credits
 
