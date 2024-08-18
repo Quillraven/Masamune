@@ -3,6 +3,8 @@ package io.github.masamune.trigger
 import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.component.Facing
+import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Move
 import io.github.masamune.component.MoveTo
@@ -103,7 +105,16 @@ class TriggerActionMoveBack(
 ) : TriggerAction {
     override fun World.onStart() {
         val (x, y) = entity[Transform].position
-        val (dirX, dirY) = entity[Move].direction
+        var (dirX, dirY) = entity[Move].direction
+        if (dirX == 0f && dirY == 0f) {
+            // might happen in special scenarios -> use facing as a fallback
+            when (entity[Facing].direction) {
+                FacingDirection.LEFT -> dirX = -1f
+                FacingDirection.RIGHT -> dirX = 1f
+                FacingDirection.UP -> dirY = 1f
+                else -> dirY = -1f
+            }
+        }
 
         entity.configure {
             it += MoveTo(vec2(x - distance * dirX, y - distance * dirY), durationInSeconds, Interpolation.linear)
