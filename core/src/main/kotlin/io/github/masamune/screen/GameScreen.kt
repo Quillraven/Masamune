@@ -34,8 +34,11 @@ import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.ui.model.DialogViewModel
+import io.github.masamune.ui.model.GameMenuViewModel
 import io.github.masamune.ui.view.DialogView
+import io.github.masamune.ui.view.GameMenuView
 import io.github.masamune.ui.view.dialogView
+import io.github.masamune.ui.view.gameMenuView
 import ktx.app.KtxScreen
 import ktx.box2d.createWorld
 import ktx.log.logger
@@ -60,6 +63,8 @@ class GameScreen(
     // views and view models
     private val dialogViewModel = DialogViewModel(eventService)
     private lateinit var dialogView: DialogView
+    private val gameMenuViewModel = GameMenuViewModel(assetService[I18NAsset.MESSAGES], eventService)
+    private lateinit var gameMenuView: GameMenuView
 
     // physic world
     private val physicWorld = createWorld(Vector2.Zero, true).apply {
@@ -116,9 +121,8 @@ class GameScreen(
         // setup UI views
         stage.clear()
         stage.actors {
-            dialogView = dialogView(dialogViewModel, skin) {
-                isVisible = false
-            }
+            dialogView = dialogView(dialogViewModel, skin) { isVisible = false }
+            gameMenuView = gameMenuView(gameMenuViewModel, skin) { isVisible = false }
         }
 
         // register all event listeners
@@ -134,6 +138,8 @@ class GameScreen(
         eventService += world
         eventService += dialogView
         eventService += dialogViewModel
+        eventService += gameMenuView
+        eventService += gameMenuViewModel
         eventService += keyboardController
     }
 
