@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -13,8 +12,8 @@ import com.badlogic.gdx.utils.Scaling
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import io.github.masamune.ui.model.DialogUiContent
 import io.github.masamune.ui.model.DialogViewModel
-import io.github.masamune.ui.widget.DialogOptionWidget
-import io.github.masamune.ui.widget.dialogOption
+import io.github.masamune.ui.widget.OptionTable
+import io.github.masamune.ui.widget.optionTable
 import ktx.actors.txt
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
@@ -23,7 +22,6 @@ import ktx.scene2d.actor
 import ktx.scene2d.defaultStyle
 import ktx.scene2d.image
 import ktx.scene2d.label
-import ktx.scene2d.scene2d
 import ktx.scene2d.stack
 import ktx.scene2d.table
 import ktx.scene2d.verticalGroup
@@ -59,7 +57,7 @@ class DialogView(
     private val model: DialogViewModel,
     skin: Skin,
     styleName: String = defaultStyle,
-) : Table(skin), KTable, View {
+) : View(skin), KTable {
 
     private val style = skin[styleName, DialogViewStyle::class.java]
 
@@ -69,8 +67,7 @@ class DialogView(
 
     private val content: TypingLabel
 
-    private val optionsTable: Table
-    private var selectedOption: Int = 0
+    private val optionTable: OptionTable
 
     init {
         setFillParent(true)
@@ -117,9 +114,7 @@ class DialogView(
             // third cell (=bottom left) is an empty cell
             add()
             // fourth cell is the option table
-            this@DialogView.optionsTable = table(skin) { optionTableCell ->
-                align(Align.left)
-
+            this@DialogView.optionTable = optionTable(skin) { optionTableCell ->
                 optionTableCell.fill().align(Align.left)
             }
         }
@@ -138,8 +133,8 @@ class DialogView(
             val (txt, options, image, caption) = dialogContent
             text(txt)
             image(image, caption)
-            clearOptions()
-            options.forEach { option(it) }
+            optionTable.clearOptions()
+            options.forEach { optionTable.option(it) }
         }
     }
 
@@ -159,47 +154,19 @@ class DialogView(
         }
     }
 
-    fun clearOptions() {
-        optionsTable.clear()
-        selectedOption = 0
-    }
-
-    fun option(text: String) {
-        val option = scene2d.dialogOption(text, skin, style.optionStyle) {
-            select(!this@DialogView.optionsTable.hasChildren())
-        }
-        optionsTable.add(option).uniformX().left().fillX().padBottom(5f).row()
-    }
-
-    fun prevOption() = selectOption(selectedOption - 1)
-
-    fun nextOption() = selectOption(selectedOption + 1)
-
-    private fun selectOption(idx: Int) {
-        val realIdx = when {
-            idx < 0 -> (optionsTable.children.size) - 1
-            idx >= (optionsTable.children.size) -> 0
-            else -> idx
-        }
-
-        (optionsTable.getChild(selectedOption) as DialogOptionWidget).select(false)
-        selectedOption = realIdx
-        (optionsTable.getChild(selectedOption) as DialogOptionWidget).select(true)
-    }
-
     override fun onUpPressed() {
-        nextOption()
+        optionTable.nextOption()
     }
 
     override fun onDownPressed() {
-        prevOption()
+        optionTable.prevOption()
     }
 
     override fun onSelectPressed() {
         if (!content.hasEnded()) {
             content.skipToTheEnd()
         } else {
-            model.triggerOption(selectedOption)
+            model.triggerOption(optionTable.selectedOption)
         }
     }
 
