@@ -9,6 +9,8 @@ import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.event.MapTransitionEndEvent
+import io.github.masamune.event.MenuBeginEvent
+import io.github.masamune.event.MenuEndEvent
 import ktx.app.KtxInputAdapter
 import ktx.app.gdxError
 import kotlin.reflect.KClass
@@ -58,6 +60,8 @@ class KeyboardController(
         Keys.W to Command.UP,
         Keys.S to Command.DOWN,
         Keys.SPACE to Command.SELECT,
+        Keys.CONTROL_LEFT to Command.MENU,
+        Keys.ESCAPE to Command.CANCEL,
     )
 
     override fun keyDown(keycode: Int): Boolean {
@@ -87,6 +91,8 @@ class KeyboardController(
         when (event) {
             is DialogBeginEvent -> activeState = uiState
             is DialogEndEvent -> activeState = gameState
+            is MenuBeginEvent -> activeState = uiState
+            is MenuEndEvent -> activeState = gameState
             is MapTransitionBeginEvent -> activeState = disabledState
             is MapTransitionEndEvent -> activeState = gameState
             else -> Unit
