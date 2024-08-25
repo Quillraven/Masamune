@@ -6,5 +6,7 @@ enum class Command {
     RIGHT,
     DOWN,
     UP,
-    SELECT
+    SELECT,
+    MENU,
+    CANCEL
 }

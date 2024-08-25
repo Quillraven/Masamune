@@ -2,8 +2,10 @@ package io.github.masamune.input
 
 import com.badlogic.gdx.math.Vector2
 import io.github.masamune.event.EventService
+import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.PlayerInteractEvent
 import io.github.masamune.event.PlayerMoveEvent
+import io.github.masamune.event.UiBackEvent
 import io.github.masamune.event.UiDownEvent
 import io.github.masamune.event.UiSelectEvent
 import io.github.masamune.event.UiUpEvent
@@ -47,6 +49,8 @@ class ControllerStateGame(private val eventService: EventService) : ControllerSt
         Command.DOWN -> updateMove(y = -1f)
         Command.UP -> updateMove(y = 1f)
         Command.SELECT -> eventService.fire(PlayerInteractEvent)
+        Command.MENU -> eventService.fire(MenuBeginEvent)
+        Command.CANCEL -> Unit
     }
 
     override fun keyUp(command: Command) = when (command) {
@@ -63,6 +67,7 @@ class ControllerStateUI(private val eventService: EventService) : ControllerStat
         Command.UP -> eventService.fire(UiUpEvent)
         Command.DOWN -> eventService.fire(UiDownEvent)
         Command.SELECT -> eventService.fire(UiSelectEvent)
+        Command.CANCEL, Command.MENU -> eventService.fire(UiBackEvent)
         else -> Unit
     }
 
