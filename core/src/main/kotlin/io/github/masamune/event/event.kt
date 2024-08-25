@@ -20,6 +20,12 @@ data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) 
 
 data object PlayerInteractEvent : Event
 
+data object MenuBeginEvent : Event
+
+data object MenuEndEvent : Event
+
+data object GameExitEvent : Event
+
 data class DialogBeginEvent(val world: World, val player: Entity, val dialog: Dialog) : Event
 
 data class DialogEndEvent(val player: Entity, val dialog: Dialog, val optionIdx: Int) : Event
@@ -29,6 +35,8 @@ data object UiUpEvent : Event
 data object UiDownEvent : Event
 
 data object UiSelectEvent : Event
+
+data object UiBackEvent : Event
 
 data class MapTransitionBeginEvent(
     val fromTiledMap: TiledMap,
