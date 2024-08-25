@@ -1,11 +1,15 @@
 package io.github.masamune.ui.model
 
+import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 abstract class PropertyChangeSource {
     @PublishedApi
     internal val actionsMap = mutableMapOf<KProperty<*>, MutableList<(Any) -> Unit>>()
+
+    inline fun <reified T : Any> propertyNotify(initialValue: T): ReadWriteProperty<PropertyChangeSource, T> =
+        Delegates.observable(initialValue) { property, _, newValue -> notify(property, newValue) }
 
     @Suppress("UNCHECKED_CAST")
     inline fun <reified T> onPropertyChange(property: KProperty<T>, noinline action: (T) -> Unit) {
@@ -17,16 +21,3 @@ abstract class PropertyChangeSource {
         actionsMap[property]?.forEach { action -> action(value) }
     }
 }
-
-class PropertyNotifier<T : Any>(initialValue: T) : ReadWriteProperty<PropertyChangeSource, T> {
-    private var _value: T = initialValue
-
-    override operator fun getValue(thisRef: PropertyChangeSource, property: KProperty<*>): T = _value
-
-    override operator fun setValue(thisRef: PropertyChangeSource, property: KProperty<*>, value: T) {
-        _value = value
-        thisRef.notify(property, value)
-    }
-}
-
-inline fun <reified T : Any> propertyNotify(initialValue: T): PropertyNotifier<T> = PropertyNotifier(initialValue)
