@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.FitViewport
 import io.github.masamune.event.EventService
 import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.view.DialogView
 import io.github.masamune.ui.view.dialogView
+import io.github.masamune.ui.widget.OptionTable
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.assets.toClasspathFile
@@ -35,6 +37,9 @@ private class UiDialogTest : KtxApplicationAdapter {
     private val uiAtlas by lazy { TextureAtlas("ui/skin.atlas".toClasspathFile()) }
     private val skin by lazy { Skin("ui/skin.json".toClasspathFile(), uiAtlas) }
     private lateinit var dialogView: DialogView
+    private val dialogOptionTable by lazy {
+        (dialogView.getChild(0) as Table).children.filterIsInstance<OptionTable>().single()
+    }
 
     override fun create() {
         stage.actors {
@@ -56,10 +61,10 @@ private class UiDialogTest : KtxApplicationAdapter {
         dialogView.run {
             text(contentStr)
             image("elder", "Flower Girl")
-            clearOptions()
-            option("Option 1")
-            option("Long Option 2")
-            option("Short 3")
+            dialogOptionTable.clearOptions()
+            dialogOptionTable.option("Option 1")
+            dialogOptionTable.option("Long Option 2")
+            dialogOptionTable.option("Short 3")
         }
     }
 
@@ -69,8 +74,8 @@ private class UiDialogTest : KtxApplicationAdapter {
         dialogView.run {
             text(contentStr)
             image("elder", "Elder")
-            clearOptions()
-            option("Option 1")
+            dialogOptionTable.clearOptions()
+            dialogOptionTable.option("Option 1")
         }
     }
 
@@ -78,8 +83,8 @@ private class UiDialogTest : KtxApplicationAdapter {
         dialogView.run {
             text("Hello no caption")
             image("elder")
-            clearOptions()
-            option("Option")
+            dialogOptionTable.clearOptions()
+            dialogOptionTable.option("Option")
         }
     }
 
@@ -87,8 +92,8 @@ private class UiDialogTest : KtxApplicationAdapter {
         dialogView.run {
             text("Hello no image")
             image("")
-            clearOptions()
-            option("Option")
+            dialogOptionTable.clearOptions()
+            dialogOptionTable.option("Option")
         }
     }
 
@@ -107,8 +112,8 @@ private class UiDialogTest : KtxApplicationAdapter {
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> loadSmallDialog()
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> loadNoCaptionDialog()
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_4) -> loadNoImageDialog()
-            Gdx.input.isKeyJustPressed(Input.Keys.W) -> this@UiDialogTest.dialogView.prevOption()
-            Gdx.input.isKeyJustPressed(Input.Keys.S) -> this@UiDialogTest.dialogView.nextOption()
+            Gdx.input.isKeyJustPressed(Input.Keys.W) -> dialogOptionTable.prevOption()
+            Gdx.input.isKeyJustPressed(Input.Keys.S) -> dialogOptionTable.nextOption()
         }
     }
 
