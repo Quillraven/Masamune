@@ -87,10 +87,9 @@ class TriggerConfigurator {
             null -> trigger(name, this, triggeringEntity) {
                 actionDialog("flower_girl_00") { selectedOptionIdx ->
                     if (selectedOptionIdx == 0) {
-                        println("TODO add flower quest")
+                        actionAddQuest(triggeringEntity, FlowerGirlQuest())
                     }
                 }
-                actionAddQuest(triggeringEntity, FlowerGirlQuest())
             }
 
             else -> trigger(name, this, triggeringEntity) {
