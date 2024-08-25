@@ -23,8 +23,8 @@ i:b:/ui/PIXEARG_.fnt:9259:1
 i:b:/ui/skin.json:1820:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 i:b:/ui/skin.atlas:1535:1
-i:b:/ui/messages.properties:2450:1
-i:b:/ui/messages_de.properties:2770:1
+i:b:/ui/messages.properties:2576:1
+i:b:/ui/messages_de.properties:2904:1
 i:d:/graphics:0:1
 i:b:/graphics/chars_and_props.png:26720:1
 i:b:/graphics/chars_and_props.atlas:5259:1
