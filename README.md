@@ -1,8 +1,8 @@
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.0-red.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.20-red.svg)](http://kotlinlang.org/)
 [![Fleks](https://img.shields.io/badge/Fleks-2.9--SNAPSHOT-purple.svg)](https://github.com/Quillraven/Fleks)
 
 [![LibGDX](https://img.shields.io/badge/LibGDX-1.12.1-green.svg)](https://libgdx.com/)
-[![LibKTX](https://img.shields.io/badge/LibKTX-1.12.1--SNAPSHOT-blue.svg)](https://github.com/libktx/ktx)
+[![LibKTX](https://img.shields.io/badge/LibKTX-1.12.1--rc--2-blue.svg)](https://github.com/libktx/ktx)
 [![Tiled](https://img.shields.io/badge/Tiled-1.11.0-teal.svg)](https://www.mapeditor.org/)
 
 # Masamune
@@ -13,6 +13,8 @@ Imagine an epic story here. Will be updated later.
 
 - Move with W/A/S/D
 - Interact with SPACE
+- Open menu with CTRL_LEFT
+- Close/Cancel menu with CTRL_LEFT or ESCAPE
 
 ### Screenshots
 
