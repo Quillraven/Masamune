@@ -35,10 +35,10 @@ import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.model.GameMenuViewModel
-import io.github.masamune.ui.view.DialogView
-import io.github.masamune.ui.view.GameMenuView
+import io.github.masamune.ui.model.StatsViewModel
 import io.github.masamune.ui.view.dialogView
 import io.github.masamune.ui.view.gameMenuView
+import io.github.masamune.ui.view.statsView
 import ktx.app.KtxScreen
 import ktx.box2d.createWorld
 import ktx.log.logger
@@ -59,12 +59,6 @@ class GameScreen(
     private val uiViewport = FitViewport(928f, 522f)
     private val stage = Stage(uiViewport, batch)
     private val skin = assetService[SkinAsset.DEFAULT]
-
-    // views and view models
-    private val dialogViewModel = DialogViewModel(eventService)
-    private lateinit var dialogView: DialogView
-    private val gameMenuViewModel = GameMenuViewModel(assetService[I18NAsset.MESSAGES], eventService)
-    private lateinit var gameMenuView: GameMenuView
 
     // physic world
     private val physicWorld = createWorld(Vector2.Zero, true).apply {
@@ -121,8 +115,9 @@ class GameScreen(
         // setup UI views
         stage.clear()
         stage.actors {
-            dialogView = dialogView(dialogViewModel, skin) { isVisible = false }
-            gameMenuView = gameMenuView(gameMenuViewModel, skin) { isVisible = false }
+            dialogView(DialogViewModel(eventService), skin) { isVisible = false }
+            gameMenuView(GameMenuViewModel(assetService[I18NAsset.MESSAGES], eventService), skin) { isVisible = false }
+            statsView(StatsViewModel(assetService[I18NAsset.MESSAGES]), skin) { isVisible = false }
         }
 
         // register all event listeners
@@ -136,10 +131,7 @@ class GameScreen(
 
     private fun registerEventListeners() {
         eventService += world
-        eventService += dialogView
-        eventService += dialogViewModel
-        eventService += gameMenuView
-        eventService += gameMenuViewModel
+        eventService += stage
         eventService += keyboardController
     }
 
@@ -149,7 +141,7 @@ class GameScreen(
     }
 
     override fun resize(width: Int, height: Int) {
-        gameViewport.update(width, height, true)
+        gameViewport.update(width, height, false)
         uiViewport.update(width, height, true)
     }
 
