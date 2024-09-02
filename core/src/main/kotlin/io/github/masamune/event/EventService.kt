@@ -1,6 +1,8 @@
 package io.github.masamune.event
 
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.github.quillraven.fleks.World
+import io.github.masamune.ui.view.View
 import ktx.log.logger
 
 interface EventListener {
@@ -27,6 +29,15 @@ class EventService {
         world.systems
             .filterIsInstance<EventListener>()
             .forEach { this += it }
+    }
+
+    operator fun plusAssign(stage: Stage) {
+        stage.actors
+            .filterIsInstance<View<*>>()
+            .forEach {
+                this += it
+                this += it.viewModel
+            }
     }
 
     operator fun minusAssign(world: World) {
