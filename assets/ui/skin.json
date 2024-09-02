@@ -54,6 +54,66 @@ com.ray3k.tenpatch.TenPatchDrawable: {
 		playMode: 2
 		crushMode: 0
 	}
+	slider_progress_green_10: {
+		region: slider_progress_green
+		horizontalStretchAreas: [ 4, 10 ]
+		verticalStretchAreas: [ 4, 11 ]
+		tiling: true
+		minWidth: 0
+		minHeight: 16
+		rightWidth: 1
+		leftWidth: 1
+		bottomHeight: 1
+		topHeight: 1
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	slider_progress_blue_10: {
+		region: slider_progress_blue
+		horizontalStretchAreas: [ 4, 10 ]
+		verticalStretchAreas: [ 4, 11 ]
+		tiling: true
+		minWidth: 0
+		minHeight: 16
+		rightWidth: 1
+		leftWidth: 1
+		bottomHeight: 1
+		topHeight: 1
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	slider_progress_yellow_10: {
+		region: slider_progress_yellow
+		horizontalStretchAreas: [ 4, 10 ]
+		verticalStretchAreas: [ 4, 11 ]
+		tiling: true
+		minWidth: 0
+		minHeight: 16
+		rightWidth: 1
+		leftWidth: 1
+		bottomHeight: 1
+		topHeight: 1
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
 }
 io.github.masamune.ui.view.DialogViewStyle: {
 	default: {
@@ -93,6 +153,22 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	default-horizontal: {
 		background: nine_path_bg
 		knobBefore: slider_progress_10
+	}
+	default-vertical: {
+		background: nine_path_bg
+		knob: slider_progress
+	}
+	green: {
+		background: nine_path_bg
+		knobBefore: slider_progress_green_10
+	}
+	blue: {
+		background: nine_path_bg
+		knobBefore: slider_progress_blue_10
+	}
+	yellow: {
+		background: nine_path_bg
+		knobBefore: slider_progress_yellow_10
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
