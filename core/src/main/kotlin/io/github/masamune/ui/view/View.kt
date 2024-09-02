@@ -8,8 +8,12 @@ import io.github.masamune.event.UiBackEvent
 import io.github.masamune.event.UiDownEvent
 import io.github.masamune.event.UiSelectEvent
 import io.github.masamune.event.UiUpEvent
+import io.github.masamune.ui.model.ViewModel
 
-abstract class View(skin: Skin) : Table(skin), EventListener {
+abstract class View<T : ViewModel>(
+    skin: Skin,
+    val viewModel: T,
+) : Table(skin), EventListener {
 
     open fun onUpPressed() = Unit
     open fun onDownPressed() = Unit

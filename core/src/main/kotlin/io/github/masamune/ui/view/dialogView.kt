@@ -1,18 +1,18 @@
 package io.github.masamune.ui.view
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.Scaling
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import io.github.masamune.ui.model.DialogUiContent
 import io.github.masamune.ui.model.DialogViewModel
+import io.github.masamune.ui.widget.FrameImage
 import io.github.masamune.ui.widget.OptionTable
+import io.github.masamune.ui.widget.frameImage
 import io.github.masamune.ui.widget.optionTable
 import ktx.actors.txt
 import ktx.scene2d.KTable
@@ -20,9 +20,7 @@ import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
 import ktx.scene2d.defaultStyle
-import ktx.scene2d.image
 import ktx.scene2d.label
-import ktx.scene2d.stack
 import ktx.scene2d.table
 import ktx.scene2d.verticalGroup
 
@@ -54,15 +52,15 @@ data class DialogViewStyle(
  */
 @Scene2dDsl
 class DialogView(
-    private val model: DialogViewModel,
+    model: DialogViewModel,
     skin: Skin,
     styleName: String = defaultStyle,
-) : View(skin), KTable {
+) : View<DialogViewModel>(skin, model), KTable {
 
     private val style = skin[styleName, DialogViewStyle::class.java]
 
     private val imageGroup: VerticalGroup
-    private val image: Image
+    private val image: FrameImage
     private val imageCaption: Label
 
     private val content: TypingLabel
@@ -82,14 +80,7 @@ class DialogView(
                 expand().fill()
 
                 // image is a stack of an image frame + the image itself
-                stack {
-                    image(this@DialogView.style.imageFrame) {
-                        setScaling(Scaling.contain)
-                    }
-                    this@DialogView.image = image(BaseDrawable()) {
-                        setScaling(Scaling.contain)
-                    }
-                }
+                this@DialogView.image = frameImage(skin, this@DialogView.style.imageFrame)
 
                 this@DialogView.imageCaption = label("", this@DialogView.style.imageCaptionStyle, skin) {
                     setAlignment(Align.top, Align.center)
@@ -148,7 +139,7 @@ class DialogView(
             imageGroup.inCell.width(0f)
         } else {
             imageGroup.isVisible = true
-            image.drawable = skin.getDrawable(drawableName)
+            image.imageDrawable(drawableName)
             imageCaption.txt = caption?.replace(' ', '\n') ?: ""
             imageGroup.inCell.minWidth(MIN_IMAGE_WIDTH)
         }
@@ -166,7 +157,7 @@ class DialogView(
         if (!content.hasEnded()) {
             content.skipToTheEnd()
         } else {
-            model.triggerOption(optionTable.selectedOption)
+            viewModel.triggerOption(optionTable.selectedOption)
         }
     }
 

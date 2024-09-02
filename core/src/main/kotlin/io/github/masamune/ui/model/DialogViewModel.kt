@@ -5,7 +5,6 @@ import io.github.masamune.dialog.Dialog
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.DialogEndEvent
 import io.github.masamune.event.Event
-import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
 import io.github.masamune.ui.model.DialogUiContent.Companion.EMPTY_CONTENT
 
@@ -20,7 +19,7 @@ data class DialogUiContent(
     }
 }
 
-class DialogViewModel(private val eventService: EventService) : PropertyChangeSource(), EventListener {
+class DialogViewModel(private val eventService: EventService) : ViewModel() {
 
     private lateinit var activeDialog: Dialog
     var content: DialogUiContent by propertyNotify(EMPTY_CONTENT)

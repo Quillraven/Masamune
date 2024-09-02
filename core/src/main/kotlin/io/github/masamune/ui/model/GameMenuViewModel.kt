@@ -3,7 +3,6 @@ package io.github.masamune.ui.model
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.I18NBundle
 import io.github.masamune.event.Event
-import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
 import io.github.masamune.event.GameExitEvent
 import io.github.masamune.event.MenuBeginEvent
@@ -12,7 +11,7 @@ import io.github.masamune.event.MenuEndEvent
 class GameMenuViewModel(
     private val bundle: I18NBundle,
     private val eventService: EventService
-) : PropertyChangeSource(), EventListener {
+) : ViewModel() {
 
     var options: List<String> by propertyNotify(listOf())
 

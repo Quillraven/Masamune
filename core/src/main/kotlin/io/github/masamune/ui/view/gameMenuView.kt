@@ -12,9 +12,9 @@ import ktx.scene2d.actor
 
 @Scene2dDsl
 class GameMenuView(
-    private val model: GameMenuViewModel,
+    model: GameMenuViewModel,
     skin: Skin,
-) : View(skin), KTable {
+) : View<GameMenuViewModel>(skin, model), KTable {
 
     private val optionTable: OptionTable
 
@@ -29,7 +29,7 @@ class GameMenuView(
     }
 
     private fun registerOnPropertyChanges() {
-        model.onPropertyChange(GameMenuViewModel::options) { options ->
+        viewModel.onPropertyChange(GameMenuViewModel::options) { options ->
             if (options.isEmpty()) {
                 isVisible = false
                 return@onPropertyChange
@@ -51,11 +51,11 @@ class GameMenuView(
     }
 
     override fun onSelectPressed() {
-        model.triggerOption(optionTable.selectedOption)
+        viewModel.triggerOption(optionTable.selectedOption)
     }
 
     override fun onBackPressed() {
-        model.triggerClose()
+        viewModel.triggerClose()
     }
 }
 
