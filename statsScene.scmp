@@ -2580,7 +2580,7 @@ preferences: {
 		value: 30
 	}
 }
-saveFile: C:/Users/Simon/IdeaProjects/Masamune/skinDesign.scmp
+saveFile: C:/Users/Simon/IdeaProjects/Masamune/statsScene.scmp
 version: 57
 sceneComposer: {
 	children: [
