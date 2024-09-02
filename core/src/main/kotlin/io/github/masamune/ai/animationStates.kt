@@ -9,7 +9,6 @@ import io.github.masamune.tiledmap.AnimationType
 
 data object AnimationStateIdle : FsmState {
     override fun World.onEnter(entity: Entity) {
-        println("change animation to idle")
         entity[Animation].changeTo = AnimationType.IDLE
     }
 
