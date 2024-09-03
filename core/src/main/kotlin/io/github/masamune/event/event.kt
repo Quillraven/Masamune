@@ -7,6 +7,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.dialog.Dialog
 import io.github.masamune.tiledmap.MapTransitionType
+import io.github.masamune.ui.model.MenuType
 
 sealed interface Event
 
@@ -20,7 +21,7 @@ data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) 
 
 data object PlayerInteractEvent : Event
 
-data object MenuBeginEvent : Event
+data class MenuBeginEvent(val type: MenuType) : Event
 
 data object MenuEndEvent : Event
 

@@ -9,6 +9,7 @@ import io.github.masamune.event.UiBackEvent
 import io.github.masamune.event.UiDownEvent
 import io.github.masamune.event.UiSelectEvent
 import io.github.masamune.event.UiUpEvent
+import io.github.masamune.ui.model.MenuType
 import ktx.math.vec2
 
 sealed interface ControllerState {
@@ -49,7 +50,7 @@ class ControllerStateGame(private val eventService: EventService) : ControllerSt
         Command.DOWN -> updateMove(y = -1f)
         Command.UP -> updateMove(y = 1f)
         Command.SELECT -> eventService.fire(PlayerInteractEvent)
-        Command.MENU -> eventService.fire(MenuBeginEvent)
+        Command.MENU -> eventService.fire(MenuBeginEvent(MenuType.GAME))
         Command.CANCEL -> Unit
     }
 
