@@ -2,14 +2,18 @@ package io.github.masamune.event
 
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.configureWorld
+import io.github.masamune.ui.model.ViewModel
+import io.github.masamune.ui.view.View
 import io.kotest.matchers.shouldBe
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import ktx.collections.gdxArrayOf
 import kotlin.test.Test
 
 class EventServiceTest {
@@ -114,6 +118,29 @@ class EventServiceTest {
 
         verify(exactly = 1) { listener.onEvent(event) }
         confirmVerified(listener)
+    }
+
+    private fun testStage(): Stage {
+        val stageMock = mockk<Stage>()
+        val viewModelMock = mockk<ViewModel>()
+        val testViewMock = mockk<View<ViewModel>>()
+        every { testViewMock.viewModel } returns viewModelMock
+        every { stageMock.actors } returns gdxArrayOf(testViewMock)
+        return stageMock
+    }
+
+    @Test
+    fun `add a stage should add all EventListener actors and view models`() {
+        val stage = testStage()
+        val service = EventService()
+        val view = stage.actors.filterIsInstance<View<ViewModel>>().single()
+        val viewModel = view.viewModel
+
+        service += stage
+
+        service.numListeners shouldBe 2
+        (view in service) shouldBe true
+        (viewModel in service) shouldBe true
     }
 
 }
