@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
@@ -56,7 +55,7 @@ class GameScreen(
 ) : KtxScreen {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
-    private val uiViewport = FitViewport(928f, 522f)
+    private val uiViewport = ExtendViewport(928f, 522f)
     private val stage = Stage(uiViewport, batch)
     private val skin = assetService[SkinAsset.DEFAULT]
 
@@ -117,7 +116,7 @@ class GameScreen(
         stage.actors {
             dialogView(DialogViewModel(eventService), skin) { isVisible = false }
             gameMenuView(GameMenuViewModel(assetService[I18NAsset.MESSAGES], eventService), skin) { isVisible = false }
-            statsView(StatsViewModel(assetService[I18NAsset.MESSAGES]), skin) { isVisible = false }
+            statsView(StatsViewModel(assetService[I18NAsset.MESSAGES], world, eventService), skin) { isVisible = false }
         }
 
         // register all event listeners
