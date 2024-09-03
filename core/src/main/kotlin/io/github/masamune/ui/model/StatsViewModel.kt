@@ -1,12 +1,36 @@
 package io.github.masamune.ui.model
 
 import com.badlogic.gdx.utils.I18NBundle
+import com.github.quillraven.fleks.World
+import io.github.masamune.component.Name
+import io.github.masamune.component.Player
 import io.github.masamune.event.Event
+import io.github.masamune.event.EventService
+import io.github.masamune.event.MenuBeginEvent
+import io.github.masamune.event.MenuEndEvent
 
 class StatsViewModel(
-    bundle: I18NBundle
+    private val bundle: I18NBundle,
+    private val world: World,
+    private val eventService: EventService,
 ) : ViewModel() {
-    override fun onEvent(event: Event) {
 
+    private val playerEntities = world.family { all(Player) }
+    var playerName: String by propertyNotify("")
+
+    fun triggerClose() {
+        eventService.fire(MenuEndEvent)
+        playerName = ""
+        eventService.fire(MenuBeginEvent(MenuType.GAME))
     }
+
+    override fun onEvent(event: Event) {
+        if (event is MenuBeginEvent && event.type == MenuType.STATS) {
+            with(world) {
+                val player = playerEntities.first()
+                playerName = player[Name].name
+            }
+        }
+    }
+
 }

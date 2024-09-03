@@ -16,9 +16,17 @@ class GameMenuViewModel(
     var options: List<String> by propertyNotify(listOf())
 
     fun triggerOption(optionIdx: Int) {
-        if (options.lastIndex == optionIdx) {
-            eventService.fire(GameExitEvent)
-            Gdx.app.exit()
+        when (optionIdx) {
+            // quit
+            options.lastIndex -> {
+                eventService.fire(GameExitEvent)
+                Gdx.app.exit()
+            }
+            // stats
+            0 -> {
+                triggerClose()
+                eventService.fire(MenuBeginEvent(MenuType.STATS))
+            }
         }
     }
 
@@ -28,18 +36,14 @@ class GameMenuViewModel(
     }
 
     override fun onEvent(event: Event) {
-        when (event) {
-            is MenuBeginEvent -> {
-                options = listOf(
-                    bundle["menu.option.stats"],
-                    bundle["menu.option.inventory"],
-                    bundle["menu.option.quests"],
-                    bundle["menu.option.save"],
-                    bundle["menu.option.quit"],
-                )
-            }
-
-            else -> Unit
+        if (event is MenuBeginEvent && event.type == MenuType.GAME) {
+            options = listOf(
+                bundle["menu.option.stats"],
+                bundle["menu.option.inventory"],
+                bundle["menu.option.quests"],
+                bundle["menu.option.save"],
+                bundle["menu.option.quit"],
+            )
         }
     }
 }

@@ -1,10 +1,12 @@
 package io.github.masamune.ui.view
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Align
 import io.github.masamune.ui.model.StatsViewModel
 import io.github.masamune.ui.widget.frameImage
 import io.github.masamune.ui.widget.menuItemLabel
+import ktx.actors.txt
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
@@ -20,6 +22,8 @@ class StatsView(
     skin: Skin,
 ) : View<StatsViewModel>(skin, model), KTable {
 
+    private val nameLabel: Label
+
     init {
         background = skin.getDrawable("dialog_frame")
         setFillParent(true)
@@ -32,7 +36,7 @@ class StatsView(
             frameImage(skin, "dialog_face_frame", "hero") { cell ->
                 cell.minWidth(375.0f).row()
             }
-            label("Alexxius", "dialog_image_caption", skin) { cell ->
+            this@StatsView.nameLabel = label("", "dialog_image_caption", skin) { cell ->
                 setAlignment(Align.center)
                 cell.padBottom(35f).row()
             }
@@ -120,6 +124,19 @@ class StatsView(
 
             rightTableCell.grow().pad(35f, 0f, 35f, 35f)
         }
+
+        registerOnPropertyChanges(viewModel)
+    }
+
+    private fun registerOnPropertyChanges(model: StatsViewModel) {
+        model.onPropertyChange(StatsViewModel::playerName) { name ->
+            isVisible = name.isNotBlank()
+            nameLabel.txt = name
+        }
+    }
+
+    override fun onBackPressed() {
+        viewModel.triggerClose()
     }
 }
 
