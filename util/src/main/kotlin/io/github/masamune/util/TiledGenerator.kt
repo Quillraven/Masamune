@@ -143,12 +143,33 @@ fun createClass(className: String, members: List<Member>) {
         append("package io.github.masamune.tiledmap").append(newLine).append(newLine)
         append("// $AUTO_GEN_INFO_TEXT").append(newLine)
         append("data class $className(").append(newLine)
-        append(members.joinToString(
-            separator = ",$newLine    ",
-            prefix = "    ",
-            transform = { member -> "val ${member.name}: ${member.kotlinType} = ${member.kotlinValue}" }
-        )).append(newLine)
-        append(")").append(newLine)
+        append(
+            members.joinToString(
+                separator = ",$newLine    ",
+                prefix = "    ",
+                transform = { member -> "val ${member.name}: ${member.kotlinType} = ${member.kotlinValue}" },
+                postfix = newLine
+            )
+        )
+        append(")")
+
+        if (className == "TiledStats") {
+            append(" {").append(newLine)
+            append("    fun isAllNull(): Boolean {").append(newLine)
+            append("        return ")
+            append(
+                members.joinToString(
+                    separator = "$newLine            && ",
+                    prefix = "",
+                    transform = { member -> "${member.name} == 0f" },
+                    postfix = newLine
+                )
+            )
+            append("    }").append(newLine)
+            append("}").append(newLine)
+        } else {
+            append(newLine)
+        }
     }
 
     classFile.writeText(content)
@@ -204,8 +225,8 @@ fun createPropertyExtensions(
             } else if ("class" == property.type) {
                 // special case for class types
                 val masamuneClass = tiledClassToMasamuneClass.first { it.first == property.kotlinType }.second
-                append("val $gdxClass.${property.name}: $masamuneClass").append(newLine)
-                append("    get() = this.property<$masamuneClass>(\"${property.name}\")")
+                append("val $gdxClass.${property.name}: $masamuneClass?").append(newLine)
+                append("    get() = this.propertyOrNull<$masamuneClass>(\"${property.name}\")")
                 return@forEach
             }
 
