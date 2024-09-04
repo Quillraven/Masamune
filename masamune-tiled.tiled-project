@@ -194,6 +194,13 @@
                     "value": 0
                 },
                 {
+                    "name": "stats",
+                    "propertyType": "Stats",
+                    "type": "class",
+                    "value": {
+                    }
+                },
+                {
                     "name": "triggerName",
                     "type": "string",
                     "value": ""
@@ -258,7 +265,27 @@
                     "value": 0
                 },
                 {
+                    "name": "arcaneStrike",
+                    "type": "float",
+                    "value": 0
+                },
+                {
                     "name": "armor",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "constitution",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "criticalStrike",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "damage",
                     "type": "float",
                     "value": 0
                 },
@@ -268,12 +295,32 @@
                     "value": 0
                 },
                 {
-                    "name": "magicalDamage",
+                    "name": "life",
                     "type": "float",
                     "value": 0
                 },
                 {
-                    "name": "physicalDamage",
+                    "name": "lifeMax",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "magicalEvade",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "mana",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "manaMax",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "physicalEvade",
                     "type": "float",
                     "value": 0
                 },

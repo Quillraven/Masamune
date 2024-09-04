@@ -6,13 +6,13 @@
     "activeFile": "assets/maps/objects.tsx",
     "expandedProjectPaths": [
         "core/src/test/resources",
+        "core",
         ".",
-        "core/src/test/resources/maps",
         "assets/maps",
-        "core/src/test",
-        "core/src",
         "assets",
-        "core"
+        "core/src/test/resources/maps",
+        "core/src",
+        "core/src/test"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
@@ -22,8 +22,8 @@
         },
         "assets/maps/path_to_forest.tmx": {
             "expandedObjectLayers": [
-                6,
-                4
+                4,
+                6
             ],
             "scale": 4,
             "selectedLayer": 1,
@@ -47,8 +47,8 @@
         },
         "assets/maps/village.tmx": {
             "expandedObjectLayers": [
-                7,
-                6
+                6,
+                7
             ],
             "scale": 3,
             "selectedLayer": 5,
@@ -172,7 +172,7 @@
         "assets/maps/objects.tsx"
     ],
     "project": "masamune-tiled.tiled-project",
-    "property.type": "AnimationType",
+    "property.type": "float",
     "recentFiles": [
         "assets/maps/village.tmx",
         "assets/maps/path_to_forest.tmx",
