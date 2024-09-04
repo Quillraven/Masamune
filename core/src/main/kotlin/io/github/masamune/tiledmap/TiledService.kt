@@ -23,6 +23,7 @@ import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Dialog
+import io.github.masamune.component.Experience
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Fade
@@ -223,6 +224,7 @@ class TiledService(
             configurePhysic(it, tile, world, x, y)
             configureDialog(it, tile)
             configureTrigger(it, tile)
+            configureStats(it, tile)
             if (objType == TiledObjectType.ENEMY) {
                 it += Tag.ENEMY
             }
@@ -324,6 +326,15 @@ class TiledService(
         entity += Trigger(tile.triggerName)
     }
 
+    private fun EntityCreateContext.configureStats(entity: Entity, tile: TiledMapTile) {
+        val tiledStats = tile.stats
+        if (tiledStats == null || tiledStats.isAllNull()) {
+            return
+        }
+
+        entity += Stats(tiledStats)
+    }
+
     private fun EntityCreateContext.configurePlayer(world: World, entity: Entity) {
         log.debug { "Configuring player" }
         entity += Tag.CAMERA_FOCUS
@@ -333,6 +344,7 @@ class TiledService(
         entity += Inventory()
         entity += QuestLog()
         entity += State(FleksStateMachine(world, entity, AnimationStateIdle))
+        entity += Experience()
     }
 
     fun loadItem(world: World, itemType: ItemType): Entity {
@@ -346,7 +358,7 @@ class TiledService(
 
             return world.entity {
                 it += Name(tile.itemType)
-                it += Stats(tile.stats)
+                configureStats(it, tile)
                 configureGraphic(it, tile)
             }
         }
