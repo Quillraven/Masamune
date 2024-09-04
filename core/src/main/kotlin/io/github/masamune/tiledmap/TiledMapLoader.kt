@@ -14,10 +14,18 @@ class TiledMapLoader(fileHandleResolver: FileHandleResolver) : TmxMapLoader(file
         "Stats" to { classProps: Map<String, Any?> ->
             TiledStats(
                 agility = classProps.getOrDefault("agility", 0f) as Float,
+                arcaneStrike = classProps.getOrDefault("arcaneStrike", 0f) as Float,
                 armor = classProps.getOrDefault("armor", 0f) as Float,
+                constitution = classProps.getOrDefault("constitution", 0f) as Float,
+                criticalStrike = classProps.getOrDefault("criticalStrike", 0f) as Float,
+                damage = classProps.getOrDefault("damage", 0f) as Float,
                 intelligence = classProps.getOrDefault("intelligence", 0f) as Float,
-                magicalDamage = classProps.getOrDefault("magicalDamage", 0f) as Float,
-                physicalDamage = classProps.getOrDefault("physicalDamage", 0f) as Float,
+                life = classProps.getOrDefault("life", 0f) as Float,
+                lifeMax = classProps.getOrDefault("lifeMax", 0f) as Float,
+                magicalEvade = classProps.getOrDefault("magicalEvade", 0f) as Float,
+                mana = classProps.getOrDefault("mana", 0f) as Float,
+                manaMax = classProps.getOrDefault("manaMax", 0f) as Float,
+                physicalEvade = classProps.getOrDefault("physicalEvade", 0f) as Float,
                 resistance = classProps.getOrDefault("resistance", 0f) as Float,
                 strength = classProps.getOrDefault("strength", 0f) as Float,
             )
