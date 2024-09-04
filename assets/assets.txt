@@ -13,7 +13,7 @@ i:b:/maps/objects/smith.png:533:1
 i:b:/maps/objects/butterfly.png:437:1
 i:b:/maps/village.tmx:3092:1
 i:b:/maps/tileset.png:473544:1
-i:b:/maps/objects.tsx:7511:1
+i:b:/maps/objects.tsx:8252:1
 i:b:/maps/tileset.tsx:9032:1
 i:b:/maps/path_to_forest.tmx:3140:1
 i:d:/ui:0:1

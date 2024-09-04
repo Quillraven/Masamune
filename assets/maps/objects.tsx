@@ -9,6 +9,20 @@
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
    <property name="speed" type="float" value="5"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="agility" type="float" value="6"/>
+     <property name="arcaneStrike" type="float" value="0.1"/>
+     <property name="constitution" type="float" value="5"/>
+     <property name="criticalStrike" type="float" value="0.2"/>
+     <property name="intelligence" type="float" value="8"/>
+     <property name="life" type="float" value="60"/>
+     <property name="lifeMax" type="float" value="60"/>
+     <property name="mana" type="float" value="20"/>
+     <property name="manaMax" type="float" value="20"/>
+     <property name="strength" type="float" value="10"/>
+    </properties>
+   </property>
   </properties>
   <image source="objects/hero.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
@@ -162,6 +176,7 @@
    <property name="itemType" propertytype="ItemType" value="ELDER_SWORD"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
+     <property name="damage" type="float" value="3"/>
      <property name="intelligence" type="float" value="1"/>
      <property name="physicalDamage" type="float" value="3"/>
     </properties>
