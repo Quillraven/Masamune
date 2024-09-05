@@ -160,15 +160,18 @@ class StatsView(
         model.onPropertyChange(StatsViewModel::playerStats) { labelsAndStats ->
             val errorTitleLabel = "???" to "0"
 
+            // money
             talonsMenuItemLabel.txt(labelsAndStats[UIStats.TALONS] ?: errorTitleLabel)
 
+            // experience
             levelMenuItemLabel.txt(labelsAndStats[UIStats.LEVEL] ?: errorTitleLabel)
             val (xpLabel, xpNeededValue) = labelsAndStats[UIStats.XP_NEEDED] ?: errorTitleLabel
             val xpCurrent = labelsAndStats[UIStats.XP]?.second ?: "1"
             val xpPercentage = xpCurrent.toFloat() / xpNeededValue.toFloat()
-            xpMenuItemLabel.txt(xpLabel, xpNeededValue)
+            xpMenuItemLabel.txt(xpLabel, "${(xpNeededValue.toInt() - xpCurrent.toInt()).coerceAtLeast(0)}")
             xpProgressBar.value = xpPercentage.coerceIn(0f, 1f)
 
+            // stats
             strengthMenuItemLabel.txt(labelsAndStats[UIStats.STRENGTH] ?: errorTitleLabel)
             agilityMenuItemLabel.txt(labelsAndStats[UIStats.AGILITY] ?: errorTitleLabel)
             intelligenceMenuItemLabel.txt(labelsAndStats[UIStats.INTELLIGENCE] ?: errorTitleLabel)
@@ -183,12 +186,14 @@ class StatsView(
             criticalStrikeMenuItemLabel.txt(labelsAndStats[UIStats.CRITICAL_STRIKE] ?: errorTitleLabel)
             arcaneStrikeMenuItemLabel.txt(labelsAndStats[UIStats.ARCANE_STRIKE] ?: errorTitleLabel)
 
+            // life
             val (lifeLabel, lifeValue) = labelsAndStats[UIStats.LIFE] ?: errorTitleLabel
             val lifeMaxValue = labelsAndStats[UIStats.LIFE_MAX]?.second ?: "1"
             val lifePercentage = lifeValue.toFloat() / lifeMaxValue.toFloat()
             lifeMenuItemLabel.txt(lifeLabel, "$lifeValue/$lifeMaxValue")
             lifeProgressBar.value = lifePercentage.coerceIn(0f, 1f)
 
+            // mana
             val (manaLabel, manaValue) = labelsAndStats[UIStats.MANA] ?: errorTitleLabel
             val manaMaxValue = labelsAndStats[UIStats.MANA_MAX]?.second ?: "1"
             val manaPercentage = manaValue.toFloat() / manaMaxValue.toFloat()
