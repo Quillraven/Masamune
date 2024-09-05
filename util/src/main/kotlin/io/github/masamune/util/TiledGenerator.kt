@@ -147,7 +147,7 @@ fun createClass(className: String, members: List<Member>) {
             members.joinToString(
                 separator = ",$newLine    ",
                 prefix = "    ",
-                transform = { member -> "val ${member.name}: ${member.kotlinType} = ${member.kotlinValue}" },
+                transform = { member -> "var ${member.name}: ${member.kotlinType} = ${member.kotlinValue}" },
                 postfix = newLine
             )
         )
