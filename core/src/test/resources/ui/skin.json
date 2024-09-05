@@ -7,7 +7,7 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 		flip: false
 	}
 	pixel_arial_16: {
-		file: pixel_arial_16.fnt
+		file: PIXEARG_.fnt
 		scaledSize: -1
 		markupEnabled: true
 		flip: false
@@ -33,6 +33,88 @@ com.badlogic.gdx.graphics.Color: {
 		hex: ffffffff
 	}
 }
+com.ray3k.tenpatch.TenPatchDrawable: {
+	slider_progress_10: {
+		region: slider_progress
+		horizontalStretchAreas: [ 4, 10 ]
+		verticalStretchAreas: [ 4, 11 ]
+		tiling: true
+		minWidth: 0
+		minHeight: 16
+		rightWidth: 3
+		leftWidth: 3
+		bottomHeight: 3
+		topHeight: 3
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	slider_progress_green_10: {
+		region: slider_progress_green
+		horizontalStretchAreas: [ 4, 10 ]
+		verticalStretchAreas: [ 4, 11 ]
+		tiling: true
+		minWidth: 0
+		minHeight: 16
+		rightWidth: 1
+		leftWidth: 1
+		bottomHeight: 1
+		topHeight: 1
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	slider_progress_blue_10: {
+		region: slider_progress_blue
+		horizontalStretchAreas: [ 4, 10 ]
+		verticalStretchAreas: [ 4, 11 ]
+		tiling: true
+		minWidth: 0
+		minHeight: 16
+		rightWidth: 1
+		leftWidth: 1
+		bottomHeight: 1
+		topHeight: 1
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	slider_progress_yellow_10: {
+		region: slider_progress_yellow
+		horizontalStretchAreas: [ 4, 10 ]
+		verticalStretchAreas: [ 4, 11 ]
+		tiling: true
+		minWidth: 0
+		minHeight: 16
+		rightWidth: 1
+		leftWidth: 1
+		bottomHeight: 1
+		topHeight: 1
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+}
 io.github.masamune.ui.view.DialogViewStyle: {
 	default: {
 		background: dialog_frame
@@ -55,7 +137,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	}
 	dialog_content: {
 		font: pixel_arial_16
-		fontColor: dark_grey
+		fontColor: white
 	}
 	dialog_image_caption: {
 		font: fipps_16
@@ -65,6 +147,28 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		font: pixel_arial_16
 		fontColor: dark_grey
 		background: dialog_choice_frame
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
+	default-horizontal: {
+		background: nine_path_bg
+		knobBefore: slider_progress_10
+	}
+	default-vertical: {
+		background: nine_path_bg
+		knob: slider_progress
+	}
+	green: {
+		background: nine_path_bg
+		knobBefore: slider_progress_green_10
+	}
+	blue: {
+		background: nine_path_bg
+		knobBefore: slider_progress_blue_10
+	}
+	yellow: {
+		background: nine_path_bg
+		knobBefore: slider_progress_yellow_10
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
