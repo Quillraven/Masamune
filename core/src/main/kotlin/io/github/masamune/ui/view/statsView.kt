@@ -26,6 +26,7 @@ class StatsView(
 ) : View<StatsViewModel>(skin, model), KTable {
 
     private val nameLabel: Label
+    private val talonsMenuItemLabel: MenuItemLabel
 
     private val levelMenuItemLabel: MenuItemLabel
     private val xpMenuItemLabel: MenuItemLabel
@@ -56,7 +57,7 @@ class StatsView(
 
         table(skin) { leftTableCell ->
             align(Align.center)
-            defaults().padBottom(10f).fillX()
+            defaults().padBottom(MENU_ITEM_BOT_PADDING).fillX()
 
             // hero image and name
             frameImage(skin, "dialog_face_frame", "hero") { cell ->
@@ -64,7 +65,7 @@ class StatsView(
             }
             this@StatsView.nameLabel = label("", "dialog_image_caption", skin) { cell ->
                 setAlignment(Align.center)
-                cell.padBottom(35f).row()
+                cell.padBottom(CATEGORY_BOT_PADDING).row()
             }
 
             // Level + XP
@@ -75,7 +76,7 @@ class StatsView(
                 cell.row()
             }
             this@StatsView.xpProgressBar = progressBar(style = "yellow", skin = skin) { cell ->
-                cell.padBottom(30f).row()
+                cell.padBottom(CATEGORY_BOT_PADDING).row()
             }
 
             // Hit points
@@ -83,7 +84,7 @@ class StatsView(
                 cell.row()
             }
             this@StatsView.lifeProgressBar = progressBar(style = "green", skin = skin) { cell ->
-                cell.padBottom(20f).row()
+                cell.padBottom(2 * MENU_ITEM_BOT_PADDING).row()
             }
 
             // Mana points
@@ -91,20 +92,20 @@ class StatsView(
                 cell.row()
             }
             this@StatsView.manaProgressBar = progressBar(style = "blue", skin = skin) { cell ->
-                cell.padBottom(20f).row()
+                cell.padBottom(CATEGORY_BOT_PADDING).row()
             }
 
             // Money
-            menuItemLabel(skin, "Talons", "312") { cell ->
-                cell.growY().row()
+            this@StatsView.talonsMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+                cell.row()
             }
 
-            leftTableCell.fillX().growY().pad(35f, 35f, 35f, 75f)
+            leftTableCell.fillX().growY().pad(EDGE_PADDING, EDGE_PADDING, EDGE_PADDING, 75f)
         }
 
         table(skin) { rightTableCell ->
             align(Align.center)
-            defaults().padBottom(10f).growX()
+            defaults().padBottom(MENU_ITEM_BOT_PADDING).growX()
 
             // Attributes
             this@StatsView.strengthMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
@@ -117,7 +118,7 @@ class StatsView(
                 cell.row()
             }
             this@StatsView.intelligenceMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
-                cell.padBottom(40f).row()
+                cell.padBottom(CATEGORY_BOT_PADDING).row()
             }
 
             // Attack, Armor, Resistance
@@ -128,7 +129,7 @@ class StatsView(
                 cell.row()
             }
             this@StatsView.resistanceMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
-                cell.padBottom(40f).row()
+                cell.padBottom(CATEGORY_BOT_PADDING).row()
             }
 
             // Percentage stats (phys. + magical evasion, phys. + magical critical strike)
@@ -145,7 +146,7 @@ class StatsView(
                 cell.row()
             }
 
-            rightTableCell.grow().pad(35f, 0f, 35f, 35f)
+            rightTableCell.grow().pad(EDGE_PADDING, 0f, EDGE_PADDING, EDGE_PADDING)
         }
 
         registerOnPropertyChanges(viewModel)
@@ -158,6 +159,8 @@ class StatsView(
         }
         model.onPropertyChange(StatsViewModel::playerStats) { labelsAndStats ->
             val errorTitleLabel = "???" to "0"
+
+            talonsMenuItemLabel.txt(labelsAndStats[UIStats.TALONS] ?: errorTitleLabel)
 
             levelMenuItemLabel.txt(labelsAndStats[UIStats.LEVEL] ?: errorTitleLabel)
             val (xpLabel, xpNeededValue) = labelsAndStats[UIStats.XP_NEEDED] ?: errorTitleLabel
@@ -196,6 +199,12 @@ class StatsView(
 
     override fun onBackPressed() {
         viewModel.triggerClose()
+    }
+
+    companion object {
+        private const val EDGE_PADDING = 25f
+        private const val CATEGORY_BOT_PADDING = 40f
+        private const val MENU_ITEM_BOT_PADDING = 10f
     }
 }
 

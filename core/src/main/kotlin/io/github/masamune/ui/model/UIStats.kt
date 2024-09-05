@@ -19,4 +19,5 @@ enum class UIStats {
     LEVEL,
     XP,
     XP_NEEDED,
+    TALONS,
 }
