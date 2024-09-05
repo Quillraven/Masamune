@@ -1,9 +1,12 @@
 package io.github.masamune.ui.view
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Align
 import io.github.masamune.ui.model.StatsViewModel
+import io.github.masamune.ui.model.UIStats
+import io.github.masamune.ui.widget.MenuItemLabel
 import io.github.masamune.ui.widget.frameImage
 import io.github.masamune.ui.widget.menuItemLabel
 import ktx.actors.txt
@@ -24,6 +27,29 @@ class StatsView(
 
     private val nameLabel: Label
 
+    private val levelMenuItemLabel: MenuItemLabel
+    private val xpMenuItemLabel: MenuItemLabel
+    private val xpProgressBar: ProgressBar
+
+    private val strengthMenuItemLabel: MenuItemLabel
+    private val agilityMenuItemLabel: MenuItemLabel
+    private val constitutionMenuItemLabel: MenuItemLabel
+    private val intelligenceMenuItemLabel: MenuItemLabel
+
+    private val attackMenuItemLabel: MenuItemLabel
+    private val armorMenuItemLabel: MenuItemLabel
+    private val resistanceMenuItemLabel: MenuItemLabel
+
+    private val physicalEvadeMenuItemLabel: MenuItemLabel
+    private val magicalEvadeMenuItemLabel: MenuItemLabel
+    private val criticalStrikeMenuItemLabel: MenuItemLabel
+    private val arcaneStrikeMenuItemLabel: MenuItemLabel
+
+    private val lifeMenuItemLabel: MenuItemLabel
+    private val lifeProgressBar: ProgressBar
+    private val manaMenuItemLabel: MenuItemLabel
+    private val manaProgressBar: ProgressBar
+
     init {
         background = skin.getDrawable("dialog_frame")
         setFillParent(true)
@@ -42,32 +68,29 @@ class StatsView(
             }
 
             // Level + XP
-            menuItemLabel(skin, "Level", "2") { cell ->
+            this@StatsView.levelMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            menuItemLabel(skin, "Next Level in:", "500") { cell ->
+            this@StatsView.xpMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            progressBar(0f, 1f, 0.01f, vertical = false, "yellow", skin) { cell ->
-                value = 0.5f
+            this@StatsView.xpProgressBar = progressBar(style = "yellow", skin = skin) { cell ->
                 cell.padBottom(30f).row()
             }
 
             // Hit points
-            menuItemLabel(skin, "HP", "80/112") { cell ->
+            this@StatsView.lifeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            progressBar(0f, 1f, 0.01f, vertical = false, "green", skin) { cell ->
-                value = 0.5f
+            this@StatsView.lifeProgressBar = progressBar(style = "green", skin = skin) { cell ->
                 cell.padBottom(20f).row()
             }
 
             // Mana points
-            menuItemLabel(skin, "Mana", "12/20") { cell ->
+            this@StatsView.manaMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            progressBar(0f, 1f, 0.01f, vertical = false, "blue", skin) { cell ->
-                value = 0.5f
+            this@StatsView.manaProgressBar = progressBar(style = "blue", skin = skin) { cell ->
                 cell.padBottom(20f).row()
             }
 
@@ -84,41 +107,41 @@ class StatsView(
             defaults().padBottom(10f).growX()
 
             // Attributes
-            menuItemLabel(skin, "Strength", "14") { cell ->
+            this@StatsView.strengthMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            menuItemLabel(skin, "Agility", "14") { cell ->
+            this@StatsView.agilityMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            menuItemLabel(skin, "Constitution", "14") { cell ->
+            this@StatsView.constitutionMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            menuItemLabel(skin, "Intelligence", "14") { cell ->
+            this@StatsView.intelligenceMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.padBottom(40f).row()
             }
 
             // Attack, Armor, Resistance
-            menuItemLabel(skin, "Attack", "14") { cell ->
+            this@StatsView.attackMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            menuItemLabel(skin, "Armor", "14") { cell ->
+            this@StatsView.armorMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            menuItemLabel(skin, "Resistance", "14") { cell ->
+            this@StatsView.resistanceMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.padBottom(40f).row()
             }
 
             // Percentage stats (phys. + magical evasion, phys. + magical critical strike)
-            menuItemLabel(skin, "Evade", "10%") { cell ->
+            this@StatsView.physicalEvadeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            menuItemLabel(skin, "Repel", "0%") { cell ->
+            this@StatsView.magicalEvadeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            menuItemLabel(skin, "Critical Strike", "25%") { cell ->
+            this@StatsView.criticalStrikeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
-            menuItemLabel(skin, "Arcane Strike", "0%") { cell ->
+            this@StatsView.arcaneStrikeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
                 cell.row()
             }
 
@@ -132,6 +155,42 @@ class StatsView(
         model.onPropertyChange(StatsViewModel::playerName) { name ->
             isVisible = name.isNotBlank()
             nameLabel.txt = name
+        }
+        model.onPropertyChange(StatsViewModel::playerStats) { labelsAndStats ->
+            val errorTitleLabel = "???" to "0"
+
+            levelMenuItemLabel.txt(labelsAndStats[UIStats.LEVEL] ?: errorTitleLabel)
+            val (xpLabel, xpNeededValue) = labelsAndStats[UIStats.XP_NEEDED] ?: errorTitleLabel
+            val xpCurrent = labelsAndStats[UIStats.XP]?.second ?: "1"
+            val xpPercentage = xpCurrent.toFloat() / xpNeededValue.toFloat()
+            xpMenuItemLabel.txt(xpLabel, xpNeededValue)
+            xpProgressBar.value = xpPercentage.coerceIn(0f, 1f)
+
+            strengthMenuItemLabel.txt(labelsAndStats[UIStats.STRENGTH] ?: errorTitleLabel)
+            agilityMenuItemLabel.txt(labelsAndStats[UIStats.AGILITY] ?: errorTitleLabel)
+            intelligenceMenuItemLabel.txt(labelsAndStats[UIStats.INTELLIGENCE] ?: errorTitleLabel)
+            constitutionMenuItemLabel.txt(labelsAndStats[UIStats.CONSTITUTION] ?: errorTitleLabel)
+
+            attackMenuItemLabel.txt(labelsAndStats[UIStats.ATTACK] ?: errorTitleLabel)
+            armorMenuItemLabel.txt(labelsAndStats[UIStats.ARMOR] ?: errorTitleLabel)
+            resistanceMenuItemLabel.txt(labelsAndStats[UIStats.RESISTANCE] ?: errorTitleLabel)
+
+            physicalEvadeMenuItemLabel.txt(labelsAndStats[UIStats.PHYSICAL_EVADE] ?: errorTitleLabel)
+            magicalEvadeMenuItemLabel.txt(labelsAndStats[UIStats.MAGICAL_EVADE] ?: errorTitleLabel)
+            criticalStrikeMenuItemLabel.txt(labelsAndStats[UIStats.CRITICAL_STRIKE] ?: errorTitleLabel)
+            arcaneStrikeMenuItemLabel.txt(labelsAndStats[UIStats.ARCANE_STRIKE] ?: errorTitleLabel)
+
+            val (lifeLabel, lifeValue) = labelsAndStats[UIStats.LIFE] ?: errorTitleLabel
+            val lifeMaxValue = labelsAndStats[UIStats.LIFE_MAX]?.second ?: "1"
+            val lifePercentage = lifeValue.toFloat() / lifeMaxValue.toFloat()
+            lifeMenuItemLabel.txt(lifeLabel, "$lifeValue/$lifeMaxValue")
+            lifeProgressBar.value = lifePercentage.coerceIn(0f, 1f)
+
+            val (manaLabel, manaValue) = labelsAndStats[UIStats.MANA] ?: errorTitleLabel
+            val manaMaxValue = labelsAndStats[UIStats.MANA_MAX]?.second ?: "1"
+            val manaPercentage = manaValue.toFloat() / manaMaxValue.toFloat()
+            manaMenuItemLabel.txt(manaLabel, "$manaValue/$manaMaxValue")
+            manaProgressBar.value = manaPercentage.coerceIn(0f, 1f)
         }
     }
 

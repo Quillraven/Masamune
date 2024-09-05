@@ -1,8 +1,10 @@
 package io.github.masamune.ui.widget
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import ktx.actors.txt
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
@@ -15,17 +17,27 @@ class MenuItemLabel(
     value: String,
 ) : KTable, Table(skin) {
 
+    private val titleLabel: Label
+    private val valueLabel: Label
+
     init {
-        label(title, "dialog_content", skin) { cell ->
+        titleLabel = label(title, "dialog_content", skin) { cell ->
             this.color = skin.getColor("dark_grey")
             cell.growX()
         }
-        label(value, "dialog_content", skin) { cell ->
+        valueLabel = label(value, "dialog_content", skin) { cell ->
             this.color = skin.getColor("dark_grey")
             this.setAlignment(Align.right)
             cell.growX()
         }
     }
+
+    fun txt(title: String, value: String) {
+        titleLabel.txt = title
+        valueLabel.txt = value
+    }
+
+    fun txt(titleAndValue: Pair<String, String>) = txt(titleAndValue.first, titleAndValue.second)
 }
 
 @Scene2dDsl

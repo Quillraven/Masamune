@@ -6,8 +6,8 @@ import kotlin.math.floor
 
 data class Experience(
     var level: Int = 1,
-    var current: Float = 0f,
-    var forLevelUp: Float = 0f,
+    var current: Int = 0,
+    var forLevelUp: Int = 0,
 ) : Component<Experience> {
 
     init {
@@ -15,8 +15,8 @@ data class Experience(
     }
 
     fun calcLevelUpXp() {
-        val xpNeeded = 250f + ((level - 1) * 200) * 1.25f
-        forLevelUp = floor(xpNeeded / 10) * 10
+        val xpNeeded: Float = 250f + ((level - 1) * 200) * 1.25f
+        forLevelUp = (floor(xpNeeded / 10) * 10).toInt()
     }
 
     override fun type() = Experience
