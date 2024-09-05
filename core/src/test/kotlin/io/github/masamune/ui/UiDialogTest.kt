@@ -1,4 +1,4 @@
-package io.github.masamune
+package io.github.masamune.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.FitViewport
 import io.github.masamune.event.EventService
+import io.github.masamune.gdxTest
 import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.view.DialogView
 import io.github.masamune.ui.view.dialogView
