@@ -8,6 +8,8 @@ import io.github.masamune.asset.SoundAsset
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.MapChangeEvent
+import io.github.masamune.event.UiDownEvent
+import io.github.masamune.event.UiUpEvent
 import ktx.log.logger
 import ktx.tiled.propertyOrNull
 
@@ -18,7 +20,7 @@ class AudioService(
     private var lastMusic: Pair<Music, MusicAsset>? = null
     private val soundCache = mutableMapOf<SoundAsset, Sound>()
 
-    var musicVolume: Float = 1f
+    var musicVolume: Float = 0.25f
         set(value) {
             field = value.coerceIn(0f, 1f)
             lastMusic?.first?.volume = field
@@ -84,13 +86,16 @@ class AudioService(
     }
 
     override fun onEvent(event: Event) {
-        if (event !is MapChangeEvent) {
-            return
-        }
+        when (event) {
+            is UiUpEvent, UiDownEvent -> play(SoundAsset.MENU_CLICK)
+            is MapChangeEvent -> {
+                event.tiledMap.propertyOrNull<String>("music")?.let { musicAssetStr ->
+                    val musicAsset = MusicAsset.valueOf(musicAssetStr)
+                    play(musicAsset, true)
+                }
+            }
 
-        event.tiledMap.propertyOrNull<String>("music")?.let { musicAssetStr ->
-            val musicAsset = MusicAsset.valueOf(musicAssetStr)
-            play(musicAsset, true)
+            else -> Unit
         }
     }
 
