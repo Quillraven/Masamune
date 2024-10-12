@@ -18,6 +18,8 @@ private class AudioTest : KtxApplicationAdapter {
 
     override fun create() {
         Gdx.app.logLevel = Application.LOG_DEBUG
+        audioService.musicVolume = 0.5f
+        audioService.soundVolume = 0.5f
     }
 
     override fun render() {
