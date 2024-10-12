@@ -3,6 +3,9 @@
  <editorsettings>
   <export target="village..tmx" format="tmx"/>
  </editorsettings>
+ <properties>
+  <property name="music" value="VILLAGE"/>
+ </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="4097" source="objects.tsx"/>
  <layer id="1" name="ground" width="20" height="20">
