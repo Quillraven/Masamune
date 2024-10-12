@@ -5,11 +5,15 @@ import com.badlogic.gdx.audio.Sound
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.SoundAsset
+import io.github.masamune.event.Event
+import io.github.masamune.event.EventListener
+import io.github.masamune.event.MapChangeEvent
 import ktx.log.logger
+import ktx.tiled.propertyOrNull
 
 class AudioService(
     val assetService: AssetService,
-) {
+) : EventListener {
 
     private var lastMusic: Pair<Music, MusicAsset>? = null
     private val soundCache = mutableMapOf<SoundAsset, Sound>()
@@ -17,6 +21,7 @@ class AudioService(
     var musicVolume: Float = 1f
         set(value) {
             field = value.coerceIn(0f, 1f)
+            lastMusic?.first?.volume = field
         }
 
     var soundVolume: Float = 1f
@@ -76,6 +81,17 @@ class AudioService(
     fun resume() {
         soundCache.values.forEach { it.resume() }
         lastMusic?.first?.play()
+    }
+
+    override fun onEvent(event: Event) {
+        if (event !is MapChangeEvent) {
+            return
+        }
+
+        event.tiledMap.propertyOrNull<String>("music")?.let { musicAssetStr ->
+            val musicAsset = MusicAsset.valueOf(musicAssetStr)
+            play(musicAsset, true)
+        }
     }
 
     override fun toString(): String {
