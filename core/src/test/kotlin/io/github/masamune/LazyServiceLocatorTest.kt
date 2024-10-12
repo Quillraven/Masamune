@@ -3,6 +3,7 @@ package io.github.masamune
 import com.badlogic.gdx.graphics.g2d.Batch
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.ShaderService
+import io.github.masamune.audio.AudioService
 import io.github.masamune.event.EventService
 import io.github.masamune.tiledmap.ImmediateMapTransitionService
 import io.github.masamune.tiledmap.MapTransitionService
@@ -23,18 +24,21 @@ class LazyServiceLocatorTest {
         val tiledServiceInitializer = mockk<(AssetService, EventService) -> TiledService>()
         val shaderServiceInitializer = mockk<() -> ShaderService>()
         val mapTransitionServiceInitializer = mockk<(TiledService) -> MapTransitionService>()
+        val audioServiceInitializer = mockk<(AssetService) -> AudioService>()
         val batch = mockk<Batch>()
         val assetService = mockk<AssetService>()
         val eventService = mockk<EventService>()
         val tiledService = mockk<TiledService>()
         val shaderService = mockk<ShaderService>()
         val mapTransitionService = mockk<MapTransitionService>()
+        val audioService = mockk<AudioService>()
         every { batchInitializer.invoke() } returns batch
         every { assetServiceInitializer.invoke() } returns assetService
         every { eventServiceInitializer.invoke() } returns eventService
         every { tiledServiceInitializer.invoke(assetService, eventService) } returns tiledService
         every { shaderServiceInitializer.invoke() } returns shaderService
         every { mapTransitionServiceInitializer.invoke(tiledService) } returns mapTransitionService
+        every { audioServiceInitializer.invoke(assetService) } returns audioService
 
         val serviceLocator = LazyServiceLocator(
             batchInitializer,
@@ -42,7 +46,8 @@ class LazyServiceLocatorTest {
             eventServiceInitializer,
             tiledServiceInitializer,
             shaderServiceInitializer,
-            mapTransitionServiceInitializer
+            mapTransitionServiceInitializer,
+            audioServiceInitializer
         )
 
         batch shouldBeSameInstanceAs serviceLocator.batch
@@ -51,6 +56,7 @@ class LazyServiceLocatorTest {
         tiledService shouldBeSameInstanceAs serviceLocator.tiled
         shaderService shouldBeSameInstanceAs serviceLocator.shader
         mapTransitionService shouldBeSameInstanceAs serviceLocator.mapTransition
+        audioService shouldBeSameInstanceAs serviceLocator.audio
     }
 
     @Test
@@ -82,6 +88,17 @@ class LazyServiceLocatorTest {
 
         serviceLocator.mapTransition shouldNotBe null
         serviceLocator.mapTransition.tiledService shouldBeSameInstanceAs serviceLocator.tiled
+    }
+
+    @Test
+    fun `verify AudioService gets correct asset service instance`() {
+        val serviceLocator = LazyServiceLocator(
+            assetServiceInitializer = { AssetService() },
+            audioServiceInitializer = { asset -> AudioService(asset) }
+        )
+
+        serviceLocator.audio shouldNotBe null
+        serviceLocator.audio.assetService shouldBeSameInstanceAs serviceLocator.asset
     }
 
 }

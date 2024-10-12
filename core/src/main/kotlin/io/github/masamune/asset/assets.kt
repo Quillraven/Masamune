@@ -5,6 +5,8 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver
 import com.badlogic.gdx.assets.loaders.I18NBundleLoader.I18NBundleParameter
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
+import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -54,6 +56,18 @@ enum class I18NAsset {
     MESSAGES;
 
     val path = "ui/${name.lowercase()}"
+}
+
+enum class MusicAsset {
+    VILLAGE, ROAD;
+
+    val path = "music/${name.lowercase()}.ogg"
+}
+
+enum class SoundAsset {
+    MENU_ACCEPT, MENU_CLICK;
+
+    val path = "sound/${name.lowercase()}.wav"
 }
 
 /**
@@ -126,6 +140,26 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
      * Gets a loaded [I18NAsset] as [I18NBundle].
      */
     operator fun get(asset: I18NAsset): I18NBundle = manager.getAsset<I18NBundle>(asset.path)
+
+    fun load(asset: MusicAsset) {
+        manager.load<Music>(asset.path)
+    }
+
+    fun unload(asset: MusicAsset) {
+        manager.unload(asset.path)
+    }
+
+    operator fun get(asset: MusicAsset): Music = manager.getAsset<Music>(asset.path)
+
+    fun load(asset: SoundAsset) {
+        manager.load<Sound>(asset.path)
+    }
+
+    fun unload(asset: SoundAsset) {
+        manager.unload(asset.path)
+    }
+
+    operator fun get(asset: SoundAsset): Sound = manager.getAsset<Sound>(asset.path)
 
     /**
      * Updates the loading process of any queued asset.

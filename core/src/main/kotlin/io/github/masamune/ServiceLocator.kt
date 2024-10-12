@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.Disposable
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.ShaderService
+import io.github.masamune.audio.AudioService
 import io.github.masamune.event.EventService
 import io.github.masamune.tiledmap.ImmediateMapTransitionService
 import io.github.masamune.tiledmap.MapTransitionService
@@ -17,6 +18,7 @@ interface ServiceLocator : Disposable {
     val tiled: TiledService
     val shader: ShaderService
     val mapTransition: MapTransitionService
+    val audio: AudioService
 }
 
 class LazyServiceLocator(
@@ -30,6 +32,7 @@ class LazyServiceLocator(
     mapTransitionServiceInitializer: (TiledService) -> MapTransitionService = { tiledService ->
         ImmediateMapTransitionService(tiledService)
     },
+    audioServiceInitializer: (AssetService) -> AudioService = { assetService -> AudioService(assetService) },
 ) : ServiceLocator {
 
     override val batch: Batch by lazy(batchInitializer)
@@ -38,6 +41,7 @@ class LazyServiceLocator(
     override val tiled: TiledService by lazy { tiledServiceInitializer(asset, event) }
     override val shader: ShaderService by lazy { shaderServiceInitializer() }
     override val mapTransition: MapTransitionService by lazy { mapTransitionServiceInitializer(tiled) }
+    override val audio: AudioService by lazy { audioServiceInitializer(asset) }
 
     override fun dispose() {
         batch.dispose()
