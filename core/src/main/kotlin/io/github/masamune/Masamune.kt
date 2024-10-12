@@ -28,6 +28,7 @@ class Masamune(
         Gdx.app.logLevel = Application.LOG_DEBUG
 
         Gdx.input.inputProcessor = inputProcessor
+        serviceLocator.event += serviceLocator.audio
 
         addScreen(LoadingScreen(this))
         setScreen<LoadingScreen>()
