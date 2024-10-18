@@ -58,6 +58,9 @@ enum class I18NAsset {
     val path = "ui/${name.lowercase()}"
 }
 
+/**
+ * Asset type for [Music] instances. Used by [AssetService].
+ */
 enum class MusicAsset(format: String) {
     VILLAGE("mp3"),
     ROAD("mp3");
@@ -65,6 +68,9 @@ enum class MusicAsset(format: String) {
     val path = "music/${name.lowercase()}.$format"
 }
 
+/**
+ * Asset type for [Sound] instances. Used by [AssetService].
+ */
 enum class SoundAsset {
     MENU_ACCEPT, MENU_CLICK;
 
@@ -77,6 +83,8 @@ enum class SoundAsset {
  * - [TiledMapAsset]
  * - [SkinAsset]
  * - [I18NAsset]
+ * - [MusicAsset]
+ * - [SoundAsset]
  *
  * Loading is done asynchronously. Call [finishLoading] to immediately load any queued assets.
  */
@@ -142,24 +150,42 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
      */
     operator fun get(asset: I18NAsset): I18NBundle = manager.getAsset<I18NBundle>(asset.path)
 
+    /**
+     * Queues a [MusicAsset] for loading.
+     */
     fun load(asset: MusicAsset) {
         manager.load<Music>(asset.path)
     }
 
+    /**
+     * Queues a [MusicAsset] for unloading.
+     */
     fun unload(asset: MusicAsset) {
         manager.unload(asset.path)
     }
 
+    /**
+     * Gets a loaded [MusicAsset] as [Music].
+     */
     operator fun get(asset: MusicAsset): Music = manager.getAsset<Music>(asset.path)
 
+    /**
+     * Queues a [SoundAsset] for loading.
+     */
     fun load(asset: SoundAsset) {
         manager.load<Sound>(asset.path)
     }
 
+    /**
+     * Queues a [SoundAsset] for unloading.
+     */
     fun unload(asset: SoundAsset) {
         manager.unload(asset.path)
     }
 
+    /**
+     * Gets a loaded [SoundAsset] as [Sound].
+     */
     operator fun get(asset: SoundAsset): Sound = manager.getAsset<Sound>(asset.path)
 
     /**
