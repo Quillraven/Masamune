@@ -32,20 +32,25 @@ class OptionTable(skin: Skin) : Table(skin), KTable {
         add(option).uniformX().left().fillX().padBottom(5f).row()
     }
 
-    fun prevOption() = selectOption(selectedOption - 1)
+    fun prevOption(): Boolean = selectOption(selectedOption - 1)
 
-    fun nextOption() = selectOption(selectedOption + 1)
+    fun nextOption(): Boolean = selectOption(selectedOption + 1)
 
-    private fun selectOption(idx: Int) {
+    private fun selectOption(idx: Int): Boolean {
         val realIdx = when {
             idx < 0 -> (children.size) - 1
             idx >= (children.size) -> 0
             else -> idx
         }
 
+        if (realIdx == selectedOption) {
+            return false
+        }
+
         (getChild(selectedOption) as DialogOptionWidget).select(false)
         selectedOption = realIdx
         (getChild(selectedOption) as DialogOptionWidget).select(true)
+        return true
     }
 
 }
