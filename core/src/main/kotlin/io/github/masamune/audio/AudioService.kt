@@ -22,7 +22,7 @@ class AudioService(
     private var lastMusic: Pair<Music, MusicAsset>? = null
     private val soundCache = mutableMapOf<SoundAsset, Sound>()
 
-    var musicVolume: Float = 0.25f
+    var musicVolume: Float = 1f
         set(value) {
             field = value.coerceIn(0f, 1f)
             lastMusic?.first?.volume = field
