@@ -2,8 +2,8 @@ i:d:/sound:0:1
 i:b:/sound/menu_accept.wav:109000:1
 i:b:/sound/menu_click.wav:33612:1
 i:d:/music:0:1
-i:b:/music/village.ogg:1049153:1
-i:b:/music/road.ogg:1080204:1
+i:b:/music/road.mp3:709694:1
+i:b:/music/village.mp3:827559:1
 i:d:/shader:0:1
 i:b:/shader/outline.frag:847:1
 i:b:/shader/default.vert:316:1
