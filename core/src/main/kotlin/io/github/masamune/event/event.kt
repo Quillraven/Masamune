@@ -31,6 +31,10 @@ data class DialogBeginEvent(val world: World, val player: Entity, val dialog: Di
 
 data class DialogEndEvent(val player: Entity, val dialog: Dialog, val optionIdx: Int) : Event
 
+data object DialogOptionTrigger : Event
+
+data object DialogOptionChange : Event
+
 data object UiUpEvent : Event
 
 data object UiDownEvent : Event

@@ -4,6 +4,8 @@ import com.github.quillraven.fleks.Entity
 import io.github.masamune.dialog.Dialog
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.DialogEndEvent
+import io.github.masamune.event.DialogOptionChange
+import io.github.masamune.event.DialogOptionTrigger
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.ui.model.DialogUiContent.Companion.EMPTY_CONTENT
@@ -27,6 +29,7 @@ class DialogViewModel(private val eventService: EventService) : ViewModel() {
     private var player: Entity = Entity.NONE
 
     fun triggerOption(optionIdx: Int) {
+        eventService.fire(DialogOptionTrigger)
         if (activeDialog.triggerOption(optionIdx)) {
             // dialog finished
             content = EMPTY_CONTENT
@@ -36,6 +39,10 @@ class DialogViewModel(private val eventService: EventService) : ViewModel() {
 
         // go to next page
         updateContent()
+    }
+
+    fun optionChanged() {
+        eventService.fire(DialogOptionChange)
     }
 
     private fun updateContent() {
