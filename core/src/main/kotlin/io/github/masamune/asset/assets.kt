@@ -58,10 +58,11 @@ enum class I18NAsset {
     val path = "ui/${name.lowercase()}"
 }
 
-enum class MusicAsset {
-    VILLAGE, ROAD;
+enum class MusicAsset(format: String) {
+    VILLAGE("mp3"),
+    ROAD("mp3");
 
-    val path = "music/${name.lowercase()}.ogg"
+    val path = "music/${name.lowercase()}.$format"
 }
 
 enum class SoundAsset {
