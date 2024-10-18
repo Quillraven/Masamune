@@ -10,6 +10,14 @@ import io.github.masamune.asset.SoundAsset
 import io.github.masamune.gdxTest
 import ktx.app.KtxApplicationAdapter
 
+/**
+ * Test for [AudioService].
+ * Press '1' and '2' to play different music.
+ * Press '3', '4' and '5' to play the same sound effect with different pitch.
+ * Press '6' to pause any audio.
+ * Press '7' to resume any audio.
+ */
+
 fun main() = gdxTest("Audio Test, 1-7 to play/stop music/sound", AudioTest())
 
 private class AudioTest : KtxApplicationAdapter {
