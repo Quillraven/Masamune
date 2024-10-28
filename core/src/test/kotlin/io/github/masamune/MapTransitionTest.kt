@@ -15,18 +15,12 @@ import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.TiledMapAsset
+import io.github.masamune.component.Player
+import io.github.masamune.component.teleport
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
-import io.github.masamune.system.CameraSystem
-import io.github.masamune.system.FadeSystem
-import io.github.masamune.system.MoveSystem
-import io.github.masamune.system.MoveToSystem
-import io.github.masamune.system.PhysicSystem
-import io.github.masamune.system.PlayerInteractSystem
-import io.github.masamune.system.RenderSystem
-import io.github.masamune.system.StateSystem
-import io.github.masamune.system.TeleportSystem
+import io.github.masamune.system.*
 import io.github.masamune.tiledmap.DefaultMapTransitionService
 import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
@@ -36,6 +30,7 @@ import io.mockk.mockkObject
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.box2d.createWorld
+import ktx.math.vec2
 
 /**
  * Test for [MapTransitionService].
@@ -91,11 +86,11 @@ private class MapTransitionTest : KtxApplicationAdapter {
             add(MoveToSystem())
             add(PhysicSystem())
             add(PlayerInteractSystem())
-            add(TeleportSystem())
             add(CameraSystem())
             add(StateSystem())
             add(FadeSystem())
             add(RenderSystem())
+            add(DebugPhysicRenderSystem())
         }
     }
 
@@ -110,7 +105,9 @@ private class MapTransitionTest : KtxApplicationAdapter {
         tiledMap = tiledService.loadMap(TiledMapAsset.VILLAGE)
         tiledService.setMap(tiledMap, world, fadeIn = false)
 
-        Gdx.input.inputProcessor = KeyboardController(eventService)
+        Gdx.input.inputProcessor = KeyboardController(eventService).also {
+            eventService += it
+        }
     }
 
     override fun resize(width: Int, height: Int) {
@@ -128,6 +125,16 @@ private class MapTransitionTest : KtxApplicationAdapter {
             every { TiledMapAsset.VILLAGE.path } returns "maps/transition_test_small.tmx"
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
             every { TiledMapAsset.VILLAGE.path } returns "maps/transition_test_large.tmx"
+        }
+
+        if (Gdx.input.justTouched()) {
+            val touchXY = vec2(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
+            val worldXY = gameViewport.unproject(touchXY)
+            world.family { all(Player) }.forEach { player ->
+                player.configure {
+                    teleport(entity = it, to = worldXY)
+                }
+            }
         }
     }
 
