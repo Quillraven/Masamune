@@ -79,7 +79,7 @@ class ImmediateMapTransitionService(
             MapTransitionType.BOTTOM_TO_TOP -> vec2(centerX, centerY - EDGE_OFFSET)
         }
         player.configure {
-            it += Teleport(targetXY)
+            teleport(entity = it, to = targetXY)
         }
     }
 
@@ -110,7 +110,7 @@ class DefaultMapTransitionService(
             // and needs to be set to the correct location of the new map
             with(world) {
                 playerEntity.configure {
-                    it += Teleport(playerTargetPosition)
+                    teleport(entity = it, to = playerTargetPosition)
                 }
                 // Reset direction to 0/0 to return to IDLE animation if no button is pressed.
                 // We set the direction in movePlayerOutOfBounds function.
