@@ -1,7 +1,7 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-red.svg)](http://kotlinlang.org/)
-[![Fleks](https://img.shields.io/badge/Fleks-2.9-purple.svg)](https://github.com/Quillraven/Fleks)
+[![Fleks](https://img.shields.io/badge/Fleks-2.10--SNAPSHOT-purple.svg)](https://github.com/Quillraven/Fleks)
 
-[![LibGDX](https://img.shields.io/badge/LibGDX-1.12.1-green.svg)](https://libgdx.com/)
+[![LibGDX](https://img.shields.io/badge/LibGDX-1.13.0-green.svg)](https://libgdx.com/)
 [![LibKTX](https://img.shields.io/badge/LibKTX-1.12.1--rc2-blue.svg)](https://github.com/libktx/ktx)
 [![Tiled](https://img.shields.io/badge/Tiled-1.11.0-teal.svg)](https://www.mapeditor.org/)
 
