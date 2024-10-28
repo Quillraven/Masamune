@@ -11,7 +11,12 @@ class MoveToSystem : IteratingSystem(family { all(MoveTo, Physic) }) {
     override fun onTickEntity(entity: Entity) = with(entity[MoveTo]) {
         val body = entity[Physic].body
 
-        alpha = (alpha - deltaTime * speed).coerceAtLeast(0f)
+        alpha = when (speed) {
+            // move instantly to target location
+            0f -> 0f
+            // interpolate to target location
+            else -> (alpha - deltaTime * speed).coerceAtLeast(0f)
+        }
         val invAlpha = 1f - alpha
         val newX = interpolation.apply(from.x, to.x, invAlpha)
         val newY = interpolation.apply(from.y, to.y, invAlpha)
