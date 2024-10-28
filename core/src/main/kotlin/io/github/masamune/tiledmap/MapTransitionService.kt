@@ -7,11 +7,7 @@ import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
-import io.github.masamune.component.Move
-import io.github.masamune.component.MoveTo
-import io.github.masamune.component.Portal
-import io.github.masamune.component.Teleport
-import io.github.masamune.component.Transform
+import io.github.masamune.component.*
 import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.event.MapTransitionEndEvent
 import io.github.masamune.tiledmap.MapTransitionService.Companion.EDGE_OFFSET
@@ -148,10 +144,10 @@ class DefaultMapTransitionService(
         playerEntity = player
         transitionType = transitionType(fromCenter, fromTiledMap)
         mapOffset.set(toCenter.x - fromCenter.x, toCenter.y - fromCenter.y)
-        log.debug { "Transition of type $transitionType and offset $mapOffset" }
         val transitionInterpolation = Interpolation.fade
 
         val (playerX, playerY) = playerEntity[Transform].position
+        log.debug { "Transition of type $transitionType and offset $mapOffset triggered from ($playerX, $playerY)" }
         val playerTransitionTargetPos = playerTransitionTargetPos(fromTiledMap, playerY, playerX)
         playerTargetPosition.set(playerRealTargetPos(playerTransitionTargetPos, transitionType, mapOffset, nextMap))
 
