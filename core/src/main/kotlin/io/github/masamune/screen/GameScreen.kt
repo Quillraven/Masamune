@@ -9,26 +9,11 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.PhysicContactHandler
-import io.github.masamune.asset.AssetService
-import io.github.masamune.asset.I18NAsset
-import io.github.masamune.asset.ShaderService
-import io.github.masamune.asset.SkinAsset
-import io.github.masamune.asset.TiledMapAsset
+import io.github.masamune.asset.*
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
-import io.github.masamune.system.AnimationSystem
-import io.github.masamune.system.CameraSystem
-import io.github.masamune.system.FacingSystem
-import io.github.masamune.system.FadeSystem
-import io.github.masamune.system.MoveSystem
-import io.github.masamune.system.MoveToSystem
-import io.github.masamune.system.PhysicSystem
-import io.github.masamune.system.PlayerInteractSystem
-import io.github.masamune.system.RenderSystem
-import io.github.masamune.system.StateSystem
-import io.github.masamune.system.TeleportSystem
-import io.github.masamune.system.TriggerSystem
+import io.github.masamune.system.*
 import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerConfigurator
@@ -91,7 +76,6 @@ class GameScreen(
             add(MoveToSystem())
             add(PhysicSystem())
             add(PlayerInteractSystem())
-            add(TeleportSystem())
             add(CameraSystem())
             add(StateSystem())
             add(AnimationSystem())
