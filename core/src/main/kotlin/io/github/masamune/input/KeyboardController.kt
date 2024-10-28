@@ -2,15 +2,7 @@ package io.github.masamune.input
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
-import io.github.masamune.event.DialogBeginEvent
-import io.github.masamune.event.DialogEndEvent
-import io.github.masamune.event.Event
-import io.github.masamune.event.EventListener
-import io.github.masamune.event.EventService
-import io.github.masamune.event.MapTransitionBeginEvent
-import io.github.masamune.event.MapTransitionEndEvent
-import io.github.masamune.event.MenuBeginEvent
-import io.github.masamune.event.MenuEndEvent
+import io.github.masamune.event.*
 import ktx.app.KtxInputAdapter
 import ktx.app.gdxError
 import kotlin.reflect.KClass
