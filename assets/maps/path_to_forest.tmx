@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="16" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="13">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="16" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="20">
  <properties>
   <property name="music" value="ROAD"/>
  </properties>
@@ -12,7 +12,7 @@
  </layer>
  <layer id="2" name="decoration" width="16" height="44">
   <data encoding="base64" compression="zlib">
-   eJzFlkkOwjAMRa0OAtEDtBRWIBbciXsxCHbs4QrAITqAyoaD4EhEcqvEStKBJ/1Fk9iKE8cuQJ2tD7BD7VEH1HUCLOuo/p2hTY4qUKVfn0vR1ww1Z3zGAUCCmqLSwM62yQXXrhr7U/l5jcx9SjLGZhnp5ygLw3WSt6+fczkfCReL1sbDe/bs7SQxxpKQeJr31JbcIibbe+iDirlbHeexenyjGRfQ3Pww64bm6ZCDNjnT5n2YUDjs/1/QfC//tG9Zc0zPjcvprnDJEZfe0Rdd9hOOqoO6bVOfKaa9dWi67l8CXT661EoV8u0N2f/oexH/jjIPXPof5Ya+7kSPX0yibhxDgFOotvsCyEQpCg==
+   eJzFljsOwjAMhq0+BKIHaGEEMXAn7sVDsLHDFYBD9AEqCwfBkYjkSmlwTJt+0j80ipM4duwCNNmEAFvUDrVHXSZgZZU0v3O0KVAlqgrttibSCCBDTVGzyN2ecsazL5Pf854j97Vzi82CsadizpyneQnuk4PNl1abAOMcyPdM0ZeM+MOJkwuFg0+uceiDWhDb09g8vm4ZV9DcfFvm+eYhyMGuc+YfSsH5h4LmezXQuXXN4d6bLaeHRNI7+sJXP6k7qNsu9ZnC7a2+8VmLJLXShH57PvsffS/q31HngaT/Ua641o3o/vVJ1Y1DDHCMzXYfcAwmAQ==
   </data>
  </layer>
  <layer id="3" name="decoration 2" width="16" height="44">
@@ -25,6 +25,13 @@
   <object id="9" gid="4104" x="128" y="32" width="16" height="16"/>
   <object id="10" gid="4105" x="144" y="16" width="16" height="16"/>
   <object id="12" name="Player" gid="4097" x="80" y="656" width="16" height="16"/>
+  <object id="13" gid="4107" x="160" y="48" width="48" height="48"/>
+  <object id="14" gid="4107" x="192" y="64" width="48" height="48"/>
+  <object id="15" gid="4107" x="32" y="128" width="48" height="48"/>
+  <object id="16" gid="4107" x="160" y="320" width="48" height="48"/>
+  <object id="17" gid="4107" x="48" y="464" width="48" height="48"/>
+  <object id="18" gid="4107" x="112" y="624" width="48" height="48"/>
+  <object id="19" gid="4107" x="176" y="32" width="48" height="48"/>
  </objectgroup>
  <objectgroup id="7" name="trigger"/>
  <objectgroup color="#ffaa00" id="6" name="portal">
@@ -37,17 +44,17 @@
  </objectgroup>
  <layer id="5" name="foreground" width="16" height="44">
   <data encoding="base64" compression="zlib">
-   eJxjYCAe3OJkYLgNxHc4SdA0QsAsYJjMBuI5ZIbNaNiOguEMRvPHKCAERtPIKBhMYDQ90g80cjMwNCHhZm762AsAR5sXzg==
+   eJztzbENADAIBLHvmTqwOG0moLKlqy8BAIB7r5L+mrr5Lj84AsI=
   </data>
  </layer>
  <layer id="8" name="foreground2" width="16" height="44">
   <data encoding="base64" compression="zlib">
-   eJzty7ENACAMxMBvs39HmAwYhq9TRYjSJ7m01DNCSjejORTL33bn8QcAAAB+uCB5BJk=
+   eJztwQEBAAAAgiD/r25IQAEAwI8BCwAAAQ==
   </data>
  </layer>
  <layer id="9" name="foreground3" width="16" height="44">
   <data encoding="base64" compression="zlib">
-   eJxjYKAvmMXJwDAbiOdwkqf/FlDfbSC+Q6b+UTAKRsEoGAWjYBSMglEwsgEA1ZsEmQ==
+   eJztwQEBAAAAgiD/r25IQAEAwI8BCwAAAQ==
   </data>
  </layer>
 </map>

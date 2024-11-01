@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="12">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="14">
  <editorsettings>
   <export target="village..tmx" format="tmx"/>
  </editorsettings>
@@ -15,7 +15,7 @@
  </layer>
  <layer id="2" name="decoration" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJzV1EuuwWAYxvGXFom0dQbubMY5C2CAidVgAQzc2Y3L1IkjcTl2YBP+HUgT0c+XtIl4kt+o7/f063VuiCzglwPHjjjhrJi755+Zi2IuZ4rkUUDRfN2nSktjP26uAc/zydG9R7o5JDzPUkyKlFBO6vV9yrNx93n0ueZ35hzCniKWSBSG5T2PIL0Ver7xYwXfm5s2PR10kU6JZJBF1Rap2c/XjHnvJ5hipvgG6vQ00ESPrv5D35Zz/lp6/8E9awf0DDHCzhH5w97xZlLMfNnh/gdVWWODJVYh9MUiInEYMHEDhLQoGw==
+   eJzV1EsOwVAYhuG/Wkx6MXDfDRbAABOrwQIYuLMblylB4roDm/B2IE2Eo0nPxJc8o/7n6+l1boos8C0njp1xwVUx98qNmbtiLmeJ5FFA0frdp0orxH78PCKe558T9h6FzSkZ0JF/eTb+Ps+arllnrhr2ZNgiMZh28Dyi9JboKaNiR9+bnzY9HXSR9kQyyKLqiNScz2vGvPcTTDFTfAN1ehpookdX/61vyzl3drj/4JG1A3qGGGHvihxwdIMZj5mUo/c/qMoaGyyx0tAXN0QSMGHhCdFoJ6w=
   </data>
  </layer>
  <layer id="3" name="decoration2" width="20" height="20">
@@ -34,6 +34,7 @@
   <object id="4" name="Merchant" gid="4101" x="288" y="240" width="16" height="16"/>
   <object id="5" name="Smith" gid="4102" x="16" y="288" width="16" height="16"/>
   <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
+  <object id="13" gid="4107" x="122" y="132" width="48" height="48"/>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
   <object id="7" name="villageExit" x="32" y="-12" width="80" height="44">
@@ -52,7 +53,7 @@
  </objectgroup>
  <layer id="5" name="foreground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFQwnM4mRgmA3EczipY94toDm3gfgOlcwbBaNgFIwcAAAUhgSZ
+   eJxjYBgFo2AUjIJRMApIBwAGQAAB
   </data>
  </layer>
 </map>
