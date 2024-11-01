@@ -14,8 +14,12 @@
   <properties>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="tree_green"/>
+   <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
   </properties>
   <image source="objects/tree_green.png" width="48" height="48"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="14" y="36" width="20" height="12"/>
+  </objectgroup>
  </tile>
  <tile id="2" type="MapObject">
   <properties>

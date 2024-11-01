@@ -3,16 +3,16 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "assets/maps/path_to_forest.tmx",
+    "activeFile": "assets/maps/village.tmx",
     "expandedProjectPaths": [
+        "core/src",
         "assets/maps",
-        "assets",
-        "core/src/test/resources/maps",
-        "core",
-        ".",
         "core/src/test/resources",
-        "core/src/test",
-        "core/src"
+        "assets",
+        "core",
+        "core/src/test/resources/maps",
+        ".",
+        "core/src/test"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
@@ -28,7 +28,7 @@
             "scale": 4,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 128,
+                "x": 128.125,
                 "y": 352.125
             }
         },
@@ -47,14 +47,14 @@
         },
         "assets/maps/village.tmx": {
             "expandedObjectLayers": [
-                7,
-                6
+                6,
+                7
             ],
-            "scale": 3,
-            "selectedLayer": 5,
+            "scale": 11,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 160,
-                "y": 159.83333333333331
+                "x": 193.54545454545456,
+                "y": 155.5
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
@@ -174,9 +174,9 @@
     "project": "masamune-tiled.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "assets/maps/village.tmx",
         "assets/maps/objects.tsx",
         "assets/maps/path_to_forest.tmx",
+        "assets/maps/village.tmx",
         "core/src/test/resources/maps/transition_test_large.tmx",
         "core/src/test/resources/maps/transition_test_small.tmx",
         "core/src/test/resources/maps/transition_test_large2.tmx",
