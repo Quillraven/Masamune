@@ -92,7 +92,7 @@ class CameraTest : KtxApplicationAdapter {
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
         tiledMap = TmxMapLoader(ClasspathFileHandleResolver()).load("maps/test.tmx")
-        tiledService.setMap(tiledMap, world, fadeIn = false)
+        tiledService.setMap(tiledMap, world)
 
         Gdx.input.inputProcessor = CameraController(gameViewport, world)
     }

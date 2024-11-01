@@ -77,7 +77,7 @@ private class InteractTest : KtxApplicationAdapter {
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
         val tiledMap = TmxMapLoader(ClasspathFileHandleResolver()).load("maps/interactTest.tmx")
-        tiledService.setMap(tiledMap, world, fadeIn = false)
+        tiledService.setMap(tiledMap, world)
 
         Gdx.input.inputProcessor = KeyboardController(eventService)
     }
