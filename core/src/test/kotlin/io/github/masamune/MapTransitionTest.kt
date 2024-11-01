@@ -20,7 +20,15 @@ import io.github.masamune.component.teleport
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
-import io.github.masamune.system.*
+import io.github.masamune.system.CameraSystem
+import io.github.masamune.system.DebugPhysicRenderSystem
+import io.github.masamune.system.FadeSystem
+import io.github.masamune.system.MoveSystem
+import io.github.masamune.system.MoveToSystem
+import io.github.masamune.system.PhysicSystem
+import io.github.masamune.system.PlayerInteractSystem
+import io.github.masamune.system.RenderSystem
+import io.github.masamune.system.StateSystem
 import io.github.masamune.tiledmap.DefaultMapTransitionService
 import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
@@ -64,9 +72,10 @@ private class MapTransitionTest : KtxApplicationAdapter {
     private val assetService by lazy { AssetService(ClasspathFileHandleResolver()) }
     private val eventService by lazy { EventService() }
     private val tiledService by lazy { TiledService(assetService, eventService) }
-    private val mapTransitionService by lazy { DefaultMapTransitionService(tiledService) }
 
     // private val mapTransitionService by lazy { ImmediateMapTransitionService(tiledService) }
+    private val mapTransitionService by lazy { DefaultMapTransitionService(tiledService) }
+
     private lateinit var tiledMap: TiledMap
 
     private fun gameWorld() = configureWorld {
@@ -103,7 +112,7 @@ private class MapTransitionTest : KtxApplicationAdapter {
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
         tiledMap = tiledService.loadMap(TiledMapAsset.VILLAGE)
-        tiledService.setMap(tiledMap, world, fadeIn = false)
+        tiledService.setMap(tiledMap, world)
 
         Gdx.input.inputProcessor = KeyboardController(eventService).also {
             eventService += it
