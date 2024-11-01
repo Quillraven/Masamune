@@ -7,10 +7,19 @@ import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
-import io.github.masamune.component.*
+import io.github.masamune.component.Move
+import io.github.masamune.component.MoveTo
+import io.github.masamune.component.Physic
+import io.github.masamune.component.Player
+import io.github.masamune.component.Portal
+import io.github.masamune.component.Tag
+import io.github.masamune.component.Transform
+import io.github.masamune.component.teleport
 import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.event.MapTransitionEndEvent
+import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.MapTransitionService.Companion.EDGE_OFFSET
+import io.github.masamune.tiledmap.TiledService.Companion.objectsLoaded
 import io.github.masamune.tiledmap.TiledService.Companion.portal
 import ktx.log.logger
 import ktx.math.component1
@@ -60,7 +69,7 @@ class ImmediateMapTransitionService(
         val portalMapObject = toTiledMap.portal(toPortalId)
 
         // unload current map and set new already loaded map
-        tiledService.setMap(toTiledMap, world, fadeIn = false)
+        tiledService.setMap(toTiledMap, world)
 
         // move player to correct location
         val fromCenter = portalEntity[Transform].center()
@@ -96,8 +105,9 @@ class DefaultMapTransitionService(
     private val playerTargetPosition = vec2() // real position in new map after map transition
     private var transitionType = MapTransitionType.TOP_TO_BOTTOM
     private val mapOffset = vec2()
+    private var newMapObjects = listOf<Entity>()
 
-    override fun update(world: World, deltaTime: Float) {
+    override fun update(world: World, deltaTime: Float) = with(world) {
         if (transitionTime == 0f) {
             return
         }
@@ -108,18 +118,26 @@ class DefaultMapTransitionService(
 
             // teleport player to correct location -> because of map transition he is currently out of bounds
             // and needs to be set to the correct location of the new map
-            with(world) {
-                playerEntity.configure {
-                    teleport(entity = it, to = playerTargetPosition)
-                }
-                // Reset direction to 0/0 to return to IDLE animation if no button is pressed.
-                // We set the direction in movePlayerOutOfBounds function.
-                playerEntity[Move].direction.setZero()
+            playerEntity.configure {
+                teleport(entity = it, to = playerTargetPosition)
             }
+            // Reset direction to 0/0 to return to IDLE animation if no button is pressed.
+            // We set the direction in movePlayerOutOfBounds function.
+            playerEntity[Move].direction.setZero()
 
             // transition is finished -> update active map
             transitionTime = 0f
-            tiledService.setMap(nextMap, world, fadeIn = true)
+            tiledService.setMap(nextMap, world)
+
+            // reset the render offset of the new map objects and activate their physic bodies again
+            newMapObjects.forEach { mapObjEntity ->
+                mapObjEntity.getOrNull(Physic)?.body?.isActive = true
+                if (mapObjEntity hasNo Player) {
+                    mapObjEntity.getOrNull(Transform)?.offset?.setZero()
+                }
+                mapObjEntity.configure { it -= Tag.MAP_TRANSITION }
+            }
+
             tiledService.eventService.fire(MapTransitionEndEvent)
         }
     }
@@ -132,6 +150,8 @@ class DefaultMapTransitionService(
         val toTiledMap = tiledService.loadMap(toMapAsset)
         // remove map boundaries and ground collisions to not block the player's transition movement effect
         tiledService.unloadBoundaryAndGroundCollision()
+        // do the same for any non-player physic body
+        tiledService.unloadNonPlayerBodies(world)
 
         // set transition time and the map that will be set at the end of the transition
         // + some additional properties that are necessary for the MapTransitionEvent
@@ -162,6 +182,21 @@ class DefaultMapTransitionService(
                 playerTargetPosition
             )
         )
+
+        // spawn next map's objects but with inactive bodies because they are already spawned
+        // at the correct location based on 0,0 as origin but the player's location is still
+        // based on the previous map, and we don't want him to collide into a new object until
+        // the transition is done.
+        toTiledMap.objectsLoaded = false // this is necessary in case fromMap and toMap are exactly the same TiledMap
+        val graphicOffset = world.system<RenderSystem>().transitionOffset
+        newMapObjects = tiledService.loadObjects(toTiledMap, world)
+        newMapObjects.forEach { mapObjEntity ->
+            mapObjEntity.getOrNull(Physic)?.body?.isActive = false
+            if (mapObjEntity hasNo Player) {
+                mapObjEntity.getOrNull(Transform)?.offset?.set(-graphicOffset.x, -graphicOffset.y)
+            }
+            mapObjEntity.configure { it += Tag.MAP_TRANSITION }
+        }
 
         // move player to target location of new map
         // this is equal to a position outside the current active map which will be fixed at the end of the transition

@@ -9,7 +9,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
-import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.github.quillraven.fleks.Entity
@@ -26,7 +25,6 @@ import io.github.masamune.component.Dialog
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
-import io.github.masamune.component.Fade
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Interact
 import io.github.masamune.component.Inventory
@@ -59,7 +57,7 @@ import ktx.tiled.x
 import ktx.tiled.y
 import kotlin.system.measureTimeMillis
 
-enum class ObjectLayerName {
+enum class ObjectLayer {
     OBJECT, PORTAL, TRIGGER;
 
     val tiledName: String = this.name.lowercase()
@@ -82,24 +80,52 @@ class TiledService(
         }
         log.debug { "Loading of map $asset took $loadingTime ms" }
 
+        // set the TiledMapAsset as property on the TiledMap to make it easier to identify it
         return assetService[asset].also {
             it.properties["tiledMapAsset"] = asset
         }
     }
 
-    fun setMap(tiledMap: TiledMap, world: World, fadeIn: Boolean) {
+    fun setMap(tiledMap: TiledMap, world: World) {
         currentMap?.let { unloadMap(it, world) }
         currentMap = tiledMap
 
         staticCollisionBodies += tiledMap.spawnBoundaryBody(world)
         loadGroundCollision(tiledMap, world)
-        loadObjects(tiledMap, world, fadeIn)
+        loadObjects(tiledMap, world)
+        tiledMap[ObjectLayer.TRIGGER]?.objects?.forEach { loadTrigger(it, world) }
+        tiledMap[ObjectLayer.PORTAL]?.objects?.forEach { loadPortal(it, world) }
         eventService.fire(MapChangeEvent(tiledMap))
+    }
+
+    fun loadObjects(tiledMap: TiledMap, world: World): List<Entity> {
+        if (tiledMap.objectsLoaded) {
+            // objects already loaded
+            return emptyList()
+        }
+
+        val mapObjects = tiledMap[ObjectLayer.OBJECT]?.objects ?: return emptyList()
+
+        // at this point we know that mapObjects are not null
+        val result = mutableListOf<Entity>()
+        mapObjects.forEach {
+            result += loadObject(it, world)
+        }
+        tiledMap.objectsLoaded = true
+        return result
     }
 
     fun unloadBoundaryAndGroundCollision() {
         staticCollisionBodies.forEach { it.world.destroyBody(it) }
         staticCollisionBodies.clear()
+    }
+
+    fun unloadNonPlayerBodies(world: World) {
+        val nonPlayerEntities = world.family { none(Player) }
+        log.debug { "Unloading ${nonPlayerEntities.numEntities} non-player bodies" }
+        nonPlayerEntities.forEach { entity ->
+            entity.configure { it -= Physic }
+        }
     }
 
     private fun unloadMap(tiledMap: TiledMap, world: World) {
@@ -118,7 +144,7 @@ class TiledService(
         unloadBoundaryAndGroundCollision()
 
         // unloading non-player entities (player entities are taken over to new map)
-        val nonPlayerEntities = world.family { none(Player) }
+        val nonPlayerEntities = world.family { none(Player, Tag.MAP_TRANSITION) }
         log.debug { "Unloading ${nonPlayerEntities.numEntities} entities" }
         nonPlayerEntities.forEach { entity ->
             entity.remove()
@@ -145,21 +171,6 @@ class TiledService(
 
             val body = cell.tile.toBody(world, cellX.toFloat(), cellY.toFloat(), BodyType.StaticBody)
             staticCollisionBodies += body
-        }
-    }
-
-    private fun loadObjects(tiledMap: TiledMap, world: World, fadeIn: Boolean) {
-        loadObjectsOfLayer(ObjectLayerName.OBJECT, tiledMap, world, fadeIn)
-        loadObjectsOfLayer(ObjectLayerName.TRIGGER, tiledMap, world, fadeIn)
-        loadObjectsOfLayer(ObjectLayerName.PORTAL, tiledMap, world, fadeIn)
-    }
-
-    private fun loadObjectsOfLayer(layerName: ObjectLayerName, tiledMap: TiledMap, world: World, fadeIn: Boolean) {
-        val layer: MapLayer? = tiledMap.layers[layerName.tiledName]
-        when (layerName) {
-            ObjectLayerName.OBJECT -> layer?.objects?.forEach { loadObject(it, world, fadeIn) }
-            ObjectLayerName.TRIGGER -> layer?.objects?.forEach { loadTrigger(it, world) }
-            ObjectLayerName.PORTAL -> layer?.objects?.forEach { loadPortal(it, world) }
         }
     }
 
@@ -199,12 +210,13 @@ class TiledService(
         }
     }
 
-    private fun loadObject(mapObject: MapObject, world: World, fadeIn: Boolean) {
+    private fun loadObject(mapObject: MapObject, world: World): Entity {
         val tiledObj = mapObject as TiledMapTileMapObject
         val isPlayerObj = mapObject.name == "Player"
-        if (isPlayerObj && world.family { all(Player) }.isNotEmpty) {
+        val playerFamily = world.family { all(Player) }
+        if (isPlayerObj && playerFamily.isNotEmpty) {
             log.debug { "Player already loaded -> ignore object" }
-            return
+            return playerFamily.first()
         }
 
         val tile = tiledObj.tile
@@ -215,7 +227,7 @@ class TiledService(
         val objTypeStr = tile.objType
         val objType = TiledObjectType.valueOf(objTypeStr)
 
-        world.entity {
+        return world.entity {
             configureTiled(it, tiledObj, objType)
             it += Facing(FacingDirection.DOWN)
             val graphicCmp = configureGraphic(it, tile)
@@ -231,9 +243,6 @@ class TiledService(
 
             if (isPlayerObj) {
                 configurePlayer(world, it)
-            } else if (fadeIn) {
-                // fade non-player entities in
-                it += Fade(from = 0f, to = graphicCmp.color.a, time = 2f, interpolation = Interpolation.fade)
             }
         }
     }
@@ -374,6 +383,14 @@ class TiledService(
                 .firstOrNull { it.id == portalId }
                 ?: gdxError("There is no portal of id $portalId")
         }
+
+        var TiledMap.objectsLoaded: Boolean
+            get() = this.property("objectsLoaded", false)
+            set(value) {
+                this.properties["objectsLoaded"] = value
+            }
+
+        operator fun TiledMap.get(layer: ObjectLayer): MapLayer? = this.layers[layer.tiledName]
     }
 
 }
