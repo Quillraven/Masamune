@@ -7,7 +7,7 @@ import com.github.quillraven.fleks.ComponentType
 import ktx.math.vec2
 
 /**
- * Component for [position], [size], [scale] and [rotation] values of an entity.
+ * Component for [position], [size], [scale], [rotation] and optional [offset] values of an entity.
  * The default scale value is one world unit (=1).
  * The rotation is in degrees.
  */
@@ -16,6 +16,7 @@ data class Transform(
     val size: Vector2,
     var scale: Float = 1f,
     var rotation: Float = 0f,
+    val offset: Vector2 = vec2(),
 ) : Component<Transform>, Comparable<Transform> {
 
     fun center(): Vector2 = vec2(
@@ -34,10 +35,10 @@ data class Transform(
         return when {
             position.z > other.position.z -> 1
             position.z < other.position.z -> -1
-            position.y > other.position.y -> -1
-            position.y < other.position.y -> 1
-            position.x > other.position.x -> 1
-            position.x < other.position.x -> -1
+            position.y + offset.y > other.position.y + other.offset.y -> -1
+            position.y + offset.y < other.position.y + other.offset.y -> 1
+            position.x + offset.x > other.position.x + other.offset.x -> 1
+            position.x + offset.x < other.position.x + other.offset.x -> -1
             else -> 0
         }
     }

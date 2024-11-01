@@ -50,7 +50,7 @@ class RenderSystem(
     // optional map layers for map transition
     private val transitionBackground = mutableListOf<TiledMapTileLayer>()
     private val transitionForeground = mutableListOf<TiledMapTileLayer>()
-    private val transitionOffset = vec2()
+    val transitionOffset = vec2()
 
     override fun onTick() {
         gameViewport.apply()
@@ -113,12 +113,12 @@ class RenderSystem(
 
     private fun Batch.drawEntity(graphic: Graphic, transform: Transform, realSize: Vector2) {
         val (texRegion, color) = graphic
-        val (position, _, scale, rotationDeg) = transform
+        val (position, _, scale, rotationDeg, offset) = transform
 
         batch.setColor(color.r, color.g, color.b, color.a)
         this.draw(
             texRegion,
-            position.x, position.y,
+            position.x + offset.x, position.y + offset.y,
             realSize.x * 0.5f, realSize.y * 0.5f,
             realSize.x, realSize.y,
             scale, scale,
