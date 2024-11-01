@@ -9,7 +9,7 @@ import io.github.masamune.component.Physic
 class MoveToSystem : IteratingSystem(family { all(MoveTo, Physic) }) {
 
     override fun onTickEntity(entity: Entity) = with(entity[MoveTo]) {
-        val body = entity[Physic].body
+        val (body, prevPosition) = entity[Physic]
 
         alpha = when (speed) {
             // move instantly to target location
@@ -21,6 +21,7 @@ class MoveToSystem : IteratingSystem(family { all(MoveTo, Physic) }) {
         val newX = interpolation.apply(from.x, to.x, invAlpha)
         val newY = interpolation.apply(from.y, to.y, invAlpha)
         body.setTransform(newX, newY, body.angle)
+        prevPosition.set(newX, newY)
 
         if (alpha == 0f) {
             // moveTo is finished -> remove it
