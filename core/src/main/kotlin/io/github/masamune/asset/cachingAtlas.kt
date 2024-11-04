@@ -11,6 +11,7 @@ import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
+import com.badlogic.gdx.utils.GdxRuntimeException
 import io.github.masamune.component.Animation.Companion.DEFAULT_FRAME_DURATION
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.GdxAnimation
@@ -20,8 +21,15 @@ import ktx.collections.GdxArray
 import ktx.log.logger
 import com.badlogic.gdx.utils.StringBuilder as GdxStringBuilder
 
+/**
+ * A [TextureAtlas] implementation that caches the regions of [findRegions][TextureAtlas.findRegions] calls.
+ * Also, supports the creation of [GdxAnimation] instances that are cached as well.
+ * This atlas can be identified by its unique [type][AtlasAsset].
+ */
 data class CachingAtlas(
+    // type to identify the atlas (mainly used for logging)
     val type: AtlasAsset,
+    // the underlying texture atlas instance
     private val textureAtlas: TextureAtlas,
 ) : Disposable {
 
@@ -29,6 +37,13 @@ data class CachingAtlas(
     private val animationCache = mutableMapOf<GdxStringBuilder, GdxAnimation>()
     private val stringBuilder = GdxStringBuilder()
 
+    /**
+     * Returns all regions with the specified [name]. If the regions
+     * are not part of the cache, then they are retrieved from the underlying
+     * [TextureAtlas] first.
+     *
+     * @throws [GdxRuntimeException] if there are no regions for the given [name].
+     */
     fun findRegions(name: String): GdxArray<TextureAtlas.AtlasRegion> {
         return regionCache.getOrPut(name) {
             val regions = textureAtlas.findRegions(name)
@@ -39,11 +54,19 @@ data class CachingAtlas(
         }
     }
 
+    /**
+     * Returns a [GdxAnimation] with the specified [atlasMainKey], [animationType] and optional [direction].
+     * The [TextureAtlas] must contain regions in the format `MAIN_KEY/TYPE` or `MAIN_KEY/TYPE_DIRECTION`.
+     * If the animation is not part of the cache, then it is created and cached first.
+     *
+     * @throws [GdxRuntimeException] if there are no regions with the special animation format.
+     */
     fun gdxAnimation(
         atlasMainKey: String,
         animationType: AnimationType,
         direction: FacingDirection = FacingDirection.UNDEFINED
     ): GdxAnimation {
+        // create animation texture regions key in format "MAIN_KEY/TYPE_DIRECTION".
         stringBuilder.clear()
         stringBuilder.append(atlasMainKey)
             .append("/")
@@ -63,6 +86,9 @@ data class CachingAtlas(
         }
     }
 
+    /**
+     * Disposes the underlying [TextureAtlas].
+     */
     override fun dispose() {
         log.debug { "Disposing caching atlas $type with ${regionCache.size} cached regions and ${animationCache.size} cached animations" }
         textureAtlas.dispose()
@@ -73,11 +99,18 @@ data class CachingAtlas(
     }
 }
 
+/**
+ * [AssetLoaderParameters] for a [CachingAtlasLoader]. Has a mandatory [type][AtlasAsset] parameter
+ * that is passed to the [CachingAtlas] instance for unique identification.
+ */
 class CachingAtlasParameter(
     val type: AtlasAsset,
     val flip: Boolean = false,
 ) : AssetLoaderParameters<CachingAtlas>()
 
+/**
+ * A [TextureAtlasLoader] for a [CachingAtlas]. It has a mandatory [type][AtlasAsset] parameter.
+ */
 class CachingAtlasLoader(
     fileHandleResolver: FileHandleResolver
 ) : SynchronousAssetLoader<CachingAtlas, CachingAtlasParameter>(fileHandleResolver) {
