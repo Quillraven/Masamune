@@ -56,5 +56,11 @@ val MapObject.userData: String?
 val MapObject.targetPortalId: Int
     get() = this.property<Int>("targetPortalId", 0)
 
+val TiledMapTile.category: String
+    get() = this.property<String>("category", "WEAPON")
+
+val TiledMapTile.cost: Int
+    get() = this.property<Int>("cost", 0)
+
 val TiledMapTile.itemType: String
     get() = this.property<String>("itemType", "UNDEFINED")
