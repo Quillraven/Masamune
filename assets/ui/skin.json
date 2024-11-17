@@ -20,6 +20,9 @@ com.badlogic.gdx.graphics.Color: {
 	dark_grey: {
 		hex: 695454ff
 	}
+	green: {
+		hex: 2ac243ff
+	}
 	highlight_blue: {
 		hex: 435bbbff
 	}
@@ -28,6 +31,9 @@ com.badlogic.gdx.graphics.Color: {
 	}
 	highlight_red: {
 		hex: b20000ff
+	}
+	red: {
+		hex: ee121dff
 	}
 	white: {
 		hex: ffffffff
@@ -169,6 +175,15 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	yellow: {
 		background: nine_path_bg
 		knobBefore: slider_progress_yellow_10
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+	default: {
+		background: nine_path_bg
+		hScroll: nine_path_bg_2
+		hScrollKnob: slider_progress
+		vScroll: nine_path_bg_2
+		vScrollKnob: slider_progress
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {

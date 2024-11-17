@@ -11,6 +11,11 @@ import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
 import ktx.scene2d.label
 
+/**
+ * A table with two labels:
+ * - One [titleLabel]
+ * - One [valueLabel] with a right alignment
+ */
 class MenuItemLabel(
     skin: Skin,
     title: String,

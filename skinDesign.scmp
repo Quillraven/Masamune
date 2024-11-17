@@ -478,6 +478,26 @@ atlasData: {
 			type: TENPATCH
 			hidden: false
 		}
+		{
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/nine_path_bg_2.9.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: nine_path_bg_2
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: NINE_PATCH
+			hidden: false
+		}
 	]
 	fontDrawables: [
 		{
@@ -547,6 +567,16 @@ jsonData: {
 		{
 			class: com.ray3k.skincomposer.data.ColorData
 			color: {
+				r: 0.16470589
+				g: 0.7607843
+				b: 0.2627451
+				a: 1
+			}
+			name: green
+		}
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
 				r: 0.2627451
 				g: 0.35686275
 				b: 0.73333335
@@ -573,6 +603,16 @@ jsonData: {
 				a: 1
 			}
 			name: highlight_red
+		}
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
+				r: 0.93333334
+				g: 0.07058824
+				b: 0.11372549
+				a: 1
+			}
+			name: red
 		}
 		{
 			class: com.ray3k.skincomposer.data.ColorData
@@ -721,7 +761,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
 						optional: true
-						value: null
+						value: nine_path_bg
 					}
 					corner: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -733,25 +773,25 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: hScroll
 						optional: true
-						value: null
+						value: nine_path_bg_2
 					}
 					hScrollKnob: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: hScrollKnob
 						optional: true
-						value: null
+						value: slider_progress
 					}
 					vScroll: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: vScroll
 						optional: true
-						value: null
+						value: nine_path_bg_2
 					}
 					vScrollKnob: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: vScrollKnob
 						optional: true
-						value: null
+						value: slider_progress
 					}
 				}
 				deletable: false
@@ -2593,6 +2633,72 @@ sceneComposer: {
 						cells: [
 							{
 								child: {
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+									name: null
+									style: {
+										name: dialog_image_caption
+										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+										properties: {
+											font: {
+												type: com.badlogic.gdx.graphics.g2d.BitmapFont
+												name: font
+												optional: false
+												value: fipps_16
+											}
+											fontColor: {
+												type: com.badlogic.gdx.graphics.Color
+												name: fontColor
+												optional: true
+												value: highlight_blue
+											}
+											background: {
+												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+												name: background
+												optional: true
+												value: null
+											}
+										}
+										deletable: true
+										parent: null
+									}
+									text: Merchant
+									textAlignment: 1
+									ellipsis: false
+									ellipsisString: ...
+									wrap: false
+									color: null
+									touchable: enabled
+									visible: true
+								}
+								row: 0
+								column: 0
+								padLeft: 0
+								padRight: 0
+								padTop: 0
+								padBottom: 0
+								spaceLeft: 0
+								spaceRight: 0
+								spaceTop: 0
+								spaceBottom: 0
+								expandX: false
+								expandY: false
+								fillX: false
+								fillY: false
+								growX: false
+								growY: false
+								alignment: 1
+								minWidth: -1
+								minHeight: -1
+								maxWidth: -1
+								maxHeight: -1
+								preferredWidth: -1
+								preferredHeight: -1
+								uniformX: false
+								uniformY: false
+								colSpan: 1
+							}
+							{
+								child: {
 									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
 									name: null
 									children: [
@@ -2619,7 +2725,7 @@ sceneComposer: {
 												type: NINE_PATCH
 												hidden: false
 											}
-											scaling: none
+											scaling: stretch
 											touchable: enabled
 											visible: true
 										}
@@ -2655,8 +2761,8 @@ sceneComposer: {
 									visible: true
 								}
 								row: 0
-								column: 0
-								padLeft: 0
+								column: 1
+								padLeft: 50
 								padRight: 0
 								padTop: 0
 								padBottom: 0
@@ -2671,7 +2777,7 @@ sceneComposer: {
 								growX: false
 								growY: false
 								alignment: 1
-								minWidth: 300
+								minWidth: -1
 								minHeight: -1
 								maxWidth: -1
 								maxHeight: -1
@@ -2679,53 +2785,550 @@ sceneComposer: {
 								preferredHeight: -1
 								uniformX: false
 								uniformY: false
-								colSpan: 2
+								colSpan: 1
 							}
 							{
 								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_image_caption
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: fipps_16
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimTable
+									cells: [
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: Stärke
+												textAlignment: 8
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
 											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: highlight_blue
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
+											row: 0
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 8
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
 										}
-										deletable: true
-										parent: null
-									}
-									text: Alexxius
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: Agilität
+												textAlignment: 8
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 1
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 8
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: Konstitution
+												textAlignment: 8
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 2
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 8
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: Intelligenz
+												textAlignment: 8
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 3
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 8
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: Angriff
+												textAlignment: 8
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 4
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 8
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: Rüstung
+												textAlignment: 8
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 5
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 8
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: Resistenz
+												textAlignment: 8
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 6
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 8
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+									]
+									name: null
+									background: null
 									color: null
-									touchable: enabled
+									padLeft: 0
+									padRight: 0
+									padTop: 0
+									padBottom: 0
+									paddingEnabled: false
+									alignment: 10
+									fillParent: false
+									touchable: childrenOnly
 									visible: true
 								}
 								row: 1
 								column: 0
 								padLeft: 0
 								padRight: 0
-								padTop: 0
-								padBottom: 15
+								padTop: 10
+								padBottom: 0
 								spaceLeft: 0
 								spaceRight: 0
 								spaceTop: 0
@@ -2745,134 +3348,549 @@ sceneComposer: {
 								preferredHeight: -1
 								uniformX: false
 								uniformY: false
-								colSpan: 2
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Level
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 2
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
 								colSpan: 1
 							}
 							{
 								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimTable
+									cells: [
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: 15
+												textAlignment: 1
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 0
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 1
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: 15
+												textAlignment: 1
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 1
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 1
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: 15
+												textAlignment: 1
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 2
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 1
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: 15
+												textAlignment: 1
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 3
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 1
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: 15
+												textAlignment: 1
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 4
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 1
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: 15
+												textAlignment: 1
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 5
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 1
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: default
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: false
+													parent: null
+												}
+												text: 15
+												textAlignment: 1
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.4117647
+														g: 0.32941177
+														b: 0.32941177
+														a: 1
+													}
+													name: dark_grey
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 6
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 1
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+									]
 									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 2
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
+									background: null
+									color: null
+									padLeft: 0
+									padRight: 0
+									padTop: 0
+									padBottom: 0
+									paddingEnabled: false
+									alignment: 1
+									fillParent: false
+									touchable: childrenOnly
 									visible: true
 								}
-								row: 2
+								row: 1
 								column: 1
-								padLeft: 0
+								padLeft: 50
 								padRight: 0
-								padTop: 0
+								padTop: 10
 								padBottom: 0
 								spaceLeft: 0
 								spaceRight: 0
@@ -2880,899 +3898,7 @@ sceneComposer: {
 								spaceBottom: 0
 								expandX: false
 								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Next Level in:
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 3
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 500
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 3
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimProgressBar
-									name: null
-									style: {
-										name: yellow
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
-										properties: {
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: false
-												value: nine_path_bg
-											}
-											disabledBackground: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledBackground
-												optional: true
-												value: null
-											}
-											knob: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: knob
-												optional: true
-												value: null
-											}
-											disabledKnob: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledKnob
-												optional: true
-												value: null
-											}
-											knobBefore: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: knobBefore
-												optional: true
-												value: slider_progress_yellow_10
-											}
-											disabledKnobBefore: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledKnobBefore
-												optional: true
-												value: null
-											}
-											knobAfter: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: knobAfter
-												optional: true
-												value: null
-											}
-											disabledKnobAfter: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledKnobAfter
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									disabled: false
-									value: 50
-									minimum: 0
-									maximum: 100
-									increment: 1
-									vertical: false
-									animationDuration: 0
-									animateInterpolation: LINEAR
-									round: true
-									visualInterpolation: LINEAR
-									touchable: enabled
-									visible: true
-								}
-								row: 5
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 20
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 2
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: HP
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 7
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 80/112
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 7
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimProgressBar
-									name: null
-									style: {
-										name: green
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
-										properties: {
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: false
-												value: nine_path_bg
-											}
-											disabledBackground: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledBackground
-												optional: true
-												value: null
-											}
-											knob: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: knob
-												optional: true
-												value: null
-											}
-											disabledKnob: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledKnob
-												optional: true
-												value: null
-											}
-											knobBefore: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: knobBefore
-												optional: true
-												value: slider_progress_green_10
-											}
-											disabledKnobBefore: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledKnobBefore
-												optional: true
-												value: null
-											}
-											knobAfter: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: knobAfter
-												optional: true
-												value: null
-											}
-											disabledKnobAfter: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledKnobAfter
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									disabled: false
-									value: 50
-									minimum: 0
-									maximum: 100
-									increment: 1
-									vertical: false
-									animationDuration: 0
-									animateInterpolation: LINEAR
-									round: true
-									visualInterpolation: LINEAR
-									touchable: enabled
-									visible: true
-								}
-								row: 8
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 2
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: MP
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 9
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 12/20
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 9
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimProgressBar
-									name: null
-									style: {
-										name: blue
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
-										properties: {
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: false
-												value: nine_path_bg
-											}
-											disabledBackground: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledBackground
-												optional: true
-												value: null
-											}
-											knob: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: knob
-												optional: true
-												value: null
-											}
-											disabledKnob: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledKnob
-												optional: true
-												value: null
-											}
-											knobBefore: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: knobBefore
-												optional: true
-												value: slider_progress_blue_10
-											}
-											disabledKnobBefore: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledKnobBefore
-												optional: true
-												value: null
-											}
-											knobAfter: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: knobAfter
-												optional: true
-												value: null
-											}
-											disabledKnobAfter: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: disabledKnobAfter
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									disabled: false
-									value: 50
-									minimum: 0
-									maximum: 100
-									increment: 1
-									vertical: false
-									animationDuration: 0
-									animateInterpolation: LINEAR
-									round: true
-									visualInterpolation: LINEAR
-									touchable: enabled
-									visible: true
-								}
-								row: 10
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 2
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Talons
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 11
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: true
-								fillX: true
-								fillY: false
-								growX: false
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 312
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 11
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: false
-								expandY: false
-								fillX: true
+								fillX: false
 								fillY: false
 								growX: false
 								growY: false
@@ -3796,28 +3922,28 @@ sceneComposer: {
 						padTop: 0
 						padBottom: 0
 						paddingEnabled: false
-						alignment: 2
+						alignment: 10
 						fillParent: false
 						touchable: childrenOnly
 						visible: true
 					}
 					row: 0
 					column: 0
-					padLeft: 15
-					padRight: 50
-					padTop: 15
-					padBottom: 15
+					padLeft: 5
+					padRight: 0
+					padTop: 5
+					padBottom: 0
 					spaceLeft: 0
 					spaceRight: 0
 					spaceTop: 0
 					spaceBottom: 0
 					expandX: false
-					expandY: true
-					fillX: true
-					fillY: true
+					expandY: false
+					fillX: false
+					fillY: false
 					growX: false
-					growY: true
-					alignment: 1
+					growY: false
+					alignment: 10
 					minWidth: -1
 					minHeight: -1
 					maxWidth: -1
@@ -3834,66 +3960,47 @@ sceneComposer: {
 						cells: [
 							{
 								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
 									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Strength
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
+									drawable: {
+										file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/arrow.png
+										bgColor: {
+											r: 1
+											g: 1
+											b: 1
 											a: 1
 										}
-										name: dark_grey
+										tint: null
+										tintName: null
+										name: arrow
+										tiled: false
+										minWidth: -1
+										minHeight: -1
+										customized: false
+										tenPatchData: null
+										tvgData: null
+										type: TEXTURE
+										hidden: false
 									}
+									scaling: stretch
 									touchable: enabled
 									visible: true
 								}
 								row: 0
 								column: 0
 								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
+								padRight: 5
+								padTop: 3
+								padBottom: 5
 								spaceLeft: 0
 								spaceRight: 0
 								spaceTop: 0
 								spaceBottom: 0
-								expandX: true
+								expandX: false
 								expandY: false
-								fillX: true
+								fillX: false
 								fillY: false
-								growX: true
+								growX: false
 								growY: false
 								alignment: 1
 								minWidth: -1
@@ -3911,7 +4018,7 @@ sceneComposer: {
 									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
 									name: null
 									style: {
-										name: dialog_content
+										name: dialog_option
 										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
 										properties: {
 											font: {
@@ -3924,32 +4031,24 @@ sceneComposer: {
 												type: com.badlogic.gdx.graphics.Color
 												name: fontColor
 												optional: true
-												value: white
+												value: dark_grey
 											}
 											background: {
 												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 												name: background
 												optional: true
-												value: null
+												value: dialog_choice_frame
 											}
 										}
 										deletable: true
 										parent: null
 									}
-									text: 14
-									textAlignment: 16
+									text: Gegenstände
+									textAlignment: 1
 									ellipsis: false
 									ellipsisString: ...
 									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
+									color: null
 									touchable: enabled
 									visible: true
 								}
@@ -3957,17 +4056,17 @@ sceneComposer: {
 								column: 1
 								padLeft: 0
 								padRight: 0
-								padTop: 0
+								padTop: 3
 								padBottom: 0
 								spaceLeft: 0
 								spaceRight: 0
 								spaceTop: 0
 								spaceBottom: 0
-								expandX: true
+								expandX: false
 								expandY: false
 								fillX: true
 								fillY: false
-								growX: true
+								growX: false
 								growY: false
 								alignment: 1
 								minWidth: -1
@@ -3982,66 +4081,47 @@ sceneComposer: {
 							}
 							{
 								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
 									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Agility
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
+									drawable: {
+										file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/arrow.png
+										bgColor: {
+											r: 1
+											g: 1
+											b: 1
 											a: 1
 										}
-										name: dark_grey
+										tint: null
+										tintName: null
+										name: arrow
+										tiled: false
+										minWidth: -1
+										minHeight: -1
+										customized: false
+										tenPatchData: null
+										tvgData: null
+										type: TEXTURE
+										hidden: false
 									}
+									scaling: stretch
 									touchable: enabled
-									visible: true
+									visible: false
 								}
 								row: 1
 								column: 0
 								padLeft: 0
-								padRight: 0
-								padTop: 0
+								padRight: 5
+								padTop: 5
 								padBottom: 0
 								spaceLeft: 0
 								spaceRight: 0
 								spaceTop: 0
 								spaceBottom: 0
-								expandX: true
+								expandX: false
 								expandY: false
-								fillX: true
+								fillX: false
 								fillY: false
-								growX: true
+								growX: false
 								growY: false
 								alignment: 1
 								minWidth: -1
@@ -4059,7 +4139,7 @@ sceneComposer: {
 									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
 									name: null
 									style: {
-										name: dialog_content
+										name: dialog_option
 										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
 										properties: {
 											font: {
@@ -4072,32 +4152,24 @@ sceneComposer: {
 												type: com.badlogic.gdx.graphics.Color
 												name: fontColor
 												optional: true
-												value: white
+												value: dark_grey
 											}
 											background: {
 												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 												name: background
 												optional: true
-												value: null
+												value: dialog_choice_frame
 											}
 										}
 										deletable: true
 										parent: null
 									}
-									text: 14
-									textAlignment: 16
+									text: Verkaufen
+									textAlignment: 1
 									ellipsis: false
 									ellipsisString: ...
 									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
+									color: null
 									touchable: enabled
 									visible: true
 								}
@@ -4105,17 +4177,17 @@ sceneComposer: {
 								column: 1
 								padLeft: 0
 								padRight: 0
-								padTop: 0
+								padTop: 5
 								padBottom: 0
 								spaceLeft: 0
 								spaceRight: 0
 								spaceTop: 0
 								spaceBottom: 0
-								expandX: true
+								expandX: false
 								expandY: false
 								fillX: true
 								fillY: false
-								growX: true
+								growX: false
 								growY: false
 								alignment: 1
 								minWidth: -1
@@ -4130,66 +4202,47 @@ sceneComposer: {
 							}
 							{
 								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
 									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Constitution
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
+									drawable: {
+										file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/arrow.png
+										bgColor: {
+											r: 1
+											g: 1
+											b: 1
 											a: 1
 										}
-										name: dark_grey
+										tint: null
+										tintName: null
+										name: arrow
+										tiled: false
+										minWidth: -1
+										minHeight: -1
+										customized: false
+										tenPatchData: null
+										tvgData: null
+										type: TEXTURE
+										hidden: false
 									}
+									scaling: stretch
 									touchable: enabled
-									visible: true
+									visible: false
 								}
 								row: 2
 								column: 0
 								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
+								padRight: 5
+								padTop: 5
+								padBottom: 3
 								spaceLeft: 0
 								spaceRight: 0
 								spaceTop: 0
 								spaceBottom: 0
-								expandX: true
+								expandX: false
 								expandY: false
-								fillX: true
+								fillX: false
 								fillY: false
-								growX: true
+								growX: false
 								growY: false
 								alignment: 1
 								minWidth: -1
@@ -4207,7 +4260,7 @@ sceneComposer: {
 									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
 									name: null
 									style: {
-										name: dialog_content
+										name: dialog_option
 										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
 										properties: {
 											font: {
@@ -4220,32 +4273,24 @@ sceneComposer: {
 												type: com.badlogic.gdx.graphics.Color
 												name: fontColor
 												optional: true
-												value: white
+												value: dark_grey
 											}
 											background: {
 												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 												name: background
 												optional: true
-												value: null
+												value: dialog_choice_frame
 											}
 										}
 										deletable: true
 										parent: null
 									}
-									text: 14
-									textAlignment: 16
+									text: Beenden
+									textAlignment: 1
 									ellipsis: false
 									ellipsisString: ...
 									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
+									color: null
 									touchable: enabled
 									visible: true
 								}
@@ -4253,1201 +4298,17 @@ sceneComposer: {
 								column: 1
 								padLeft: 0
 								padRight: 0
-								padTop: 0
-								padBottom: 0
+								padTop: 5
+								padBottom: 3
 								spaceLeft: 0
 								spaceRight: 0
 								spaceTop: 0
 								spaceBottom: 0
-								expandX: true
+								expandX: false
 								expandY: false
 								fillX: true
 								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Intelligence
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 3
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 15
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 14
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 3
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 15
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Attack
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 4
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 14
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 4
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Armor
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 5
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 14
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 5
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Resistence
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 6
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 20
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 14
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 6
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 20
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Evade
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 7
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 10%
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 7
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Repel
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 8
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 0%
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 8
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Critical Strike
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 9
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 25%
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 9
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: Arcane Strike
-									textAlignment: 8
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 10
-								column: 0
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
-								growY: false
-								alignment: 1
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								uniformX: false
-								uniformY: false
-								colSpan: 1
-							}
-							{
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
-									name: null
-									style: {
-										name: dialog_content
-										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-										properties: {
-											font: {
-												type: com.badlogic.gdx.graphics.g2d.BitmapFont
-												name: font
-												optional: false
-												value: pixel_arial_16
-											}
-											fontColor: {
-												type: com.badlogic.gdx.graphics.Color
-												name: fontColor
-												optional: true
-												value: white
-											}
-											background: {
-												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-												name: background
-												optional: true
-												value: null
-											}
-										}
-										deletable: true
-										parent: null
-									}
-									text: 0%
-									textAlignment: 16
-									ellipsis: false
-									ellipsisString: ...
-									wrap: false
-									color: {
-										color: {
-											r: 0.4117647
-											g: 0.32941177
-											b: 0.32941177
-											a: 1
-										}
-										name: dark_grey
-									}
-									touchable: enabled
-									visible: true
-								}
-								row: 10
-								column: 1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								spaceLeft: 0
-								spaceRight: 0
-								spaceTop: 0
-								spaceBottom: 0
-								expandX: true
-								expandY: false
-								fillX: true
-								fillY: false
-								growX: true
+								growX: false
 								growY: false
 								alignment: 1
 								minWidth: -1
@@ -5462,24 +4323,1788 @@ sceneComposer: {
 							}
 						]
 						name: null
-						background: null
+						background: {
+							file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/dialog_frame.9.png
+							bgColor: {
+								r: 1
+								g: 1
+								b: 1
+								a: 1
+							}
+							tint: null
+							tintName: null
+							name: dialog_frame
+							tiled: false
+							minWidth: -1
+							minHeight: -1
+							customized: false
+							tenPatchData: null
+							tvgData: null
+							type: NINE_PATCH
+							hidden: false
+						}
 						color: null
 						padLeft: 0
 						padRight: 0
 						padTop: 0
 						padBottom: 0
 						paddingEnabled: false
-						alignment: 2
+						alignment: 1
 						fillParent: false
 						touchable: childrenOnly
 						visible: true
 					}
 					row: 0
 					column: 1
-					padLeft: 100
-					padRight: 25
-					padTop: 25
-					padBottom: 25
+					padLeft: 0
+					padRight: 5
+					padTop: 5
+					padBottom: 0
+					spaceLeft: 0
+					spaceRight: 0
+					spaceTop: 0
+					spaceBottom: 0
+					expandX: false
+					expandY: false
+					fillX: false
+					fillY: false
+					growX: false
+					growY: false
+					alignment: 18
+					minWidth: -1
+					minHeight: -1
+					maxWidth: 230
+					maxHeight: -1
+					preferredWidth: -1
+					preferredHeight: -1
+					uniformX: false
+					uniformY: false
+					colSpan: 1
+				}
+				{
+					child: {
+						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimTable
+						cells: [
+							{
+								child: {
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+									name: null
+									style: {
+										name: dialog_option
+										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+										properties: {
+											font: {
+												type: com.badlogic.gdx.graphics.g2d.BitmapFont
+												name: font
+												optional: false
+												value: pixel_arial_16
+											}
+											fontColor: {
+												type: com.badlogic.gdx.graphics.Color
+												name: fontColor
+												optional: true
+												value: dark_grey
+											}
+											background: {
+												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+												name: background
+												optional: true
+												value: dialog_choice_frame
+											}
+										}
+										deletable: true
+										parent: null
+									}
+									text: 123 Krallen
+									textAlignment: 1
+									ellipsis: false
+									ellipsisString: ...
+									wrap: false
+									color: null
+									touchable: enabled
+									visible: true
+								}
+								row: 0
+								column: 0
+								padLeft: 0
+								padRight: 0
+								padTop: 2
+								padBottom: 10
+								spaceLeft: 0
+								spaceRight: 0
+								spaceTop: 0
+								spaceBottom: 0
+								expandX: true
+								expandY: false
+								fillX: false
+								fillY: false
+								growX: false
+								growY: false
+								alignment: 18
+								minWidth: -1
+								minHeight: -1
+								maxWidth: -1
+								maxHeight: -1
+								preferredWidth: -1
+								preferredHeight: -1
+								uniformX: false
+								uniformY: false
+								colSpan: 1
+							}
+							{
+								child: {
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimScrollPane
+									name: null
+									style: {
+										name: default
+										clazz: com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+										properties: {
+											background: {
+												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+												name: background
+												optional: true
+												value: nine_path_bg
+											}
+											corner: {
+												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+												name: corner
+												optional: true
+												value: null
+											}
+											hScroll: {
+												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+												name: hScroll
+												optional: true
+												value: nine_path_bg_2
+											}
+											hScrollKnob: {
+												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+												name: hScrollKnob
+												optional: true
+												value: slider_progress
+											}
+											vScroll: {
+												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+												name: vScroll
+												optional: true
+												value: nine_path_bg_2
+											}
+											vScrollKnob: {
+												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+												name: vScrollKnob
+												optional: true
+												value: slider_progress
+											}
+										}
+										deletable: false
+										parent: null
+									}
+									fadeScrollBars: false
+									child: {
+										class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimTable
+										cells: [
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: Kleiner Heiltrank
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 0
+												column: 0
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 8
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 100.000K
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 0
+												column: 1
+												padLeft: 0
+												padRight: 30
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: true
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 0x
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 0
+												column: 2
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: Helm
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 1
+												column: 0
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 8
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 50K
+													textAlignment: 1
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 1
+												column: 1
+												padLeft: 0
+												padRight: 30
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: true
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 9x
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 1
+												column: 2
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: Großer Heiltrank
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 2
+												column: 0
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 8
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 2.500K
+													textAlignment: 1
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 2
+												column: 1
+												padLeft: 0
+												padRight: 30
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: true
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 9x
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 2
+												column: 2
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: Brustpanzer
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 3
+												column: 0
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 8
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 50K
+													textAlignment: 1
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 3
+												column: 1
+												padLeft: 0
+												padRight: 30
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: true
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 9x
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 3
+												column: 2
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: Kurzschwert
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 4
+												column: 0
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 8
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 50K
+													textAlignment: 1
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 4
+												column: 1
+												padLeft: 0
+												padRight: 30
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: true
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 9x
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 4
+												column: 2
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: Langschwert
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 5
+												column: 0
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 8
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 50K
+													textAlignment: 1
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 5
+												column: 1
+												padLeft: 0
+												padRight: 30
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: true
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+											{
+												child: {
+													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+													name: null
+													style: {
+														name: default
+														clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+														properties: {
+															font: {
+																type: com.badlogic.gdx.graphics.g2d.BitmapFont
+																name: font
+																optional: false
+																value: pixel_arial_16
+															}
+															fontColor: {
+																type: com.badlogic.gdx.graphics.Color
+																name: fontColor
+																optional: true
+																value: white
+															}
+															background: {
+																type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+																name: background
+																optional: true
+																value: null
+															}
+														}
+														deletable: false
+														parent: null
+													}
+													text: 9x
+													textAlignment: 8
+													ellipsis: false
+													ellipsisString: ...
+													wrap: false
+													color: null
+													touchable: enabled
+													visible: true
+												}
+												row: 5
+												column: 2
+												padLeft: 0
+												padRight: 0
+												padTop: 0
+												padBottom: 0
+												spaceLeft: 0
+												spaceRight: 0
+												spaceTop: 0
+												spaceBottom: 0
+												expandX: false
+												expandY: false
+												fillX: false
+												fillY: false
+												growX: false
+												growY: false
+												alignment: 16
+												minWidth: -1
+												minHeight: -1
+												maxWidth: -1
+												maxHeight: -1
+												preferredWidth: -1
+												preferredHeight: -1
+												uniformX: false
+												uniformY: false
+												colSpan: 1
+											}
+										]
+										name: null
+										background: null
+										color: null
+										padLeft: 5
+										padRight: 5
+										padTop: 5
+										padBottom: 5
+										paddingEnabled: true
+										alignment: 2
+										fillParent: false
+										touchable: childrenOnly
+										visible: true
+									}
+									clamp: false
+									flickScroll: false
+									flingTime: 1
+									forceScrollX: false
+									forceScrollY: true
+									overScrollX: false
+									overScrollY: false
+									overScrollDistance: 50
+									overScrollSpeedMin: 30
+									overScrollSpeedMax: 200
+									scrollBarBottom: true
+									scrollBarRight: true
+									scrollBarsOnTop: false
+									scrollBarsVisible: true
+									scrollBarTouch: true
+									scrollingDisabledX: true
+									scrollingDisabledY: false
+									smoothScrolling: true
+									variableSizeKnobs: true
+									touchable: enabled
+									visible: true
+								}
+								row: 1
+								column: 0
+								padLeft: 0
+								padRight: 0
+								padTop: 0
+								padBottom: 0
+								spaceLeft: 0
+								spaceRight: 0
+								spaceTop: 0
+								spaceBottom: 0
+								expandX: true
+								expandY: true
+								fillX: true
+								fillY: true
+								growX: true
+								growY: true
+								alignment: 1
+								minWidth: -1
+								minHeight: -1
+								maxWidth: -1
+								maxHeight: -1
+								preferredWidth: -1
+								preferredHeight: -1
+								uniformX: false
+								uniformY: false
+								colSpan: 1
+							}
+						]
+						name: null
+						background: {
+							file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/dialog_frame.9.png
+							bgColor: {
+								r: 1
+								g: 1
+								b: 1
+								a: 1
+							}
+							tint: null
+							tintName: null
+							name: dialog_frame
+							tiled: false
+							minWidth: -1
+							minHeight: -1
+							customized: false
+							tenPatchData: null
+							tvgData: null
+							type: NINE_PATCH
+							hidden: false
+						}
+						color: null
+						padLeft: 0
+						padRight: 0
+						padTop: 0
+						padBottom: 0
+						paddingEnabled: false
+						alignment: 1
+						fillParent: false
+						touchable: childrenOnly
+						visible: true
+					}
+					row: 1
+					column: 0
+					padLeft: 10
+					padRight: 0
+					padTop: 0
+					padBottom: 10
+					spaceLeft: 0
+					spaceRight: 0
+					spaceTop: 0
+					spaceBottom: 0
+					expandX: false
+					expandY: true
+					fillX: false
+					fillY: true
+					growX: false
+					growY: true
+					alignment: 1
+					minWidth: 450
+					minHeight: -1
+					maxWidth: -1
+					maxHeight: -1
+					preferredWidth: -1
+					preferredHeight: -1
+					uniformX: false
+					uniformY: false
+					colSpan: 1
+				}
+				{
+					child: {
+						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimTable
+						cells: [
+							{
+								child: {
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimTable
+									cells: [
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
+												name: null
+												drawable: {
+													file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/flower_girl.png
+													bgColor: {
+														r: 1
+														g: 1
+														b: 1
+														a: 1
+													}
+													tint: null
+													tintName: null
+													name: flower_girl
+													tiled: false
+													minWidth: -1
+													minHeight: -1
+													customized: false
+													tenPatchData: null
+													tvgData: null
+													type: TEXTURE
+													hidden: false
+												}
+												scaling: stretch
+												touchable: enabled
+												visible: true
+											}
+											row: 0
+											column: 0
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: false
+											expandY: false
+											fillX: false
+											fillY: false
+											growX: false
+											growY: false
+											alignment: 1
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+										{
+											child: {
+												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+												name: null
+												style: {
+													name: dialog_content
+													clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+													properties: {
+														font: {
+															type: com.badlogic.gdx.graphics.g2d.BitmapFont
+															name: font
+															optional: false
+															value: pixel_arial_16
+														}
+														fontColor: {
+															type: com.badlogic.gdx.graphics.Color
+															name: fontColor
+															optional: true
+															value: white
+														}
+														background: {
+															type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+															name: background
+															optional: true
+															value: null
+														}
+													}
+													deletable: true
+													parent: null
+												}
+												text: Kleiner Heiltrank
+												textAlignment: 1
+												ellipsis: false
+												ellipsisString: ...
+												wrap: false
+												color: {
+													color: {
+														r: 0.2627451
+														g: 0.35686275
+														b: 0.73333335
+														a: 1
+													}
+													name: highlight_blue
+												}
+												touchable: enabled
+												visible: true
+											}
+											row: 0
+											column: 1
+											padLeft: 0
+											padRight: 0
+											padTop: 0
+											padBottom: 0
+											spaceLeft: 0
+											spaceRight: 0
+											spaceTop: 0
+											spaceBottom: 0
+											expandX: true
+											expandY: false
+											fillX: true
+											fillY: false
+											growX: true
+											growY: false
+											alignment: 1
+											minWidth: -1
+											minHeight: -1
+											maxWidth: -1
+											maxHeight: -1
+											preferredWidth: -1
+											preferredHeight: -1
+											uniformX: false
+											uniformY: false
+											colSpan: 1
+										}
+									]
+									name: null
+									background: null
+									color: null
+									padLeft: 0
+									padRight: 0
+									padTop: 0
+									padBottom: 0
+									paddingEnabled: false
+									alignment: 1
+									fillParent: false
+									touchable: childrenOnly
+									visible: true
+								}
+								row: 0
+								column: 0
+								padLeft: 0
+								padRight: 0
+								padTop: 0
+								padBottom: 0
+								spaceLeft: 0
+								spaceRight: 0
+								spaceTop: 0
+								spaceBottom: 0
+								expandX: true
+								expandY: false
+								fillX: true
+								fillY: false
+								growX: true
+								growY: false
+								alignment: 1
+								minWidth: -1
+								minHeight: -1
+								maxWidth: -1
+								maxHeight: -1
+								preferredWidth: -1
+								preferredHeight: -1
+								uniformX: false
+								uniformY: false
+								colSpan: 1
+							}
+							{
+								child: {
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+									name: null
+									style: {
+										name: dialog_content
+										clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+										properties: {
+											font: {
+												type: com.badlogic.gdx.graphics.g2d.BitmapFont
+												name: font
+												optional: false
+												value: pixel_arial_16
+											}
+											fontColor: {
+												type: com.badlogic.gdx.graphics.Color
+												name: fontColor
+												optional: true
+												value: white
+											}
+											background: {
+												type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+												name: background
+												optional: true
+												value: null
+											}
+										}
+										deletable: true
+										parent: null
+									}
+									text: Ein kleiner Trank der 25 Leben wiederherstellt.
+									textAlignment: 8
+									ellipsis: false
+									ellipsisString: ...
+									wrap: true
+									color: {
+										color: {
+											r: 0.4117647
+											g: 0.32941177
+											b: 0.32941177
+											a: 1
+										}
+										name: dark_grey
+									}
+									touchable: enabled
+									visible: true
+								}
+								row: 1
+								column: 0
+								padLeft: 0
+								padRight: 0
+								padTop: 0
+								padBottom: 0
+								spaceLeft: 0
+								spaceRight: 0
+								spaceTop: 0
+								spaceBottom: 0
+								expandX: true
+								expandY: true
+								fillX: true
+								fillY: true
+								growX: true
+								growY: true
+								alignment: 1
+								minWidth: -1
+								minHeight: -1
+								maxWidth: -1
+								maxHeight: -1
+								preferredWidth: -1
+								preferredHeight: -1
+								uniformX: false
+								uniformY: false
+								colSpan: 1
+							}
+						]
+						name: null
+						background: {
+							file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/dialog_frame.9.png
+							bgColor: {
+								r: 1
+								g: 1
+								b: 1
+								a: 1
+							}
+							tint: null
+							tintName: null
+							name: dialog_frame
+							tiled: false
+							minWidth: -1
+							minHeight: -1
+							customized: false
+							tenPatchData: null
+							tvgData: null
+							type: NINE_PATCH
+							hidden: false
+						}
+						color: null
+						padLeft: 0
+						padRight: 0
+						padTop: 0
+						padBottom: 0
+						paddingEnabled: false
+						alignment: 1
+						fillParent: false
+						touchable: childrenOnly
+						visible: true
+					}
+					row: 1
+					column: 1
+					padLeft: 20
+					padRight: 10
+					padTop: 0
+					padBottom: 10
 					spaceLeft: 0
 					spaceRight: 0
 					spaceTop: 0

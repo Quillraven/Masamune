@@ -6,21 +6,21 @@ filter: Nearest, Nearest
 repeat: none
 PIXEARG_
   rotate: false
-  xy: 4, 814
+  xy: 4, 818
   size: 503, 51
   orig: 503, 51
   offset: 0, 0
   index: -1
 arrow
   rotate: false
-  xy: 938, 930
+  xy: 152, 774
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 dialog_choice_frame
   rotate: false
-  xy: 842, 922
+  xy: 842, 926
   size: 64, 20
   split: 5, 5, 5, 5
   pad: 6, 6, 5, 5
@@ -29,7 +29,7 @@ dialog_choice_frame
   index: -1
 dialog_face_frame
   rotate: false
-  xy: 4, 758
+  xy: 4, 762
   size: 48, 48
   split: 13, 6, 16, 6
   pad: 0, 0, 0, 0
@@ -38,7 +38,7 @@ dialog_face_frame
   index: -1
 dialog_frame
   rotate: false
-  xy: 518, 882
+  xy: 518, 886
   size: 316, 60
   split: 9, 9, 9, 9
   orig: 316, 60
@@ -46,51 +46,59 @@ dialog_frame
   index: -1
 elder
   rotate: false
-  xy: 4, 712
+  xy: 4, 716
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 fipps_16
   rotate: false
-  xy: 4, 873
+  xy: 4, 877
   size: 506, 69
   orig: 506, 69
   offset: 0, 0
   index: -1
 flower_girl
   rotate: false
-  xy: 106, 768
+  xy: 106, 772
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 hero
   rotate: false
-  xy: 4, 620
+  xy: 4, 624
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 merchant
   rotate: false
-  xy: 60, 768
+  xy: 60, 772
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 nine_path_bg
   rotate: false
-  xy: 842, 898
+  xy: 842, 902
   size: 16, 16
   split: 3, 3, 3, 3
   pad: 0, 0, 0, 0
   orig: 16, 16
   offset: 0, 0
   index: -1
+nine_path_bg_2
+  rotate: false
+  xy: 938, 930
+  size: 16, 16
+  split: 3, 3, 3, 3
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 slider_progress
   rotate: false
-  xy: 914, 926
+  xy: 914, 930
   size: 16, 16
   split: 4, 4, 4, 4
   pad: 0, 0, 0, 0
@@ -99,7 +107,7 @@ slider_progress
   index: -1
 slider_progress_blue
   rotate: false
-  xy: 4, 596
+  xy: 4, 600
   size: 16, 16
   split: 4, 5, 4, 4
   pad: 0, 0, 0, 0
@@ -108,7 +116,7 @@ slider_progress_blue
   index: -1
 slider_progress_green
   rotate: false
-  xy: 152, 790
+  xy: 152, 794
   size: 16, 16
   split: 4, 4, 4, 4
   pad: 0, 0, 0, 0
@@ -117,7 +125,7 @@ slider_progress_green
   index: -1
 slider_progress_yellow
   rotate: false
-  xy: 866, 898
+  xy: 866, 902
   size: 16, 16
   split: 4, 6, 4, 4
   pad: 0, 0, 0, 0
@@ -126,7 +134,7 @@ slider_progress_yellow
   index: -1
 smith
   rotate: false
-  xy: 4, 666
+  xy: 4, 670
   size: 38, 38
   orig: 38, 38
   offset: 0, 0

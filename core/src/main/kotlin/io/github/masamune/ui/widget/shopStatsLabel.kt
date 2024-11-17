@@ -1,0 +1,65 @@
+package io.github.masamune.ui.widget
+
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Align
+import ktx.actors.txt
+import ktx.scene2d.KTable
+import ktx.scene2d.KWidget
+import ktx.scene2d.Scene2dDsl
+import ktx.scene2d.actor
+import ktx.scene2d.label
+
+/**
+ * A table with two labels:
+ * - One [valueLabel] for the current stats value of a character
+ * - One [diffLabel] that can show the difference to the current stats value like (+3) or (-3)
+ *
+ * This is used in shops to let the player know if a specific e.g. weapon is better than the currently equipped one.
+ */
+class ShopStatsLabel(
+    skin: Skin,
+    initValue: String,
+) : KTable, Table(skin) {
+
+    private val valueLabel: Label
+    private val diffLabel: Label
+
+    init {
+        valueLabel = label(initValue, "dialog_content", skin) { cell ->
+            this.color = skin.getColor("dark_grey")
+            this.setAlignment(Align.left)
+            cell.growX()
+        }
+        diffLabel = label("", "dialog_content", skin) { cell ->
+            this.setAlignment(Align.right)
+            cell.growX().padLeft(10f).minWidth(40f)
+        }
+    }
+
+    fun txt(initValue: String, diffValue: Int) {
+        valueLabel.txt = initValue
+        if (diffValue == 0) {
+            diffLabel.txt = ""
+            return
+        }
+
+        if (diffValue > 0) {
+            diffLabel.txt = "+$diffValue"
+            diffLabel.color = skin.getColor("green")
+        } else {
+            diffLabel.txt = "$diffValue"
+            diffLabel.color = skin.getColor("red")
+        }
+    }
+
+    fun txt(initAndDiff: Pair<String, Int>) = txt(initAndDiff.first, initAndDiff.second)
+}
+
+@Scene2dDsl
+fun <S> KWidget<S>.shopStatsLabel(
+    skin: Skin,
+    initValue: String,
+    init: (@Scene2dDsl ShopStatsLabel).(S) -> Unit = {},
+): ShopStatsLabel = actor(ShopStatsLabel(skin, initValue), init)

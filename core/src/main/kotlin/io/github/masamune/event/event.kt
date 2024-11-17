@@ -43,6 +43,8 @@ data object UiSelectEvent : Event
 
 data object UiBackEvent : Event
 
+data class ShopBeginEvent(val world: World, val player: Entity, val shop: Entity) : Event
+
 data class MapTransitionBeginEvent(
     val fromTiledMap: TiledMap,
     val toTiledMap: TiledMap,

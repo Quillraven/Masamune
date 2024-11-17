@@ -3,16 +3,16 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "core/src/test/resources/maps/objects.tsx",
+    "activeFile": "assets/maps/path_to_forest.tmx",
     "expandedProjectPaths": [
-        "core/src/test/resources/maps",
-        "assets/maps",
-        "core/src/test/resources",
         "core/src/test",
+        "assets/maps",
+        "assets",
         ".",
         "core",
-        "assets",
-        "core/src"
+        "core/src",
+        "core/src/test/resources",
+        "core/src/test/resources/maps"
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
@@ -26,10 +26,10 @@
                 4
             ],
             "scale": 4,
-            "selectedLayer": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 128.125,
-                "y": 352.125
+                "x": 122.5,
+                "y": 505.375
             }
         },
         "assets/maps/test.tmx": {
@@ -47,14 +47,14 @@
         },
         "assets/maps/village.tmx": {
             "expandedObjectLayers": [
-                6,
-                7
+                7,
+                6
             ],
             "scale": 4,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 164.25,
-                "y": 170.875
+                "x": 160.125,
+                "y": 159.875
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
@@ -177,10 +177,10 @@
     "property.type": "string",
     "recentFiles": [
         "assets/maps/village.tmx",
-        "assets/maps/path_to_forest.tmx",
-        "assets/maps/objects.tsx",
-        "core/src/test/resources/maps/transition_test_small.tmx",
         "core/src/test/resources/maps/objects.tsx",
+        "core/src/test/resources/maps/transition_test_small.tmx",
+        "assets/maps/objects.tsx",
+        "assets/maps/path_to_forest.tmx",
         "core/src/test/resources/maps/transition_test_large.tmx",
         "core/src/test/resources/maps/transition_test_large2.tmx",
         "core/src/test/resources/maps/transition_test.tmx",
