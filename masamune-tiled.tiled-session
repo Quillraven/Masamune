@@ -22,14 +22,14 @@
         },
         "assets/maps/path_to_forest.tmx": {
             "expandedObjectLayers": [
-                6,
-                4
+                4,
+                6
             ],
             "scale": 4,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 122.5,
-                "y": 505.375
+                "x": 128.125,
+                "y": 352.125
             }
         },
         "assets/maps/test.tmx": {
@@ -174,7 +174,7 @@
         "core/src/test/resources/maps/objects.tsx"
     ],
     "project": "masamune-tiled.tiled-project",
-    "property.type": "string",
+    "property.type": "ItemCategory",
     "recentFiles": [
         "assets/maps/village.tmx",
         "core/src/test/resources/maps/objects.tsx",

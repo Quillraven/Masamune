@@ -90,6 +90,22 @@
             ]
         },
         {
+            "id": 12,
+            "name": "ItemCategory",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "WEAPON",
+                "ARMOR",
+                "HELMET",
+                "BOOTS",
+                "ACCESSORY",
+                "OTHER",
+                "QUEST"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 9,
@@ -104,6 +120,17 @@
                     "name": "atlasRegionKey",
                     "type": "string",
                     "value": ""
+                },
+                {
+                    "name": "category",
+                    "propertyType": "ItemCategory",
+                    "type": "string",
+                    "value": "WEAPON"
+                },
+                {
+                    "name": "cost",
+                    "type": "int",
+                    "value": 0
                 },
                 {
                     "name": "itemType",
@@ -140,7 +167,12 @@
             "type": "enum",
             "values": [
                 "ELDER_SWORD",
-                "UNDEFINED"
+                "UNDEFINED",
+                "STUDDED_LEATHER",
+                "BOOTS",
+                "HELMET",
+                "RING",
+                "SMALL_MANA_POTION"
             ],
             "valuesAsFlags": false
         },

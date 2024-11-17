@@ -66,6 +66,7 @@ fun main() {
         "MapObjectType" to "TiledObjectType",
         "ItemType" to "ItemType",
         "AnimationType" to "AnimationType",
+        "ItemCategory" to "ItemCategory",
     )
     supportedEnums.forEach { (tiledEnum, masamuneEnum) ->
         tiledProject.propertyTypes
