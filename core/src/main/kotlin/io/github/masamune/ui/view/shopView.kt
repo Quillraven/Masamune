@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import io.github.masamune.ui.model.ShopViewModel
 import io.github.masamune.ui.model.UIStats
+import io.github.masamune.ui.widget.OptionTable
 import io.github.masamune.ui.widget.ShopStatsLabel
 import io.github.masamune.ui.widget.frameImage
 import io.github.masamune.ui.widget.optionTable
@@ -44,6 +45,9 @@ class ShopView(
     private val resistanceLabel: Label
     private val resistanceShopStatsLabel: ShopStatsLabel
 
+    private val itemTable: Table
+    private val optionTable: OptionTable
+
     init {
         background = skin.getDrawable("dialog_frame")
         setFillParent(true)
@@ -68,6 +72,9 @@ class ShopView(
         armorShopStatsLabel = findActor(ShopView::armorShopStatsLabel.name)
         resistanceLabel = findActor(ShopView::resistanceLabel.name)
         resistanceShopStatsLabel = findActor(ShopView::resistanceShopStatsLabel.name)
+
+        itemTable = findActor(ShopView::itemTable.name)
+        optionTable = findActor(ShopView::optionTable.name)
 
         registerOnPropertyChanges(model)
     }
@@ -115,14 +122,20 @@ class ShopView(
 
             optionTable(skin) { optionTableCell ->
                 optionTableCell.fill().align(Align.left)
-
-                option("Gegenstände")
-                option("Verkaufen")
-                option("Beenden")
+                name = ShopView::optionTable.name
             }
 
             tblCell.top().right().padTop(10f).padRight(10f).width(250f).row()
         }
+    }
+
+    private fun itemRow(title: String, cost: Int) {
+        val titleLabel = scene2d.label(title, defaultStyle, skin)
+        val costLabel = scene2d.label("${cost}[#FFFFFF77]K[]", defaultStyle, skin)
+        val selectedLabel = scene2d.label("0x", defaultStyle, skin)
+        itemTable.add(titleLabel).left().padLeft(5f)
+        itemTable.add(costLabel).right().padRight(30f).expandX()
+        itemTable.add(selectedLabel).right().padRight(5f).row()
     }
 
     private fun initBottomLeft(skin: Skin) {
@@ -146,57 +159,7 @@ class ShopView(
                 setScrollingDisabled(true, false)
 
                 table(skin) {
-                    label("Kleiner Heiltrank", defaultStyle, skin) { lblCell ->
-                        lblCell.left().padLeft(5f)
-                    }
-                    label("100.000K", defaultStyle, skin) { lblCell ->
-                        lblCell.padRight(30f).expandX().right()
-                    }
-                    label("0x", defaultStyle, skin) { lblCell ->
-                        lblCell.right().padRight(5f).row()
-                    }
-
-                    label("Großer Heiltrank", defaultStyle, skin) { lblCell ->
-                        lblCell.left().padLeft(5f)
-                    }
-                    label("50.000K", defaultStyle, skin) { lblCell ->
-                        lblCell.padRight(30f).expandX().right()
-                    }
-                    label("9x", defaultStyle, skin) { lblCell ->
-                        lblCell.right().padRight(5f).row()
-                    }
-
-                    label("Kurzschwert", defaultStyle, skin) { lblCell ->
-                        lblCell.left().padLeft(5f)
-                    }
-                    label("100", defaultStyle, skin) { lblCell ->
-                        lblCell.padRight(30f).expandX().right()
-                    }
-                    label("0x", defaultStyle, skin) { lblCell ->
-                        lblCell.right().padRight(5f).row()
-                    }
-
-                    label("Langschwert", defaultStyle, skin) { lblCell ->
-                        lblCell.left().padLeft(5f)
-                    }
-                    label("550", defaultStyle, skin) { lblCell ->
-                        lblCell.padRight(30f).expandX().right()
-                    }
-                    label("4x", defaultStyle, skin) { lblCell ->
-                        lblCell.right().padRight(5f).row()
-                    }
-
-                    for (i in 0..20) {
-                        label("Item $i", defaultStyle, skin) { lblCell ->
-                            lblCell.left().padLeft(5f)
-                        }
-                        label("${i * 50}", defaultStyle, skin) { lblCell ->
-                            lblCell.padRight(30f).expandX().right()
-                        }
-                        label("0x", defaultStyle, skin) { lblCell ->
-                            lblCell.right().padRight(5f).row()
-                        }
-                    }
+                    this.name = ShopView::itemTable.name
                 }.top().padTop(5f)
 
                 spCell.grow()
@@ -253,6 +216,16 @@ class ShopView(
             armorShopStatsLabel.txt(labelsAndStats[UIStats.ARMOR]?.second ?: errorTitleLabel.second, -200)
             resistanceLabel.setText(labelsAndStats[UIStats.RESISTANCE]?.first ?: errorTitleLabel.first)
             resistanceShopStatsLabel.txt(labelsAndStats[UIStats.RESISTANCE]?.second ?: errorTitleLabel.second, -3)
+        }
+
+        model.onPropertyChange(ShopViewModel::shopItems) { itemsByCategory ->
+            itemsByCategory.values.forEach { itemModels ->
+                itemModels.forEach { itemRow(it.name, it.cost) }
+            }
+        }
+
+        model.onPropertyChange(ShopViewModel::options) { optionNames ->
+            optionNames.forEach { optionTable.option(it) }
         }
     }
 
