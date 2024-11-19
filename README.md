@@ -17,11 +17,14 @@ Imagine an epic story here. Will be updated later.
 - Close/Cancel menu with CTRL_LEFT or ESCAPE
 
 ### Screenshots
-
-![image](https://github.com/user-attachments/assets/ac47d508-1ce7-40bb-90e3-a4faa4378b5b)
-![image](https://github.com/user-attachments/assets/1a2200d2-22de-4738-9f1e-fa286e9b8f71)
-![image](https://github.com/user-attachments/assets/7a2eceb5-9542-4b50-8f1a-8823c0438cfb)
-
+<p float="left">
+    <img src="https://github.com/user-attachments/assets/ac47d508-1ce7-40bb-90e3-a4faa4378b5b" width="500">
+    <img src="https://github.com/user-attachments/assets/1a2200d2-22de-4738-9f1e-fa286e9b8f71" width="500">
+</p>
+<p float="left">
+    <img src="https://github.com/user-attachments/assets/7a2eceb5-9542-4b50-8f1a-8823c0438cfb" width="500">
+    <img src="https://github.com/user-attachments/assets/c8553500-47d4-4b89-a535-6b720c19039a" width="500">
+</p>
 
 ### Credits
 
