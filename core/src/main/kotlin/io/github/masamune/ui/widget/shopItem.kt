@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Scaling
+import io.github.masamune.ui.view.ShopView
 import ktx.actors.plusAssign
 import ktx.actors.then
 import ktx.scene2d.KTable
@@ -35,7 +36,7 @@ class ShopItemWidget(
         }
 
         label(title, defaultStyle, skin) { it.left() }
-        label("${cost}[#FFFFFF77]K[]", defaultStyle, skin) { it.right().padRight(30f).expandX() }
+        label("${cost}${ShopView.TALONS_POSTFIX}", defaultStyle, skin) { it.right().padRight(30f).expandX() }
         label("0x", defaultStyle, skin) { it.right().padRight(5f) }
     }
 
