@@ -25,8 +25,9 @@ class OptionTable(skin: Skin) : Table(skin), KTable {
         selectedOption = 0
     }
 
-    fun option(text: String, optionStyle: String = defaultStyle) {
+    fun option(text: String, userObject: Any? = null, optionStyle: String = defaultStyle) {
         val option = scene2d.dialogOption(text, skin, optionStyle) {
+            this.userObject = userObject
             select(!this@OptionTable.hasChildren())
         }
         add(option).uniformX().left().fillX().padBottom(5f).row()
@@ -53,6 +54,18 @@ class OptionTable(skin: Skin) : Table(skin), KTable {
         selectedOption = realIdx
         (getChild(selectedOption) as DialogOptionWidget).select(true)
         return true
+    }
+
+    inline fun <reified T : Any> selectedUserObject(): T {
+        return getChild(selectedOption).userObject as T
+    }
+
+    fun stopSelectAnimation() {
+        (getChild(selectedOption) as DialogOptionWidget).stopSelectAnimation()
+    }
+
+    fun resumeSelectAnimation() {
+        (getChild(selectedOption) as DialogOptionWidget).resumeSelectAnimation()
     }
 
 }
