@@ -2,7 +2,11 @@ package io.github.masamune.component
 
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
-import com.github.quillraven.fleks.*
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.EntityUpdateContext
+import com.github.quillraven.fleks.World
 import ktx.math.component1
 import ktx.math.component2
 import ktx.math.vec2
