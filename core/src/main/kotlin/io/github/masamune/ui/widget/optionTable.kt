@@ -36,10 +36,12 @@ class OptionTable(skin: Skin) : Table(skin), KTable {
 
     fun nextOption(): Boolean = selectOption(selectedOption + 1)
 
+    fun lastOption(): Boolean = selectOption(children.size - 1)
+
     private fun selectOption(idx: Int): Boolean {
         val realIdx = when {
-            idx < 0 -> (children.size) - 1
-            idx >= (children.size) -> 0
+            idx < 0 -> children.size - 1
+            idx >= children.size -> 0
             else -> idx
         }
 

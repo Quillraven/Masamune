@@ -24,6 +24,8 @@ import io.github.masamune.component.Stats
 import io.github.masamune.event.EventService
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.gdxTest
+import io.github.masamune.input.ControllerStateUI
+import io.github.masamune.input.KeyboardController
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledStats
@@ -123,6 +125,9 @@ private class UiShopTest : KtxApplicationAdapter {
             shopView(viewModel, skin)
         }
         eventService += stage
+        Gdx.input.inputProcessor = KeyboardController(eventService, ControllerStateUI::class).also {
+            eventService += it
+        }
 
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()

@@ -6,9 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import io.github.masamune.ui.model.ShopViewModel
 import io.github.masamune.ui.model.UIStats
+import io.github.masamune.ui.widget.ItemTable
 import io.github.masamune.ui.widget.OptionTable
 import io.github.masamune.ui.widget.ShopStatsLabel
 import io.github.masamune.ui.widget.frameImage
+import io.github.masamune.ui.widget.itemTable
 import io.github.masamune.ui.widget.optionTable
 import io.github.masamune.ui.widget.shopStatsLabel
 import ktx.scene2d.KTable
@@ -19,8 +21,12 @@ import ktx.scene2d.defaultStyle
 import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
-import ktx.scene2d.scrollPane
 import ktx.scene2d.table
+
+
+private enum class ShopViewFocus {
+    OPTIONS, ITEMS
+}
 
 @Scene2dDsl
 class ShopView(
@@ -45,8 +51,10 @@ class ShopView(
     private val resistanceLabel: Label
     private val resistanceShopStatsLabel: ShopStatsLabel
 
-    private val itemTable: Table
+    private val itemTable: ItemTable
     private val optionTable: OptionTable
+
+    private var focus = ShopViewFocus.OPTIONS
 
     init {
         background = skin.getDrawable("dialog_frame")
@@ -129,15 +137,6 @@ class ShopView(
         }
     }
 
-    private fun itemRow(title: String, cost: Int) {
-        val titleLabel = scene2d.label(title, defaultStyle, skin)
-        val costLabel = scene2d.label("${cost}[#FFFFFF77]K[]", defaultStyle, skin)
-        val selectedLabel = scene2d.label("0x", defaultStyle, skin)
-        itemTable.add(titleLabel).left().padLeft(5f)
-        itemTable.add(costLabel).right().padRight(30f).expandX()
-        itemTable.add(selectedLabel).right().padRight(5f).row()
-    }
-
     private fun initBottomLeft(skin: Skin) {
         table(skin) { tblCell ->
             background = skin.getDrawable("dialog_frame")
@@ -151,18 +150,9 @@ class ShopView(
                 innerTblCell.expandX().top().right().row()
             }
 
-            scrollPane(defaultStyle, skin) { spCell ->
-                fadeScrollBars = false
-                setFlickScroll(false)
-                setForceScroll(false, true)
-                setOverscroll(false, false)
-                setScrollingDisabled(true, false)
-
-                table(skin) {
-                    this.name = ShopView::itemTable.name
-                }.top().padTop(5f)
-
-                spCell.grow()
+            itemTable(skin) { itCell ->
+                this.name = ShopView::itemTable.name
+                itCell.grow()
             }
 
             tblCell.pad(10f, 10f, 10f, 20f).grow()
@@ -218,17 +208,50 @@ class ShopView(
             resistanceShopStatsLabel.txt(labelsAndStats[UIStats.RESISTANCE]?.second ?: errorTitleLabel.second, -3)
         }
 
-        model.onPropertyChange(ShopViewModel::shopItems) { itemsByCategory ->
-            itemsByCategory.values.forEach { itemModels ->
-                itemModels.forEach { itemRow(it.name, it.cost) }
-            }
-        }
-
         model.onPropertyChange(ShopViewModel::options) { optionNames ->
             optionNames.forEach { optionTable.option(it) }
         }
     }
 
+    override fun onUpPressed() {
+        when (focus) {
+            ShopViewFocus.OPTIONS -> optionTable.prevOption()
+            ShopViewFocus.ITEMS -> itemTable.prevItem()
+        }
+    }
+
+    override fun onDownPressed() {
+        when (focus) {
+            ShopViewFocus.OPTIONS -> optionTable.nextOption()
+            ShopViewFocus.ITEMS -> itemTable.nextItem()
+        }
+    }
+
+    private fun selectOption() {
+        // TODO when for optionTable.selectedOption (somehow we need to also know which option is WEAPON, QUIT, ARMOR, ...)
+        focus = ShopViewFocus.ITEMS
+        itemTable.clearItems()
+        viewModel.shopItems.values.forEach { itemModels ->
+            itemModels.forEach { itemTable.item(it.name, it.cost) }
+        }
+    }
+
+    override fun onSelectPressed() {
+        when (focus) {
+            ShopViewFocus.OPTIONS -> selectOption()
+            ShopViewFocus.ITEMS -> Unit
+        }
+    }
+
+    override fun onBackPressed() {
+        when (focus) {
+            ShopViewFocus.OPTIONS -> optionTable.lastOption() // select 'Quit' option
+            ShopViewFocus.ITEMS -> {
+                focus = ShopViewFocus.OPTIONS
+                itemTable.clearItems()
+            }
+        }
+    }
 }
 
 @Scene2dDsl
