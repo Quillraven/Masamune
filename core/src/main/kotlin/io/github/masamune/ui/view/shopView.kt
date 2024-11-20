@@ -4,12 +4,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import io.github.masamune.tiledmap.ItemCategory
+import io.github.masamune.ui.model.ItemModel
+import io.github.masamune.ui.model.ShopOption
 import io.github.masamune.ui.model.ShopViewModel
 import io.github.masamune.ui.model.UIStats
+import io.github.masamune.ui.widget.ItemInfoTable
 import io.github.masamune.ui.widget.ItemTable
 import io.github.masamune.ui.widget.OptionTable
 import io.github.masamune.ui.widget.ShopStatsLabel
 import io.github.masamune.ui.widget.frameImage
+import io.github.masamune.ui.widget.itemInfoTable
 import io.github.masamune.ui.widget.itemTable
 import io.github.masamune.ui.widget.optionTable
 import io.github.masamune.ui.widget.shopStatsLabel
@@ -18,7 +23,6 @@ import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
 import ktx.scene2d.defaultStyle
-import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
@@ -35,6 +39,7 @@ class ShopView(
 ) : View<ShopViewModel>(skin, model), KTable {
 
     private val talonLabel: Label
+    private val totalLabel: Label
 
     private val strLabel: Label
     private val strShopStatsLabel: ShopStatsLabel
@@ -53,8 +58,10 @@ class ShopView(
 
     private val itemTable: ItemTable
     private val optionTable: OptionTable
+    private val itemInfoTable: ItemInfoTable
 
     private var focus = ShopViewFocus.OPTIONS
+    private var activeItems: List<ItemModel> = emptyList()
 
     init {
         background = skin.getDrawable("dialog_frame")
@@ -66,6 +73,8 @@ class ShopView(
         initBottomRight(skin)
 
         talonLabel = findActor(ShopView::talonLabel.name)
+        totalLabel = findActor(ShopView::totalLabel.name)
+
         strLabel = findActor(ShopView::strLabel.name)
         strShopStatsLabel = findActor(ShopView::strShopStatsLabel.name)
         agiLabel = findActor(ShopView::agiLabel.name)
@@ -83,6 +92,7 @@ class ShopView(
 
         itemTable = findActor(ShopView::itemTable.name)
         optionTable = findActor(ShopView::optionTable.name)
+        itemInfoTable = findActor(ShopView::itemInfoTable.name)
 
         registerOnPropertyChanges(model)
     }
@@ -145,13 +155,19 @@ class ShopView(
                 label("", "dialog_option", skin) { lblCell ->
                     setAlignment(Align.center)
                     name = ShopView::talonLabel.name
+                    lblCell.padTop(2f).padBottom(5f).expandX().left()
+                }
+                label("", "dialog_option", skin) { lblCell ->
+                    setAlignment(Align.center)
+                    name = ShopView::totalLabel.name
                     lblCell.padTop(2f).padBottom(5f)
                 }
-                innerTblCell.expandX().top().right().row()
+                innerTblCell.growX().row()
             }
 
             itemTable(skin) { itCell ->
                 this.name = ShopView::itemTable.name
+                this.isVisible = false
                 itCell.grow()
             }
 
@@ -160,26 +176,9 @@ class ShopView(
     }
 
     private fun initBottomRight(skin: Skin) {
-        table(skin) { tblCell ->
-            background = skin.getDrawable("dialog_frame")
-
-            table(skin) { headerTblCell ->
-                image(skin.getDrawable("flower_girl"))
-                label("Kleiner Heiltrank", "dialog_content", skin) { lblCell ->
-                    setAlignment(Align.center)
-                    color = skin.getColor("highlight_blue")
-                    lblCell.growX()
-                }
-                headerTblCell.growX().row()
-            }
-
-            label("Ein kleiner Trank der 25 Leben wiederherstellt.", "dialog_content", skin) { lblCell ->
-                wrap = true
-                color = skin.getColor("dark_grey")
-                setAlignment(Align.topLeft)
-                lblCell.padTop(10f).grow()
-            }
-
+        itemInfoTable(skin) { tblCell ->
+            name = ShopView::itemInfoTable.name
+            isVisible = false
             tblCell.pad(10f, 0f, 10f, 10f).growX().top()
         }
     }
@@ -189,7 +188,9 @@ class ShopView(
             val errorTitleLabel = "???" to "0"
 
             // money
-            talonLabel.setText(labelsAndStats[UIStats.TALONS]?.first ?: errorTitleLabel.first)
+            val talonsTitle = labelsAndStats[UIStats.TALONS]?.first ?: errorTitleLabel.first
+            val talonsValue = labelsAndStats[UIStats.TALONS]?.second ?: errorTitleLabel.second
+            talonLabel.setText(" $talonsTitle: $talonsValue$TALONS_POSTFIX ")
             // stats
             strLabel.setText(labelsAndStats[UIStats.STRENGTH]?.first ?: errorTitleLabel.first)
             strShopStatsLabel.txt(labelsAndStats[UIStats.STRENGTH]?.second ?: errorTitleLabel.second, 1)
@@ -209,31 +210,73 @@ class ShopView(
         }
 
         model.onPropertyChange(ShopViewModel::options) { optionNames ->
-            optionNames.forEach { optionTable.option(it) }
+            optionNames.forEach { optionTable.option(it.second, it.first) }
         }
+
+        model.onPropertyChange(ShopViewModel::totalCost) { labelAndValues ->
+            totalLabel.setText(" ${labelAndValues.first}: ${labelAndValues.second}$TALONS_POSTFIX ")
+        }
+    }
+
+    private fun updateActiveItem() {
+        if (activeItems.isEmpty()) {
+            return
+        }
+
+        val selectedItem = activeItems[itemTable.selectedItem]
+        itemInfoTable.item(selectedItem.name, selectedItem.description, selectedItem.image)
     }
 
     override fun onUpPressed() {
         when (focus) {
             ShopViewFocus.OPTIONS -> optionTable.prevOption()
-            ShopViewFocus.ITEMS -> itemTable.prevItem()
+            ShopViewFocus.ITEMS -> {
+                itemTable.prevItem()
+                updateActiveItem()
+            }
         }
     }
 
     override fun onDownPressed() {
         when (focus) {
             ShopViewFocus.OPTIONS -> optionTable.nextOption()
-            ShopViewFocus.ITEMS -> itemTable.nextItem()
+            ShopViewFocus.ITEMS -> {
+                itemTable.nextItem()
+                updateActiveItem()
+            }
         }
     }
 
     private fun selectOption() {
-        // TODO when for optionTable.selectedOption (somehow we need to also know which option is WEAPON, QUIT, ARMOR, ...)
-        focus = ShopViewFocus.ITEMS
-        itemTable.clearItems()
-        viewModel.shopItems.values.forEach { itemModels ->
-            itemModels.forEach { itemTable.item(it.name, it.cost) }
+        val shopOption: ShopOption = optionTable.selectedUserObject()
+        activeItems = when (shopOption) {
+            ShopOption.WEAPON -> viewModel.shopItemsOf(ItemCategory.WEAPON)
+            ShopOption.ARMOR -> viewModel.shopItemsOf(ItemCategory.ARMOR, ItemCategory.HELMET, ItemCategory.BOOTS)
+            ShopOption.ACCESSORY -> viewModel.shopItemsOf(ItemCategory.ACCESSORY)
+            ShopOption.OTHER -> viewModel.shopItemsOf(ItemCategory.OTHER)
+            ShopOption.SELL -> viewModel.sellItems()
+            ShopOption.QUIT -> {
+                println("TODO QUIT")
+                return
+            }
         }
+
+        focus = ShopViewFocus.ITEMS
+        optionTable.stopSelectAnimation()
+        itemTable.isVisible = true
+        itemInfoTable.isVisible = activeItems.isNotEmpty()
+        itemTable.clearItems()
+        itemInfoTable.clearItem()
+        activeItems.forEach { itemTable.item(itemName(it.name), it.cost) }
+        updateActiveItem()
+    }
+
+    // shorten item names by a maximum length
+    private fun itemName(name: String): String {
+        if (name.length > 14) {
+            return "${name.substring(0, 14)}."
+        }
+        return name
     }
 
     override fun onSelectPressed() {
@@ -249,8 +292,15 @@ class ShopView(
             ShopViewFocus.ITEMS -> {
                 focus = ShopViewFocus.OPTIONS
                 itemTable.clearItems()
+                itemTable.isVisible = false
+                itemInfoTable.isVisible = false
+                optionTable.resumeSelectAnimation()
             }
         }
+    }
+
+    companion object {
+        const val TALONS_POSTFIX = "[#FFFFFF77]K[]" // postfix at the end of an item cost
     }
 }
 
