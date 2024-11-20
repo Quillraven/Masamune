@@ -45,6 +45,10 @@ class ItemTable(skin: Skin) : ScrollPane(null, skin), KGroup {
     fun nextItem(): Boolean = selectOption(selectedItem + 1)
 
     private fun selectOption(idx: Int): Boolean {
+        if (!contentTable.hasChildren()) {
+            return false
+        }
+
         val realIdx = when {
             idx < 0 -> 0
             idx >= contentTable.children.size -> contentTable.children.size - 1
