@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
+import ktx.actors.alpha
 import ktx.actors.plusAssign
 import ktx.actors.then
 import ktx.scene2d.KTable
@@ -54,6 +55,16 @@ class DialogOptionWidget(
         image.isVisible = value
     }
 
+    fun stopSelectAnimation() {
+        image.clearActions()
+        image.alpha = 1f
+    }
+
+    fun resumeSelectAnimation() {
+        image.clearActions()
+        image.alpha = 1f
+        image += forever(fadeOut(0.5f) then fadeIn(0.25f) then delay(0.25f))
+    }
 }
 
 @Scene2dDsl
