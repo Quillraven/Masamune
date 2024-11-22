@@ -1,5 +1,6 @@
 package io.github.masamune.ui.model
 
+import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Entity
 import io.github.masamune.dialog.Dialog
 import io.github.masamune.event.DialogBeginEvent
@@ -21,7 +22,10 @@ data class DialogUiContent(
     }
 }
 
-class DialogViewModel(private val eventService: EventService) : ViewModel() {
+class DialogViewModel(
+    bundle: I18NBundle,
+    private val eventService: EventService
+) : ViewModel(bundle) {
 
     private lateinit var activeDialog: Dialog
     var content: DialogUiContent by propertyNotify(EMPTY_CONTENT)
