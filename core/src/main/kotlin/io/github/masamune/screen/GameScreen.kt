@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
@@ -64,8 +65,9 @@ class GameScreen(
     }
 
     // other stuff
+    private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]
     private val keyboardController = KeyboardController(eventService)
-    private val dialogConfigurator = DialogConfigurator(assetService[I18NAsset.MESSAGES])
+    private val dialogConfigurator = DialogConfigurator(bundle)
     private val triggerConfigurator = TriggerConfigurator()
 
     // ecs world
@@ -112,9 +114,9 @@ class GameScreen(
         // setup UI views
         stage.clear()
         stage.actors {
-            dialogView(DialogViewModel(eventService), skin) { isVisible = false }
-            gameMenuView(GameMenuViewModel(assetService[I18NAsset.MESSAGES], eventService), skin) { isVisible = false }
-            statsView(StatsViewModel(assetService[I18NAsset.MESSAGES], world, eventService), skin) { isVisible = false }
+            dialogView(DialogViewModel(bundle, eventService), skin) { isVisible = false }
+            gameMenuView(GameMenuViewModel(bundle, eventService), skin) { isVisible = false }
+            statsView(StatsViewModel(bundle, world, eventService), skin) { isVisible = false }
         }
 
         // register all event listeners
