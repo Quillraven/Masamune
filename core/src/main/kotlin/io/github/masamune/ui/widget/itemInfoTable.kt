@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.Scaling
 import ktx.actors.txt
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
@@ -26,7 +27,9 @@ class ItemInfoTable(skin: Skin) : Table(skin), KTable {
         background = skin.getDrawable("dialog_frame")
 
         table(skin) { headerTblCell ->
-            this@ItemInfoTable.image = image()
+            this@ItemInfoTable.image = image {
+                setScaling(Scaling.fill)
+            }
             this@ItemInfoTable.name = label("", "dialog_content", skin) { lblCell ->
                 setAlignment(Align.center)
                 color = skin.getColor("highlight_blue")

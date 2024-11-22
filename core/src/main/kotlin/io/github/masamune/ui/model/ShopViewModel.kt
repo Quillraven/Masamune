@@ -14,9 +14,9 @@ import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.tiledmap.ItemCategory
 
 class ShopViewModel(
-    private val bundle: I18NBundle,
+    bundle: I18NBundle,
     private val world: World,
-) : ViewModel() {
+) : ViewModel(bundle) {
 
     private val weaponOption = ShopOption.WEAPON to bundle["menu.option.weapon"]
     private val armorOption = ShopOption.ARMOR to bundle["menu.option.armor"]
@@ -26,10 +26,11 @@ class ShopViewModel(
     private val quitOption = ShopOption.QUIT to bundle["menu.option.quit"]
 
     // pair-left = localized text for UIStat, pair-right = value
-    var playerStats: Map<UIStats, Pair<String, String>> by propertyNotify(emptyMap())
+    var playerStats: Map<UIStats, String> by propertyNotify(emptyMap())
     var shopItems: Map<ItemCategory, List<ItemModel>> by propertyNotify(emptyMap())
     var options: List<Pair<ShopOption, String>> by propertyNotify(emptyList())
     var totalCost: Pair<String, Int> by propertyNotify("" to 0)
+    var shopName: String by propertyNotify("")
 
     override fun onEvent(event: Event) {
         if (event !is ShopBeginEvent) {
@@ -43,6 +44,7 @@ class ShopViewModel(
 
             // get shop items
             val shop = event.shop
+            shopName = shop[Name].name
             shopItems = shop[Inventory].items.groupBy(
                 // group by item category
                 { itemEntity -> itemEntity[Item].category }

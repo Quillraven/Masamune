@@ -13,15 +13,15 @@ import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.MenuEndEvent
 
 class StatsViewModel(
-    private val bundle: I18NBundle,
+    bundle: I18NBundle,
     private val world: World,
     private val eventService: EventService,
-) : ViewModel() {
+) : ViewModel(bundle) {
 
     private val playerEntities = world.family { all(Player) }
 
     // pair-left = localized text for UIStat, pair-right = value
-    var playerStats: Map<UIStats, Pair<String, String>> by propertyNotify(emptyMap())
+    var playerStats: Map<UIStats, String> by propertyNotify(emptyMap())
     var playerName: String by propertyNotify("")
 
     fun triggerClose() {

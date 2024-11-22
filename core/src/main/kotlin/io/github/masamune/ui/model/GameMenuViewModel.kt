@@ -11,9 +11,9 @@ import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.MenuEndEvent
 
 class GameMenuViewModel(
-    private val bundle: I18NBundle,
+    bundle: I18NBundle,
     private val eventService: EventService
-) : ViewModel() {
+) : ViewModel(bundle) {
 
     var options: List<String> by propertyNotify(listOf())
 

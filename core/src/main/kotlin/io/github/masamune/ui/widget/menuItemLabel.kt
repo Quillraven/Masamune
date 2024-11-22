@@ -37,6 +37,10 @@ class MenuItemLabel(
         }
     }
 
+    fun value(value: String) {
+        valueLabel.txt = value
+    }
+
     fun txt(title: String, value: String) {
         titleLabel.txt = title
         valueLabel.txt = value

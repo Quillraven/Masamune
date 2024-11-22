@@ -19,5 +19,11 @@ enum class UIStats {
     LEVEL,
     XP,
     XP_NEEDED,
-    TALONS,
+    TALONS;
+
+    val bundleKey = "stats.${name.toCamelCase()}"
+
+    private fun String.toCamelCase(): String {
+        return this.lowercase().replace("_[a-z]".toRegex()) { it.value.last().uppercase() }
+    }
 }

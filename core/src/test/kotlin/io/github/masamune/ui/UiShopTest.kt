@@ -69,6 +69,7 @@ private class UiShopTest : KtxApplicationAdapter {
     }
     private val allShop by lazy {
         world.entity {
+            it += Name("Merchant")
             it += Inventory(items = MutableEntityBag(16).apply {
                 this += createItem(world, ItemType.ELDER_SWORD)
                 this += createItem(world, ItemType.STUDDED_LEATHER)

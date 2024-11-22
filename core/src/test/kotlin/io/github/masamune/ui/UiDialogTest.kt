@@ -14,6 +14,7 @@ import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.view.DialogView
 import io.github.masamune.ui.view.dialogView
 import io.github.masamune.ui.widget.OptionTable
+import io.mockk.mockk
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.assets.toClasspathFile
@@ -44,7 +45,7 @@ private class UiDialogTest : KtxApplicationAdapter {
 
     override fun create() {
         stage.actors {
-            this@UiDialogTest.dialogView = dialogView(DialogViewModel(EventService()), skin)
+            this@UiDialogTest.dialogView = dialogView(DialogViewModel(mockk(), EventService()), skin)
         }
         stage.isDebugAll = DEBUG_STAGE
 

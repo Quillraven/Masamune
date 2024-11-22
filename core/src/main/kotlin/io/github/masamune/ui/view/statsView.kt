@@ -54,6 +54,7 @@ class StatsView(
     init {
         background = skin.getDrawable("dialog_frame")
         setFillParent(true)
+        val uiStatsLabels = viewModel.statsLabels()
 
         table(skin) { leftTableCell ->
             align(Align.center)
@@ -69,10 +70,10 @@ class StatsView(
             }
 
             // Level + XP
-            this@StatsView.levelMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+            this@StatsView.levelMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.LEVEL), "") { cell ->
                 cell.row()
             }
-            this@StatsView.xpMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+            this@StatsView.xpMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.XP_NEEDED), "") { cell ->
                 cell.row()
             }
             this@StatsView.xpProgressBar = progressBar(style = "yellow", skin = skin) { cell ->
@@ -80,7 +81,7 @@ class StatsView(
             }
 
             // Hit points
-            this@StatsView.lifeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+            this@StatsView.lifeMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.LIFE), "") { cell ->
                 cell.row()
             }
             this@StatsView.lifeProgressBar = progressBar(style = "green", skin = skin) { cell ->
@@ -88,7 +89,7 @@ class StatsView(
             }
 
             // Mana points
-            this@StatsView.manaMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+            this@StatsView.manaMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.MANA), "") { cell ->
                 cell.row()
             }
             this@StatsView.manaProgressBar = progressBar(style = "blue", skin = skin) { cell ->
@@ -96,7 +97,7 @@ class StatsView(
             }
 
             // Money
-            this@StatsView.talonsMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+            this@StatsView.talonsMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.TALONS), "") { cell ->
                 cell.row()
             }
 
@@ -108,43 +109,50 @@ class StatsView(
             defaults().padBottom(MENU_ITEM_BOT_PADDING).growX()
 
             // Attributes
-            this@StatsView.strengthMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+            this@StatsView.strengthMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.STRENGTH), "") { cell ->
                 cell.row()
             }
-            this@StatsView.agilityMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+            this@StatsView.agilityMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.AGILITY), "") { cell ->
                 cell.row()
             }
-            this@StatsView.constitutionMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
-                cell.row()
-            }
-            this@StatsView.intelligenceMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
-                cell.padBottom(CATEGORY_BOT_PADDING).row()
-            }
+            this@StatsView.constitutionMenuItemLabel =
+                menuItemLabel(skin, uiStatsLabels.of(UIStats.CONSTITUTION), "") { cell ->
+                    cell.row()
+                }
+            this@StatsView.intelligenceMenuItemLabel =
+                menuItemLabel(skin, uiStatsLabels.of(UIStats.INTELLIGENCE), "") { cell ->
+                    cell.padBottom(CATEGORY_BOT_PADDING).row()
+                }
 
             // Attack, Armor, Resistance
-            this@StatsView.attackMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+            this@StatsView.attackMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.ATTACK), "") { cell ->
                 cell.row()
             }
-            this@StatsView.armorMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
+            this@StatsView.armorMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.ARMOR), "") { cell ->
                 cell.row()
             }
-            this@StatsView.resistanceMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
-                cell.padBottom(CATEGORY_BOT_PADDING).row()
-            }
+            this@StatsView.resistanceMenuItemLabel =
+                menuItemLabel(skin, uiStatsLabels.of(UIStats.RESISTANCE), "") { cell ->
+                    cell.padBottom(CATEGORY_BOT_PADDING).row()
+                }
 
             // Percentage stats (phys. + magical evasion, phys. + magical critical strike)
-            this@StatsView.physicalEvadeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
-                cell.row()
-            }
-            this@StatsView.magicalEvadeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
-                cell.row()
-            }
-            this@StatsView.criticalStrikeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
-                cell.row()
-            }
-            this@StatsView.arcaneStrikeMenuItemLabel = menuItemLabel(skin, "", "") { cell ->
-                cell.row()
-            }
+            this@StatsView.physicalEvadeMenuItemLabel =
+                menuItemLabel(skin, uiStatsLabels.of(UIStats.PHYSICAL_EVADE), "") { cell ->
+                    cell.row()
+                }
+            this@StatsView.magicalEvadeMenuItemLabel =
+                menuItemLabel(skin, uiStatsLabels.of(UIStats.MAGICAL_EVADE), "") { cell ->
+                    cell.row()
+                }
+            this@StatsView.criticalStrikeMenuItemLabel =
+                menuItemLabel(skin, uiStatsLabels.of(UIStats.CRITICAL_STRIKE), "") { cell ->
+                    cell.row()
+                }
+            this@StatsView.arcaneStrikeMenuItemLabel =
+                menuItemLabel(skin, uiStatsLabels.of(UIStats.ARCANE_STRIKE), "") { cell ->
+                    cell.row()
+                }
 
             rightTableCell.grow().pad(EDGE_PADDING, 0f, EDGE_PADDING, EDGE_PADDING)
         }
@@ -157,47 +165,47 @@ class StatsView(
             isVisible = name.isNotBlank()
             nameLabel.txt = name
         }
-        model.onPropertyChange(StatsViewModel::playerStats) { labelsAndStats ->
-            val errorTitleLabel = "???" to "0"
+        model.onPropertyChange(StatsViewModel::playerStats) { stats ->
+            val missingValue = "0"
 
             // money
-            talonsMenuItemLabel.txt(labelsAndStats[UIStats.TALONS] ?: errorTitleLabel)
+            talonsMenuItemLabel.value(stats[UIStats.TALONS] ?: missingValue)
 
             // experience
-            levelMenuItemLabel.txt(labelsAndStats[UIStats.LEVEL] ?: errorTitleLabel)
-            val (xpLabel, xpNeededValue) = labelsAndStats[UIStats.XP_NEEDED] ?: errorTitleLabel
-            val xpCurrent = labelsAndStats[UIStats.XP]?.second ?: "1"
+            levelMenuItemLabel.value(stats[UIStats.LEVEL] ?: missingValue)
+            val xpNeededValue = stats[UIStats.XP_NEEDED] ?: "1"
+            val xpCurrent = stats[UIStats.XP] ?: missingValue
             val xpPercentage = xpCurrent.toFloat() / xpNeededValue.toFloat()
-            xpMenuItemLabel.txt(xpLabel, "${(xpNeededValue.toInt() - xpCurrent.toInt()).coerceAtLeast(0)}")
+            xpMenuItemLabel.value("${(xpNeededValue.toInt() - xpCurrent.toInt()).coerceAtLeast(0)}")
             xpProgressBar.value = xpPercentage.coerceIn(0f, 1f)
 
             // stats
-            strengthMenuItemLabel.txt(labelsAndStats[UIStats.STRENGTH] ?: errorTitleLabel)
-            agilityMenuItemLabel.txt(labelsAndStats[UIStats.AGILITY] ?: errorTitleLabel)
-            intelligenceMenuItemLabel.txt(labelsAndStats[UIStats.INTELLIGENCE] ?: errorTitleLabel)
-            constitutionMenuItemLabel.txt(labelsAndStats[UIStats.CONSTITUTION] ?: errorTitleLabel)
+            strengthMenuItemLabel.value(stats[UIStats.STRENGTH] ?: missingValue)
+            agilityMenuItemLabel.value(stats[UIStats.AGILITY] ?: missingValue)
+            constitutionMenuItemLabel.value(stats[UIStats.CONSTITUTION] ?: missingValue)
+            intelligenceMenuItemLabel.value(stats[UIStats.INTELLIGENCE] ?: missingValue)
 
-            attackMenuItemLabel.txt(labelsAndStats[UIStats.ATTACK] ?: errorTitleLabel)
-            armorMenuItemLabel.txt(labelsAndStats[UIStats.ARMOR] ?: errorTitleLabel)
-            resistanceMenuItemLabel.txt(labelsAndStats[UIStats.RESISTANCE] ?: errorTitleLabel)
+            attackMenuItemLabel.value(stats[UIStats.ATTACK] ?: missingValue)
+            armorMenuItemLabel.value(stats[UIStats.ARMOR] ?: missingValue)
+            resistanceMenuItemLabel.value(stats[UIStats.RESISTANCE] ?: missingValue)
 
-            physicalEvadeMenuItemLabel.txt(labelsAndStats[UIStats.PHYSICAL_EVADE] ?: errorTitleLabel)
-            magicalEvadeMenuItemLabel.txt(labelsAndStats[UIStats.MAGICAL_EVADE] ?: errorTitleLabel)
-            criticalStrikeMenuItemLabel.txt(labelsAndStats[UIStats.CRITICAL_STRIKE] ?: errorTitleLabel)
-            arcaneStrikeMenuItemLabel.txt(labelsAndStats[UIStats.ARCANE_STRIKE] ?: errorTitleLabel)
+            physicalEvadeMenuItemLabel.value(stats[UIStats.PHYSICAL_EVADE] ?: missingValue)
+            magicalEvadeMenuItemLabel.value(stats[UIStats.MAGICAL_EVADE] ?: missingValue)
+            criticalStrikeMenuItemLabel.value(stats[UIStats.CRITICAL_STRIKE] ?: missingValue)
+            arcaneStrikeMenuItemLabel.value(stats[UIStats.ARCANE_STRIKE] ?: missingValue)
 
             // life
-            val (lifeLabel, lifeValue) = labelsAndStats[UIStats.LIFE] ?: errorTitleLabel
-            val lifeMaxValue = labelsAndStats[UIStats.LIFE_MAX]?.second ?: "1"
+            val lifeValue = stats[UIStats.LIFE] ?: missingValue
+            val lifeMaxValue = stats[UIStats.LIFE_MAX] ?: "1"
             val lifePercentage = lifeValue.toFloat() / lifeMaxValue.toFloat()
-            lifeMenuItemLabel.txt(lifeLabel, "$lifeValue/$lifeMaxValue")
+            lifeMenuItemLabel.value("$lifeValue/$lifeMaxValue")
             lifeProgressBar.value = lifePercentage.coerceIn(0f, 1f)
 
             // mana
-            val (manaLabel, manaValue) = labelsAndStats[UIStats.MANA] ?: errorTitleLabel
-            val manaMaxValue = labelsAndStats[UIStats.MANA_MAX]?.second ?: "1"
+            val manaValue = stats[UIStats.MANA] ?: missingValue
+            val manaMaxValue = stats[UIStats.MANA_MAX] ?: "1"
             val manaPercentage = manaValue.toFloat() / manaMaxValue.toFloat()
-            manaMenuItemLabel.txt(manaLabel, "$manaValue/$manaMaxValue")
+            manaMenuItemLabel.value("$manaValue/$manaMaxValue")
             manaProgressBar.value = manaPercentage.coerceIn(0f, 1f)
         }
     }
