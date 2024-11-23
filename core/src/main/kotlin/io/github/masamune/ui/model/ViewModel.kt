@@ -29,7 +29,7 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
 
     fun statsLabels(): Map<UIStats, String> = UIStats.entries.associateWith { bundle[it.bundleKey] }
 
-    fun Stats.toUiMap(bundle: I18NBundle): MutableMap<UIStats, String> {
+    fun Stats.toUiMap(): MutableMap<UIStats, String> {
         val stats = this.tiledStats
         return mutableMapOf(
             UIStats.AGILITY to "${stats.agility.toInt()}",
@@ -50,7 +50,7 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
         )
     }
 
-    fun Experience.toUiMap(bundle: I18NBundle): MutableMap<UIStats, String> {
+    fun Experience.toUiMap(): MutableMap<UIStats, String> {
         return mutableMapOf(
             UIStats.LEVEL to "${this.level}",
             UIStats.XP to "${this.current}",
@@ -58,7 +58,7 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
         )
     }
 
-    fun Inventory.toUiMap(bundle: I18NBundle): MutableMap<UIStats, String> {
+    fun Inventory.toUiMap(): MutableMap<UIStats, String> {
         return mutableMapOf(
             UIStats.TALONS to "${this.talons}",
         )
@@ -68,4 +68,6 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
         this.putAll(other)
         return this
     }
+
+    fun labelTxt(key: I18NKey): String = bundle[key.key]
 }

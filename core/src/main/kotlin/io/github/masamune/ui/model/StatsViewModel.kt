@@ -38,7 +38,7 @@ class StatsViewModel(
                 val statsCmp = player[Stats]
                 val xpCmp = player[Experience]
                 val inventoryCmp = player[Inventory]
-                playerStats = statsCmp.toUiMap(bundle) and xpCmp.toUiMap(bundle) and inventoryCmp.toUiMap(bundle)
+                playerStats = statsCmp.toUiMap() and xpCmp.toUiMap() and inventoryCmp.toUiMap()
             }
         }
     }

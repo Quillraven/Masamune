@@ -1,5 +1,6 @@
 package io.github.masamune.ui
 
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
@@ -15,6 +16,7 @@ import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
+import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
@@ -28,9 +30,13 @@ import io.github.masamune.input.ControllerStateUI
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.ItemType
+import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.tiledmap.TiledStats
 import io.github.masamune.ui.model.ShopViewModel
 import io.github.masamune.ui.view.shopView
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.app.gdxError
@@ -47,9 +53,11 @@ private class UiShopTest : KtxApplicationAdapter {
     private val skin by lazy { Skin("ui/skin.json".toClasspathFile(), uiAtlas) }
     private val eventService by lazy { EventService() }
     private val assetService by lazy { AssetService(ClasspathFileHandleResolver()) }
+    private val tiledService by lazy { mockk<TiledService>() }
     private val world = configureWorld {}
     private val bundle by lazy { I18NBundle.createBundle("ui/messages".toClasspathFile(), Charsets.ISO_8859_1.name()) }
-    private val viewModel by lazy { ShopViewModel(bundle, world) }
+    private val viewModel by lazy { ShopViewModel(bundle, world, tiledService, eventService) }
+    private val audioService by lazy { AudioService(assetService) }
     private val player by lazy {
         world.entity {
             it += Player()
@@ -67,7 +75,7 @@ private class UiShopTest : KtxApplicationAdapter {
             )
         }
     }
-    private val allShop by lazy {
+    private val shop by lazy {
         world.entity {
             it += Name("Merchant")
             it += Inventory(items = MutableEntityBag(16).apply {
@@ -89,32 +97,32 @@ private class UiShopTest : KtxApplicationAdapter {
         when (type) {
             ItemType.ELDER_SWORD -> {
                 it += Stats(TiledStats(damage = 3f, intelligence = 1f))
-                it += Item(50, ItemCategory.WEAPON, "item.${type.name.lowercase()}.description")
+                it += Item(type, 50, ItemCategory.WEAPON, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.STUDDED_LEATHER -> {
                 it += Stats(TiledStats(armor = 5f))
-                it += Item(150, ItemCategory.ARMOR, "item.${type.name.lowercase()}.description")
+                it += Item(type, 150, ItemCategory.ARMOR, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.HELMET -> {
                 it += Stats(TiledStats(armor = 2f))
-                it += Item(40, ItemCategory.HELMET, "item.${type.name.lowercase()}.description")
+                it += Item(type, 40, ItemCategory.HELMET, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.BOOTS -> {
                 it += Stats(TiledStats(armor = 1f))
-                it += Item(30, ItemCategory.BOOTS, "item.${type.name.lowercase()}.description")
+                it += Item(type, 30, ItemCategory.BOOTS, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.RING -> {
                 it += Stats(TiledStats(strength = 1f, agility = 1f))
-                it += Item(100, ItemCategory.ACCESSORY, "item.${type.name.lowercase()}.description")
+                it += Item(type, 100, ItemCategory.ACCESSORY, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.SMALL_MANA_POTION -> {
                 it += Stats(TiledStats(mana = 15f))
-                it += Item(10, ItemCategory.OTHER, "item.${type.name.lowercase()}.description")
+                it += Item(type, 10, ItemCategory.OTHER, "item.${type.name.lowercase()}.description")
             }
 
             else -> gdxError("Unsupported item type: $type")
@@ -122,10 +130,19 @@ private class UiShopTest : KtxApplicationAdapter {
     }
 
     override fun create() {
+        Gdx.app.logLevel = Application.LOG_DEBUG
+        val itemTypeSlot = slot<ItemType>()
+        every {
+            tiledService.loadItem(eq(world), capture(itemTypeSlot))
+        } answers {
+            createItem(world, itemTypeSlot.captured)
+        }
+
         stage.actors {
             shopView(viewModel, skin)
         }
         eventService += stage
+        eventService += audioService
         Gdx.input.inputProcessor = KeyboardController(eventService, ControllerStateUI::class).also {
             eventService += it
         }
@@ -133,7 +150,7 @@ private class UiShopTest : KtxApplicationAdapter {
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
 
-        eventService.fire(ShopBeginEvent(world, player, allShop))
+        eventService.fire(ShopBeginEvent(world, player, shop))
     }
 
     override fun resize(width: Int, height: Int) {
@@ -152,7 +169,8 @@ private class UiShopTest : KtxApplicationAdapter {
                 shopView(viewModel, skin)
             }
             stage.isDebugAll = false
-            eventService.fire(ShopBeginEvent(world, player, allShop))
+            eventService += stage
+            eventService.fire(ShopBeginEvent(world, player, shop))
         }
     }
 

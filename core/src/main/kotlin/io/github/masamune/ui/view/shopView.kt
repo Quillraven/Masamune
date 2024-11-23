@@ -2,8 +2,10 @@ package io.github.masamune.ui.view
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import io.github.masamune.tiledmap.ItemCategory
+import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.ItemModel
 import io.github.masamune.ui.model.ShopOption
 import io.github.masamune.ui.model.ShopViewModel
@@ -20,18 +22,20 @@ import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
+import ktx.scene2d.defaultStyle
 import ktx.scene2d.label
+import ktx.scene2d.scene2d
 import ktx.scene2d.table
 
 
 private enum class ShopViewFocus {
-    OPTIONS, ITEMS
+    OPTIONS, ITEMS, CONFIRM
 }
 
 @Scene2dDsl
 class ShopView(
     model: ShopViewModel,
-    skin: Skin,
+    private val skin: Skin,
 ) : View<ShopViewModel>(skin, model), KTable {
 
     private val talonLabel: Label
@@ -41,6 +45,8 @@ class ShopView(
     private val itemTable: ItemTable
     private val optionTable: OptionTable
     private val itemInfoTable: ItemInfoTable
+    private val confirmTable: Table
+    private val confirmOptionTable: OptionTable
 
     private var focus = ShopViewFocus.OPTIONS
     private var activeItems: List<ItemModel> = emptyList()
@@ -72,12 +78,14 @@ class ShopView(
                 val talonsLabel = uiStatsLabels.of(UIStats.TALONS)
                 this@ShopView.talonLabel = label(talonsLabel, "dialog_option", skin) { lblCell ->
                     userObject = talonsLabel
-                    setAlignment(Align.center)
-                    lblCell.padTop(2f).padBottom(5f).expandX().left()
+                    setAlignment(Align.left)
+                    lblCell.padTop(2f).padBottom(5f).expandX().left().minWidth(220f)
                 }
-                this@ShopView.totalLabel = label("", "dialog_option", skin) { lblCell ->
-                    setAlignment(Align.center)
-                    lblCell.padTop(2f).padBottom(5f)
+                val totalLabel = model.totalLabel()
+                this@ShopView.totalLabel = label(totalLabel, "dialog_option", skin) { lblCell ->
+                    userObject = totalLabel
+                    setAlignment(Align.left)
+                    lblCell.padTop(2f).padBottom(5f).minWidth(220f)
                 }
                 innerTblCell.growX().row()
             }
@@ -94,6 +102,25 @@ class ShopView(
             isVisible = false
             tblCell.pad(10f, 0f, 10f, 10f).growX().top()
         }
+        // confirm buy popup
+        confirmTable = scene2d.table(this@ShopView.skin) {
+            setFillParent(true)
+
+            table(skin) {
+                background = skin.getDrawable("dialog_frame")
+
+                label(this@ShopView.viewModel.labelTxt(I18NKey.SHOP_CONFIRM_BUY), defaultStyle, skin) {
+                    color = this@ShopView.skin.getColor("dark_grey")
+                    it.grow().colspan(2).pad(2f, 2f, 5f, 2f).row()
+                }
+                this@ShopView.confirmOptionTable = optionTable(skin) {
+                    option(this@ShopView.viewModel.labelTxt(I18NKey.GENERAL_YES))
+                    option(this@ShopView.viewModel.labelTxt(I18NKey.GENERAL_NO))
+                }
+
+                center()
+            }
+        }
 
         registerOnPropertyChanges(model)
     }
@@ -102,10 +129,6 @@ class ShopView(
         model.onPropertyChange(ShopViewModel::playerStats) { stats ->
             val missingValue = "0"
 
-            // money
-            val talonsValue = stats[UIStats.TALONS] ?: missingValue
-            talonLabel.setText(" ${talonLabel.userObject}: $talonsValue$TALONS_POSTFIX ")
-            // stats
             shopStatsTable.statsValue(UIStats.STRENGTH, stats[UIStats.STRENGTH] ?: missingValue, 1)
             shopStatsTable.statsValue(UIStats.AGILITY, stats[UIStats.AGILITY] ?: missingValue, 2)
             shopStatsTable.statsValue(UIStats.INTELLIGENCE, stats[UIStats.INTELLIGENCE] ?: missingValue, 300)
@@ -115,15 +138,19 @@ class ShopView(
             shopStatsTable.statsValue(UIStats.RESISTANCE, stats[UIStats.RESISTANCE] ?: missingValue, -3)
         }
 
+        model.onPropertyChange(ShopViewModel::playerTalons) { value ->
+            talonLabel.setText(" ${talonLabel.userObject}: $value$TALONS_POSTFIX ")
+        }
+
         model.onPropertyChange(ShopViewModel::options) { optionNames ->
             optionNames.forEach { optionTable.option(it.second, it.first) }
         }
 
-        model.onPropertyChange(ShopViewModel::totalCost) { labelAndValues ->
-            totalLabel.setText(" ${labelAndValues.first}: ${labelAndValues.second}$TALONS_POSTFIX ")
+        model.onPropertyChange(ShopViewModel::totalCost) { value ->
+            totalLabel.setText(" ${totalLabel.userObject}: ${value}$TALONS_POSTFIX ")
         }
 
-        model.onPropertyChange(ShopViewModel::shopName) { shopStatsTable.shopName(it)}
+        model.onPropertyChange(ShopViewModel::shopName) { shopStatsTable.shopName(it) }
     }
 
     private fun updateActiveItem() {
@@ -137,22 +164,66 @@ class ShopView(
 
     override fun onUpPressed() {
         when (focus) {
-            ShopViewFocus.OPTIONS -> optionTable.prevOption()
+            ShopViewFocus.OPTIONS -> {
+                if (optionTable.prevOption()) {
+                    viewModel.optionChanged()
+                }
+            }
+
             ShopViewFocus.ITEMS -> {
-                itemTable.prevItem()
-                updateActiveItem()
+                if (itemTable.prevItem()) {
+                    viewModel.optionChanged()
+                    updateActiveItem()
+                }
+            }
+
+            ShopViewFocus.CONFIRM -> {
+                if (confirmOptionTable.prevOption()) {
+                    viewModel.optionChanged()
+                }
             }
         }
     }
 
     override fun onDownPressed() {
         when (focus) {
-            ShopViewFocus.OPTIONS -> optionTable.nextOption()
+            ShopViewFocus.OPTIONS -> {
+                if (optionTable.nextOption()) {
+                    viewModel.optionChanged()
+                }
+            }
+
             ShopViewFocus.ITEMS -> {
-                itemTable.nextItem()
-                updateActiveItem()
+                if (itemTable.nextItem()) {
+                    viewModel.optionChanged()
+                    updateActiveItem()
+                }
+            }
+
+            ShopViewFocus.CONFIRM -> {
+                if (confirmOptionTable.nextOption()) {
+                    viewModel.optionChanged()
+                }
             }
         }
+    }
+
+    override fun onRightPressed() {
+        if (focus != ShopViewFocus.ITEMS || itemTable.hasNoItems()) {
+            return
+        }
+
+        val amount = viewModel.selectItem(itemTable.selectedItem)
+        itemTable.amount(amount)
+    }
+
+    override fun onLeftPressed() {
+        if (focus != ShopViewFocus.ITEMS || itemTable.hasNoItems()) {
+            return
+        }
+
+        val amount = viewModel.deselectItem(itemTable.selectedItem)
+        itemTable.amount(amount)
     }
 
     private fun selectOption() {
@@ -187,24 +258,69 @@ class ShopView(
         return name
     }
 
+    private fun onBuyItems() {
+        if (viewModel.totalCost == 0) {
+            return
+        }
+
+        viewModel.optionOrItemSelected()
+        focus = ShopViewFocus.CONFIRM
+        itemTable.stopSelectAnimation()
+        confirmOptionTable.firstOption()
+        stage.addActor(confirmTable)
+    }
+
     override fun onSelectPressed() {
         when (focus) {
-            ShopViewFocus.OPTIONS -> selectOption()
-            ShopViewFocus.ITEMS -> Unit
+            ShopViewFocus.OPTIONS -> {
+                selectOption()
+                viewModel.optionOrItemSelected()
+            }
+
+            ShopViewFocus.ITEMS -> onBuyItems()
+            ShopViewFocus.CONFIRM -> {
+                closeConfirmPopup()
+                if (confirmOptionTable.selectedOption == 0) {
+                    // item buy confirmed
+                    viewModel.optionOrItemSelected()
+                    viewModel.buyItems()
+                    itemTable.clearAmounts()
+                    return
+                }
+                viewModel.optionCancelled()
+            }
         }
     }
 
     override fun onBackPressed() {
         when (focus) {
-            ShopViewFocus.OPTIONS -> optionTable.lastOption() // select 'Quit' option
+            ShopViewFocus.OPTIONS -> {
+                // select 'Quit' option
+                if (optionTable.lastOption()) {
+                    viewModel.optionChanged()
+                }
+            }
+
             ShopViewFocus.ITEMS -> {
                 focus = ShopViewFocus.OPTIONS
                 itemTable.clearItems()
                 itemTable.isVisible = false
                 itemInfoTable.isVisible = false
                 optionTable.resumeSelectAnimation()
+                viewModel.optionCancelled()
+            }
+
+            ShopViewFocus.CONFIRM -> {
+                closeConfirmPopup()
+                viewModel.optionCancelled()
             }
         }
+    }
+
+    private fun closeConfirmPopup() {
+        focus = ShopViewFocus.ITEMS
+        confirmTable.remove()
+        itemTable.resumeSelectAnimation()
     }
 
     companion object {

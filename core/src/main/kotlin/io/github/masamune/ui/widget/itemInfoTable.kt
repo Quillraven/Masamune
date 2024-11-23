@@ -27,13 +27,14 @@ class ItemInfoTable(skin: Skin) : Table(skin), KTable {
         background = skin.getDrawable("dialog_frame")
 
         table(skin) { headerTblCell ->
-            this@ItemInfoTable.image = image {
-                setScaling(Scaling.fill)
+            this@ItemInfoTable.image = image { imgCell ->
+                setScaling(Scaling.fit)
+                imgCell.size(42f, 42f).fill()
             }
             this@ItemInfoTable.name = label("", "dialog_content", skin) { lblCell ->
-                setAlignment(Align.center)
+                setAlignment(Align.left)
                 color = skin.getColor("highlight_blue")
-                lblCell.growX()
+                lblCell.growX().padLeft(20f)
             }
             headerTblCell.growX().row()
         }

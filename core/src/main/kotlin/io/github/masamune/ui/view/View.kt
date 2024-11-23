@@ -6,6 +6,8 @@ import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.UiBackEvent
 import io.github.masamune.event.UiDownEvent
+import io.github.masamune.event.UiLeftEvent
+import io.github.masamune.event.UiRightEvent
 import io.github.masamune.event.UiSelectEvent
 import io.github.masamune.event.UiUpEvent
 import io.github.masamune.ui.model.UIStats
@@ -18,6 +20,8 @@ abstract class View<T : ViewModel>(
 
     open fun onUpPressed() = Unit
     open fun onDownPressed() = Unit
+    open fun onRightPressed() = Unit
+    open fun onLeftPressed() = Unit
     open fun onSelectPressed() = Unit
     open fun onBackPressed() = Unit
 
@@ -29,6 +33,8 @@ abstract class View<T : ViewModel>(
         when (event) {
             is UiUpEvent -> onUpPressed()
             is UiDownEvent -> onDownPressed()
+            is UiRightEvent -> onRightPressed()
+            is UiLeftEvent -> onLeftPressed()
             is UiSelectEvent -> onSelectPressed()
             is UiBackEvent -> onBackPressed()
             else -> Unit

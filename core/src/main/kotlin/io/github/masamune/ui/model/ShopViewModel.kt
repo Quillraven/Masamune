@@ -3,19 +3,28 @@ package io.github.masamune.ui.model
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.I18NBundle
+import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Stats
+import io.github.masamune.event.DialogBackEvent
+import io.github.masamune.event.DialogOptionChangeEvent
+import io.github.masamune.event.DialogOptionTriggerEvent
 import io.github.masamune.event.Event
+import io.github.masamune.event.EventService
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.tiledmap.ItemCategory
+import io.github.masamune.tiledmap.TiledService
+import ktx.log.logger
 
 class ShopViewModel(
     bundle: I18NBundle,
     private val world: World,
+    private val tiledService: TiledService,
+    private val eventService: EventService = tiledService.eventService,
 ) : ViewModel(bundle) {
 
     private val weaponOption = ShopOption.WEAPON to bundle["menu.option.weapon"]
@@ -27,10 +36,17 @@ class ShopViewModel(
 
     // pair-left = localized text for UIStat, pair-right = value
     var playerStats: Map<UIStats, String> by propertyNotify(emptyMap())
-    var shopItems: Map<ItemCategory, List<ItemModel>> by propertyNotify(emptyMap())
+    private var shopItems: Map<ItemCategory, List<ItemModel>> by propertyNotify(emptyMap())
     var options: List<Pair<ShopOption, String>> by propertyNotify(emptyList())
-    var totalCost: Pair<String, Int> by propertyNotify("" to 0)
+    var playerTalons: Int by propertyNotify(0)
+    var totalCost: Int by propertyNotify(0)
     var shopName: String by propertyNotify("")
+    private var activeItems: List<ItemModel> = emptyList()
+    private var playerEntity = Entity.NONE
+
+    fun totalLabel(): String {
+        return bundle["general.total"]
+    }
 
     override fun onEvent(event: Event) {
         if (event !is ShopBeginEvent) {
@@ -39,24 +55,26 @@ class ShopViewModel(
 
         with(event.world) {
             // get player stats (this will update the ShopView)
-            val player = event.player
-            playerStats = player[Stats].toUiMap(bundle) and player[Inventory].toUiMap(bundle)
+            playerEntity = event.player
+            playerStats = playerEntity[Stats].toUiMap()
+            playerTalons = playerEntity[Inventory].talons
 
             // get shop items
-            val shop = event.shop
-            shopName = shop[Name].name
-            shopItems = shop[Inventory].items.groupBy(
+            val shopEntity = event.shop
+            shopName = shopEntity[Name].name
+            shopItems = shopEntity[Inventory].items.groupBy(
                 // group by item category
                 { itemEntity -> itemEntity[Item].category }
             ) { itemEntity ->
                 // and transform items into UI ItemModel objects
-                val (cost, category, descriptionKey) = itemEntity[Item]
+                val (type, cost, category, descriptionKey) = itemEntity[Item]
                 val itemName = itemEntity[Name].name
                 val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
 
                 val i18nName = bundle["item.$itemName.name"]
                 val i18nDescription = bundle[descriptionKey]
                 ItemModel(
+                    type = type,
                     name = i18nName,
                     cost = cost,
                     description = i18nDescription,
@@ -80,7 +98,7 @@ class ShopViewModel(
             )
 
             // reset total cost
-            totalCost = bundle["general.total"] to 0
+            totalCost = 0
         }
     }
 
@@ -101,11 +119,75 @@ class ShopViewModel(
     }
 
     fun shopItemsOf(vararg categories: ItemCategory): List<ItemModel> {
-        return shopItems.filter { it.key in categories }.values.flatten()
+        activeItems = shopItems.filter { it.key in categories }.values.flatten()
+        activeItems.forEach { it.selected = 0 }
+        totalCost = 0
+        return activeItems
+    }
+
+    fun selectItem(itemIdx: Int): Int = with(world) {
+        val talons = playerEntity[Inventory].talons
+        val selectedItem = activeItems[itemIdx]
+        if (talons < totalCost + selectedItem.cost) {
+            // not enough talons to buy it
+            return@with selectedItem.selected
+        }
+
+        // this triggers a sound effect
+        eventService.fire(DialogOptionChangeEvent)
+        totalCost += selectedItem.cost
+        return ++selectedItem.selected
+    }
+
+    fun deselectItem(itemIdx: Int): Int {
+        val selectedItem = activeItems[itemIdx]
+        if (selectedItem.selected == 0) {
+            // cannot go below zero amount
+            return 0
+        }
+
+        // this triggers a sound effect
+        eventService.fire(DialogOptionChangeEvent)
+        totalCost -= selectedItem.cost
+        return --selectedItem.selected
     }
 
     fun sellItems(): List<ItemModel> {
         return emptyList()
     }
 
+    fun buyItems() = with(world) {
+        // reduce player talons
+        val inventoryCmp = playerEntity[Inventory]
+        inventoryCmp.talons -= totalCost
+        totalCost = 0
+        playerTalons = inventoryCmp.talons
+
+        // add items to inventory
+        val itemsToBuy = activeItems.filter { it.selected > 0 }
+        activeItems.forEach { it.selected = 0 }
+        itemsToBuy.forEach { itemToBuy ->
+            log.debug { "Adding item of type: ${itemToBuy.type}" }
+            inventoryCmp.items += tiledService.loadItem(world, itemToBuy.type)
+        }
+    }
+
+    fun optionChanged() {
+        // this triggers a sound effect
+        eventService.fire(DialogOptionChangeEvent)
+    }
+
+    fun optionOrItemSelected() {
+        // this triggers a sound effect
+        eventService.fire(DialogOptionTriggerEvent)
+    }
+
+    fun optionCancelled() {
+        // this triggers a sound effect
+        eventService.fire(DialogBackEvent)
+    }
+
+    companion object {
+        private val log = logger<ShopViewModel>()
+    }
 }

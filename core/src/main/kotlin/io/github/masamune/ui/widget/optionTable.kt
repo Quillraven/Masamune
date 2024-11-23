@@ -39,6 +39,8 @@ class OptionTable(skin: Skin) : Table(skin), KTable {
 
     fun lastOption(): Boolean = selectOption(children.size - 1)
 
+    fun firstOption(): Boolean = selectOption(0)
+
     private fun selectOption(idx: Int): Boolean {
         val realIdx = when {
             idx < 0 -> children.size - 1

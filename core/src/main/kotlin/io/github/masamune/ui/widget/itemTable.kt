@@ -33,6 +33,12 @@ class ItemTable(skin: Skin) : ScrollPane(null, skin), KGroup {
         selectedItem = 0
     }
 
+    fun clearAmounts() {
+        contentTable.children.forEach {
+            (it as ShopItemWidget).amount(0)
+        }
+    }
+
     fun item(title: String, cost: Int) {
         val shopItem = scene2d.shopItem(title, cost, contentTable.skin) {
             select(!this@ItemTable.contentTable.hasChildren())
@@ -40,12 +46,18 @@ class ItemTable(skin: Skin) : ScrollPane(null, skin), KGroup {
         contentTable.add(shopItem).growX().row()
     }
 
+    fun amount(value: Int) {
+        (contentTable.getChild(selectedItem) as ShopItemWidget).amount(value)
+    }
+
     fun prevItem(): Boolean = selectOption(selectedItem - 1)
 
     fun nextItem(): Boolean = selectOption(selectedItem + 1)
 
+    fun hasNoItems(): Boolean = !contentTable.hasChildren()
+
     private fun selectOption(idx: Int): Boolean {
-        if (!contentTable.hasChildren()) {
+        if (hasNoItems()) {
             return false
         }
 
@@ -63,6 +75,14 @@ class ItemTable(skin: Skin) : ScrollPane(null, skin), KGroup {
         selectedItem = realIdx
         (contentTable.getChild(selectedItem) as ShopItemWidget).select(true)
         return true
+    }
+
+    fun stopSelectAnimation() {
+        (contentTable.getChild(selectedItem) as ShopItemWidget).stopSelectAnimation()
+    }
+
+    fun resumeSelectAnimation() {
+        (contentTable.getChild(selectedItem) as ShopItemWidget).resumeSelectAnimation()
     }
 
 }
