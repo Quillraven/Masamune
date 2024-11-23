@@ -10,6 +10,7 @@ import io.github.masamune.event.UiLeftEvent
 import io.github.masamune.event.UiRightEvent
 import io.github.masamune.event.UiSelectEvent
 import io.github.masamune.event.UiUpEvent
+import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.UIStats
 import io.github.masamune.ui.model.ViewModel
 
@@ -24,6 +25,8 @@ abstract class View<T : ViewModel>(
     open fun onLeftPressed() = Unit
     open fun onSelectPressed() = Unit
     open fun onBackPressed() = Unit
+
+    fun i18nTxt(key: I18NKey): String = viewModel.i18nTxt(key)
 
     override fun onEvent(event: Event) {
         if (!isVisible) {

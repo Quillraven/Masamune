@@ -69,5 +69,5 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
         return this
     }
 
-    fun labelTxt(key: I18NKey): String = bundle[key.key]
+    fun i18nTxt(key: I18NKey): String = bundle[key]
 }

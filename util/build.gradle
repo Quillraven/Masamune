@@ -18,3 +18,11 @@ tasks.register('genTiledEnumsAndExtensions', JavaExec) {
   mainClass.set("io.github.masamune.util.TiledGeneratorKt")
   setClasspath(sourceSets.main.runtimeClasspath)
 }
+
+tasks.register('genI18nKeys', JavaExec) {
+  setGroup("masamune")
+  setDescription("Creates an I18NKey enum for all keys in the messages.properties bundle.")
+
+  mainClass.set("io.github.masamune.util.I18NKeyGeneratorKt")
+  setClasspath(sourceSets.main.runtimeClasspath)
+}

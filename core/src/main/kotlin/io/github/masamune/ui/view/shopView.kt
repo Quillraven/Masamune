@@ -109,13 +109,13 @@ class ShopView(
             table(skin) {
                 background = skin.getDrawable("dialog_frame")
 
-                label(this@ShopView.viewModel.labelTxt(I18NKey.SHOP_CONFIRM_BUY), defaultStyle, skin) {
+                label(this@ShopView.i18nTxt(I18NKey.SHOP_CONFIRM_BUY), defaultStyle, skin) {
                     color = this@ShopView.skin.getColor("dark_grey")
                     it.grow().colspan(2).pad(2f, 2f, 5f, 2f).row()
                 }
                 this@ShopView.confirmOptionTable = optionTable(skin) {
-                    option(this@ShopView.viewModel.labelTxt(I18NKey.GENERAL_YES))
-                    option(this@ShopView.viewModel.labelTxt(I18NKey.GENERAL_NO))
+                    option(this@ShopView.viewModel.i18nTxt(I18NKey.GENERAL_YES))
+                    option(this@ShopView.viewModel.i18nTxt(I18NKey.GENERAL_NO))
                 }
 
                 center()
