@@ -9,4 +9,7 @@ enum class ItemCategory {
     OTHER,
     QUEST,
     WEAPON;
+
+    val isEquipment: Boolean
+        get() = this == ACCESSORY || this == ARMOR || this == BOOTS || this == HELMET || this == WEAPON
 }

@@ -120,8 +120,16 @@ fun createEnum(enumName: String, values: List<String>) {
         append(values.sorted().joinToString(separator = ",$newLine    ", prefix = "    ", postfix = ";"))
         append(newLine)
 
-        if (enumName == "AnimationType") {
-            append(newLine).append("    val atlasKey: String = this.name.lowercase()").append(newLine)
+        when (enumName) {
+            "AnimationType" -> {
+                append(newLine).append("    val atlasKey: String = this.name.lowercase()").append(newLine)
+            }
+
+            "ItemCategory" -> {
+                append(newLine).append("    val isEquipment: Boolean").append(newLine)
+                append("        get() = this == ACCESSORY || this == ARMOR || this == BOOTS || this == HELMET || this == WEAPON")
+                append(newLine)
+            }
         }
 
         append("}").append(newLine)
@@ -166,6 +174,10 @@ fun createClass(className: String, members: List<Member>) {
                     postfix = newLine
                 )
             )
+            append("    }").append(newLine)
+            append(newLine)
+            append("    companion object {").append(newLine)
+            append("        val NULL_STATS = TiledStats()").append(newLine)
             append("    }").append(newLine)
             append("}").append(newLine)
         } else {

@@ -35,4 +35,8 @@ data class TiledStats(
             && resistance == 0f
             && strength == 0f
     }
+
+    companion object {
+        val NULL_STATS = TiledStats()
+    }
 }
