@@ -38,7 +38,7 @@ class ShopStatsTable(
             UIStats.AGILITY to statsRow(skin, statsLabels[UIStats.AGILITY] ?: ""),
             UIStats.CONSTITUTION to statsRow(skin, statsLabels[UIStats.CONSTITUTION] ?: ""),
             UIStats.INTELLIGENCE to statsRow(skin, statsLabels[UIStats.INTELLIGENCE] ?: ""),
-            UIStats.ATTACK to statsRow(skin, statsLabels[UIStats.ATTACK] ?: ""),
+            UIStats.DAMAGE to statsRow(skin, statsLabels[UIStats.DAMAGE] ?: ""),
             UIStats.ARMOR to statsRow(skin, statsLabels[UIStats.ARMOR] ?: ""),
             UIStats.RESISTANCE to statsRow(skin, statsLabels[UIStats.RESISTANCE] ?: ""),
         )
@@ -55,9 +55,18 @@ class ShopStatsTable(
         return statsLabel
     }
 
-    fun statsValue(stat: UIStats, value: String, diff: Int = 0) {
+    fun statsValue(stat: UIStats, value: String) {
         val statsLabel = playerStats[stat] ?: gdxError("No StatsLabel for $stat")
-        statsLabel.txt(value, diff)
+        statsLabel.valueTxt(value)
+    }
+
+    fun clearDiff() {
+        playerStats.values.forEach { it.diffTxt(0) }
+    }
+
+    fun diffValue(stat: UIStats, value: Int) {
+        val statsLabel = playerStats[stat] ?: gdxError("No StatsLabel for $stat")
+        statsLabel.diffTxt(value)
     }
 
     fun shopName(name: String) {

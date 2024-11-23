@@ -17,6 +17,7 @@ import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.component.Equipment
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
@@ -61,7 +62,8 @@ private class UiShopTest : KtxApplicationAdapter {
     private val player by lazy {
         world.entity {
             it += Player()
-            it += Inventory(talons = 100)
+            it += Inventory(talons = 500)
+            it += Equipment(items = MutableEntityBag(8).apply { this += createItem(world, ItemType.HELMET) })
             it += Stats(
                 TiledStats(
                     strength = 10f,
@@ -96,7 +98,7 @@ private class UiShopTest : KtxApplicationAdapter {
         it += Graphic(atlas.findRegions("items/${type.name.lowercase()}").first())
         when (type) {
             ItemType.ELDER_SWORD -> {
-                it += Stats(TiledStats(damage = 3f, intelligence = 1f))
+                it += Stats(TiledStats(damage = 3f, intelligence = 1f, agility = -2f))
                 it += Item(type, 50, ItemCategory.WEAPON, "item.${type.name.lowercase()}.description")
             }
 

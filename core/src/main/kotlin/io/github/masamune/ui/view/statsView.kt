@@ -194,7 +194,7 @@ class StatsView(
             constitutionMenuItemLabel.value(stats[UIStats.CONSTITUTION] ?: missingValue)
             intelligenceMenuItemLabel.value(stats[UIStats.INTELLIGENCE] ?: missingValue)
 
-            attackMenuItemLabel.value(stats[UIStats.ATTACK] ?: missingValue)
+            attackMenuItemLabel.value(stats[UIStats.DAMAGE] ?: missingValue)
             armorMenuItemLabel.value(stats[UIStats.ARMOR] ?: missingValue)
             resistanceMenuItemLabel.value(stats[UIStats.RESISTANCE] ?: missingValue)
 

@@ -10,6 +10,7 @@ data class Item(
     val cost: Int,
     val category: ItemCategory,
     val descriptionKey: String, // key in i18n bundle
+    var amount: Int = 1,
 ) : Component<Item> {
     override fun type() = Item
 

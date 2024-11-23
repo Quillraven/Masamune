@@ -61,7 +61,7 @@ class ShopView(
             UIStats.AGILITY to i18nTxt(I18NKey.STATS_AGILITY),
             UIStats.CONSTITUTION to i18nTxt(I18NKey.STATS_CONSTITUTION),
             UIStats.INTELLIGENCE to i18nTxt(I18NKey.STATS_INTELLIGENCE),
-            UIStats.ATTACK to i18nTxt(I18NKey.STATS_ATTACK),
+            UIStats.DAMAGE to i18nTxt(I18NKey.STATS_ATTACK),
             UIStats.ARMOR to i18nTxt(I18NKey.STATS_ARMOR),
             UIStats.RESISTANCE to i18nTxt(I18NKey.STATS_RESISTANCE),
         )
@@ -89,7 +89,7 @@ class ShopView(
                     setAlignment(Align.left)
                     lblCell.padTop(2f).padBottom(5f).expandX().left().minWidth(220f)
                 }
-                val totalLabel = model.totalLabel()
+                val totalLabel = this@ShopView.i18nTxt(I18NKey.GENERAL_TOTAL)
                 this@ShopView.totalLabel = label(totalLabel, "dialog_option", skin) { lblCell ->
                     userObject = totalLabel
                     setAlignment(Align.left)
@@ -137,13 +137,13 @@ class ShopView(
         model.onPropertyChange(ShopViewModel::playerStats) { stats ->
             val missingValue = "0"
 
-            shopStatsTable.statsValue(UIStats.STRENGTH, stats[UIStats.STRENGTH] ?: missingValue, 1)
-            shopStatsTable.statsValue(UIStats.AGILITY, stats[UIStats.AGILITY] ?: missingValue, 2)
-            shopStatsTable.statsValue(UIStats.INTELLIGENCE, stats[UIStats.INTELLIGENCE] ?: missingValue, 300)
-            shopStatsTable.statsValue(UIStats.CONSTITUTION, stats[UIStats.CONSTITUTION] ?: missingValue, 4)
-            shopStatsTable.statsValue(UIStats.ATTACK, stats[UIStats.ATTACK] ?: missingValue)
-            shopStatsTable.statsValue(UIStats.ARMOR, stats[UIStats.ARMOR] ?: missingValue, -200)
-            shopStatsTable.statsValue(UIStats.RESISTANCE, stats[UIStats.RESISTANCE] ?: missingValue, -3)
+            shopStatsTable.statsValue(UIStats.STRENGTH, stats[UIStats.STRENGTH] ?: missingValue)
+            shopStatsTable.statsValue(UIStats.AGILITY, stats[UIStats.AGILITY] ?: missingValue)
+            shopStatsTable.statsValue(UIStats.INTELLIGENCE, stats[UIStats.INTELLIGENCE] ?: missingValue)
+            shopStatsTable.statsValue(UIStats.CONSTITUTION, stats[UIStats.CONSTITUTION] ?: missingValue)
+            shopStatsTable.statsValue(UIStats.DAMAGE, stats[UIStats.DAMAGE] ?: missingValue)
+            shopStatsTable.statsValue(UIStats.ARMOR, stats[UIStats.ARMOR] ?: missingValue)
+            shopStatsTable.statsValue(UIStats.RESISTANCE, stats[UIStats.RESISTANCE] ?: missingValue)
         }
 
         model.onPropertyChange(ShopViewModel::playerTalons) { value ->
@@ -168,6 +168,12 @@ class ShopView(
 
         val selectedItem = activeItems[itemTable.selectedItem]
         itemInfoTable.item(selectedItem.name, selectedItem.description, selectedItem.image)
+
+        val diff: Map<UIStats, Int> = viewModel.calcDiff(selectedItem)
+        shopStatsTable.clearDiff()
+        diff.forEach { (uiStat, diffValue) ->
+            shopStatsTable.diffValue(uiStat, diffValue)
+        }
     }
 
     override fun onUpPressed() {
@@ -316,6 +322,7 @@ class ShopView(
                 itemInfoTable.isVisible = false
                 optionTable.resumeSelectAnimation()
                 viewModel.optionCancelled()
+                shopStatsTable.clearDiff()
             }
 
             ShopViewFocus.CONFIRM -> {

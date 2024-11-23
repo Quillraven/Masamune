@@ -6,7 +6,7 @@ enum class UIStats {
     ARMOR,
     CONSTITUTION,
     CRITICAL_STRIKE,
-    ATTACK,
+    DAMAGE,
     INTELLIGENCE,
     LIFE,
     LIFE_MAX,

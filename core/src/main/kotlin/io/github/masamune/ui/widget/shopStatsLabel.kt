@@ -38,23 +38,24 @@ class ShopStatsLabel(
         }
     }
 
-    fun txt(initValue: String, diffValue: Int) {
+    fun valueTxt(initValue: String) {
         valueLabel.txt = initValue
-        if (diffValue == 0) {
+    }
+
+    fun diffTxt(value: Int) {
+        if (value == 0) {
             diffLabel.txt = ""
             return
         }
 
-        if (diffValue > 0) {
-            diffLabel.txt = "+$diffValue"
+        if (value > 0) {
+            diffLabel.txt = "+$value"
             diffLabel.color = skin.getColor("green")
         } else {
-            diffLabel.txt = "$diffValue"
+            diffLabel.txt = "$value"
             diffLabel.color = skin.getColor("red")
         }
     }
-
-    fun txt(initAndDiff: Pair<String, Int>) = txt(initAndDiff.first, initAndDiff.second)
 }
 
 @Scene2dDsl

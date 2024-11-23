@@ -5,8 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.component.Equipment
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
+import io.github.masamune.component.Inventory.Companion.addItem
 import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Stats
@@ -18,6 +20,7 @@ import io.github.masamune.event.EventService
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.tiledmap.TiledStats
 import ktx.log.logger
 
 class ShopViewModel(
@@ -44,10 +47,6 @@ class ShopViewModel(
     private var activeItems: List<ItemModel> = emptyList()
     private var playerEntity = Entity.NONE
 
-    fun totalLabel(): String {
-        return bundle["general.total"]
-    }
-
     override fun onEvent(event: Event) {
         if (event !is ShopBeginEvent) {
             return
@@ -70,11 +69,13 @@ class ShopViewModel(
                 val (type, cost, category, descriptionKey) = itemEntity[Item]
                 val itemName = itemEntity[Name].name
                 val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
+                val itemStats = itemEntity.getOrNull(Stats)?.tiledStats ?: TiledStats.NULL_STATS
 
                 val i18nName = bundle["item.$itemName.name"]
                 val i18nDescription = bundle[descriptionKey]
                 ItemModel(
                     type = type,
+                    stats = itemStats,
                     name = i18nName,
                     cost = cost,
                     description = i18nDescription,
@@ -165,11 +166,16 @@ class ShopViewModel(
 
         // add items to inventory
         val itemsToBuy = activeItems.filter { it.selected > 0 }
-        activeItems.forEach { it.selected = 0 }
         itemsToBuy.forEach { itemToBuy ->
             log.debug { "Adding item of type: ${itemToBuy.type}" }
-            inventoryCmp.items += tiledService.loadItem(world, itemToBuy.type)
+            val itemToAdd = tiledService.loadItem(world, itemToBuy.type)
+            itemToAdd[Item].amount = itemToBuy.selected
+            world.addItem(itemToAdd, playerEntity)
         }
+        log.debug { "New inventory: ${inventoryCmp.items.map { it[Item] }.joinToString("\n")}" }
+
+        // reset selected amounts of UI items
+        activeItems.forEach { it.selected = 0 }
     }
 
     fun optionChanged() {
@@ -185,6 +191,44 @@ class ShopViewModel(
     fun optionCancelled() {
         // this triggers a sound effect
         eventService.fire(DialogBackEvent)
+    }
+
+    fun calcDiff(selectedItem: ItemModel): Map<UIStats, Int> {
+        if (!selectedItem.category.isEquipment) {
+            return emptyMap()
+        }
+
+        with(world) {
+            val (items) = playerEntity[Equipment]
+            val itemToCompare = items.firstOrNull { it[Item].category == selectedItem.category }
+            val selectedStats = selectedItem.stats
+
+            if (itemToCompare == null) {
+                // player has no item of given type selected
+                // -> diff is the stats of the selected item
+                return mapOf(
+                    UIStats.STRENGTH to selectedStats.strength.toInt(),
+                    UIStats.AGILITY to selectedStats.agility.toInt(),
+                    UIStats.CONSTITUTION to selectedStats.constitution.toInt(),
+                    UIStats.INTELLIGENCE to selectedStats.intelligence.toInt(),
+                    UIStats.DAMAGE to selectedStats.damage.toInt(),
+                    UIStats.ARMOR to selectedStats.armor.toInt(),
+                    UIStats.RESISTANCE to selectedStats.resistance.toInt(),
+                )
+            }
+
+            // compare selected item with currently equipped item
+            val equipStats = itemToCompare[Stats].tiledStats
+            return mapOf(
+                UIStats.STRENGTH to (equipStats.strength - selectedStats.strength).toInt(),
+                UIStats.AGILITY to (equipStats.agility - selectedStats.agility).toInt(),
+                UIStats.CONSTITUTION to (equipStats.constitution - selectedStats.constitution).toInt(),
+                UIStats.INTELLIGENCE to (equipStats.intelligence - selectedStats.intelligence).toInt(),
+                UIStats.DAMAGE to (equipStats.damage - selectedStats.damage).toInt(),
+                UIStats.ARMOR to (equipStats.armor - selectedStats.armor).toInt(),
+                UIStats.RESISTANCE to (equipStats.resistance - selectedStats.resistance).toInt(),
+            )
+        }
     }
 
     companion object {

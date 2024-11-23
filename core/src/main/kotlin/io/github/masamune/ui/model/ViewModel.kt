@@ -35,7 +35,7 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
             UIStats.ARMOR to "${stats.armor.toInt()}",
             UIStats.CONSTITUTION to "${stats.constitution.toInt()}",
             UIStats.CRITICAL_STRIKE to "${(stats.criticalStrike * 100).toInt()}%",
-            UIStats.ATTACK to "${stats.damage.toInt()}",
+            UIStats.DAMAGE to "${stats.damage.toInt()}",
             UIStats.INTELLIGENCE to "${stats.intelligence.toInt()}",
             UIStats.LIFE to "${stats.life.toInt()}",
             UIStats.LIFE_MAX to "${stats.lifeMax.toInt()}",
