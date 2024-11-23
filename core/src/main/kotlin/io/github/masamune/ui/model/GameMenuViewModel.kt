@@ -2,8 +2,8 @@ package io.github.masamune.ui.model
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.I18NBundle
-import io.github.masamune.event.DialogOptionChange
-import io.github.masamune.event.DialogOptionTrigger
+import io.github.masamune.event.DialogOptionChangeEvent
+import io.github.masamune.event.DialogOptionTriggerEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.GameExitEvent
@@ -18,7 +18,7 @@ class GameMenuViewModel(
     var options: List<String> by propertyNotify(listOf())
 
     fun triggerOption(optionIdx: Int) {
-        eventService.fire(DialogOptionTrigger)
+        eventService.fire(DialogOptionTriggerEvent)
         when (optionIdx) {
             // quit
             options.lastIndex -> {
@@ -35,13 +35,13 @@ class GameMenuViewModel(
     }
 
     fun optionChanged() {
-        eventService.fire(DialogOptionChange)
+        eventService.fire(DialogOptionChangeEvent)
     }
 
     fun triggerClose(fireOptionEvent: Boolean = true) {
         if (fireOptionEvent) {
             // this triggers a sound effect
-            eventService.fire(DialogOptionTrigger)
+            eventService.fire(DialogOptionTriggerEvent)
         }
         options = emptyList()
         eventService.fire(MenuEndEvent)
