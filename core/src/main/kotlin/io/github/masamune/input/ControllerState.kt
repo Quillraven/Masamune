@@ -7,6 +7,8 @@ import io.github.masamune.event.PlayerInteractEvent
 import io.github.masamune.event.PlayerMoveEvent
 import io.github.masamune.event.UiBackEvent
 import io.github.masamune.event.UiDownEvent
+import io.github.masamune.event.UiLeftEvent
+import io.github.masamune.event.UiRightEvent
 import io.github.masamune.event.UiSelectEvent
 import io.github.masamune.event.UiUpEvent
 import io.github.masamune.ui.model.MenuType
@@ -67,9 +69,10 @@ class ControllerStateUI(private val eventService: EventService) : ControllerStat
     override fun keyDown(command: Command) = when (command) {
         Command.UP -> eventService.fire(UiUpEvent)
         Command.DOWN -> eventService.fire(UiDownEvent)
+        Command.LEFT -> eventService.fire(UiLeftEvent)
+        Command.RIGHT -> eventService.fire(UiRightEvent)
         Command.SELECT -> eventService.fire(UiSelectEvent)
         Command.CANCEL, Command.MENU -> eventService.fire(UiBackEvent)
-        else -> Unit
     }
 
     override fun keyUp(command: Command) = Unit
