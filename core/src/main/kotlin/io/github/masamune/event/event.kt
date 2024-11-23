@@ -41,6 +41,10 @@ data object UiUpEvent : Event
 
 data object UiDownEvent : Event
 
+data object UiRightEvent : Event
+
+data object UiLeftEvent : Event
+
 data object UiSelectEvent : Event
 
 data object UiBackEvent : Event
