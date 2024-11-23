@@ -27,8 +27,6 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
         actionsMap[property]?.forEach { action -> action(value) }
     }
 
-    fun statsLabels(): Map<UIStats, String> = UIStats.entries.associateWith { bundle[it.bundleKey] }
-
     fun Stats.toUiMap(): MutableMap<UIStats, String> {
         val stats = this.tiledStats
         return mutableMapOf(

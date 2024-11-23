@@ -41,12 +41,6 @@ class MenuItemLabel(
         valueLabel.txt = value
     }
 
-    fun txt(title: String, value: String) {
-        titleLabel.txt = title
-        valueLabel.txt = value
-    }
-
-    fun txt(titleAndValue: Pair<String, String>) = txt(titleAndValue.first, titleAndValue.second)
 }
 
 @Scene2dDsl

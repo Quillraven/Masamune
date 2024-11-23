@@ -54,9 +54,17 @@ class ShopView(
     init {
         background = skin.getDrawable("dialog_frame")
         setFillParent(true)
-        val uiStatsLabels = viewModel.statsLabels()
 
         // top left -> shop title and stats
+        val uiStatsLabels = mapOf(
+            UIStats.STRENGTH to i18nTxt(I18NKey.STATS_STRENGTH),
+            UIStats.AGILITY to i18nTxt(I18NKey.STATS_AGILITY),
+            UIStats.CONSTITUTION to i18nTxt(I18NKey.STATS_CONSTITUTION),
+            UIStats.INTELLIGENCE to i18nTxt(I18NKey.STATS_INTELLIGENCE),
+            UIStats.ATTACK to i18nTxt(I18NKey.STATS_ATTACK),
+            UIStats.ARMOR to i18nTxt(I18NKey.STATS_ARMOR),
+            UIStats.RESISTANCE to i18nTxt(I18NKey.STATS_RESISTANCE),
+        )
         shopStatsTable = shopStatsTable(skin, "", uiStatsLabels) {
             it.padLeft(10.0f).padTop(10f).top().left()
         }
@@ -75,7 +83,7 @@ class ShopView(
             background = skin.getDrawable("dialog_frame")
 
             table(skin) { innerTblCell ->
-                val talonsLabel = uiStatsLabels.of(UIStats.TALONS)
+                val talonsLabel = this@ShopView.i18nTxt(I18NKey.STATS_TALONS)
                 this@ShopView.talonLabel = label(talonsLabel, "dialog_option", skin) { lblCell ->
                     userObject = talonsLabel
                     setAlignment(Align.left)

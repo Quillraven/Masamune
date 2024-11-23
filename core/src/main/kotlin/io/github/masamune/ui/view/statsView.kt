@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Align
+import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.StatsViewModel
 import io.github.masamune.ui.model.UIStats
 import io.github.masamune.ui.widget.MenuItemLabel
@@ -54,7 +55,6 @@ class StatsView(
     init {
         background = skin.getDrawable("dialog_frame")
         setFillParent(true)
-        val uiStatsLabels = viewModel.statsLabels()
 
         table(skin) { leftTableCell ->
             align(Align.center)
@@ -70,36 +70,41 @@ class StatsView(
             }
 
             // Level + XP
-            this@StatsView.levelMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.LEVEL), "") { cell ->
-                cell.row()
-            }
-            this@StatsView.xpMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.XP_NEEDED), "") { cell ->
-                cell.row()
-            }
+            this@StatsView.levelMenuItemLabel =
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_LEVEL), "") { cell ->
+                    cell.row()
+                }
+            this@StatsView.xpMenuItemLabel =
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_XP_NEEDED), "") { cell ->
+                    cell.row()
+                }
             this@StatsView.xpProgressBar = progressBar(style = "yellow", skin = skin) { cell ->
                 cell.padBottom(CATEGORY_BOT_PADDING).row()
             }
 
             // Hit points
-            this@StatsView.lifeMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.LIFE), "") { cell ->
-                cell.row()
-            }
+            this@StatsView.lifeMenuItemLabel =
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_LIFE), "") { cell ->
+                    cell.row()
+                }
             this@StatsView.lifeProgressBar = progressBar(style = "green", skin = skin) { cell ->
                 cell.padBottom(2 * MENU_ITEM_BOT_PADDING).row()
             }
 
             // Mana points
-            this@StatsView.manaMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.MANA), "") { cell ->
-                cell.row()
-            }
+            this@StatsView.manaMenuItemLabel =
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_MANA), "") { cell ->
+                    cell.row()
+                }
             this@StatsView.manaProgressBar = progressBar(style = "blue", skin = skin) { cell ->
                 cell.padBottom(CATEGORY_BOT_PADDING).row()
             }
 
             // Money
-            this@StatsView.talonsMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.TALONS), "") { cell ->
-                cell.row()
-            }
+            this@StatsView.talonsMenuItemLabel =
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_TALONS), "") { cell ->
+                    cell.row()
+                }
 
             leftTableCell.fillX().growY().pad(EDGE_PADDING, EDGE_PADDING, EDGE_PADDING, 75f)
         }
@@ -109,48 +114,52 @@ class StatsView(
             defaults().padBottom(MENU_ITEM_BOT_PADDING).growX()
 
             // Attributes
-            this@StatsView.strengthMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.STRENGTH), "") { cell ->
-                cell.row()
-            }
-            this@StatsView.agilityMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.AGILITY), "") { cell ->
-                cell.row()
-            }
+            this@StatsView.strengthMenuItemLabel =
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_STRENGTH), "") { cell ->
+                    cell.row()
+                }
+            this@StatsView.agilityMenuItemLabel =
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_AGILITY), "") { cell ->
+                    cell.row()
+                }
             this@StatsView.constitutionMenuItemLabel =
-                menuItemLabel(skin, uiStatsLabels.of(UIStats.CONSTITUTION), "") { cell ->
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_CONSTITUTION), "") { cell ->
                     cell.row()
                 }
             this@StatsView.intelligenceMenuItemLabel =
-                menuItemLabel(skin, uiStatsLabels.of(UIStats.INTELLIGENCE), "") { cell ->
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_INTELLIGENCE), "") { cell ->
                     cell.padBottom(CATEGORY_BOT_PADDING).row()
                 }
 
             // Attack, Armor, Resistance
-            this@StatsView.attackMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.ATTACK), "") { cell ->
-                cell.row()
-            }
-            this@StatsView.armorMenuItemLabel = menuItemLabel(skin, uiStatsLabels.of(UIStats.ARMOR), "") { cell ->
-                cell.row()
-            }
+            this@StatsView.attackMenuItemLabel =
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_ATTACK), "") { cell ->
+                    cell.row()
+                }
+            this@StatsView.armorMenuItemLabel =
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_ARMOR), "") { cell ->
+                    cell.row()
+                }
             this@StatsView.resistanceMenuItemLabel =
-                menuItemLabel(skin, uiStatsLabels.of(UIStats.RESISTANCE), "") { cell ->
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_RESISTANCE), "") { cell ->
                     cell.padBottom(CATEGORY_BOT_PADDING).row()
                 }
 
             // Percentage stats (phys. + magical evasion, phys. + magical critical strike)
             this@StatsView.physicalEvadeMenuItemLabel =
-                menuItemLabel(skin, uiStatsLabels.of(UIStats.PHYSICAL_EVADE), "") { cell ->
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_PHYSICAL_EVADE), "") { cell ->
                     cell.row()
                 }
             this@StatsView.magicalEvadeMenuItemLabel =
-                menuItemLabel(skin, uiStatsLabels.of(UIStats.MAGICAL_EVADE), "") { cell ->
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_MAGICAL_EVADE), "") { cell ->
                     cell.row()
                 }
             this@StatsView.criticalStrikeMenuItemLabel =
-                menuItemLabel(skin, uiStatsLabels.of(UIStats.CRITICAL_STRIKE), "") { cell ->
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_CRITICAL_STRIKE), "") { cell ->
                     cell.row()
                 }
             this@StatsView.arcaneStrikeMenuItemLabel =
-                menuItemLabel(skin, uiStatsLabels.of(UIStats.ARCANE_STRIKE), "") { cell ->
+                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_ARCANE_STRIKE), "") { cell ->
                     cell.row()
                 }
 
