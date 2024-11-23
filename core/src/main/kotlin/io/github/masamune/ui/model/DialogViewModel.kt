@@ -5,8 +5,8 @@ import com.github.quillraven.fleks.Entity
 import io.github.masamune.dialog.Dialog
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.DialogEndEvent
-import io.github.masamune.event.DialogOptionChange
-import io.github.masamune.event.DialogOptionTrigger
+import io.github.masamune.event.DialogOptionChangeEvent
+import io.github.masamune.event.DialogOptionTriggerEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.ui.model.DialogUiContent.Companion.EMPTY_CONTENT
@@ -33,7 +33,7 @@ class DialogViewModel(
     private var player: Entity = Entity.NONE
 
     fun triggerOption(optionIdx: Int) {
-        eventService.fire(DialogOptionTrigger)
+        eventService.fire(DialogOptionTriggerEvent)
         if (activeDialog.triggerOption(optionIdx)) {
             // dialog finished
             content = EMPTY_CONTENT
@@ -46,7 +46,7 @@ class DialogViewModel(
     }
 
     fun optionChanged() {
-        eventService.fire(DialogOptionChange)
+        eventService.fire(DialogOptionChangeEvent)
     }
 
     private fun updateContent() {
