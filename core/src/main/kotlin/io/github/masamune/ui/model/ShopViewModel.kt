@@ -9,6 +9,7 @@ import io.github.masamune.component.Equipment
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Inventory.Companion.addItem
+import io.github.masamune.component.Inventory.Companion.removeItem
 import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Stats
@@ -46,6 +47,8 @@ class ShopViewModel(
     var shopName: String by propertyNotify("")
     private var activeItems: List<ItemModel> = emptyList()
     private var playerEntity = Entity.NONE
+    var sellMode = false
+        private set
 
     override fun onEvent(event: Event) {
         if (event !is ShopBeginEvent) {
@@ -64,25 +67,7 @@ class ShopViewModel(
             shopItems = shopEntity[Inventory].items.groupBy(
                 // group by item category
                 { itemEntity -> itemEntity[Item].category }
-            ) { itemEntity ->
-                // and transform items into UI ItemModel objects
-                val (type, cost, category, descriptionKey) = itemEntity[Item]
-                val itemName = itemEntity[Name].name
-                val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
-                val itemStats = itemEntity.getOrNull(Stats)?.tiledStats ?: TiledStats.NULL_STATS
-
-                val i18nName = bundle["item.$itemName.name"]
-                val i18nDescription = bundle[descriptionKey]
-                ItemModel(
-                    type = type,
-                    stats = itemStats,
-                    name = i18nName,
-                    cost = cost,
-                    description = i18nDescription,
-                    category = category,
-                    image = TextureRegionDrawable(region)
-                )
-            }
+            ) { it.toItemModel() }
 
             // get shop options like weapons, sell, etc. (this will update the ShopView)
             val optWeaponOption = if (shopItems.hasWeapon()) weaponOption else null
@@ -101,6 +86,28 @@ class ShopViewModel(
             // reset total cost
             totalCost = 0
         }
+    }
+
+    private fun Entity.toItemModel(): ItemModel = with(world) {
+        val itemEntity = this@toItemModel
+        // and transform items into UI ItemModel objects
+        val (type, cost, category, descriptionKey, amount) = itemEntity[Item]
+        val itemName = itemEntity[Name].name
+        val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
+        val itemStats = itemEntity.getOrNull(Stats)?.tiledStats ?: TiledStats.NULL_STATS
+
+        val i18nName = bundle["item.$itemName.name"]
+        val i18nDescription = bundle[descriptionKey]
+        return ItemModel(
+            type = type,
+            stats = itemStats,
+            name = i18nName,
+            cost = cost,
+            description = i18nDescription,
+            category = category,
+            image = TextureRegionDrawable(region),
+            amount = amount,
+        )
     }
 
     private fun Map<ItemCategory, List<ItemModel>>.hasWeapon(): Boolean {
@@ -123,12 +130,23 @@ class ShopViewModel(
         activeItems = shopItems.filter { it.key in categories }.values.flatten()
         activeItems.forEach { it.selected = 0 }
         totalCost = 0
+        sellMode = false
         return activeItems
     }
 
-    fun selectItem(itemIdx: Int): Int = with(world) {
-        val talons = playerEntity[Inventory].talons
+    fun incItemAmount(itemIdx: Int): Int = with(world) {
         val selectedItem = activeItems[itemIdx]
+        if (sellMode) {
+            if (selectedItem.selected < selectedItem.amount) {
+                // this triggers a sound effect
+                eventService.fire(DialogOptionChangeEvent)
+                totalCost += selectedItem.cost
+                ++selectedItem.selected
+            }
+            return@with selectedItem.selected
+        }
+
+        val talons = playerEntity[Inventory].talons
         if (talons < totalCost + selectedItem.cost) {
             // not enough talons to buy it
             return@with selectedItem.selected
@@ -140,7 +158,7 @@ class ShopViewModel(
         return ++selectedItem.selected
     }
 
-    fun deselectItem(itemIdx: Int): Int {
+    fun decItemAmount(itemIdx: Int): Int {
         val selectedItem = activeItems[itemIdx]
         if (selectedItem.selected == 0) {
             // cannot go below zero amount
@@ -153,11 +171,15 @@ class ShopViewModel(
         return --selectedItem.selected
     }
 
-    fun sellItems(): List<ItemModel> {
-        return emptyList()
+    fun itemsToSell(): List<ItemModel> = with(world) {
+        activeItems = playerEntity[Inventory].items.map { it.toItemModel() }
+        activeItems.forEach { it.selected = 0 }
+        totalCost = 0
+        sellMode = true
+        return activeItems
     }
 
-    fun buyItems() = with(world) {
+    private fun buyItems() = with(world) {
         // reduce player talons
         val inventoryCmp = playerEntity[Inventory]
         inventoryCmp.talons -= totalCost
@@ -172,10 +194,35 @@ class ShopViewModel(
             itemToAdd[Item].amount = itemToBuy.selected
             world.addItem(itemToAdd, playerEntity)
         }
-        log.debug { "New inventory: ${inventoryCmp.items.map { it[Item] }.joinToString("\n")}" }
+        log.debug { "New inventory:\n${inventoryCmp.items.map { it[Item] }.joinToString("\n")}" }
 
         // reset selected amounts of UI items
         activeItems.forEach { it.selected = 0 }
+    }
+
+    private fun sellItems() = with(world) {
+        // increase player talons
+        val inventoryCmp = playerEntity[Inventory]
+        inventoryCmp.talons += totalCost
+        totalCost = 0
+        playerTalons = inventoryCmp.talons
+
+        // remove items from inventory
+        val itemsToSell = activeItems.filter { it.selected > 0 }
+        itemsToSell.forEach { itemToSell ->
+            log.debug { "Removing item of type: ${itemToSell.type}" }
+            world.removeItem(itemToSell.type, itemToSell.selected, playerEntity)
+        }
+        log.debug { "New inventory:\n${inventoryCmp.items.map { it[Item] }.joinToString("\n")}" }
+    }
+
+    fun buyOrSellItems() = with(world) {
+        if (sellMode) {
+            sellItems()
+            return@with
+        }
+
+        buyItems()
     }
 
     fun optionChanged() {

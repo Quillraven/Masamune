@@ -51,6 +51,7 @@ enum class I18NKey(val key: String) {
     NPC_MERCHANT_TITLE("npc.merchant.title"),
     NPC_SMITH_TITLE("npc.smith.title"),
     SHOP_CONFIRM_BUY("shop.confirmBuy"),
+    SHOP_CONFIRM_SELL("shop.confirmSell"),
     STATS_AGILITY("stats.agility"),
     STATS_ARCANE_STRIKE("stats.arcaneStrike"),
     STATS_ARMOR("stats.armor"),

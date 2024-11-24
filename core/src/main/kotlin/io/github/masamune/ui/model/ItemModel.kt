@@ -13,5 +13,6 @@ data class ItemModel(
     val description: String,
     val category: ItemCategory,
     val image: Drawable?,
-    var selected: Int = 0,
+    var selected: Int = 0, // amount to buy/sell
+    var amount: Int = 0, // current player amount (only needed for sell logic)
 )

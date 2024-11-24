@@ -2,7 +2,6 @@ package io.github.masamune.ui.view
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.ui.model.I18NKey
@@ -13,16 +12,17 @@ import io.github.masamune.ui.model.UIStats
 import io.github.masamune.ui.widget.ItemInfoTable
 import io.github.masamune.ui.widget.ItemTable
 import io.github.masamune.ui.widget.OptionTable
+import io.github.masamune.ui.widget.PopupTable
 import io.github.masamune.ui.widget.ShopStatsTable
 import io.github.masamune.ui.widget.itemInfoTable
 import io.github.masamune.ui.widget.itemTable
 import io.github.masamune.ui.widget.optionTable
+import io.github.masamune.ui.widget.popupTable
 import io.github.masamune.ui.widget.shopStatsTable
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
-import ktx.scene2d.defaultStyle
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
@@ -35,7 +35,7 @@ private enum class ShopViewFocus {
 @Scene2dDsl
 class ShopView(
     model: ShopViewModel,
-    private val skin: Skin,
+    skin: Skin,
 ) : View<ShopViewModel>(skin, model), KTable {
 
     private val talonLabel: Label
@@ -45,8 +45,7 @@ class ShopView(
     private val itemTable: ItemTable
     private val optionTable: OptionTable
     private val itemInfoTable: ItemInfoTable
-    private val confirmTable: Table
-    private val confirmOptionTable: OptionTable
+    private val popupTable: PopupTable
 
     private var focus = ShopViewFocus.OPTIONS
     private var activeItems: List<ItemModel> = emptyList()
@@ -111,24 +110,7 @@ class ShopView(
             tblCell.pad(10f, 0f, 10f, 10f).growX().top()
         }
         // confirm buy popup
-        confirmTable = scene2d.table(this@ShopView.skin) {
-            setFillParent(true)
-
-            table(skin) {
-                background = skin.getDrawable("dialog_frame")
-
-                label(this@ShopView.i18nTxt(I18NKey.SHOP_CONFIRM_BUY), defaultStyle, skin) {
-                    color = this@ShopView.skin.getColor("dark_grey")
-                    it.grow().colspan(2).pad(2f, 2f, 5f, 2f).row()
-                }
-                this@ShopView.confirmOptionTable = optionTable(skin) {
-                    option(this@ShopView.viewModel.i18nTxt(I18NKey.GENERAL_YES))
-                    option(this@ShopView.viewModel.i18nTxt(I18NKey.GENERAL_NO))
-                }
-
-                center()
-            }
-        }
+        popupTable = scene2d.popupTable("", emptyList(), skin)
 
         registerOnPropertyChanges(model)
     }
@@ -192,7 +174,7 @@ class ShopView(
             }
 
             ShopViewFocus.CONFIRM -> {
-                if (confirmOptionTable.prevOption()) {
+                if (popupTable.prevOption()) {
                     viewModel.optionChanged()
                 }
             }
@@ -215,7 +197,7 @@ class ShopView(
             }
 
             ShopViewFocus.CONFIRM -> {
-                if (confirmOptionTable.nextOption()) {
+                if (popupTable.nextOption()) {
                     viewModel.optionChanged()
                 }
             }
@@ -227,7 +209,7 @@ class ShopView(
             return
         }
 
-        val amount = viewModel.selectItem(itemTable.selectedItem)
+        val amount = viewModel.incItemAmount(itemTable.selectedItem)
         itemTable.amount(amount)
     }
 
@@ -236,7 +218,7 @@ class ShopView(
             return
         }
 
-        val amount = viewModel.deselectItem(itemTable.selectedItem)
+        val amount = viewModel.decItemAmount(itemTable.selectedItem)
         itemTable.amount(amount)
     }
 
@@ -247,7 +229,7 @@ class ShopView(
             ShopOption.ARMOR -> viewModel.shopItemsOf(ItemCategory.ARMOR, ItemCategory.HELMET, ItemCategory.BOOTS)
             ShopOption.ACCESSORY -> viewModel.shopItemsOf(ItemCategory.ACCESSORY)
             ShopOption.OTHER -> viewModel.shopItemsOf(ItemCategory.OTHER)
-            ShopOption.SELL -> viewModel.sellItems()
+            ShopOption.SELL -> viewModel.itemsToSell()
             ShopOption.QUIT -> {
                 println("TODO QUIT")
                 return
@@ -255,6 +237,10 @@ class ShopView(
         }
 
         focus = ShopViewFocus.ITEMS
+        updateActiveItems()
+    }
+
+    private fun updateActiveItems() {
         optionTable.stopSelectAnimation()
         itemTable.isVisible = true
         itemInfoTable.isVisible = activeItems.isNotEmpty()
@@ -280,8 +266,21 @@ class ShopView(
         viewModel.optionOrItemSelected()
         focus = ShopViewFocus.CONFIRM
         itemTable.stopSelectAnimation()
-        confirmOptionTable.firstOption()
-        stage.addActor(confirmTable)
+
+        if (viewModel.sellMode) {
+            popupTable.update(
+                i18nTxt(I18NKey.SHOP_CONFIRM_SELL),
+                listOf(i18nTxt(I18NKey.GENERAL_YES), i18nTxt(I18NKey.GENERAL_NO))
+            )
+        } else {
+            popupTable.update(
+                i18nTxt(I18NKey.SHOP_CONFIRM_BUY),
+                listOf(i18nTxt(I18NKey.GENERAL_YES), i18nTxt(I18NKey.GENERAL_NO))
+            )
+        }
+
+        popupTable.firstOption()
+        stage.addActor(popupTable)
     }
 
     override fun onSelectPressed() {
@@ -294,11 +293,15 @@ class ShopView(
             ShopViewFocus.ITEMS -> onBuyItems()
             ShopViewFocus.CONFIRM -> {
                 closeConfirmPopup()
-                if (confirmOptionTable.selectedOption == 0) {
-                    // item buy confirmed
+                if (popupTable.selectedOption == 0) {
+                    // item buy/sell confirmed
                     viewModel.optionOrItemSelected()
-                    viewModel.buyItems()
+                    viewModel.buyOrSellItems()
                     itemTable.clearAmounts()
+                    if (viewModel.sellMode) {
+                        activeItems = viewModel.itemsToSell()
+                        updateActiveItems()
+                    }
                     return
                 }
                 viewModel.optionCancelled()
@@ -334,7 +337,7 @@ class ShopView(
 
     private fun closeConfirmPopup() {
         focus = ShopViewFocus.ITEMS
-        confirmTable.remove()
+        popupTable.remove()
         itemTable.resumeSelectAnimation()
     }
 
