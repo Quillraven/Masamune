@@ -97,7 +97,7 @@ class ShopViewModel(
         val itemStats = itemEntity.getOrNull(Stats)?.tiledStats ?: TiledStats.NULL_STATS
 
         val i18nName = bundle["item.$itemName.name"]
-        val i18nDescription = bundle[descriptionKey]
+        val i18nDescription = description(descriptionKey, itemEntity, world)
         return ItemModel(
             type = type,
             stats = itemStats,
