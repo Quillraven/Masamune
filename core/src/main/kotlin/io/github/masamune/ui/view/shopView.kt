@@ -32,6 +32,13 @@ private enum class ShopViewFocus {
     OPTIONS, ITEMS, CONFIRM
 }
 
+/**
+ * ShopView is a 2x2 table where:
+ * - top left show the name of the shop + the player stats
+ * - top right shows the possible options like weapon, sell or quit
+ * - bottom left shows a scroll pane with all the items of a specific option
+ * - bottom right shows the details of an item including its image
+ */
 @Scene2dDsl
 class ShopView(
     model: ShopViewModel,

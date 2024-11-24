@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import com.github.quillraven.fleks.collection.MutableEntityBag
+import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
@@ -34,6 +34,7 @@ import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.tiledmap.TiledStats
 import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.ShopViewModel
+import io.github.masamune.ui.view.ShopView
 import io.github.masamune.ui.view.shopView
 import io.mockk.every
 import io.mockk.mockk
@@ -43,6 +44,13 @@ import ktx.app.clearScreen
 import ktx.app.gdxError
 import ktx.assets.toClasspathFile
 import ktx.scene2d.actors
+
+/**
+ * Test for [ShopView].
+ * It loads a shop with weapon, armor, accessory and other items to buy.
+ * It also loads a player with some talons and items to sell.
+ * When selecting the "Quit" option then the UI gets invisible and the test must be restarted.
+ */
 
 fun main() = gdxTest("UI Shop Test", UiShopTest())
 
@@ -63,7 +71,7 @@ private class UiShopTest : KtxApplicationAdapter {
         world.entity {
             it += Player()
             it += Inventory(talons = 500)
-            it += Equipment(items = MutableEntityBag(8).apply { this += createItem(world, ItemType.HELMET) })
+            it += Equipment(items = mutableEntityBagOf(createItem(world, ItemType.HELMET)))
             it += Stats(
                 TiledStats(
                     strength = 10f,
@@ -80,14 +88,16 @@ private class UiShopTest : KtxApplicationAdapter {
     private val shop by lazy {
         world.entity {
             it += Name(I18NKey.NPC_MERCHANT_TITLE.key)
-            it += Inventory(items = MutableEntityBag(16).apply {
-                this += createItem(world, ItemType.ELDER_SWORD)
-                this += createItem(world, ItemType.STUDDED_LEATHER)
-                this += createItem(world, ItemType.HELMET)
-                this += createItem(world, ItemType.BOOTS)
-                this += createItem(world, ItemType.RING)
-                this += createItem(world, ItemType.SMALL_MANA_POTION)
-            })
+            it += Inventory(
+                items = mutableEntityBagOf(
+                    createItem(world, ItemType.ELDER_SWORD),
+                    createItem(world, ItemType.STUDDED_LEATHER),
+                    createItem(world, ItemType.HELMET),
+                    createItem(world, ItemType.BOOTS),
+                    createItem(world, ItemType.RING),
+                    createItem(world, ItemType.SMALL_MANA_POTION),
+                )
+            )
         }
     }
 
