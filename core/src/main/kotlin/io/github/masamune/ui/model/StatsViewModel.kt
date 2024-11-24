@@ -35,10 +35,7 @@ class StatsViewModel(
             with(world) {
                 val player = playerEntities.first()
                 playerName = player[Name].name
-                val statsCmp = player[Stats]
-                val xpCmp = player[Experience]
-                val inventoryCmp = player[Inventory]
-                playerStats = statsCmp.toUiMap() and xpCmp.toUiMap() and inventoryCmp.toUiMap()
+                playerStats = uiMapOf(player[Stats], player[Experience], player[Inventory])
             }
         }
     }

@@ -352,7 +352,7 @@ class TiledService(
         entity += Player(gameProgress = 0)
         entity += Name("Alexxius")
         entity += Interact()
-        entity += Inventory()
+        entity += Inventory(talons = 100)
         entity += Equipment()
         entity += QuestLog()
         entity += State(FleksStateMachine(world, entity, AnimationStateIdle))

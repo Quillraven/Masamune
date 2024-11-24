@@ -59,7 +59,7 @@ class ShopViewModel(
         with(event.world) {
             // get player stats (this will update the ShopView)
             playerEntity = event.player
-            playerStats = playerEntity[Stats].toUiMap()
+            playerStats = uiMapOf(playerEntity[Stats])
             playerTalons = playerEntity[Inventory].talons
 
             // get shop items

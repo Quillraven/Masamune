@@ -1,6 +1,7 @@
 package io.github.masamune.ui.model
 
 import com.badlogic.gdx.utils.I18NBundle
+import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.component.Experience
@@ -30,44 +31,45 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
         actionsMap[property]?.forEach { action -> action(value) }
     }
 
-    fun Stats.toUiMap(): MutableMap<UIStats, String> {
-        val stats = this.tiledStats
-        return mutableMapOf(
-            UIStats.AGILITY to "${stats.agility.toInt()}",
-            UIStats.ARCANE_STRIKE to "${(stats.arcaneStrike * 100).toInt()}%",
-            UIStats.ARMOR to "${stats.armor.toInt()}",
-            UIStats.CONSTITUTION to "${stats.constitution.toInt()}",
-            UIStats.CRITICAL_STRIKE to "${(stats.criticalStrike * 100).toInt()}%",
-            UIStats.DAMAGE to "${stats.damage.toInt()}",
-            UIStats.INTELLIGENCE to "${stats.intelligence.toInt()}",
-            UIStats.LIFE to "${stats.life.toInt()}",
-            UIStats.LIFE_MAX to "${stats.lifeMax.toInt()}",
-            UIStats.MAGICAL_EVADE to "${(stats.magicalEvade * 100).toInt()}%",
-            UIStats.MANA to "${stats.mana.toInt()}",
-            UIStats.MANA_MAX to "${stats.manaMax.toInt()}",
-            UIStats.PHYSICAL_EVADE to "${(stats.physicalEvade * 100).toInt()}%",
-            UIStats.RESISTANCE to "${stats.resistance.toInt()}",
-            UIStats.STRENGTH to "${stats.strength.toInt()}",
-        )
-    }
+    fun uiMapOf(vararg components: Component<*>): Map<UIStats, String> {
+        val result = mutableMapOf<UIStats, String>()
 
-    fun Experience.toUiMap(): MutableMap<UIStats, String> {
-        return mutableMapOf(
-            UIStats.LEVEL to "${this.level}",
-            UIStats.XP to "${this.current}",
-            UIStats.XP_NEEDED to "${this.forLevelUp}",
-        )
-    }
+        components.forEach { component ->
+            when (component) {
+                is Stats -> {
+                    val stats = component.tiledStats
+                    result += UIStats.AGILITY to "${stats.agility.toInt()}"
+                    result += UIStats.ARCANE_STRIKE to "${(stats.arcaneStrike * 100).toInt()}%"
+                    result += UIStats.ARMOR to "${stats.armor.toInt()}"
+                    result += UIStats.CONSTITUTION to "${stats.constitution.toInt()}"
+                    result += UIStats.CRITICAL_STRIKE to "${(stats.criticalStrike * 100).toInt()}%"
+                    result += UIStats.DAMAGE to "${stats.damage.toInt()}"
+                    result += UIStats.INTELLIGENCE to "${stats.intelligence.toInt()}"
+                    result += UIStats.LIFE to "${stats.life.toInt()}"
+                    result += UIStats.LIFE_MAX to "${stats.lifeMax.toInt()}"
+                    result += UIStats.MAGICAL_EVADE to "${(stats.magicalEvade * 100).toInt()}%"
+                    result += UIStats.MANA to "${stats.mana.toInt()}"
+                    result += UIStats.MANA_MAX to "${stats.manaMax.toInt()}"
+                    result += UIStats.PHYSICAL_EVADE to "${(stats.physicalEvade * 100).toInt()}%"
+                    result += UIStats.RESISTANCE to "${stats.resistance.toInt()}"
+                    result += UIStats.STRENGTH to "${stats.strength.toInt()}"
+                }
 
-    fun Inventory.toUiMap(): MutableMap<UIStats, String> {
-        return mutableMapOf(
-            UIStats.TALONS to "${this.talons}",
-        )
-    }
+                is Experience -> {
+                    result += UIStats.LEVEL to "${component.level}"
+                    result += UIStats.XP to "${component.current}"
+                    result += UIStats.XP_NEEDED to "${component.forLevelUp}"
+                }
 
-    infix fun MutableMap<UIStats, String>.and(other: Map<UIStats, String>): MutableMap<UIStats, String> {
-        this.putAll(other)
-        return this
+                is Inventory -> {
+                    result += UIStats.TALONS to "${component.talons}"
+                }
+
+                else -> gdxError("Unsupported component: $component")
+            }
+        }
+
+        return result
     }
 
     fun i18nTxt(key: I18NKey): String = bundle[key]
