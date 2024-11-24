@@ -6,6 +6,7 @@ import io.github.masamune.component.QuestLog
 import io.github.masamune.quest.FlowerGirlQuest
 import io.github.masamune.quest.MainQuest
 import io.github.masamune.tiledmap.ItemType
+import io.github.masamune.ui.model.I18NKey
 import ktx.app.gdxError
 import ktx.log.logger
 
@@ -17,8 +18,8 @@ class TriggerConfigurator {
         return when (name) {
             "villageExit" -> world.villageExitTrigger(name, scriptEntity, triggeringEntity)
             "elder" -> world.elderTrigger(name, triggeringEntity)
-            "merchant" -> world.merchantTrigger(name, triggeringEntity)
-            "smith" -> world.smithTrigger(name, triggeringEntity)
+            "merchant" -> world.merchantTrigger(name, triggeringEntity, scriptEntity)
+            "smith" -> world.smithTrigger(name, triggeringEntity, scriptEntity)
             "flower_girl" -> world.flowerGirlTrigger(name, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
@@ -62,20 +63,29 @@ class TriggerConfigurator {
         }
     }
 
-    private fun World.merchantTrigger(name: String, triggeringEntity: Entity) =
+    private fun World.merchantTrigger(name: String, triggeringEntity: Entity, scriptEntity: Entity) =
         trigger(name, this, triggeringEntity) {
             actionDialog("merchant_00") { selectedOptionIdx ->
                 if (selectedOptionIdx == 0) {
-                    println("TODO open shop merchant UI")
+                    actionShop(
+                        triggeringEntity, scriptEntity, I18NKey.NPC_MERCHANT_TITLE, listOf(
+                            ItemType.SMALL_MANA_POTION,
+                        )
+                    )
                 }
             }
         }
 
-    private fun World.smithTrigger(name: String, triggeringEntity: Entity) =
+    private fun World.smithTrigger(name: String, triggeringEntity: Entity, scriptEntity: Entity) =
         trigger(name, this, triggeringEntity) {
             actionDialog("smith_00") { selectedOptionIdx ->
                 if (selectedOptionIdx == 0) {
-                    println("TODO open shop smith UI")
+                    actionShop(
+                        triggeringEntity, scriptEntity, I18NKey.NPC_SMITH_TITLE, listOf(
+                            ItemType.BOOTS,
+                            ItemType.HELMET,
+                        )
+                    )
                 }
             }
         }

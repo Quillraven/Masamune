@@ -8,6 +8,7 @@ import io.github.masamune.quest.Quest
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerActionDialog.Companion.NO_CLOSE_ACTION
+import io.github.masamune.ui.model.I18NKey
 import ktx.app.gdxError
 
 
@@ -42,6 +43,11 @@ class TriggerCfg(
 
     fun actionMoveBack(entity: Entity, distance: Float, timeInSeconds: Float = 0f, wait: Boolean = true) {
         actions += TriggerActionMoveBack(entity, distance, timeInSeconds, wait)
+    }
+
+    fun actionShop(playerEntity: Entity, shopEntity: Entity, shopName: I18NKey, items: List<ItemType>) {
+        val tiledService = world.inject<TiledService>()
+        actions += TriggerActionShop(playerEntity, shopEntity, shopName, items, tiledService)
     }
 
 }

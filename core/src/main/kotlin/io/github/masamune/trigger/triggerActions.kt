@@ -3,19 +3,23 @@ package io.github.masamune.trigger
 import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import com.github.quillraven.fleks.collection.MutableEntityBag
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Move
 import io.github.masamune.component.MoveTo
+import io.github.masamune.component.Name
 import io.github.masamune.component.QuestLog
 import io.github.masamune.component.Transform
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.EventService
+import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.quest.Quest
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.ui.model.I18NKey
 import ktx.log.logger
 import ktx.math.component1
 import ktx.math.component2
@@ -125,4 +129,28 @@ class TriggerActionMoveBack(
         durationInSeconds -= this.deltaTime
         return !wait || durationInSeconds <= 0f
     }
+}
+
+class TriggerActionShop(
+    private val playerEntity: Entity,
+    private val shopEntity: Entity,
+    private val shopName: I18NKey,
+    private val items: List<ItemType>,
+    private val tiledService: TiledService,
+    private val eventService: EventService = tiledService.eventService,
+) : TriggerAction {
+    override fun World.onStart() {
+        val shopItems = MutableEntityBag(items.size)
+        items.forEach { item ->
+            shopItems += tiledService.loadItem(this, item)
+        }
+        shopEntity.configure {
+            it += Name(shopName.key)
+            it += Inventory(items = shopItems)
+        }
+
+        eventService.fire(ShopBeginEvent(this, playerEntity, shopEntity))
+    }
+
+    override fun World.onUpdate(): Boolean = true
 }

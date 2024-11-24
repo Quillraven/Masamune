@@ -133,6 +133,7 @@ class ShopView(
         }
 
         model.onPropertyChange(ShopViewModel::options) { optionNames ->
+            optionTable.clearOptions()
             optionNames.forEach { optionTable.option(it.second, it.first) }
         }
 
@@ -140,7 +141,11 @@ class ShopView(
             totalLabel.setText(" ${totalLabel.userObject}: ${value}$TALONS_POSTFIX ")
         }
 
-        model.onPropertyChange(ShopViewModel::shopName) { shopStatsTable.shopName(it) }
+        model.onPropertyChange(ShopViewModel::shopName) {
+            shopStatsTable.shopName(it)
+            isVisible = true
+            focus = ShopViewFocus.OPTIONS
+        }
     }
 
     private fun updateActiveItem() {
@@ -231,7 +236,8 @@ class ShopView(
             ShopOption.OTHER -> viewModel.shopItemsOf(ItemCategory.OTHER)
             ShopOption.SELL -> viewModel.itemsToSell()
             ShopOption.QUIT -> {
-                println("TODO QUIT")
+                isVisible = false
+                viewModel.quit()
                 return
             }
         }

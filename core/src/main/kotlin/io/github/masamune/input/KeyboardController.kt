@@ -11,6 +11,8 @@ import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.event.MapTransitionEndEvent
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.MenuEndEvent
+import io.github.masamune.event.ShopBeginEvent
+import io.github.masamune.event.ShopEndEvent
 import ktx.app.KtxInputAdapter
 import ktx.app.gdxError
 import kotlin.reflect.KClass
@@ -93,6 +95,8 @@ class KeyboardController(
             is DialogEndEvent -> activeState = gameState
             is MenuBeginEvent -> activeState = uiState
             is MenuEndEvent -> activeState = gameState
+            is ShopBeginEvent -> activeState = uiState
+            is ShopEndEvent -> activeState = gameState
             is MapTransitionBeginEvent -> activeState = disabledState
             is MapTransitionEndEvent -> activeState = gameState
             else -> Unit

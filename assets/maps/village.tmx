@@ -29,7 +29,7 @@
   </data>
  </layer>
  <objectgroup id="6" name="object">
-  <object id="1" name="Player" gid="4097" x="176" y="144" width="16" height="16"/>
+  <object id="1" name="Player" gid="4097" x="256" y="251" width="16" height="16"/>
   <object id="3" name="Elder" gid="4099" x="176" y="112" width="16" height="16"/>
   <object id="4" name="Merchant" gid="4101" x="288" y="240" width="16" height="16"/>
   <object id="5" name="Smith" gid="4102" x="16" y="288" width="16" height="16"/>

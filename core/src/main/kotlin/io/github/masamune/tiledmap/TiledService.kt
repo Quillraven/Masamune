@@ -22,12 +22,14 @@ import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Dialog
+import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Interact
 import io.github.masamune.component.Inventory
+import io.github.masamune.component.Item
 import io.github.masamune.component.Move
 import io.github.masamune.component.Name
 import io.github.masamune.component.Physic
@@ -351,9 +353,20 @@ class TiledService(
         entity += Name("Alexxius")
         entity += Interact()
         entity += Inventory()
+        entity += Equipment()
         entity += QuestLog()
         entity += State(FleksStateMachine(world, entity, AnimationStateIdle))
         entity += Experience()
+    }
+
+    private fun EntityCreateContext.configureItem(entity: Entity, tile: TiledMapTile) {
+        val itemType = ItemType.valueOf(tile.itemType)
+        entity += Item(
+            type = itemType,
+            cost = tile.cost,
+            category = ItemCategory.valueOf(tile.category),
+            descriptionKey = "item.${itemType.name.lowercase()}.description"
+        )
     }
 
     fun loadItem(world: World, itemType: ItemType): Entity {
@@ -366,9 +379,10 @@ class TiledService(
             }
 
             return world.entity {
-                it += Name(tile.itemType)
+                it += Name(tile.itemType.lowercase())
                 configureStats(it, tile)
                 configureGraphic(it, tile)
+                configureItem(it, tile)
             }
         }
 

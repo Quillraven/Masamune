@@ -2,7 +2,6 @@ package io.github.masamune.ui
 
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
@@ -33,6 +32,7 @@ import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.tiledmap.TiledStats
+import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.ShopViewModel
 import io.github.masamune.ui.view.shopView
 import io.mockk.every
@@ -79,7 +79,7 @@ private class UiShopTest : KtxApplicationAdapter {
     }
     private val shop by lazy {
         world.entity {
-            it += Name("Merchant")
+            it += Name(I18NKey.NPC_MERCHANT_TITLE.key)
             it += Inventory(items = MutableEntityBag(16).apply {
                 this += createItem(world, ItemType.ELDER_SWORD)
                 this += createItem(world, ItemType.STUDDED_LEATHER)
@@ -164,16 +164,6 @@ private class UiShopTest : KtxApplicationAdapter {
         uiViewport.apply()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            stage.clear()
-            stage.actors {
-                shopView(viewModel, skin)
-            }
-            stage.isDebugAll = false
-            eventService += stage
-            eventService.fire(ShopBeginEvent(world, player, shop))
-        }
     }
 
     override fun dispose() {

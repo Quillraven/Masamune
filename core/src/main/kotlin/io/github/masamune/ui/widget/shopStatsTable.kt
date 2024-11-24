@@ -28,6 +28,7 @@ class ShopStatsTable(
         // header: Shop Name + character faces
         shopNameLabel = label(shopTitle, "dialog_image_caption", skin) {
             setAlignment(Align.center)
+            it.left()
         }
         frameImage(skin, "dialog_face_frame", "hero") { cell ->
             cell.row()

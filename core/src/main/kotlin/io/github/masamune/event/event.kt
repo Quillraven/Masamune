@@ -51,6 +51,8 @@ data object UiBackEvent : Event
 
 data class ShopBeginEvent(val world: World, val player: Entity, val shop: Entity) : Event
 
+data object ShopEndEvent : Event
+
 data class MapTransitionBeginEvent(
     val fromTiledMap: TiledMap,
     val toTiledMap: TiledMap,

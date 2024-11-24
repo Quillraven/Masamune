@@ -22,13 +22,13 @@
         },
         "assets/maps/path_to_forest.tmx": {
             "expandedObjectLayers": [
-                4,
-                6
+                6,
+                4
             ],
             "scale": 4,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 128.125,
+                "x": 128,
                 "y": 352.125
             }
         },

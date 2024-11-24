@@ -19,6 +19,7 @@ import io.github.masamune.event.DialogOptionTriggerEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.ShopBeginEvent
+import io.github.masamune.event.ShopEndEvent
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.tiledmap.TiledStats
@@ -63,7 +64,7 @@ class ShopViewModel(
 
             // get shop items
             val shopEntity = event.shop
-            shopName = shopEntity[Name].name
+            shopName = bundle[shopEntity[Name].name]
             shopItems = shopEntity[Inventory].items.groupBy(
                 // group by item category
                 { itemEntity -> itemEntity[Item].category }
@@ -276,6 +277,10 @@ class ShopViewModel(
                 UIStats.RESISTANCE to (equipStats.resistance - selectedStats.resistance).toInt(),
             )
         }
+    }
+
+    fun quit() {
+        eventService.fire(ShopEndEvent)
     }
 
     companion object {
