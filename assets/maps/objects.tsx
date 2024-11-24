@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="10" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="13" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="MapObject">
   <properties>
@@ -194,5 +194,50 @@
   <objectgroup draworder="index" id="2">
    <object id="1" type="FixtureDefinition" x="14" y="36" width="20" height="12"/>
   </objectgroup>
+ </tile>
+ <tile id="11" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="atlasRegionKey" value="items/boots"/>
+   <property name="category" propertytype="ItemCategory" value="BOOTS"/>
+   <property name="cost" type="int" value="150"/>
+   <property name="itemType" propertytype="ItemType" value="BOOTS"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="armor" type="float" value="1"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/boots.png" width="16" height="16"/>
+ </tile>
+ <tile id="12" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="atlasRegionKey" value="items/helmet"/>
+   <property name="category" propertytype="ItemCategory" value="HELMET"/>
+   <property name="cost" type="int" value="150"/>
+   <property name="itemType" propertytype="ItemType" value="HELMET"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="armor" type="float" value="1"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/helmet.png" width="16" height="16"/>
+ </tile>
+ <tile id="13" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="atlasRegionKey" value="items/small_mana_potion"/>
+   <property name="category" propertytype="ItemCategory" value="OTHER"/>
+   <property name="cost" type="int" value="20"/>
+   <property name="itemType" propertytype="ItemType" value="SMALL_MANA_POTION"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="mana" type="float" value="15"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/small_mana_potion.png" width="9" height="11"/>
  </tile>
 </tileset>

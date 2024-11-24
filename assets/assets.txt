@@ -16,7 +16,7 @@ i:b:/graphics/chars_and_props.png:28346:1
 i:d:/maps:0:1
 i:b:/maps/village.tmx:3186:1
 i:b:/maps/tileset.tsx:9032:1
-i:b:/maps/objects.tsx:8740:1
+i:b:/maps/objects.tsx:10656:1
 i:d:/maps/objects:0:1
 i:b:/maps/objects/boots.png:468:1
 i:b:/maps/objects/studded_leather.png:423:1
@@ -37,12 +37,12 @@ i:b:/maps/path_to_forest.tmx:3554:1
 i:b:/maps/tileset-orig.png:195892:1
 i:b:/maps/tileset.png:473544:1
 i:d:/ui:0:1
-i:b:/ui/messages_de.properties:4167:1
+i:b:/ui/messages_de.properties:4228:1
 i:b:/ui/fipps_16.fnt:8935:1
 i:b:/ui/PIXEARG_.fnt:10450:1
 i:b:/ui/skin.atlas:2100:1
 i:b:/ui/skin.png:20581:1
-i:b:/ui/messages.properties:3770:1
+i:b:/ui/messages.properties:3829:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 i:b:/ui/skin.json:3521:1
 c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
