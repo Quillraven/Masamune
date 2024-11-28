@@ -123,7 +123,7 @@ class TiledService(
     }
 
     fun unloadNonPlayerBodies(world: World) {
-        val nonPlayerEntities = world.family { none(Player) }
+        val nonPlayerEntities = world.family { none(Player).all(Physic) }
         log.debug { "Unloading ${nonPlayerEntities.numEntities} non-player bodies" }
         nonPlayerEntities.forEach { entity ->
             entity.configure { it -= Physic }
@@ -146,9 +146,10 @@ class TiledService(
         unloadBoundaryAndGroundCollision()
 
         // unloading non-player entities (player entities are taken over to new map)
-        val nonPlayerEntities = world.family { none(Player, Tag.MAP_TRANSITION) }
+        val nonPlayerEntities = world.family { none(Player, Tag.MAP_TRANSITION).all(Tiled) }
         log.debug { "Unloading ${nonPlayerEntities.numEntities} entities" }
         nonPlayerEntities.forEach { entity ->
+            log.debug { "Unloading entity $entity" }
             entity.remove()
         }
     }
@@ -189,6 +190,8 @@ class TiledService(
             ?: gdxError("There is no TiledMapAsset of name $toMapName")
 
         world.entity { entity ->
+            log.debug { "Loading portal ${mapObject.id} as entity $entity" }
+
             entity += Tiled(mapObject.id, TiledObjectType.PORTAL)
             entity += Portal(toMapAsset, mapObject.targetPortalId)
             val body = mapObject.toBody(world, x, y, data = entity)
@@ -206,9 +209,12 @@ class TiledService(
         }
 
         world.entity { entity ->
+            log.debug { "Loading trigger $triggerName as entity $entity" }
+
             entity += Trigger(triggerName)
             val body = mapObject.toBody(world, x, y, data = entity)
             entity += Physic(body)
+            entity += Tiled(mapObject.id, TiledObjectType.TRIGGER)
         }
     }
 
@@ -224,12 +230,13 @@ class TiledService(
         val tile = tiledObj.tile
         val x = tiledObj.x * UNIT_SCALE
         val y = tiledObj.y * UNIT_SCALE
-        log.debug { "Loading object ${mapObject.id}" }
 
         val objTypeStr = tile.objType
         val objType = TiledObjectType.valueOf(objTypeStr)
 
         return world.entity {
+            log.debug { "Loading object ${mapObject.id} as entity $it" }
+
             configureTiled(it, tiledObj, objType)
             it += Facing(FacingDirection.DOWN)
             val graphicCmp = configureGraphic(it, tile)
@@ -379,6 +386,8 @@ class TiledService(
             }
 
             return world.entity {
+                log.debug { "Loading item $itemType as entity $it" }
+
                 it += Name(tile.itemType.lowercase())
                 configureStats(it, tile)
                 configureGraphic(it, tile)
