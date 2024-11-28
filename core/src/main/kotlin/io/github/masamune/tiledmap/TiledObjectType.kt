@@ -10,5 +10,6 @@ enum class TiledObjectType {
     MERCHANT,
     PORTAL,
     SMITH,
+    TRIGGER,
     UNDEFINED;
 }

@@ -259,7 +259,8 @@
                 "SMITH",
                 "PORTAL",
                 "ENEMY",
-                "ITEM"
+                "ITEM",
+                "TRIGGER"
             ],
             "valuesAsFlags": false
         },
