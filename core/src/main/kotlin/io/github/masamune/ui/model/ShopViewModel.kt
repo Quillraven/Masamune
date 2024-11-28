@@ -48,6 +48,7 @@ class ShopViewModel(
     var shopName: String by propertyNotify("")
     private var activeItems: List<ItemModel> = emptyList()
     private var playerEntity = Entity.NONE
+    private var shopEntity = Entity.NONE
     var sellMode = false
         private set
 
@@ -63,7 +64,7 @@ class ShopViewModel(
             playerTalons = playerEntity[Inventory].talons
 
             // get shop items
-            val shopEntity = event.shop
+            shopEntity = event.shop
             shopName = bundle[shopEntity[Name].name]
             shopItems = shopEntity[Inventory].items.groupBy(
                 // group by item category
@@ -281,6 +282,12 @@ class ShopViewModel(
 
     fun quit() {
         eventService.fire(ShopEndEvent)
+        // cleanup item entities of the shop to free the entities properly
+        with(world) {
+            val (items) = shopEntity[Inventory]
+            items.forEach { it.remove() }
+            items.clear()
+        }
     }
 
     companion object {
