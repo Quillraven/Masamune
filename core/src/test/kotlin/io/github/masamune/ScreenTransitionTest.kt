@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import io.github.masamune.screen.BlurTransitionType
+import io.github.masamune.screen.ScreenTransitionService
 import io.github.masamune.screen.TransitionType
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
@@ -17,6 +18,15 @@ import ktx.log.Logger
 import ktx.math.vec2
 
 private val log = Logger("TransitionTest")
+
+/**
+ * Test for [ScreenTransitionService] and blur shader.
+ * Press 1 to transition to Screen 1.
+ * Press 2 to transition to Screen 2.
+ *
+ * The current screen gets blurred out.
+ * The new screen gets blurred in.
+ */
 
 fun main() = gdxTest("Screen Transition Test", TransitionTest(), windowSize = vec2(300f, 300f))
 
