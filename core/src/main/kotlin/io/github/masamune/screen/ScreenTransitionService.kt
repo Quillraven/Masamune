@@ -6,8 +6,8 @@ import io.github.masamune.asset.ShaderService
 import ktx.log.logger
 
 class ScreenTransitionService(
-    private val batch: Batch,
-    private val shaderService: ShaderService,
+    val batch: Batch,
+    val shaderService: ShaderService,
 ) {
     private var fromTransition: Transition = DefaultTransition
     private var toTransition: Transition = DefaultTransition

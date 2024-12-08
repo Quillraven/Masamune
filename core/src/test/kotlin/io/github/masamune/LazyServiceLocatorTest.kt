@@ -5,6 +5,7 @@ import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.audio.AudioService
 import io.github.masamune.event.EventService
+import io.github.masamune.screen.ScreenTransitionService
 import io.github.masamune.tiledmap.ImmediateMapTransitionService
 import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
@@ -25,6 +26,7 @@ class LazyServiceLocatorTest {
         val shaderServiceInitializer = mockk<() -> ShaderService>()
         val mapTransitionServiceInitializer = mockk<(TiledService) -> MapTransitionService>()
         val audioServiceInitializer = mockk<(AssetService) -> AudioService>()
+        val screenTransitionServiceInitializer = mockk<(Batch, ShaderService) -> ScreenTransitionService>()
         val batch = mockk<Batch>()
         val assetService = mockk<AssetService>()
         val eventService = mockk<EventService>()
@@ -32,6 +34,7 @@ class LazyServiceLocatorTest {
         val shaderService = mockk<ShaderService>()
         val mapTransitionService = mockk<MapTransitionService>()
         val audioService = mockk<AudioService>()
+        val screenTransitionService = mockk<ScreenTransitionService>()
         every { batchInitializer.invoke() } returns batch
         every { assetServiceInitializer.invoke() } returns assetService
         every { eventServiceInitializer.invoke() } returns eventService
@@ -39,6 +42,7 @@ class LazyServiceLocatorTest {
         every { shaderServiceInitializer.invoke() } returns shaderService
         every { mapTransitionServiceInitializer.invoke(tiledService) } returns mapTransitionService
         every { audioServiceInitializer.invoke(assetService) } returns audioService
+        every { screenTransitionServiceInitializer.invoke(batch, shaderService) } returns screenTransitionService
 
         val serviceLocator = LazyServiceLocator(
             batchInitializer,
@@ -47,7 +51,8 @@ class LazyServiceLocatorTest {
             tiledServiceInitializer,
             shaderServiceInitializer,
             mapTransitionServiceInitializer,
-            audioServiceInitializer
+            audioServiceInitializer,
+            screenTransitionServiceInitializer,
         )
 
         batch shouldBeSameInstanceAs serviceLocator.batch
@@ -57,6 +62,7 @@ class LazyServiceLocatorTest {
         shaderService shouldBeSameInstanceAs serviceLocator.shader
         mapTransitionService shouldBeSameInstanceAs serviceLocator.mapTransition
         audioService shouldBeSameInstanceAs serviceLocator.audio
+        screenTransitionService shouldBeSameInstanceAs serviceLocator.screenTransition
     }
 
     @Test
@@ -99,6 +105,21 @@ class LazyServiceLocatorTest {
 
         serviceLocator.audio shouldNotBe null
         serviceLocator.audio.assetService shouldBeSameInstanceAs serviceLocator.asset
+    }
+
+    @Test
+    fun `verify ScreenTransitionService gets correct batch and shader service instance`() {
+        val serviceLocator = LazyServiceLocator(
+            batchInitializer = { mockk<Batch>() },
+            shaderServiceInitializer = { mockk<ShaderService>() },
+            screenTransitionServiceInitializer = { batch, shaderService ->
+                ScreenTransitionService(batch, shaderService)
+            }
+        )
+
+        serviceLocator.screenTransition shouldNotBe null
+        serviceLocator.screenTransition.batch shouldBeSameInstanceAs serviceLocator.batch
+        serviceLocator.screenTransition.shaderService shouldBeSameInstanceAs serviceLocator.shader
     }
 
 }
