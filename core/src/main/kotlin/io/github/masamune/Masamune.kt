@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.World
 import io.github.masamune.screen.LoadingScreen
+import io.github.masamune.screen.TransitionType
 import io.github.masamune.tiledmap.DefaultMapTransitionService
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
@@ -34,10 +35,31 @@ class Masamune(
         setScreen<LoadingScreen>()
     }
 
+    override fun resize(width: Int, height: Int) {
+        super.resize(width, height)
+        shader.resize(width, height)
+    }
+
     override fun render() {
         clearScreen(0f, 0f, 0f, 1f)
         val deltaTime = Gdx.graphics.deltaTime.coerceAtMost(1 / 30f)
-        currentScreen.render(deltaTime)
+
+        if (screenTransition.hasActiveTransition) {
+            screenTransition.render(deltaTime)
+        } else {
+            currentScreen.render(deltaTime)
+        }
+    }
+
+    inline fun <reified T : KtxScreen> transitionScreen(
+        fromType: TransitionType,
+        toType: TransitionType,
+    ) {
+        val toScreen = getScreen<T>()
+        toScreen.resize(Gdx.graphics.width, Gdx.graphics.height)
+        screenTransition.transition(shownScreen, fromType, toScreen, toType) {
+            setScreen<T>()
+        }
     }
 
     override fun dispose() {
