@@ -34,6 +34,9 @@ class AudioService(
             field = value.coerceIn(0f, 1f)
         }
 
+    val currentMusic: MusicAsset?
+        get() = lastMusic?.second
+
     fun play(musicAsset: MusicAsset, loop: Boolean = true) {
         // stop previous music instance if there is any and unload it
         lastMusic?.let { (prevMusic, prevMusicAsset) ->

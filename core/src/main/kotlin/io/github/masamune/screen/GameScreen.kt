@@ -138,6 +138,7 @@ class GameScreen(
         eventService += world
         eventService += stage
         eventService += keyboardController
+        eventService += masamune.audio
     }
 
     override fun hide() {

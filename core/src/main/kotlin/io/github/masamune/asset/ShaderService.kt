@@ -108,8 +108,9 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
     /**
      * Applies a **blur** shader to the given draw [block] before rendering it via the [batch].
      * The [radius] defines how much blur is applied. 0 means no blur. Good values are between 0 and 6.
+     * If [targetFbo] is defined then the rendering is done to the [FrameBuffer] instead of the screen.
      */
-    fun useBlurShader(batch: Batch, radius: Float, block: () -> Unit) {
+    fun useBlurShader(batch: Batch, radius: Float, targetFbo: FrameBuffer? = null, block: () -> Unit) {
         val texture = tmpFbo.renderToFbo(block)
         batch.useShader(blurShader) {
             blurShader.use {
@@ -131,22 +132,18 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
                 it.setUniformf(blurRadiusIdx, radius)
                 it.setUniformf(blurDirectionIdx, Vector2.Y)
             }
-            batch.use(batch.projectionMatrix.idt()) {
-                it.draw(blurFbo.colorBufferTexture, -1f, 1f, 2f, -2f)
+            if (targetFbo != null) {
+                targetFbo.use {
+                    batch.use(batch.projectionMatrix.idt()) {
+                        it.draw(blurFbo.colorBufferTexture, -1f, 1f, 2f, -2f)
+                    }
+                }
+            } else {
+                batch.use(batch.projectionMatrix.idt()) {
+                    it.draw(blurFbo.colorBufferTexture, -1f, 1f, 2f, -2f)
+                }
             }
         }
-    }
-
-    /**
-     * Resize [FrameBuffer] by disposing the current one and recreating a new one with the
-     * given new [width] and [height].
-     */
-    private fun FrameBuffer.resize(width: Int, height: Int): FrameBuffer {
-        if (this.width != width || this.height != height) {
-            this.dispose()
-            return FrameBuffer(FBO_FORMAT, width, height, false)
-        }
-        return this
     }
 
     /**
@@ -172,7 +169,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
 
         // FBO format requires ALPHA support for proper overlapping rendering of fbo textures like
         // in the blur screen transition
-        private val FBO_FORMAT = Format.RGBA8888
+        val FBO_FORMAT = Format.RGBA8888
         private val log = logger<ShaderService>()
 
         /**
@@ -190,6 +187,19 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
                 block()
             }
             return this.colorBufferTexture
+        }
+
+
+        /**
+         * Resize [FrameBuffer] by disposing the current one and recreating a new one with the
+         * given new [width] and [height].
+         */
+        fun FrameBuffer.resize(width: Int, height: Int): FrameBuffer {
+            if (this.width != width || this.height != height) {
+                this.dispose()
+                return FrameBuffer(FBO_FORMAT, width, height, false)
+            }
+            return this
         }
     }
 

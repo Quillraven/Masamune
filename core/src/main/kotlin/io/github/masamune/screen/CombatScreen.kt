@@ -4,19 +4,30 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.FrameBuffer
+import com.badlogic.gdx.graphics.glutils.HdpiUtils
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
+import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.I18NAsset
+import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.ShaderService
+import io.github.masamune.asset.ShaderService.Companion.resize
 import io.github.masamune.asset.SkinAsset
+import io.github.masamune.audio.AudioService
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
 import ktx.app.KtxScreen
+import ktx.graphics.component1
+import ktx.graphics.component2
+import ktx.graphics.component3
+import ktx.graphics.component4
+import ktx.graphics.use
 import ktx.log.logger
 
 class CombatScreen(
@@ -26,6 +37,7 @@ class CombatScreen(
     private val eventService: EventService = masamune.event,
     private val shaderService: ShaderService = masamune.shader,
     private val assetService: AssetService = masamune.asset,
+    private val audioService: AudioService = masamune.audio,
 ) : KtxScreen {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
@@ -36,6 +48,8 @@ class CombatScreen(
     // other stuff
     private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]
     private val keyboardController = KeyboardController(eventService)
+    private var fbo = FrameBuffer(ShaderService.FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
+    private var prevMusic: MusicAsset? = null
 
     // ecs world
     private val world = configureWorld {}
@@ -48,8 +62,17 @@ class CombatScreen(
         // register all event listeners
         registerEventListeners()
 
-        shaderService.useBlurShader(batch, 6f) {
-            masamune.getScreen<GameScreen>()
+        updateBgdFbo()
+
+        prevMusic = audioService.currentMusic
+        audioService.play(MusicAsset.COMBAT1)
+    }
+
+    private fun updateBgdFbo() {
+        shaderService.useBlurShader(batch, 6f, fbo) {
+            ScreenUtils.clear(0f, 0f, 0f, 0f, false)
+            HdpiUtils.glViewport(0, 0, Gdx.graphics.width, Gdx.graphics.height)
+            masamune.getScreen<GameScreen>().render(0f)
         }
     }
 
@@ -57,19 +80,30 @@ class CombatScreen(
         eventService += world
         eventService += stage
         eventService += keyboardController
+        eventService += masamune.audio
     }
 
     override fun hide() {
         eventService.clearListeners()
         world.removeAll(clearRecycled = true)
+        prevMusic?.let { audioService.play(it) }
     }
 
     override fun resize(width: Int, height: Int) {
         gameViewport.update(width, height, false)
         uiViewport.update(width, height, true)
+        fbo = fbo.resize(width, height)
+        updateBgdFbo()
     }
 
     override fun render(delta: Float) {
+        // render blurred out GameScreen as background
+        batch.use(batch.projectionMatrix.idt()) {
+            val (r, g, b, a) = batch.color
+            batch.setColor(r, g, b, 0.7f)
+            it.draw(fbo.colorBufferTexture, -1f, 1f, 2f, -2f)
+            batch.setColor(r, g, b, a)
+        }
         world.update(delta)
 
         uiViewport.apply()
@@ -88,6 +122,7 @@ class CombatScreen(
         log.debug { "Disposing world with '${world.numEntities}' entities" }
         world.dispose()
         stage.dispose()
+        fbo.dispose()
     }
 
     companion object {
