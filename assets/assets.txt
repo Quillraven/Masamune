@@ -5,6 +5,7 @@ i:b:/sound/menu_click.wav:33612:1
 i:d:/music:0:1
 i:b:/music/road.mp3:709694:1
 i:b:/music/village.mp3:827559:1
+i:b:/music/combat1.mp3:2005701:1
 i:d:/shader:0:1
 i:b:/shader/outline.frag:847:1
 i:b:/shader/default.vert:316:1
@@ -15,7 +16,7 @@ i:b:/graphics/chars_and_props.atlas:5439:1
 i:b:/graphics/sfx.png:1520:1
 i:b:/graphics/chars_and_props.png:28346:1
 i:d:/maps:0:1
-i:b:/maps/village.tmx:3186:1
+i:b:/maps/village.tmx:3256:1
 i:b:/maps/tileset.tsx:9032:1
 i:b:/maps/objects.tsx:10656:1
 i:d:/maps/objects:0:1
