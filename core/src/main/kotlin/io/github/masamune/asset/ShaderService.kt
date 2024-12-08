@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.ScreenUtils
+import io.github.masamune.asset.ShaderService.Companion.renderToFbo
 import ktx.app.gdxError
 import ktx.graphics.use
 import ktx.log.logger

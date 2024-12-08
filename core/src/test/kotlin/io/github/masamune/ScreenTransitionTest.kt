@@ -21,8 +21,7 @@ private val log = Logger("TransitionTest")
 
 /**
  * Test for [ScreenTransitionService] and blur shader.
- * Press 1 to transition to Screen 1.
- * Press 2 to transition to Screen 2.
+ * Press Space to transition between screens.
  *
  * The current screen gets blurred out.
  * The new screen gets blurred in.
@@ -30,8 +29,9 @@ private val log = Logger("TransitionTest")
 
 fun main() = gdxTest("Screen Transition Test", TransitionTest(), windowSize = vec2(300f, 300f))
 
-private class Screen1(private val batch: Batch, private val texture: Texture) : KtxScreen {
-    private val viewport = StretchViewport(32f, 32f)
+private class Screen1(private val batch: Batch) : KtxScreen {
+    private val viewport = StretchViewport(300f, 300f)
+    private val texture by lazy { Texture("screen1.png".toClasspathFile()) }
 
     override fun show() {
         log.debug { "Screen 1 show" }
@@ -43,17 +43,20 @@ private class Screen1(private val batch: Batch, private val texture: Texture) : 
     }
 
     override fun render(delta: Float) {
-        log.debug { "Render Screen 1" }
         viewport.apply()
         batch.use(viewport.camera) {
-            it.setColor(1f, 0f, 0f, 1f)
             it.draw(texture, 0f, 0f)
         }
     }
+
+    override fun dispose() {
+        texture.dispose()
+    }
 }
 
-private class Screen2(private val batch: Batch, private val texture: Texture) : KtxScreen {
-    private val viewport = StretchViewport(32f, 32f)
+private class Screen2(private val batch: Batch) : KtxScreen {
+    private val viewport = StretchViewport(300f, 300f)
+    private val texture by lazy { Texture("screen2.png".toClasspathFile()) }
 
     override fun show() {
         log.debug { "Screen 2 show" }
@@ -65,28 +68,41 @@ private class Screen2(private val batch: Batch, private val texture: Texture) : 
     }
 
     override fun render(delta: Float) {
-        log.debug { "Render Screen 2" }
         viewport.apply()
         batch.use(viewport.camera) {
-            it.setColor(0f, 1f, 0f, 1f)
-            it.draw(texture, 16f, 16f)
+            it.draw(texture, 0f, 0f)
         }
+    }
+
+    override fun dispose() {
+        texture.dispose()
     }
 }
 
 private class TransitionTest : KtxGame<KtxScreen>() {
     private val serviceLocator by lazy { LazyServiceLocator() }
-    private val texture by lazy { Texture("hero.png".toClasspathFile()) }
 
     override fun create() {
         Gdx.app.logLevel = Application.LOG_DEBUG
-        addScreen(Screen1(serviceLocator.batch, texture))
-        addScreen(Screen2(serviceLocator.batch, texture))
+        addScreen(Screen1(serviceLocator.batch))
+        addScreen(Screen2(serviceLocator.batch))
         setScreen<Screen1>()
 
         serviceLocator.shader.loadAllShader()
+        startTransition()
+    }
 
-        transitionScreen<Screen2>(BlurTransitionType(0f, 6f, 2f), BlurTransitionType(6f, 0f, 2f))
+    private fun startTransition() {
+        val time = 2f
+        val fromTransitionType = BlurTransitionType(0f, 6f, time, endAlpha = 0.9f)
+        val toTransitionType = BlurTransitionType(6f, 0f, time, startAlpha = 0.9f)
+        if (currentScreen is Screen1) {
+            log.debug { "Transition Screen 2" }
+            transitionScreen<Screen2>(fromTransitionType, toTransitionType)
+        } else {
+            log.debug { "Transition Screen 1" }
+            transitionScreen<Screen1>(fromTransitionType, toTransitionType, fromFirst = false)
+        }
     }
 
     override fun resize(width: Int, height: Int) {
@@ -100,28 +116,23 @@ private class TransitionTest : KtxGame<KtxScreen>() {
 
         if (serviceLocator.screenTransition.hasActiveTransition) {
             serviceLocator.screenTransition.render(deltaTime)
+        } else {
+            super.render()
         }
 
-        when {
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> {
-                log.debug { "Transition Screen 1" }
-                transitionScreen<Screen1>(BlurTransitionType(0f, 6f, 2f), BlurTransitionType(6f, 0f, 2f))
-            }
-
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> {
-                log.debug { "Transition Screen 2" }
-                transitionScreen<Screen2>(BlurTransitionType(0f, 6f, 2f), BlurTransitionType(6f, 0f, 2f))
-            }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !serviceLocator.screenTransition.hasActiveTransition) {
+            startTransition()
         }
     }
 
     inline fun <reified T : KtxScreen> transitionScreen(
         fromType: TransitionType,
         toType: TransitionType,
+        fromFirst: Boolean = true,
     ) {
         val toScreen = getScreen<T>()
         toScreen.resize(Gdx.graphics.width, Gdx.graphics.height)
-        serviceLocator.screenTransition.transition(shownScreen, fromType, toScreen, toType) {
+        serviceLocator.screenTransition.transition(shownScreen, fromType, toScreen, toType, fromFirst) {
             setScreen<T>()
         }
     }
@@ -129,6 +140,5 @@ private class TransitionTest : KtxGame<KtxScreen>() {
     override fun dispose() {
         super.dispose()
         serviceLocator.dispose()
-        texture.dispose()
     }
 }

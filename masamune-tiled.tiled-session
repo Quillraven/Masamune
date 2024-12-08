@@ -28,8 +28,8 @@
             "scale": 4,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 128.125,
-                "y": 352.125
+                "x": 128,
+                "y": 86.625
             }
         },
         "assets/maps/test.tmx": {
@@ -53,8 +53,8 @@
             "scale": 4,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 160.125,
-                "y": 159.875
+                "x": 228.25,
+                "y": 196.625
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
@@ -150,8 +150,8 @@
             "scale": 8,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 52.0625,
-                "y": 48.0625
+                "x": 48,
+                "y": 47.9375
             }
         }
     },

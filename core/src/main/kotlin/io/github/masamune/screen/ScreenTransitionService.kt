@@ -22,6 +22,7 @@ class ScreenTransitionService(
 
     private fun transition(screen: Screen, type: TransitionType): Transition {
         return when (type) {
+            is DefaultTransitionType -> DefaultTransition
             is BlurTransitionType -> BlurTransition(type, screen, batch, shaderService)
         }
     }
@@ -31,10 +32,16 @@ class ScreenTransitionService(
         fromType: TransitionType,
         toScreen: Screen,
         toType: TransitionType,
+        fromFirst: Boolean = true,
         onTransitionEnd: () -> Unit
     ) {
-        fromTransition = transition(fromScreen, fromType)
-        toTransition = transition(toScreen, toType)
+        if (fromFirst) {
+            fromTransition = transition(fromScreen, fromType)
+            toTransition = transition(toScreen, toType)
+        } else {
+            fromTransition = transition(toScreen, toType)
+            toTransition = transition(fromScreen, fromType)
+        }
         transitionEnd = onTransitionEnd
     }
 

@@ -10,6 +10,7 @@ import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.collection.compareEntity
+import io.github.masamune.Masamune
 import io.github.masamune.PhysicContactHandler.Companion.testPoint
 import io.github.masamune.component.Dialog
 import io.github.masamune.component.Graphic
@@ -30,6 +31,9 @@ import io.github.masamune.event.PlayerInteractBeginContactEvent
 import io.github.masamune.event.PlayerInteractEndContactEvent
 import io.github.masamune.event.PlayerInteractEvent
 import io.github.masamune.event.PlayerMoveEvent
+import io.github.masamune.screen.BlurTransitionType
+import io.github.masamune.screen.CombatScreen
+import io.github.masamune.screen.DefaultTransitionType
 import io.github.masamune.tiledmap.MapTransitionService
 import ktx.log.logger
 import ktx.math.component1
@@ -41,6 +45,7 @@ class PlayerInteractSystem(
     private val eventService: EventService = inject(),
     private val dialogConfigurator: DialogConfigurator = inject(),
     private val mapTransitionService: MapTransitionService = inject(),
+    private val masamune: Masamune = inject(),
 ) : IteratingSystem(
     family = family { all(Interact, Player) },
     interval = Fixed(1 / 20f)
@@ -80,15 +85,34 @@ class PlayerInteractSystem(
         }
 
         triggerTimer = 0f
-        if (interactEntity == Entity.NONE) {
-            // no entity to interact
-            return@with
-        } else if (interactEntity has Dialog) {
-            val namedDialog = dialogConfigurator[interactEntity[Dialog].dialogName, world, entity]
-            eventService.fire(DialogBeginEvent(world, entity, namedDialog))
-        } else if (interactEntity has Trigger) {
-            interactEntity.configure { it += Tag.EXECUTE_TRIGGER }
-            interactEntity[Trigger].triggeringEntity = entity
+        when {
+            interactEntity == Entity.NONE -> {
+                // no entity to interact
+                return@with
+            }
+
+            interactEntity has Dialog -> {
+                val namedDialog = dialogConfigurator[interactEntity[Dialog].dialogName, world, entity]
+                eventService.fire(DialogBeginEvent(world, entity, namedDialog))
+            }
+
+            interactEntity has Trigger -> {
+                interactEntity.configure { it += Tag.EXECUTE_TRIGGER }
+                interactEntity[Trigger].triggeringEntity = entity
+            }
+
+            interactEntity has Tag.ENEMY -> {
+                masamune.transitionScreen<CombatScreen>(
+                    fromType = BlurTransitionType(
+                        startBlur = 0f,
+                        endBlur = 6f,
+                        startAlpha = 1f,
+                        endAlpha = 0.7f,
+                        time = 2f
+                    ),
+                    toType = DefaultTransitionType,
+                )
+            }
         }
     }
 

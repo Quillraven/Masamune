@@ -12,6 +12,7 @@ import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.log.logger
+import kotlin.reflect.KClass
 
 typealias PhysicWorld = World
 
@@ -54,10 +55,11 @@ class Masamune(
     inline fun <reified T : KtxScreen> transitionScreen(
         fromType: TransitionType,
         toType: TransitionType,
+        fromFirst: Boolean = true,
     ) {
         val toScreen = getScreen<T>()
         toScreen.resize(Gdx.graphics.width, Gdx.graphics.height)
-        screenTransition.transition(shownScreen, fromType, toScreen, toType) {
+        screenTransition.transition(shownScreen, fromType, toScreen, toType, fromFirst) {
             setScreen<T>()
         }
     }

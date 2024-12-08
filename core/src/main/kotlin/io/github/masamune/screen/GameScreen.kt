@@ -87,6 +87,7 @@ class GameScreen(
             add(tiledService)
             add<MapTransitionService>(mapTransitionService)
             add(assetService)
+            add(masamune)
         }
 
         systems {
@@ -124,9 +125,11 @@ class GameScreen(
 
         // register all event listeners
         registerEventListeners()
+    }
 
+    fun setMap(mapAsset: TiledMapAsset) {
         // load map AFTER event listeners are registered
-        tiledService.loadMap(TiledMapAsset.VILLAGE).also {
+        tiledService.loadMap(mapAsset).also {
             tiledService.setMap(it, world)
         }
     }
