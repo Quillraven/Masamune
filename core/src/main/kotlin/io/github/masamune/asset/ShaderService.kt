@@ -105,10 +105,10 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
     }
 
     /**
-     * Applies a **blur** shader to the given [texture] before rendering it via the [batch].
+     * Applies a **blur** shader to the given draw [block] before rendering it via the [batch].
      * The [radius] defines how much blur is applied. 0 means no blur. Good values are between 0 and 6.
      */
-    fun useBlurShader(batch: Batch, radius: Float, texture: Texture) {
+    fun useBlurShader(batch: Batch, radius: Float, block: () -> Unit) {
         batch.useShader(blurShader) {
             blurShader.use {
                 it.setUniformf(blurRadiusIdx, radius)
@@ -116,6 +116,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
             }
 
             // apply horizontal blur to texture by rendering it to FrameBuffer
+            val texture = tmpFbo.renderToFbo(block)
             blurFbo.renderToFbo {
                 // viewport is the entire screen since we render the frame buffer texture pixel perfect 1:1
                 // use identity matrix to render pixel perfect
