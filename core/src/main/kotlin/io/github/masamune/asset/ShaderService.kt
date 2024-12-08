@@ -29,7 +29,8 @@ import ktx.math.vec2
 class ShaderService(private val fileHandleResolver: FileHandleResolver = InternalFileHandleResolver()) : Disposable {
 
     /** a temporary [FrameBuffer] that can be used in [renderToFbo] (e.g. for blur shader). */
-    private var tmpFbo: FrameBuffer = FrameBuffer(FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
+    var tmpFbo: FrameBuffer = FrameBuffer(FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
+        private set
 
     // outline shader
     private lateinit var outlineShader: ShaderProgram
@@ -133,7 +134,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
                 it.setUniformf(blurDirectionIdx, Vector2.Y)
             }
             if (targetFbo != null) {
-                targetFbo.use {
+                targetFbo.renderToFbo {
                     batch.use(batch.projectionMatrix.idt()) {
                         it.draw(blurFbo.colorBufferTexture, -1f, 1f, 2f, -2f)
                     }

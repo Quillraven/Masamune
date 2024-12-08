@@ -1,7 +1,9 @@
 package io.github.masamune.screen
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.HdpiUtils
 import com.badlogic.gdx.math.Interpolation
 import io.github.masamune.asset.ShaderService
 import ktx.app.KtxScreen
@@ -9,6 +11,7 @@ import ktx.graphics.component1
 import ktx.graphics.component2
 import ktx.graphics.component3
 import ktx.graphics.component4
+import ktx.graphics.use
 
 sealed class Transition(val screen: Screen) {
     abstract fun render(delta: Float)
@@ -48,11 +51,16 @@ class BlurTransition(
         currentBlur = interpolation.apply(startBlur, endBlur, alpha)
         currentAlpha = interpolation.apply(startAlpha, endAlpha, alpha)
 
-        shaderService.useBlurShader(batch, radius = currentBlur) {
-            val (r, g, b, a) = batch.color
-            batch.setColor(r, g, b, currentAlpha)
+        shaderService.useBlurShader(batch, radius = currentBlur, shaderService.tmpFbo) {
             screen.render(0f)
-            batch.setColor(r, g, b, a)
         }
+
+        val (r, g, b, a) = batch.color
+        batch.setColor(r, g, b, currentAlpha)
+        HdpiUtils.glViewport(0, 0, Gdx.graphics.width, Gdx.graphics.height)
+        batch.use(batch.projectionMatrix.idt()) {
+            it.draw(shaderService.tmpFbo.colorBufferTexture, -1f, 1f, 2f, -2f)
+        }
+        batch.setColor(r, g, b, a)
     }
 }

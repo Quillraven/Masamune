@@ -107,7 +107,7 @@ class PlayerInteractSystem(
                         startBlur = 0f,
                         endBlur = 6f,
                         startAlpha = 1f,
-                        endAlpha = 0.7f,
+                        endAlpha = 0.4f,
                         time = 2f
                     ),
                     toType = DefaultTransitionType,

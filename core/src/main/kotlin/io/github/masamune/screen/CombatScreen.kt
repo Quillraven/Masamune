@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.graphics.glutils.HdpiUtils
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
-import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
@@ -62,17 +61,17 @@ class CombatScreen(
         // register all event listeners
         registerEventListeners()
 
-        updateBgdFbo()
+        updateBgdFbo(Gdx.graphics.width, Gdx.graphics.height)
 
         prevMusic = audioService.currentMusic
         audioService.play(MusicAsset.COMBAT1)
     }
 
-    private fun updateBgdFbo() {
+    private fun updateBgdFbo(width: Int, height: Int) {
         shaderService.useBlurShader(batch, 6f, fbo) {
-            ScreenUtils.clear(0f, 0f, 0f, 0f, false)
-            HdpiUtils.glViewport(0, 0, Gdx.graphics.width, Gdx.graphics.height)
-            masamune.getScreen<GameScreen>().render(0f)
+            val gameScreen = masamune.getScreen<GameScreen>()
+            gameScreen.resize(width, height)
+            gameScreen.render(0f)
         }
     }
 
@@ -93,14 +92,15 @@ class CombatScreen(
         gameViewport.update(width, height, false)
         uiViewport.update(width, height, true)
         fbo = fbo.resize(width, height)
-        updateBgdFbo()
+        updateBgdFbo(width, height)
     }
 
     override fun render(delta: Float) {
         // render blurred out GameScreen as background
+        HdpiUtils.glViewport(0, 0, Gdx.graphics.width, Gdx.graphics.height)
         batch.use(batch.projectionMatrix.idt()) {
             val (r, g, b, a) = batch.color
-            batch.setColor(r, g, b, 0.7f)
+            batch.setColor(r, g, b, 0.4f)
             it.draw(fbo.colorBufferTexture, -1f, 1f, 2f, -2f)
             batch.setColor(r, g, b, a)
         }
@@ -110,10 +110,11 @@ class CombatScreen(
         stage.act(delta)
         stage.draw()
 
+        // TODO remove debug
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             masamune.transitionScreen<GameScreen>(
                 fromType = DefaultTransitionType,
-                toType = BlurTransitionType(startBlur = 6f, endBlur = 0f, time = 2f, endAlpha = 1f, startAlpha = 0.7f)
+                toType = BlurTransitionType(startBlur = 6f, endBlur = 0f, time = 2f, endAlpha = 1f, startAlpha = 0.4f)
             )
         }
     }

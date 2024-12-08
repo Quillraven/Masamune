@@ -54,12 +54,12 @@ class RenderSystem(
 
     override fun onTick() {
         gameViewport.apply()
+        batchOrigColor.set(batch.color)
         mapRenderer.use(camera) { renderer ->
             background.forEach(renderer::renderTileLayer)
             renderer.renderTransitionMapLayers(transitionBackground)
 
             // render all entities
-            batchOrigColor.set(batch.color)
             super.onTick()
             batch.setColor(batchOrigColor.r, batchOrigColor.g, batchOrigColor.b, batchOrigColor.a)
 
@@ -115,7 +115,12 @@ class RenderSystem(
         val (texRegion, color) = graphic
         val (position, _, scale, rotationDeg, offset) = transform
 
-        batch.setColor(color.r, color.g, color.b, color.a)
+        batch.setColor(
+            color.r * batchOrigColor.r,
+            color.g * batchOrigColor.g,
+            color.b * batchOrigColor.b,
+            color.a * batchOrigColor.a
+        )
         this.draw(
             texRegion,
             position.x + offset.x, position.y + offset.y,
