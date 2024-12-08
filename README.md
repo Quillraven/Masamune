@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-red.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.0-red.svg)](http://kotlinlang.org/)
 [![Fleks](https://img.shields.io/badge/Fleks-2.11--SNAPSHOT-purple.svg)](https://github.com/Quillraven/Fleks)
 
 [![LibGDX](https://img.shields.io/badge/LibGDX-1.13.0-green.svg)](https://libgdx.com/)
