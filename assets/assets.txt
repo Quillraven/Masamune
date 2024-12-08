@@ -9,7 +9,7 @@ i:b:/music/combat1.mp3:2005701:1
 i:d:/shader:0:1
 i:b:/shader/outline.frag:847:1
 i:b:/shader/default.vert:316:1
-i:b:/shader/blur.frag:1177:1
+i:b:/shader/blur.frag:1189:1
 i:d:/graphics:0:1
 i:b:/graphics/sfx.atlas:305:1
 i:b:/graphics/chars_and_props.atlas:5439:1
