@@ -42,6 +42,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
     private lateinit var blurShader: ShaderProgram
     private var blurRadiusIdx = -1
     private var blurDirectionIdx = -1
+    private var blurPixelSizeIdx = -1
 
     /**
      * Loads all shaders and stores uniform locations internally for better performance.
@@ -54,6 +55,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
         blurShader = loadShader("default.vert", "blur.frag")
         blurRadiusIdx = blurShader.getUniformLocation("u_radius")
         blurDirectionIdx = blurShader.getUniformLocation("u_direction")
+        blurPixelSizeIdx = blurShader.getUniformLocation("u_pixelSize")
     }
 
     /**
@@ -117,6 +119,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
             blurShader.use {
                 it.setUniformf(blurRadiusIdx, radius)
                 it.setUniformf(blurDirectionIdx, Vector2.X)
+                it.setUniformf(blurPixelSizeIdx, TMP_VEC2.set(texture.width.toFloat(), texture.height.toFloat()))
             }
 
             // apply horizontal blur to texture by rendering it to FrameBuffer
@@ -132,6 +135,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
             blurShader.use {
                 it.setUniformf(blurRadiusIdx, radius)
                 it.setUniformf(blurDirectionIdx, Vector2.Y)
+                it.setUniformf(blurPixelSizeIdx, TMP_VEC2.set(texture.width.toFloat(), texture.height.toFloat()))
             }
             if (targetFbo != null) {
                 targetFbo.renderToFbo {
