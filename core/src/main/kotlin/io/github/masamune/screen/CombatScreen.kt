@@ -10,17 +10,34 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
+import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.asset.AssetService
+import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.ShaderService.Companion.resize
 import io.github.masamune.asset.SkinAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.AttackAction
+import io.github.masamune.component.Animation
+import io.github.masamune.component.Combat
+import io.github.masamune.component.Facing
+import io.github.masamune.component.FacingDirection
+import io.github.masamune.component.Graphic
+import io.github.masamune.component.Name
+import io.github.masamune.component.Player
+import io.github.masamune.component.Stats
+import io.github.masamune.component.Transform
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
+import io.github.masamune.system.AnimationSystem
+import io.github.masamune.system.CombatSystem
+import io.github.masamune.system.RenderSystem
+import io.github.masamune.tiledmap.AnimationType
+import io.github.masamune.tiledmap.TiledStats
 import ktx.app.KtxScreen
 import ktx.graphics.component1
 import ktx.graphics.component2
@@ -28,6 +45,7 @@ import ktx.graphics.component3
 import ktx.graphics.component4
 import ktx.graphics.use
 import ktx.log.logger
+import ktx.math.vec3
 
 class CombatScreen(
     private val masamune: Masamune,
@@ -39,7 +57,7 @@ class CombatScreen(
     private val audioService: AudioService = masamune.audio,
 ) : KtxScreen {
     // viewports and stage
-    private val gameViewport: Viewport = ExtendViewport(16f, 9f)
+    private val gameViewport: Viewport = ExtendViewport(8f, 8f)
     private val uiViewport = ExtendViewport(928f, 522f)
     private val stage = Stage(uiViewport, batch)
     private val skin = assetService[SkinAsset.DEFAULT]
@@ -50,7 +68,26 @@ class CombatScreen(
     private var fbo = FrameBuffer(ShaderService.FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
 
     // ecs world
-    private val world = configureWorld {}
+    private val world = combatWorld()
+
+    private fun combatWorld(): World {
+        return configureWorld {
+            injectables {
+                add(batch)
+                add(gameViewport)
+                add(shaderService)
+                add(eventService)
+                add(assetService)
+                add(masamune)
+            }
+
+            systems {
+                add(CombatSystem())
+                add(AnimationSystem())
+                add(RenderSystem())
+            }
+        }
+    }
 
     override fun show() {
         // set controller
@@ -61,8 +98,44 @@ class CombatScreen(
         registerEventListeners()
 
         updateBgdFbo(Gdx.graphics.width, Gdx.graphics.height)
-
         audioService.play(MusicAsset.COMBAT1)
+
+        spawnDummyCombatEntities()
+    }
+
+    private fun spawnDummyCombatEntities() {
+        val atlas = assetService[AtlasAsset.CHARS_AND_PROPS]
+
+        // player
+        world.entity {
+            it += Name("Player")
+            it += Player()
+            it += Stats(TiledStats(strength = 10f, agility = 5f, damage = 1f, armor = 0f, life = 10f, lifeMax = 10f))
+            it += Facing(FacingDirection.UP)
+            val animationCmp = Animation.ofAtlas(atlas, "hero", AnimationType.WALK, FacingDirection.UP, speed = 0.4f)
+            it += animationCmp
+            val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
+            it += graphicCmp
+            it += Transform(vec3(gameViewport.worldWidth * 0.5f + 1f, 1f, 0f), graphicCmp.regionSize)
+            it += Combat()
+        }
+
+        // enemy
+        world.entity {
+            it += Name("Dummy")
+            it += Stats(TiledStats(strength = 2f, agility = 3f, damage = 3f, armor = 5f, life = 20f, lifeMax = 20f))
+            it += Facing(FacingDirection.DOWN)
+            val animationCmp =
+                Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)
+            it += animationCmp
+            val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
+            it += graphicCmp
+            it += Transform(
+                vec3(gameViewport.worldWidth * 0.5f - 1f, gameViewport.worldHeight - 2f, 0f),
+                graphicCmp.regionSize
+            )
+            it += Combat()
+        }
     }
 
     private fun updateBgdFbo(width: Int, height: Int) {
@@ -87,7 +160,7 @@ class CombatScreen(
     }
 
     override fun resize(width: Int, height: Int) {
-        gameViewport.update(width, height, false)
+        gameViewport.update(width, height, true)
         uiViewport.update(width, height, true)
         fbo = fbo.resize(width, height)
         updateBgdFbo(width, height)
@@ -109,11 +182,28 @@ class CombatScreen(
         stage.draw()
 
         // TODO remove debug
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            masamune.transitionScreen<GameScreen>(
-                fromType = DefaultTransitionType,
-                toType = BlurTransitionType(startBlur = 6f, endBlur = 0f, time = 2f, endAlpha = 1f, startAlpha = 0.4f)
-            )
+        when {
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> {
+                val combatEntities = world.family { all(Combat) }
+                combatEntities.forEach { entity ->
+                    entity[Combat].action = AttackAction(entity).also { action ->
+                        action.targets += combatEntities.first { it != entity }
+                    }
+                }
+            }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) -> {
+                masamune.transitionScreen<GameScreen>(
+                    fromType = DefaultTransitionType,
+                    toType = BlurTransitionType(
+                        startBlur = 6f,
+                        endBlur = 0f,
+                        time = 2f,
+                        endAlpha = 1f,
+                        startAlpha = 0.4f
+                    )
+                )
+            }
         }
     }
 
