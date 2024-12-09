@@ -20,6 +20,7 @@ class AudioService(
     val assetService: AssetService,
 ) : EventListener {
 
+    private var prevMusic: MusicAsset? = null
     private var lastMusic: Pair<Music, MusicAsset>? = null
     private val soundCache = mutableMapOf<SoundAsset, Sound>()
 
@@ -34,9 +35,6 @@ class AudioService(
             field = value.coerceIn(0f, 1f)
         }
 
-    val currentMusic: MusicAsset?
-        get() = lastMusic?.second
-
     fun play(musicAsset: MusicAsset, loop: Boolean = true) {
         // stop previous music instance if there is any and unload it
         lastMusic?.let { (prevMusic, prevMusicAsset) ->
@@ -44,6 +42,7 @@ class AudioService(
             prevMusic.stop()
             assetService.unload(prevMusicAsset)
         }
+        prevMusic = lastMusic?.second
 
         // load new music asset and finish unloading/loading process
         assetService.load(musicAsset)
@@ -58,6 +57,10 @@ class AudioService(
             // remember music asset and music instance for unloading/stopping later on
             lastMusic = Pair(this, musicAsset)
         }
+    }
+
+    fun playPrevMusic() {
+        prevMusic?.let { play(it) }
     }
 
     fun play(soundAsset: SoundAsset, pitch: Float = 1f) {

@@ -48,7 +48,6 @@ class CombatScreen(
     private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]
     private val keyboardController = KeyboardController(eventService)
     private var fbo = FrameBuffer(ShaderService.FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
-    private var prevMusic: MusicAsset? = null
 
     // ecs world
     private val world = configureWorld {}
@@ -63,7 +62,6 @@ class CombatScreen(
 
         updateBgdFbo(Gdx.graphics.width, Gdx.graphics.height)
 
-        prevMusic = audioService.currentMusic
         audioService.play(MusicAsset.COMBAT1)
     }
 
@@ -85,7 +83,7 @@ class CombatScreen(
     override fun hide() {
         eventService.clearListeners()
         world.removeAll(clearRecycled = true)
-        prevMusic?.let { audioService.play(it) }
+        audioService.playPrevMusic()
     }
 
     override fun resize(width: Int, height: Int) {
