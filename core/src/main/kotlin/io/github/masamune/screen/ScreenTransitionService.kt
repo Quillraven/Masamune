@@ -62,6 +62,13 @@ class ScreenTransitionService(
         }
     }
 
+    fun resize(width: Int, height: Int) {
+        if (hasActiveTransition) {
+            fromTransition.screen.resize(width, height)
+            toTransition.screen.resize(width, height)
+        }
+    }
+
     companion object {
         private val log = logger<ScreenTransitionService>()
     }

@@ -12,7 +12,6 @@ import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.log.logger
-import kotlin.reflect.KClass
 
 typealias PhysicWorld = World
 
@@ -37,8 +36,14 @@ class Masamune(
     }
 
     override fun resize(width: Int, height: Int) {
-        super.resize(width, height)
+        // 1) resize shader service because of blur/tmp FrameBuffer that might be used by other screen logic.
+        //    CombatScreen uses it to render GameScreen as blurred background.
         shader.resize(width, height)
+        // 2) resize any screens that are currently in an active transition. The normal resize method of the game
+        //    class only resizes the active screen.
+        screenTransition.resize(width, height)
+        // 3) resize active screen
+        super.resize(width, height)
     }
 
     override fun render() {
