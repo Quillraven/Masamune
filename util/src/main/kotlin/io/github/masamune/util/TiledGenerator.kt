@@ -83,7 +83,7 @@ fun main() {
         val members = tiledProject.propertyTypes
             .first { it.name == tiledClass && it.members.isNotEmpty() }
             .members
-        createClass(masamuneClass, members)
+        createClass(masamuneClass, members, tiledClass == "Stats")
     }
 
     println("Generating property extensions")
@@ -138,7 +138,7 @@ fun createEnum(enumName: String, values: List<String>) {
     enumFile.writeText(content)
 }
 
-fun createClass(className: String, members: List<Member>) {
+fun createClass(className: String, members: List<Member>, isOpen: Boolean) {
     println("Creating class $className with ${members.size} members")
     val classTargetPackage = "io/github/masamune/tiledmap"
     val classFile = File("../core/src/main/kotlin/$classTargetPackage/$className.kt")
@@ -151,7 +151,11 @@ fun createClass(className: String, members: List<Member>) {
         val newLine = System.lineSeparator()
         append("package io.github.masamune.tiledmap").append(newLine).append(newLine)
         append("// $AUTO_GEN_INFO_TEXT").append(newLine)
-        append("data class $className(").append(newLine)
+        if (isOpen) {
+            append("open class $className(").append(newLine)
+        } else {
+            append("data class $className(").append(newLine)
+        }
         append(
             members.joinToString(
                 separator = ",$newLine    ",
@@ -176,9 +180,29 @@ fun createClass(className: String, members: List<Member>) {
             )
             append("    }").append(newLine)
             append(newLine)
+            append("    override fun toString(): String {").append(newLine)
+            append("        return \"TiledStats(")
+            append("agility=\$agility, ")
+            append("arcaneStrike=\$arcaneStrike, ")
+            append("armor=\$armor, ")
+            append("constitution=\$constitution, ")
+            append("criticalStrike=\$criticalStrike, ")
+            append("damage=\$damage, ")
+            append("intelligence=\$intelligence, ")
+            append("life=\$life, ")
+            append("lifeMax=\$lifeMax, ")
+            append("magicalEvade=\$magicalEvade, ")
+            append("mana=\$mana, ")
+            append("manaMax=\$manaMax, ")
+            append("physicalEvade=\$physicalEvade, ")
+            append("resistance=\$resistance, ")
+            append("strength=\$strength)\"").append(newLine)
+            append("    }").append(newLine)
+            append(newLine)
             append("    companion object {").append(newLine)
             append("        val NULL_STATS = TiledStats()").append(newLine)
             append("    }").append(newLine)
+            append(newLine)
             append("}").append(newLine)
         } else {
             append(newLine)

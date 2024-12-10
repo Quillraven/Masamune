@@ -17,7 +17,6 @@ import io.github.masamune.component.Stats
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.gdxTest
-import io.github.masamune.tiledmap.TiledStats
 import io.github.masamune.ui.model.MenuType
 import io.github.masamune.ui.model.StatsViewModel
 import io.github.masamune.ui.view.statsView
@@ -50,7 +49,6 @@ private class UiStatsTest : KtxApplicationAdapter {
             it += Name("Test Hero")
             it += Experience(level = 2)
             it += Stats(
-                TiledStats(
                     strength = 10f,
                     lifeMax = 100f,
                     life = 100f,
@@ -60,7 +58,6 @@ private class UiStatsTest : KtxApplicationAdapter {
                     arcaneStrike = -0.25f,
                     physicalEvade = 1f,
                     magicalEvade = 1.25f,
-                )
             )
         }
 
@@ -73,7 +70,7 @@ private class UiStatsTest : KtxApplicationAdapter {
 
     private fun updatePlayer(lifePerc: Float, manaPerc: Float, xpPerc: Float) = with(world) {
         val playerEntity = family { all(Player) }.first()
-        val stats = playerEntity[Stats].tiledStats
+        val stats = playerEntity[Stats]
         stats.life = stats.lifeMax * lifePerc
         stats.mana = stats.manaMax * manaPerc
         val experience = playerEntity[Experience]

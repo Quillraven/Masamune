@@ -37,22 +37,21 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
         components.forEach { component ->
             when (component) {
                 is Stats -> {
-                    val stats = component.tiledStats
-                    result += UIStats.AGILITY to "${stats.agility.toInt()}"
-                    result += UIStats.ARCANE_STRIKE to "${(stats.arcaneStrike * 100).toInt()}%"
-                    result += UIStats.ARMOR to "${stats.armor.toInt()}"
-                    result += UIStats.CONSTITUTION to "${stats.constitution.toInt()}"
-                    result += UIStats.CRITICAL_STRIKE to "${(stats.criticalStrike * 100).toInt()}%"
-                    result += UIStats.DAMAGE to "${stats.damage.toInt()}"
-                    result += UIStats.INTELLIGENCE to "${stats.intelligence.toInt()}"
-                    result += UIStats.LIFE to "${stats.life.toInt()}"
-                    result += UIStats.LIFE_MAX to "${stats.lifeMax.toInt()}"
-                    result += UIStats.MAGICAL_EVADE to "${(stats.magicalEvade * 100).toInt()}%"
-                    result += UIStats.MANA to "${stats.mana.toInt()}"
-                    result += UIStats.MANA_MAX to "${stats.manaMax.toInt()}"
-                    result += UIStats.PHYSICAL_EVADE to "${(stats.physicalEvade * 100).toInt()}%"
-                    result += UIStats.RESISTANCE to "${stats.resistance.toInt()}"
-                    result += UIStats.STRENGTH to "${stats.strength.toInt()}"
+                    result += UIStats.AGILITY to "${component.agility.toInt()}"
+                    result += UIStats.ARCANE_STRIKE to "${(component.arcaneStrike * 100).toInt()}%"
+                    result += UIStats.ARMOR to "${component.armor.toInt()}"
+                    result += UIStats.CONSTITUTION to "${component.constitution.toInt()}"
+                    result += UIStats.CRITICAL_STRIKE to "${(component.criticalStrike * 100).toInt()}%"
+                    result += UIStats.DAMAGE to "${component.damage.toInt()}"
+                    result += UIStats.INTELLIGENCE to "${component.intelligence.toInt()}"
+                    result += UIStats.LIFE to "${component.life.toInt()}"
+                    result += UIStats.LIFE_MAX to "${component.lifeMax.toInt()}"
+                    result += UIStats.MAGICAL_EVADE to "${(component.magicalEvade * 100).toInt()}%"
+                    result += UIStats.MANA to "${component.mana.toInt()}"
+                    result += UIStats.MANA_MAX to "${component.manaMax.toInt()}"
+                    result += UIStats.PHYSICAL_EVADE to "${(component.physicalEvade * 100).toInt()}%"
+                    result += UIStats.RESISTANCE to "${component.resistance.toInt()}"
+                    result += UIStats.STRENGTH to "${component.strength.toInt()}"
                 }
 
                 is Experience -> {
@@ -88,7 +87,7 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
     }
 
     private fun replaceStatToken(statName: String, entity: Entity, world: World): String = with(world) {
-        val stats = entity[Stats].tiledStats
+        val stats = entity[Stats]
         when (statName) {
             "AGI" -> "${stats.agility.toInt()}"
             "ARCSTR" -> "${(stats.arcaneStrike * 100).toInt()}%"

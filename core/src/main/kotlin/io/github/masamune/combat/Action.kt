@@ -31,7 +31,7 @@ data object DefaultAction : Action(Entity.NONE, ActionTargetType.NONE) {
 class AttackAction(entity: Entity) : Action(entity, ActionTargetType.SINGLE) {
 
     override fun World.onUpdate(deltaTime: Float): Boolean {
-        singleTarget[Stats].tiledStats.life -= entity[Stats].tiledStats.damage
+        singleTarget[Stats].life -= entity[Stats].damage
         return true
     }
 

@@ -110,7 +110,7 @@ class CombatScreen(
         world.entity {
             it += Name("Player")
             it += Player()
-            it += Stats(TiledStats(strength = 10f, agility = 5f, damage = 1f, armor = 0f, life = 10f, lifeMax = 10f))
+            it += Stats(strength = 10f, agility = 5f, damage = 1f, armor = 0f, life = 10f, lifeMax = 10f)
             it += Facing(FacingDirection.UP)
             val animationCmp = Animation.ofAtlas(atlas, "hero", AnimationType.WALK, FacingDirection.UP, speed = 0.4f)
             it += animationCmp
@@ -123,7 +123,7 @@ class CombatScreen(
         // enemy
         world.entity {
             it += Name("Dummy")
-            it += Stats(TiledStats(strength = 2f, agility = 3f, damage = 3f, armor = 5f, life = 20f, lifeMax = 20f))
+            it += Stats(strength = 2f, agility = 3f, damage = 3f, armor = 5f, life = 20f, lifeMax = 20f)
             it += Facing(FacingDirection.DOWN)
             val animationCmp =
                 Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)

@@ -350,7 +350,7 @@ class TiledService(
             return
         }
 
-        entity += Stats(tiledStats)
+        entity += Stats.of(tiledStats)
     }
 
     private fun EntityCreateContext.configurePlayer(world: World, entity: Entity) {

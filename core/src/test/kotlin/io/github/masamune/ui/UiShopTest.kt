@@ -31,7 +31,6 @@ import io.github.masamune.input.KeyboardController
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
-import io.github.masamune.tiledmap.TiledStats
 import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.ShopViewModel
 import io.github.masamune.ui.view.ShopView
@@ -73,7 +72,6 @@ private class UiShopTest : KtxApplicationAdapter {
             it += Inventory(talons = 500)
             it += Equipment(items = mutableEntityBagOf(createItem(world, ItemType.HELMET)))
             it += Stats(
-                TiledStats(
                     strength = 10f,
                     agility = 1f,
                     constitution = 2f,
@@ -81,7 +79,6 @@ private class UiShopTest : KtxApplicationAdapter {
                     damage = 1000f,
                     armor = 5f,
                     resistance = 100f,
-                )
             )
         }
     }
@@ -108,32 +105,32 @@ private class UiShopTest : KtxApplicationAdapter {
         it += Graphic(atlas.findRegions("items/${type.name.lowercase()}").first())
         when (type) {
             ItemType.ELDER_SWORD -> {
-                it += Stats(TiledStats(damage = 3f, intelligence = 1f, agility = -2f))
+                it += Stats(damage = 3f, intelligence = 1f, agility = -2f)
                 it += Item(type, 50, ItemCategory.WEAPON, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.STUDDED_LEATHER -> {
-                it += Stats(TiledStats(armor = 5f))
+                it += Stats(armor = 5f)
                 it += Item(type, 150, ItemCategory.ARMOR, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.HELMET -> {
-                it += Stats(TiledStats(armor = 2f))
+                it += Stats(armor = 2f)
                 it += Item(type, 40, ItemCategory.HELMET, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.BOOTS -> {
-                it += Stats(TiledStats(armor = 1f))
+                it += Stats(armor = 1f)
                 it += Item(type, 30, ItemCategory.BOOTS, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.RING -> {
-                it += Stats(TiledStats(strength = 1f, agility = 1f))
+                it += Stats(strength = 1f, agility = 1f)
                 it += Item(type, 100, ItemCategory.ACCESSORY, "item.${type.name.lowercase()}.description")
             }
 
             ItemType.SMALL_MANA_POTION -> {
-                it += Stats(TiledStats(mana = 15f))
+                it += Stats(mana = 15f)
                 it += Item(type, 10, ItemCategory.OTHER, "item.${type.name.lowercase()}.description")
             }
 

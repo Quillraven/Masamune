@@ -26,14 +26,14 @@ class CombatSystem : IntervalSystem() {
                     // all entities made their decision -> start combat round
                     // sort entities by their agility -> higher agility goes first
                     combatEntities.sort(compareEntity(world) { e1, e2 ->
-                        (e1[Stats].tiledStats.agility - e2[Stats].tiledStats.agility).toInt()
+                        (e1[Stats].agility - e2[Stats].agility).toInt()
                     })
                     actionEntities.clear()
                     combatEntities.forEach { actionEntities += it }
                     log.debug {
                         buildString {
                             append("Starting combat round for:\n")
-                            append(actionEntities.map { "Entity ${it.id} life ${it[Stats].tiledStats.life} -> ${it[Combat].action}" }
+                            append(actionEntities.map { "Entity ${it.id} life ${it[Stats].life} -> ${it[Combat].action}" }
                                 .joinToString("\n"))
                         }
                     }

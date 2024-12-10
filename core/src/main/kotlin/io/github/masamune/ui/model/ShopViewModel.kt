@@ -96,7 +96,7 @@ class ShopViewModel(
         val (type, cost, category, descriptionKey, amount) = itemEntity[Item]
         val itemName = itemEntity[Name].name
         val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
-        val itemStats = itemEntity.getOrNull(Stats)?.tiledStats ?: TiledStats.NULL_STATS
+        val itemStats = itemEntity.getOrNull(Stats) ?: TiledStats.NULL_STATS
 
         val i18nName = bundle["item.$itemName.name"]
         val i18nDescription = description(descriptionKey, itemEntity, world)
@@ -267,7 +267,7 @@ class ShopViewModel(
             }
 
             // compare selected item with currently equipped item
-            val equipStats = itemToCompare[Stats].tiledStats
+            val equipStats = itemToCompare[Stats]
             return mapOf(
                 UIStats.STRENGTH to (equipStats.strength - selectedStats.strength).toInt(),
                 UIStats.AGILITY to (equipStats.agility - selectedStats.agility).toInt(),
