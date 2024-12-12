@@ -44,10 +44,10 @@ data class CachingAtlas(
      *
      * @throws [GdxRuntimeException] if there are no regions for the given [name].
      */
-    fun findRegions(name: String): GdxArray<TextureAtlas.AtlasRegion> {
+    fun findRegions(name: String, errorOnMissingRegions: Boolean = true): GdxArray<TextureAtlas.AtlasRegion> {
         return regionCache.getOrPut(name) {
             val regions = textureAtlas.findRegions(name)
-            if (regions.isEmpty) {
+            if (regions.isEmpty && errorOnMissingRegions) {
                 gdxError("There are no regions with name $name in atlas $type")
             }
             regions
@@ -77,9 +77,14 @@ data class CachingAtlas(
         }
 
         return animationCache.getOrPut(stringBuilder) {
-            val texRegions = findRegions(stringBuilder.toString())
+            val regionKey = stringBuilder.toString()
+            var texRegions = findRegions(regionKey, errorOnMissingRegions = false)
             if (texRegions.isEmpty) {
-                gdxError("No regions in atlas $type for key $stringBuilder")
+                // try one last time without facing direction
+                texRegions = findRegions(regionKey.substringBeforeLast("_"))
+                if (texRegions.isEmpty) {
+                    gdxError("No regions in atlas $type for key $stringBuilder")
+                }
             }
 
             GdxAnimation(DEFAULT_FRAME_DURATION, texRegions, atlasMainKey, animationType)
