@@ -22,6 +22,11 @@ sealed class Action(val entity: Entity, val targetType: ActionTargetType) {
     abstract fun World.onUpdate(deltaTime: Float): Boolean
 
     fun World.onFinish() = Unit
+
+    override fun toString(): String {
+        return "${this::class.simpleName}(entity=$entity)"
+    }
+
 }
 
 data object DefaultAction : Action(Entity.NONE, ActionTargetType.NONE) {
