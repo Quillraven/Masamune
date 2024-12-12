@@ -35,14 +35,16 @@ class AudioService(
             field = value.coerceIn(0f, 1f)
         }
 
-    fun play(musicAsset: MusicAsset, loop: Boolean = true) {
+    fun play(musicAsset: MusicAsset, loop: Boolean = true, keepPrevious: Boolean = false) {
         // stop previous music instance if there is any and unload it
         lastMusic?.let { (prevMusic, prevMusicAsset) ->
             log.debug { "Unloading previous music $prevMusicAsset" }
             prevMusic.stop()
             assetService.unload(prevMusicAsset)
         }
-        prevMusic = lastMusic?.second
+        if (!keepPrevious) {
+            prevMusic = lastMusic?.second
+        }
 
         // load new music asset and finish unloading/loading process
         assetService.load(musicAsset)
