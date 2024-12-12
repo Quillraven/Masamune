@@ -43,3 +43,4 @@ Imagine an epic story here. Will be updated later.
 - [Fipps font](https://www.dafont.com/de/search.php?q=fipps)
 - [Typing label](https://github.com/rafaskb/typing-label)
 - [RPG Icon Pack](https://clockworkraven.itch.io/free-rpg-icon-pack-100-accessories-and-armor-clockwork-raven-studios)
+- [JRPG Collection](https://opengameart.org/content/jrpg-collection)
