@@ -64,7 +64,10 @@ enum class I18NAsset {
 enum class MusicAsset(format: String) {
     VILLAGE("mp3"),
     ROAD("mp3"),
-    COMBAT1("mp3");
+    COMBAT1("mp3"),
+    COMBAT_VICTORY("mp3"),
+    COMBAT_DEFEAT("mp3"),
+    ;
 
     val path = "music/${name.lowercase()}.$format"
 }
