@@ -21,7 +21,8 @@
                 "WALK",
                 "ITEM",
                 "SPECIAL1",
-                "SPECIAL2"
+                "SPECIAL2",
+                "DEAD"
             ],
             "valuesAsFlags": false
         },

@@ -5,14 +5,14 @@
     },
     "activeFile": "assets/maps/village.tmx",
     "expandedProjectPaths": [
-        "assets",
-        "core/src/test/resources/maps",
-        "core/src/test",
         "core/src/test/resources",
-        ".",
-        "assets/maps",
+        "core/src/test/resources/maps",
         "core/src",
-        "core"
+        "assets/maps",
+        "core",
+        "core/src/test",
+        "assets",
+        "."
     ],
     "fileStates": {
         "assets/maps/objects.tsx": {
@@ -28,8 +28,8 @@
             "scale": 4,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 128,
-                "y": 86.625
+                "x": 128.125,
+                "y": 352.125
             }
         },
         "assets/maps/test.tmx": {
@@ -53,8 +53,8 @@
             "scale": 4,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 228.25,
-                "y": 196.625
+                "x": 160.125,
+                "y": 159.875
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {
@@ -150,8 +150,8 @@
             "scale": 8,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 48,
-                "y": 47.9375
+                "x": 52.0625,
+                "y": 48.0625
             }
         }
     },
