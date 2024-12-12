@@ -2,6 +2,8 @@ package io.github.masamune.component
 
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
+import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.World
 import io.github.masamune.tiledmap.TiledStats
 
 class Stats(
@@ -60,3 +62,6 @@ class Stats(
     }
 }
 
+fun World.isEntityDead(entity: Entity): Boolean = with(this) {
+    return entity[Stats].life <= 0f
+}
