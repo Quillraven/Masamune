@@ -12,6 +12,8 @@ import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.collection.compareEntity
 import io.github.masamune.Masamune
 import io.github.masamune.PhysicContactHandler.Companion.testPoint
+import io.github.masamune.asset.MusicAsset
+import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Dialog
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Interact
@@ -46,6 +48,7 @@ class PlayerInteractSystem(
     private val dialogConfigurator: DialogConfigurator = inject(),
     private val mapTransitionService: MapTransitionService = inject(),
     private val masamune: Masamune = inject(),
+    private val audioService: AudioService = masamune.audio,
 ) : IteratingSystem(
     family = family { all(Interact, Player) },
     interval = Fixed(1 / 20f)
@@ -102,6 +105,7 @@ class PlayerInteractSystem(
             }
 
             interactEntity has Tag.ENEMY -> {
+                audioService.play(MusicAsset.COMBAT1)
                 masamune.transitionScreen<CombatScreen>(
                     fromType = BlurTransitionType(
                         startBlur = 0f,

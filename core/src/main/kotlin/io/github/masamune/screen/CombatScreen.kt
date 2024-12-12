@@ -98,7 +98,6 @@ class CombatScreen(
         registerEventListeners()
 
         updateBgdFbo(Gdx.graphics.width, Gdx.graphics.height)
-        audioService.play(MusicAsset.COMBAT1)
 
         spawnDummyCombatEntities()
     }
