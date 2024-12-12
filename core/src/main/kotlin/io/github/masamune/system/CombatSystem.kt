@@ -1,60 +1,75 @@
 package io.github.masamune.system
 
 import com.github.quillraven.fleks.IntervalSystem
-import com.github.quillraven.fleks.World.Companion.family
-import com.github.quillraven.fleks.collection.compareEntity
-import com.github.quillraven.fleks.collection.mutableEntityBagOf
-import io.github.masamune.component.Combat
-import io.github.masamune.component.Stats
+import io.github.masamune.combat.CombatState
+import io.github.masamune.combat.CombatStateCheckVictoryDefeat
+import io.github.masamune.combat.CombatStateDefeat
+import io.github.masamune.combat.CombatStateIdle
+import io.github.masamune.combat.CombatStatePerformAction
+import io.github.masamune.combat.CombatStatePrepareRound
+import io.github.masamune.combat.CombatStateVictory
+import io.github.masamune.event.CombatNextTurnEvent
+import io.github.masamune.event.CombatPlayerActionEvent
+import io.github.masamune.event.CombatPlayerDefeatEvent
+import io.github.masamune.event.CombatPlayerVictoryEvent
+import io.github.masamune.event.CombatStartEvent
+import io.github.masamune.event.CombatTurnBeginEvent
+import io.github.masamune.event.Event
+import io.github.masamune.event.EventListener
 import ktx.log.logger
 
-private enum class CombatState {
-    CHOOSE_ACTION,
-    PERFORM_ACTION,
-}
-
-class CombatSystem : IntervalSystem() {
-
-    private val combatEntities = family { all(Combat, Stats) }
-    private var state = CombatState.CHOOSE_ACTION
-    private val actionEntities = mutableEntityBagOf()
+class CombatSystem : IntervalSystem(), EventListener {
+    private val states = listOf(
+        CombatStateIdle,
+        CombatStatePrepareRound(world),
+        CombatStatePerformAction(world),
+        CombatStateVictory(world),
+        CombatStateDefeat(world),
+    )
+    private var prevState: CombatState = CombatStateIdle
+    private var currentState: CombatState = CombatStateIdle
+    private var globalState: CombatState = CombatStateIdle
 
     override fun onTick() {
-        when (state) {
-            CombatState.CHOOSE_ACTION -> {
-                if (combatEntities.isNotEmpty && combatEntities.entities.all { it[Combat].hasAction }) {
-                    // all entities made their decision -> start combat round
-                    // sort entities by their agility -> higher agility goes first
-                    combatEntities.sort(compareEntity(world) { e1, e2 ->
-                        (e1[Stats].agility - e2[Stats].agility).toInt()
-                    })
-                    actionEntities.clear()
-                    combatEntities.forEach { actionEntities += it }
-                    log.debug {
-                        buildString {
-                            append("Starting combat round for:\n")
-                            append(actionEntities.map { "Entity ${it.id} life ${it[Stats].life} -> ${it[Combat].action}" }
-                                .joinToString("\n"))
-                        }
-                    }
-                    state = CombatState.PERFORM_ACTION
-                }
-            }
+        globalState.onUpdate(deltaTime)
+        currentState.onUpdate(deltaTime)
+    }
 
-            CombatState.PERFORM_ACTION -> {
-                val actionEntity = actionEntities.first()
-                val action = actionEntity[Combat].action
-                log.debug { "$actionEntity performing $action" }
-                actionEntities -= actionEntity
-                actionEntity[Combat].action.run { world.onUpdate(deltaTime) }
-                actionEntity[Combat].clearAction()
-                if (actionEntities.isEmpty()) {
-                    log.debug { "Combat round finished" }
-                    state = CombatState.CHOOSE_ACTION
-                }
-            }
+    private inline fun <reified S : CombatState> changeState() {
+        val nextState = states.filterIsInstance<S>().single()
+        if (currentState == nextState) {
+            return
         }
 
+        log.debug { "Switching combat state from $prevState to $nextState" }
+        prevState = currentState
+        prevState.onExit()
+        currentState = nextState
+        currentState.onEnter()
+    }
+
+    override fun onEvent(event: Event) {
+        when (event) {
+            is CombatStartEvent -> {
+                globalState = CombatStateCheckVictoryDefeat(world)
+                changeState<CombatStateIdle>()
+            }
+
+            is CombatNextTurnEvent -> changeState<CombatStateIdle>()
+            is CombatPlayerActionEvent -> changeState<CombatStatePrepareRound>()
+            is CombatTurnBeginEvent -> changeState<CombatStatePerformAction>()
+            is CombatPlayerDefeatEvent -> {
+                globalState = CombatStateIdle
+                changeState<CombatStateDefeat>()
+            }
+
+            is CombatPlayerVictoryEvent -> {
+                globalState = CombatStateIdle
+                changeState<CombatStateVictory>()
+            }
+
+            else -> Unit
+        }
     }
 
     companion object {

@@ -16,7 +16,6 @@ import io.github.masamune.Masamune
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
-import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.ShaderService.Companion.resize
 import io.github.masamune.asset.SkinAsset
@@ -31,13 +30,14 @@ import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
+import io.github.masamune.event.CombatPlayerActionEvent
+import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CombatSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.AnimationType
-import io.github.masamune.tiledmap.TiledStats
 import ktx.app.KtxScreen
 import ktx.graphics.component1
 import ktx.graphics.component2
@@ -69,6 +69,8 @@ class CombatScreen(
 
     // ecs world
     private val world = combatWorld()
+    private val playerEntities = world.family { all(Player, Combat) }
+    private val enemyEntities = world.family { none(Player).all(Combat) }
 
     private fun combatWorld(): World {
         return configureWorld {
@@ -79,6 +81,7 @@ class CombatScreen(
                 add(eventService)
                 add(assetService)
                 add(masamune)
+                add(audioService)
             }
 
             systems {
@@ -100,6 +103,7 @@ class CombatScreen(
         updateBgdFbo(Gdx.graphics.width, Gdx.graphics.height)
 
         spawnDummyCombatEntities()
+        eventService.fire(CombatStartEvent)
     }
 
     private fun spawnDummyCombatEntities() {
@@ -182,13 +186,12 @@ class CombatScreen(
 
         // TODO remove debug
         when {
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> {
-                val combatEntities = world.family { all(Combat) }
-                combatEntities.forEach { entity ->
-                    entity[Combat].action = AttackAction(entity).also { action ->
-                        action.targets += combatEntities.first { it != entity }
-                    }
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> with(world) {
+                val player = playerEntities.first()
+                player[Combat].action = AttackAction(player).also { action ->
+                    action.targets += enemyEntities.first()
                 }
+                eventService.fire(CombatPlayerActionEvent(player))
             }
 
             Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) -> {

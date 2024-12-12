@@ -11,48 +11,40 @@ import io.github.masamune.ui.model.MenuType
 
 sealed interface Event
 
-data class MapChangeEvent(val tiledMap: TiledMap) : Event
-
+// GENERAL EVENTS
 data class PlayerMoveEvent(val direction: Vector2) : Event
-
-data class PlayerInteractBeginContactEvent(val player: Entity, val other: Entity) : Event
-
-data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) : Event
-
-data object PlayerInteractEvent : Event
-
-data class MenuBeginEvent(val type: MenuType) : Event
-
-data object MenuEndEvent : Event
-
 data object GameExitEvent : Event
 
+// PLAYER INTERACT EVENTS
+data class PlayerInteractBeginContactEvent(val player: Entity, val other: Entity) : Event
+data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) : Event
+data object PlayerInteractEvent : Event
+
+// MENU EVENTS
+data class MenuBeginEvent(val type: MenuType) : Event
+data object MenuEndEvent : Event
+
+// DIALOG EVENTS
 data class DialogBeginEvent(val world: World, val player: Entity, val dialog: Dialog) : Event
-
 data class DialogEndEvent(val player: Entity, val dialog: Dialog, val optionIdx: Int) : Event
-
 data object DialogOptionTriggerEvent : Event
-
 data object DialogOptionChangeEvent : Event
-
 data object DialogBackEvent : Event
 
+// UI EVENTS
 data object UiUpEvent : Event
-
 data object UiDownEvent : Event
-
 data object UiRightEvent : Event
-
 data object UiLeftEvent : Event
-
 data object UiSelectEvent : Event
-
 data object UiBackEvent : Event
 
+// SHOP EVENTS
 data class ShopBeginEvent(val world: World, val player: Entity, val shop: Entity) : Event
-
 data object ShopEndEvent : Event
 
+// MAP + TRANSITION EVENTS
+data class MapChangeEvent(val tiledMap: TiledMap) : Event
 data class MapTransitionBeginEvent(
     val fromTiledMap: TiledMap,
     val toTiledMap: TiledMap,
@@ -62,5 +54,13 @@ data class MapTransitionBeginEvent(
     val mapOffset: Vector2,
     val newPlayerPos: Vector2, // position in new map (=toTiledMap)
 ) : Event
-
 data object MapTransitionEndEvent : Event
+
+// COMBAT EVENTS
+data object CombatStartEvent : Event
+data class CombatPlayerActionEvent(val player: Entity) : Event
+data object CombatNextTurnEvent : Event
+data class CombatTurnBeginEvent(val turn: Int) : Event
+data object CombatTurnEndEvent : Event
+data object CombatPlayerDefeatEvent : Event
+data object CombatPlayerVictoryEvent : Event
