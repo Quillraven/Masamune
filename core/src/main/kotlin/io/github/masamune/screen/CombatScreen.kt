@@ -20,7 +20,8 @@ import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.ShaderService.Companion.resize
 import io.github.masamune.asset.SkinAsset
 import io.github.masamune.audio.AudioService
-import io.github.masamune.combat.AttackAction
+import io.github.masamune.combat.AttackActionEffect
+import io.github.masamune.combat.FireballActionEffect
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Facing
@@ -123,10 +124,10 @@ class CombatScreen(
             it += Combat()
         }
 
-        // enemy
+        // enemy 1
         world.entity {
-            it += Name("Dummy")
-            it += Stats(strength = 2f, agility = 3f, damage = 3f, armor = 5f, life = 20f, lifeMax = 20f)
+            it += Name("Dummy1")
+            it += Stats(strength = 2f, agility = 3f, damage = 2f, armor = 5f, life = 20f, lifeMax = 20f)
             it += Facing(FacingDirection.DOWN)
             val animationCmp =
                 Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)
@@ -135,6 +136,23 @@ class CombatScreen(
             it += graphicCmp
             it += Transform(
                 vec3(gameViewport.worldWidth * 0.5f - 1f, gameViewport.worldHeight - 2f, 0f),
+                graphicCmp.regionSize
+            )
+            it += Combat()
+        }
+
+        // enemy 2
+        world.entity {
+            it += Name("Dummy2")
+            it += Stats(strength = 2f, agility = 7f, damage = 1f, armor = 5f, life = 20f, lifeMax = 20f)
+            it += Facing(FacingDirection.DOWN)
+            val animationCmp =
+                Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)
+            it += animationCmp
+            val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
+            it += graphicCmp
+            it += Transform(
+                vec3(gameViewport.worldWidth * 0.5f + 1f, gameViewport.worldHeight - 3f, 0f),
                 graphicCmp.regionSize
             )
             it += Combat()
@@ -188,8 +206,20 @@ class CombatScreen(
         when {
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> with(world) {
                 val player = playerEntities.first()
-                player[Combat].action = AttackAction(player).also { action ->
-                    action.targets += enemyEntities.first()
+                player[Combat].run {
+                    effect = AttackActionEffect()
+                    targets.clear()
+                    targets += enemyEntities.first()
+                }
+                eventService.fire(CombatPlayerActionEvent(player))
+            }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> with(world) {
+                val player = playerEntities.first()
+                player[Combat].run {
+                    effect = FireballActionEffect()
+                    targets.clear()
+                    targets += enemyEntities.entities
                 }
                 eventService.fire(CombatPlayerActionEvent(player))
             }

@@ -2,19 +2,21 @@ package io.github.masamune.component
 
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
-import io.github.masamune.combat.Action
-import io.github.masamune.combat.DefaultAction
+import com.github.quillraven.fleks.collection.MutableEntityBag
+import io.github.masamune.combat.ActionEffect
+import io.github.masamune.combat.DefaultActionEffect
 
 data class Combat(
-    var action: Action = DefaultAction,
+    var effect: ActionEffect = DefaultActionEffect,
+    val targets: MutableEntityBag = MutableEntityBag(4),
 ) : Component<Combat> {
-    val hasAction: Boolean
-        get() = action != DefaultAction
+    val hasEffect: Boolean
+        get() = effect != DefaultActionEffect
 
     override fun type() = Combat
 
-    fun clearAction() {
-        action = DefaultAction
+    fun clearEffect() {
+        effect = DefaultActionEffect
     }
 
     companion object : ComponentType<Combat>()

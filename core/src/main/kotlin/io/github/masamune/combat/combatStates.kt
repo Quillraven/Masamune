@@ -28,7 +28,7 @@ sealed interface CombatState {
     fun onExit() = Unit
 }
 
-object CombatStateIdle : CombatState
+data object CombatStateIdle : CombatState
 
 // state is entered, when player decided the actions for next round
 // this state then calls enemy AI to pick their actions
@@ -42,15 +42,17 @@ class CombatStatePrepareRound(
 
     // sort entities by their agility -> higher agility goes first
     private val comparator = compareEntity(world) { e1, e2 ->
-        (e1[Stats].agility - e2[Stats].agility).toInt()
+        (e2[Stats].agility - e1[Stats].agility).toInt()
     }
     private var turn = 0
 
     override fun onEnter() {
         // TODO pick enemy action based on their AI
         enemyEntities.forEach { enemy ->
-            enemy[Combat].action = AttackAction(enemy).also { action ->
-                action.targets += playerEntities.first()
+            enemy[Combat].run {
+                effect = AttackActionEffect()
+                targets.clear()
+                targets += playerEntities.first()
             }
         }
 
@@ -75,7 +77,8 @@ class CombatStatePerformAction(
         turnEnd = false
         actionStack.clear()
         combatEntities.forEach { entity ->
-            actionStack += entity[Combat].action
+            val (effect, targets) = entity[Combat]
+            actionStack += Action(world, entity, effect, targets)
         }
     }
 
@@ -106,10 +109,12 @@ class CombatStatePerformAction(
         }
 
         val action = actionStack.first()
-        log.debug { "${action.entity} performing $action" }
-        action.run {
-            if (world.onUpdate(deltaTime)) {
-                actionStack.removeFirst()
+        log.debug { "${action.source} performing $action" }
+        action.update()
+        if (action.isFinished) {
+            actionStack.removeFirst()
+            with(world) {
+                action.source[Combat].clearEffect()
             }
         }
     }
@@ -123,7 +128,7 @@ class CombatStateVictory(
     private val world: World,
     private val audioService: AudioService = world.inject(),
 ) : CombatState {
-    override fun onUpdate(deltaTime: Float) {
+    override fun onEnter() {
         audioService.play(MusicAsset.COMBAT_VICTORY, loop = false, keepPrevious = true)
         log.debug { "Combat victory!" }
     }
@@ -152,10 +157,10 @@ class CombatStateCheckVictoryDefeat(
     private val playerEntities = world.family { all(Player, Combat) }
 
     override fun onUpdate(deltaTime: Float) {
-        if (playerEntities.entities.all { world.isEntityDead(it) }) {
+        if (playerEntities.all { world.isEntityDead(it) }) {
             log.debug { "All player entities dead -> Defeat" }
             eventService.fire(CombatPlayerDefeatEvent)
-        } else if (enemyEntities.entities.all { world.isEntityDead(it) }) {
+        } else if (enemyEntities.all { world.isEntityDead(it) }) {
             log.debug { "All enemy entities dead -> Victory" }
             eventService.fire(CombatPlayerVictoryEvent)
         }
