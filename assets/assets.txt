@@ -23,7 +23,7 @@ i:b:/graphics/chars_and_props.png:28299:1
 i:d:/maps:0:1
 i:b:/maps/village.tmx:3256:1
 i:b:/maps/tileset.tsx:9032:1
-i:b:/maps/objects.tsx:10656:1
+i:b:/maps/objects.tsx:10758:1
 i:d:/maps/objects:0:1
 i:b:/maps/objects/boots.png:468:1
 i:b:/maps/objects/studded_leather.png:423:1
