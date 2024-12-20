@@ -1,5 +1,8 @@
 i:d:/sound:0:1
 i:b:/sound/menu_abort.wav:73332:1
+i:b:/sound/explosion1.wav:50062:1
+i:b:/sound/sword_swipe.wav:117714:1
+i:b:/sound/attack_swipe.wav:117714:1
 i:b:/sound/menu_accept.wav:109000:1
 i:b:/sound/menu_click.wav:33612:1
 i:d:/music:0:1
