@@ -59,33 +59,15 @@ fun main() {
     }
     val tiledProject = json.decodeFromString<TiledProject>(jsonStr)
 
-    println("Generating enums")
-    // map of 'tiled enum name' to 'kotlin class name'
-    // if map does not contain the tiled name then nothing will be generated
-    val supportedEnums = mapOf(
-        "MapObjectType" to "TiledObjectType",
-        "ItemType" to "ItemType",
-        "AnimationType" to "AnimationType",
-        "ItemCategory" to "ItemCategory",
-    )
-    supportedEnums.forEach { (tiledEnum, masamuneEnum) ->
-        tiledProject.propertyTypes
-            .filter { it.name == tiledEnum && it.values.isNotEmpty() }
-            .forEach { createEnum(masamuneEnum, it.values) }
-    }
+    parseEnums(tiledProject)
+    val tiledClassToMasamuneClass = parseClasses(tiledProject)
+    parseExtensions(tiledProject, tiledClassToMasamuneClass)
+}
 
-    println("Generating classes")
-    // name of tiled classes for which Masamune Kotlin classes should be created (Tiled name to Masamune Kotlin name)
-    val tiledClassToMasamuneClass = listOf(
-        "Stats" to "TiledStats",
-    )
-    tiledClassToMasamuneClass.forEach { (tiledClass, masamuneClass) ->
-        val members = tiledProject.propertyTypes
-            .first { it.name == tiledClass && it.members.isNotEmpty() }
-            .members
-        createClass(masamuneClass, members, tiledClass == "Stats")
-    }
-
+private fun parseExtensions(
+    tiledProject: TiledProject,
+    tiledClassToMasamuneClass: List<Pair<String, String>>
+) {
     println("Generating property extensions")
     val extensionContent = createPropertyExtensionsHeader()
     // name of tiled classes to process
@@ -103,6 +85,39 @@ fun main() {
     createPropertyExtensionsFile(extensionContent)
 }
 
+private fun parseClasses(tiledProject: TiledProject): List<Pair<String, String>> {
+    println("Generating classes")
+    // name of tiled classes for which Masamune Kotlin classes should be created (Tiled name to Masamune Kotlin name)
+    val tiledClassToMasamuneClass = listOf(
+        "Stats" to "TiledStats",
+    )
+    tiledClassToMasamuneClass.forEach { (tiledClass, masamuneClass) ->
+        val members = tiledProject.propertyTypes
+            .first { it.name == tiledClass && it.members.isNotEmpty() }
+            .members
+        createClass(masamuneClass, members, tiledClass == "Stats")
+    }
+    return tiledClassToMasamuneClass
+}
+
+private fun parseEnums(tiledProject: TiledProject) {
+    println("Generating enums")
+    // map of 'tiled enum name' to 'kotlin class name'
+    // if map does not contain the tiled name then nothing will be generated
+    val supportedEnums = mapOf(
+        "MapObjectType" to "TiledObjectType",
+        "ItemType" to "ItemType",
+        "AnimationType" to "AnimationType",
+        "ItemCategory" to "ItemCategory",
+        "ActionType" to "ActionType",
+    )
+    supportedEnums.forEach { (tiledEnum, masamuneEnum) ->
+        tiledProject.propertyTypes
+            .filter { it.name == tiledEnum && it.values.isNotEmpty() }
+            .forEach { createEnum(masamuneEnum, it.values) }
+    }
+}
+
 fun createEnum(enumName: String, values: List<String>) {
     println("Creating enum $enumName with values $values")
     val enumTargetPackage = "io/github/masamune/tiledmap"
@@ -113,29 +128,60 @@ fun createEnum(enumName: String, values: List<String>) {
     enumFile.createNewFile()
 
     val content = buildString {
-        val newLine = System.lineSeparator()
-        append("package io.github.masamune.tiledmap").append(newLine).append(newLine)
-        append("// $AUTO_GEN_INFO_TEXT").append(newLine)
-        append("enum class $enumName {").append(newLine)
-        append(values.sorted().joinToString(separator = ",$newLine    ", prefix = "    ", postfix = ";"))
-        append(newLine)
+        appendLine("package io.github.masamune.tiledmap")
+        appendLine()
+
+        if ("ActionType" == enumName) {
+            this.createActionTypeEnum(enumName, values)
+            return@buildString
+        }
+
+        appendLine("// $AUTO_GEN_INFO_TEXT")
+        appendLine("enum class $enumName {")
+        appendLine(
+            values.sorted().joinToString(separator = ",${System.lineSeparator()}    ", prefix = "    ", postfix = ";")
+        )
 
         when (enumName) {
             "AnimationType" -> {
-                append(newLine).append("    val atlasKey: String = this.name.lowercase()").append(newLine)
+                appendLine()
+                appendLine("    val atlasKey: String = this.name.lowercase()")
             }
 
             "ItemCategory" -> {
-                append(newLine).append("    val isEquipment: Boolean").append(newLine)
-                append("        get() = this == ACCESSORY || this == ARMOR || this == BOOTS || this == HELMET || this == WEAPON")
-                append(newLine)
+                appendLine()
+                appendLine("    val isEquipment: Boolean")
+                appendLine("        get() = this == ACCESSORY || this == ARMOR || this == BOOTS || this == HELMET || this == WEAPON")
             }
         }
 
-        append("}").append(newLine)
+        appendLine("}")
     }
 
     enumFile.writeText(content)
+}
+
+private fun StringBuilder.createActionTypeEnum(enumName: String, values: List<String>) {
+    fun String.toCamelCase(): String {
+        return this.lowercase().replace("_[a-z]".toRegex()) { it.value.last().uppercase() }
+    }
+
+    appendLine("import io.github.masamune.combat.effect.*")
+    appendLine()
+    appendLine("// $AUTO_GEN_INFO_TEXT")
+    appendLine("enum class $enumName(private val actionFactory: () -> Effect) {")
+    values.sorted().forEach { value ->
+        if ("UNDEFINED".equals(value, ignoreCase = true)) {
+            appendLine("    $value({ DefaultEffect }),")
+        } else {
+            val actionName = value.toCamelCase()
+            appendLine("    $value(::${actionName.first().uppercase() + actionName.substring(1)}Effect),")
+        }
+    }
+    appendLine("    ;")
+    appendLine()
+    appendLine("    operator fun invoke() = actionFactory()")
+    appendLine("}")
 }
 
 fun createClass(className: String, members: List<Member>, isOpen: Boolean) {

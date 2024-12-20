@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
+import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.configureWorld
@@ -23,9 +24,6 @@ import io.github.masamune.asset.SkinAsset
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionTargetType
-import io.github.masamune.combat.effect.FireballEffect
-import io.github.masamune.combat.effect.FireboltEffect
-import io.github.masamune.combat.effect.SingleAttackEffect
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Facing
@@ -42,6 +40,7 @@ import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CombatSystem
 import io.github.masamune.system.RenderSystem
+import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
 import ktx.app.KtxScreen
 import ktx.app.gdxError
@@ -112,22 +111,32 @@ class CombatScreen(
         eventService.fire(CombatStartEvent)
     }
 
-    private fun spawnDummyCombatEntities() {
+    fun spawnPlayer(gameScreenWorld: World, gameScreenPlayer: Entity) {
         val atlas = assetService[AtlasAsset.CHARS_AND_PROPS]
+        val nameCmp = with(gameScreenWorld) { gameScreenPlayer[Name] }
+        val playerCmp = with(gameScreenWorld) { gameScreenPlayer[Player] }
+        val statsCmp = with(gameScreenWorld) { gameScreenPlayer[Stats] }
+        val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
 
-        // player
-        world.entity {
-            it += Name("Player")
-            it += Player()
-            it += Stats(strength = 10f, agility = 5f, damage = 1f, armor = 0f, life = 10f, lifeMax = 10f)
+        this.world.entity {
+            it += nameCmp
+            it += playerCmp
+            it += Stats.of(statsCmp)
             it += Facing(FacingDirection.UP)
             val animationCmp = Animation.ofAtlas(atlas, "hero", AnimationType.WALK, FacingDirection.UP, speed = 0.4f)
             it += animationCmp
             val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
             it += graphicCmp
             it += Transform(vec3(gameViewport.worldWidth * 0.5f + 1f, 1f, 0f), graphicCmp.regionSize)
-            it += Combat(attackSnd = SoundAsset.SWORD_SWIPE)
+            it += Combat(
+                availableActions = combatCmp.availableActions.toMutableList(),
+                attackSnd = SoundAsset.SWORD_SWIPE
+            )
         }
+    }
+
+    private fun spawnDummyCombatEntities() {
+        val atlas = assetService[AtlasAsset.CHARS_AND_PROPS]
 
         // enemy 1 slower
         world.entity {
@@ -143,7 +152,7 @@ class CombatScreen(
                 vec3(gameViewport.worldWidth * 0.5f - 1f, gameViewport.worldHeight - 2f, 0f),
                 graphicCmp.regionSize
             )
-            it += Combat()
+            it += Combat(availableActions = listOf(ActionType.ATTACK_SINGLE))
         }
 
         // enemy 2 faster
@@ -160,7 +169,7 @@ class CombatScreen(
                 vec3(gameViewport.worldWidth * 0.5f + 1f, gameViewport.worldHeight - 3f, 0f),
                 graphicCmp.regionSize
             )
-            it += Combat()
+            it += Combat(availableActions = listOf(ActionType.ATTACK_SINGLE))
         }
 
         // enemy 3 slower
@@ -177,7 +186,7 @@ class CombatScreen(
                 vec3(gameViewport.worldWidth * 0.5f - 3f, gameViewport.worldHeight - 4f, 0f),
                 graphicCmp.regionSize
             )
-            it += Combat()
+            it += Combat(availableActions = listOf(ActionType.ATTACK_SINGLE))
         }
     }
 
@@ -242,7 +251,7 @@ class CombatScreen(
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> with(world) {
                 val player = playerEntities.first()
                 player[Combat].run {
-                    effect = SingleAttackEffect()
+                    effect = availableActions.first { it == ActionType.ATTACK_SINGLE }()
                     getEnemyTarget(targets, effect.targetType)
                 }
                 eventService.fire(CombatPlayerActionEvent(player))
@@ -251,7 +260,7 @@ class CombatScreen(
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> with(world) {
                 val player = playerEntities.first()
                 player[Combat].run {
-                    effect = FireballEffect()
+                    effect = availableActions.first { it == ActionType.FIREBALL }()
                     getEnemyTarget(targets, effect.targetType)
                 }
                 eventService.fire(CombatPlayerActionEvent(player))
@@ -260,7 +269,7 @@ class CombatScreen(
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> with(world) {
                 val player = playerEntities.first()
                 player[Combat].run {
-                    effect = FireboltEffect()
+                    effect = availableActions.first { it == ActionType.FIREBOLT }()
                     getEnemyTarget(targets, effect.targetType)
                 }
                 eventService.fire(CombatPlayerActionEvent(player))

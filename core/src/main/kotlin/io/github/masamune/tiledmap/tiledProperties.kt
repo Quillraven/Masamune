@@ -23,6 +23,9 @@ val TiledMapTile.bodyType: String
 val TiledMapTile.color: String
     get() = this.property<String>("color", "#ffffffff")
 
+val TiledMapTile.combatActions: String
+    get() = this.property<String>("combatActions", "")
+
 val TiledMapTile.dialogName: String
     get() = this.property<String>("dialogName", "")
 

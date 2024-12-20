@@ -115,7 +115,9 @@ class PlayerInteractSystem(
                         time = 2f
                     ),
                     toType = DefaultTransitionType,
-                )
+                ) { combatScreen ->
+                    combatScreen.spawnPlayer(world, entity)
+                }
             }
         }
     }

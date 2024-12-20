@@ -7,6 +7,7 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="hero"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
    <property name="speed" type="float" value="5"/>
    <property name="stats" type="class" propertytype="Stats">

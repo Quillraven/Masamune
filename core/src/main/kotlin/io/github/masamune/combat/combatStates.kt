@@ -4,7 +4,7 @@ import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.compareEntity
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.audio.AudioService
-import io.github.masamune.combat.effect.SingleAttackEffect
+import io.github.masamune.combat.effect.AttackSingleEffect
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
@@ -51,7 +51,7 @@ class CombatStatePrepareRound(
         // TODO pick enemy action based on their AI
         enemyEntities.forEach { enemy ->
             enemy[Combat].run {
-                effect = SingleAttackEffect()
+                effect = AttackSingleEffect()
                 targets.clear()
                 targets += playerEntities.first()
             }
@@ -78,7 +78,7 @@ class CombatStatePerformAction(
         turnEnd = false
         actionStack.clear()
         combatEntities.forEach { entity ->
-            val (effect, targets) = entity[Combat]
+            val (_, effect, targets) = entity[Combat]
             actionStack += Action(world, entity, effect, targets)
         }
     }

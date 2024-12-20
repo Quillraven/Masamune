@@ -21,6 +21,7 @@ import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.component.Animation
+import io.github.masamune.component.Combat
 import io.github.masamune.component.Dialog
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
@@ -246,6 +247,7 @@ class TiledService(
             configureDialog(it, tile)
             configureTrigger(it, tile)
             configureStats(it, tile)
+            configureCombat(it, tile)
             if (objType == TiledObjectType.ENEMY) {
                 it += Tag.ENEMY
             }
@@ -351,6 +353,15 @@ class TiledService(
         }
 
         entity += Stats.of(tiledStats)
+    }
+
+    private fun EntityCreateContext.configureCombat(entity: Entity, tile: TiledMapTile) {
+        val actionTypes = tile.combatActions
+        if (actionTypes.isEmpty()) {
+            return
+        }
+
+        entity += Combat(availableActions = actionTypes.split(",").map { ActionType.valueOf(it) })
     }
 
     private fun EntityCreateContext.configurePlayer(world: World, entity: Entity) {

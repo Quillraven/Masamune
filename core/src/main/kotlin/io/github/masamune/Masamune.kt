@@ -61,11 +61,13 @@ class Masamune(
         fromType: TransitionType,
         toType: TransitionType,
         fromFirst: Boolean = true,
+        crossinline onTransitionEnd: (T) -> Unit = {},
     ) {
         val toScreen = getScreen<T>()
         toScreen.resize(Gdx.graphics.width, Gdx.graphics.height)
         screenTransition.transition(shownScreen, fromType, toScreen, toType, fromFirst) {
             setScreen<T>()
+            onTransitionEnd(getScreen<T>())
         }
     }
 

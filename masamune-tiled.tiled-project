@@ -11,6 +11,19 @@
     ],
     "propertyTypes": [
         {
+            "id": 13,
+            "name": "ActionType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "ATTACK_SINGLE",
+                "FIREBOLT",
+                "FIREBALL",
+                "UNDEFINED"
+            ],
+            "valuesAsFlags": true
+        },
+        {
             "id": 11,
             "name": "AnimationType",
             "storageType": "string",
@@ -209,6 +222,12 @@
                     "name": "color",
                     "type": "color",
                     "value": "#ffffffff"
+                },
+                {
+                    "name": "combatActions",
+                    "propertyType": "ActionType",
+                    "type": "string",
+                    "value": ""
                 },
                 {
                     "name": "dialogName",
