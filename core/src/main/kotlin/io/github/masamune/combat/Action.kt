@@ -1,10 +1,16 @@
 package io.github.masamune.combat
 
+import com.badlogic.gdx.math.MathUtils
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.EntityBag
+import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.effect.DefaultEffect
+import io.github.masamune.combat.effect.Effect
+import io.github.masamune.component.Combat
 import io.github.masamune.component.Stats
+import kotlin.math.max
 
 enum class ActionTargetType {
     NONE, SINGLE, MULTI, ALL
@@ -15,20 +21,28 @@ enum class ActionState {
 }
 
 class Action(
-    val world: World,
-    val source: Entity,
-    val effect: ActionEffect,
-    val targets: EntityBag,
-    val audioService: AudioService = world.inject(),
+    private val world: World,
+    private val source: Entity,
+    private var effect: Effect,
+    private val targets: EntityBag,
+    private val audioService: AudioService = world.inject(),
 ) {
     private var state: ActionState = ActionState.START
 
+    private var delaySec = 0f
+
     val isFinished: Boolean
-        get() = state == ActionState.END
+        get() = state == ActionState.END && delaySec <= 0f
 
 
     val singleTarget: Entity
         get() = targets.first()
+
+    val allTargets: EntityBag
+        get() = targets
+
+    val numTargets: Int
+        get() = targets.size
 
     val deltaTime: Float
         get() = world.deltaTime
@@ -40,6 +54,11 @@ class Action(
     }
 
     fun update() {
+        if (delaySec > 0f) {
+            delaySec = max(0f, delaySec - deltaTime)
+            return
+        }
+
         when (state) {
             ActionState.START -> {
                 effect.run { this@Action.onStart() }
@@ -64,12 +83,24 @@ class Action(
         }
     }
 
-    fun attack(target: Entity) = with(world) {
+    /**
+     * Performs an attack against the [target] entity and waits [delay] seconds before continuing.
+     */
+    fun attack(target: Entity, delay: Float = 1f) = with(world) {
         target[Stats].life -= source[Stats].damage
+        play(source[Combat].attackSnd, delay)
+    }
+
+    fun wait(seconds: Float) {
+        delaySec += seconds
     }
 
     fun dealDamage(physical: Float, magical: Float, target: Entity) = with(world) {
         target[Stats].life -= (physical + magical)
+    }
+
+    fun dealDamage(physical: Float, magical: Float, targets: EntityBag) = with(world) {
+        targets.forEach { dealDamage(physical, magical, it) }
     }
 
     fun endAction() {
@@ -80,44 +111,19 @@ class Action(
         source[Stats].mana >= amount
     }
 
+    fun play(soundAsset: SoundAsset, delay: Float = 0.5f) {
+        audioService.play(soundAsset, pitch = MathUtils.random(0.7f, 1.3f))
+        wait(delay)
+    }
+
+    fun clearEffect() = with(world) {
+        source[Combat].clearEffect()
+        effect = DefaultEffect
+    }
+
     override fun toString(): String {
-        return "Action(effect=${effect::class.simpleName}, entity=${source.id}, state=$state)"
+        return "Action(effect=${effect::class.simpleName}, entity=${source.id}, state=$state, delay=$delaySec)"
     }
 }
 
-sealed class ActionEffect(val targetType: ActionTargetType) {
-    open fun Action.canPerform(entity: Entity): Boolean = true
-    open fun Action.onStart() = Unit
-    open fun Action.onUpdate(): Boolean = true
-    open fun Action.onFinish() = Unit
-}
 
-data object DefaultActionEffect : ActionEffect(ActionTargetType.NONE)
-
-class AttackActionEffect : ActionEffect(ActionTargetType.SINGLE) {
-    override fun Action.onStart() {
-        attack(singleTarget)
-        endAction()
-    }
-}
-
-class FireballActionEffect : ActionEffect(ActionTargetType.ALL) {
-    private var timer = 0.5f;
-    private var amount = 2;
-
-    override fun Action.canPerform(entity: Entity) = hasMana(5)
-
-    override fun Action.onUpdate(): Boolean {
-        if (amount <= 0) {
-            return true
-        }
-
-        timer -= deltaTime
-        if (timer <= 0f) {
-            timer = 0.5f
-            amount--
-            targets.forEach { dealDamage(physical = 0f, magical = 10f, it) }
-        }
-        return false
-    }
-}

@@ -76,7 +76,13 @@ enum class MusicAsset(format: String) {
  * Asset type for [Sound] instances. Used by [AssetService].
  */
 enum class SoundAsset {
-    MENU_ACCEPT, MENU_CLICK, MENU_ABORT;
+    MENU_ACCEPT,
+    MENU_CLICK,
+    MENU_ABORT,
+    ATTACK_SWIPE,
+    SWORD_SWIPE,
+    EXPLOSION1,
+    ;
 
     val path = "sound/${name.lowercase()}.wav"
 }
