@@ -5,8 +5,7 @@ enum class AnimationType {
     DEAD,
     IDLE,
     ITEM,
-    SPECIAL1,
-    SPECIAL2,
+    SPECIAL,
     UNDEFINED,
     WALK;
 

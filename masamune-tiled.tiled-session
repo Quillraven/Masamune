@@ -29,7 +29,7 @@
             "selectedLayer": 3,
             "viewCenter": {
                 "x": 128.125,
-                "y": 352
+                "y": 352.125
             }
         },
         "assets/maps/test.tmx": {
@@ -54,7 +54,7 @@
             "selectedLayer": 4,
             "viewCenter": {
                 "x": 160.125,
-                "y": 160
+                "y": 159.875
             }
         },
         "core/src/test/resources/maps/interactTest.tmx": {

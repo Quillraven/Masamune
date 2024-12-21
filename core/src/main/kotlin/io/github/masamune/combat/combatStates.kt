@@ -140,9 +140,16 @@ class CombatStateVictory(
     private val world: World,
     private val audioService: AudioService = world.inject(),
 ) : CombatState {
+    private val playerEntities = world.family { all(Player, Combat) }
+
     override fun onEnter() {
-        audioService.play(MusicAsset.COMBAT_VICTORY, loop = false, keepPrevious = true)
         log.debug { "Combat victory!" }
+        audioService.play(MusicAsset.COMBAT_VICTORY, loop = false, keepPrevious = true)
+        playerEntities.forEach { entity ->
+            val aniCmp = entity[Animation]
+            aniCmp.changeTo = AnimationType.SPECIAL
+            aniCmp.speed = 0.25f
+        }
     }
 }
 

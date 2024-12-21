@@ -33,8 +33,7 @@
                 "IDLE",
                 "WALK",
                 "ITEM",
-                "SPECIAL1",
-                "SPECIAL2",
+                "SPECIAL",
                 "DEAD"
             ],
             "valuesAsFlags": false
