@@ -17,9 +17,9 @@ i:b:/shader/default.vert:316:1
 i:b:/shader/blur.frag:1189:1
 i:d:/graphics:0:1
 i:b:/graphics/sfx.atlas:305:1
-i:b:/graphics/chars_and_props.atlas:5469:1
+i:b:/graphics/chars_and_props.atlas:5483:1
 i:b:/graphics/sfx.png:1520:1
-i:b:/graphics/chars_and_props.png:28299:1
+i:b:/graphics/chars_and_props.png:28025:1
 i:d:/maps:0:1
 i:b:/maps/village.tmx:3256:1
 i:b:/maps/tileset.tsx:9032:1
