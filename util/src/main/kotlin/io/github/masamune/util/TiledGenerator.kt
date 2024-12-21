@@ -166,16 +166,16 @@ private fun StringBuilder.createActionTypeEnum(enumName: String, values: List<St
         return this.lowercase().replace("_[a-z]".toRegex()) { it.value.last().uppercase() }
     }
 
-    appendLine("import io.github.masamune.combat.effect.*")
+    appendLine("import io.github.masamune.combat.action.*")
     appendLine()
     appendLine("// $AUTO_GEN_INFO_TEXT")
-    appendLine("enum class $enumName(private val actionFactory: () -> Effect) {")
+    appendLine("enum class $enumName(private val actionFactory: () -> Action) {")
     values.sorted().forEach { value ->
         if ("UNDEFINED".equals(value, ignoreCase = true)) {
-            appendLine("    $value({ DefaultEffect }),")
+            appendLine("    $value({ DefaultAction }),")
         } else {
             val actionName = value.toCamelCase()
-            appendLine("    $value(::${actionName.first().uppercase() + actionName.substring(1)}Effect),")
+            appendLine("    $value(::${actionName.first().uppercase() + actionName.substring(1)}Action),")
         }
     }
     appendLine("    ;")
