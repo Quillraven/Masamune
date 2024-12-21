@@ -23,7 +23,7 @@ import io.github.masamune.asset.ShaderService.Companion.resize
 import io.github.masamune.asset.SkinAsset
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
-import io.github.masamune.combat.ActionTargetType
+import io.github.masamune.combat.action.ActionTargetType
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Facing
@@ -251,8 +251,8 @@ class CombatScreen(
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> with(world) {
                 val player = playerEntities.first()
                 player[Combat].run {
-                    effect = availableActions.first { it == ActionType.ATTACK_SINGLE }()
-                    getEnemyTarget(targets, effect.targetType)
+                    action = availableActions.first { it == ActionType.ATTACK_SINGLE }()
+                    getEnemyTarget(targets, action.targetType)
                 }
                 eventService.fire(CombatPlayerActionEvent(player))
             }
@@ -260,8 +260,8 @@ class CombatScreen(
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> with(world) {
                 val player = playerEntities.first()
                 player[Combat].run {
-                    effect = availableActions.first { it == ActionType.FIREBALL }()
-                    getEnemyTarget(targets, effect.targetType)
+                    action = availableActions.first { it == ActionType.FIREBALL }()
+                    getEnemyTarget(targets, action.targetType)
                 }
                 eventService.fire(CombatPlayerActionEvent(player))
             }
@@ -269,8 +269,8 @@ class CombatScreen(
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> with(world) {
                 val player = playerEntities.first()
                 player[Combat].run {
-                    effect = availableActions.first { it == ActionType.FIREBOLT }()
-                    getEnemyTarget(targets, effect.targetType)
+                    action = availableActions.first { it == ActionType.FIREBOLT }()
+                    getEnemyTarget(targets, action.targetType)
                 }
                 eventService.fire(CombatPlayerActionEvent(player))
             }

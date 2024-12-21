@@ -4,23 +4,23 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import io.github.masamune.asset.SoundAsset
-import io.github.masamune.combat.effect.DefaultEffect
-import io.github.masamune.combat.effect.Effect
+import io.github.masamune.combat.action.Action
+import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.tiledmap.ActionType
 
 data class Combat(
     val availableActions: List<ActionType>,
-    var effect: Effect = DefaultEffect,
+    var action: Action = DefaultAction,
     val targets: MutableEntityBag = MutableEntityBag(4),
     var attackSnd: SoundAsset = SoundAsset.ATTACK_SWIPE,
 ) : Component<Combat> {
-    val hasEffect: Boolean
-        get() = effect != DefaultEffect
+    val hasAction: Boolean
+        get() = action != DefaultAction
 
     override fun type() = Combat
 
-    fun clearEffect() {
-        effect = DefaultEffect
+    fun clearAction() {
+        action = DefaultAction
     }
 
     companion object : ComponentType<Combat>()

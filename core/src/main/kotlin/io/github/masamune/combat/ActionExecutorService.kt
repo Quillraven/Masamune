@@ -4,36 +4,32 @@ import com.badlogic.gdx.math.MathUtils
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.EntityBag
+import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
-import io.github.masamune.combat.effect.DefaultEffect
-import io.github.masamune.combat.effect.Effect
+import io.github.masamune.combat.action.Action
+import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Stats
+import ktx.log.logger
 import kotlin.math.max
 
-enum class ActionTargetType {
-    NONE, SINGLE, MULTI, ALL
-}
-
-enum class ActionState {
+private enum class ActionState {
     START, UPDATE, FINISH, END;
 }
 
-class Action(
+class ActionExecutorService(
     private val world: World,
-    private val source: Entity,
-    private var effect: Effect,
-    private val targets: EntityBag,
     private val audioService: AudioService = world.inject(),
 ) {
     private var state: ActionState = ActionState.START
-
     private var delaySec = 0f
+    private val targets = mutableEntityBagOf()
+    private var source: Entity = Entity.NONE
+    private var action: Action = DefaultAction
 
     val isFinished: Boolean
-        get() = state == ActionState.END && delaySec <= 0f
-
+        get() = action == DefaultAction || (state == ActionState.END && delaySec <= 0f)
 
     val singleTarget: Entity
         get() = targets.first()
@@ -47,7 +43,20 @@ class Action(
     val deltaTime: Float
         get() = world.deltaTime
 
+    fun perform(source: Entity, action: Action, targets: EntityBag) {
+        log.debug { "Performing action ${action::class.simpleName}: source=$source, targets(${targets.size})=$targets" }
+
+        this.state = ActionState.START
+        this.delaySec = 0f
+        this.source = source
+        this.action = action
+        this.targets.clear()
+        this.targets += targets
+    }
+
     private fun changeState(newState: ActionState) {
+        // never go back to a previous state (can happen if 'end' is called during an update).
+        // In that case we want to remain in END state
         if (newState.ordinal > state.ordinal) {
             state = newState
         }
@@ -61,13 +70,13 @@ class Action(
 
         when (state) {
             ActionState.START -> {
-                effect.run { this@Action.onStart() }
+                action.run { this@ActionExecutorService.onStart() }
                 changeState(ActionState.UPDATE)
             }
 
             ActionState.UPDATE -> {
-                effect.run {
-                    if (this@Action.onUpdate()) {
+                action.run {
+                    if (this@ActionExecutorService.onUpdate()) {
                         changeState(ActionState.FINISH)
                     }
                 }
@@ -75,7 +84,7 @@ class Action(
             }
 
             ActionState.FINISH -> {
-                effect.run { this@Action.onFinish() }
+                action.run { this@ActionExecutorService.onFinish() }
                 changeState(ActionState.END)
             }
 
@@ -116,13 +125,17 @@ class Action(
         wait(delay)
     }
 
-    fun clearEffect() = with(world) {
-        source[Combat].clearEffect()
-        effect = DefaultEffect
+    fun clearAction() = with(world) {
+        source[Combat].clearAction()
+        action = DefaultAction
     }
 
     override fun toString(): String {
-        return "Action(effect=${effect::class.simpleName}, entity=${source.id}, state=$state, delay=$delaySec)"
+        return "Action(effect=${action::class.simpleName}, entity=${source.id}, state=$state, delay=$delaySec)"
+    }
+
+    companion object {
+        private val log = logger<ActionExecutorService>()
     }
 }
 
