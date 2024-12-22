@@ -14,14 +14,14 @@ data class Combat(
     val targets: MutableEntityBag = MutableEntityBag(4),
     var attackSnd: SoundAsset = SoundAsset.ATTACK_SWIPE,
 ) : Component<Combat> {
-    val hasAction: Boolean
-        get() = action != DefaultAction
 
     override fun type() = Combat
 
     fun clearAction() {
         action = DefaultAction
     }
+
+    fun attackAction(): Action = availableActions.single { it == ActionType.ATTACK_SINGLE }()
 
     companion object : ComponentType<Combat>()
 }
