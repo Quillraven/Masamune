@@ -13,7 +13,8 @@ uniform vec2 u_direction;
 uniform float u_radius;
 uniform vec2 u_pixelSize;
 
-void main() {
+void main()
+{
     vec4 sum = vec4(0.0);
 
     // Number of pixels of the central pixel to sample from
