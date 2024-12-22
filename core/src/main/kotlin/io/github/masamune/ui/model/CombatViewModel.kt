@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.World
+import com.github.quillraven.fleks.collection.compareEntityBy
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.combat.action.ActionTargetType
@@ -17,6 +18,7 @@ import io.github.masamune.component.Tag
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
+import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatPlayerActionEvent
 import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.DialogBackEvent
@@ -25,7 +27,9 @@ import io.github.masamune.event.DialogOptionTriggerEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.tiledmap.AnimationType
+import ktx.log.logger
 import ktx.math.vec2
+import ktx.math.vec3
 
 class CombatViewModel(
     bundle: I18NBundle,
@@ -40,7 +44,7 @@ class CombatViewModel(
     private val enemyEntities = mutableEntityBagOf()
     private val selectorEntities = world.family { all(Tag.COMBAT_SELECTOR) }
     private var targetType = ActionTargetType.NONE
-    private var selectedTargetIdx = -1
+    private var targetSelected = mutableListOf<Boolean>()
 
     var playerLife: Pair<Float, Float> by propertyNotify(0f to 0f)
     var playerMana: Pair<Float, Float> by propertyNotify(0f to 0f)
@@ -58,7 +62,7 @@ class CombatViewModel(
                 playerMana = playerStats.mana to playerStats.manaMax
                 playerName = player[Name].name
 
-                // get play magic
+                // get player magic
                 playerMagic = player[Combat].magicActions.map {
                     MagicModel(it.type, bundle["magic.${it.type.name.lowercase()}.name"], it.manaCost)
                 }
@@ -67,7 +71,19 @@ class CombatViewModel(
                 onResize()
 
                 // store enemy entities for easier target selection
+                enemyEntities.clear()
                 enemyEntities += event.enemies
+                enemyEntities.sort(compareEntityBy(Transform, world))
+                targetSelected.clear()
+                enemyEntities.forEach { targetSelected += false }
+            }
+
+            is CombatNextTurnEvent -> {
+                enemyEntities.clear()
+                enemyEntities += event.enemies
+                enemyEntities.sort(compareEntityBy(Transform, world))
+                targetSelected.clear()
+                enemyEntities.forEach { targetSelected += false }
             }
 
             is CombatEntityTakeDamageEvent -> {
@@ -126,15 +142,22 @@ class CombatViewModel(
     private fun spawnTargetSelectorEntities() = with(world) {
         when (targetType) {
             ActionTargetType.SINGLE -> {
-                selectedTargetIdx = 0
+                targetSelected[0] = true
                 spawnSelectorEntity(enemyEntities.first()[Transform])
             }
 
             ActionTargetType.ALL -> {
-                enemyEntities.forEach { spawnSelectorEntity(it[Transform]) }
+                enemyEntities.forEachIndexed { idx, entity ->
+                    targetSelected[idx] = true
+                    spawnSelectorEntity(entity[Transform])
+                }
             }
 
-            else -> Unit
+            ActionTargetType.MULTI -> {
+
+            }
+
+            ActionTargetType.NONE -> Unit
         }
     }
 
@@ -155,37 +178,60 @@ class CombatViewModel(
         optionSelected()
     }
 
-    private fun selectSingleTarget(index: Int) = with(world) {
-        val selector = selectorEntities.single()
-        val target = enemyEntities[index]
-        val (targetPos, targetSize) = target[Transform]
-        val selectorTransform = selector[Transform]
-        selectorTransform.position.set(targetPos)
-        selectorTransform.size.set(targetSize)
+    private fun updateSelection() = with(world) {
+        log.debug { "Update selection to: $targetSelected" }
+
+        if (selectorEntities.numEntities != targetSelected.count { it == true }) {
+            selectorEntities.forEach { selector ->
+                world -= selector
+            }
+            entity {
+                it += Transform(vec3(1f, 1f, 0f), vec2(1f, 1f), 1.2f)
+                val animationCmp = Animation.ofAtlas(charsAndPropsAtlas, "select", AnimationType.IDLE, speed = 1.5f)
+                it += animationCmp
+                it += Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
+                it += Tag.COMBAT_SELECTOR
+            }
+        }
+
+        enemyEntities
+            .filterIndexed { idx, _ -> targetSelected[idx] }
+            .forEach { target ->
+                val selector = selectorEntities.single()
+                val (targetPos, targetSize) = target[Transform]
+                val selectorTransform = selector[Transform]
+                selectorTransform.position.set(targetPos)
+                selectorTransform.size.set(targetSize)
+            }
+
     }
 
     fun selectPrevTarget() {
         if (targetType == ActionTargetType.SINGLE) {
-            if (selectedTargetIdx == 0) {
-                selectedTargetIdx = enemyEntities.size - 1
+            val selectedIdx = targetSelected.indexOfFirst { it == true }
+            targetSelected[selectedIdx] = false
+            if (selectedIdx == 0) {
+                targetSelected[enemyEntities.size - 1] = true
             } else {
-                selectedTargetIdx--
+                targetSelected[selectedIdx - 1] = true
             }
 
-            selectSingleTarget(selectedTargetIdx)
+            updateSelection()
             optionChanged()
         }
     }
 
     fun selectNextTarget() {
         if (targetType == ActionTargetType.SINGLE) {
-            if (selectedTargetIdx == enemyEntities.size - 1) {
-                selectedTargetIdx = 0
+            val selectedIdx = targetSelected.indexOfFirst { it == true }
+            targetSelected[selectedIdx] = false
+            if (selectedIdx == enemyEntities.size - 1) {
+                targetSelected[0] = true
             } else {
-                selectedTargetIdx++
+                targetSelected[selectedIdx + 1] = true
             }
 
-            selectSingleTarget(selectedTargetIdx)
+            updateSelection()
             optionChanged()
         }
     }
@@ -198,6 +244,8 @@ class CombatViewModel(
     }
 
     fun confirmTargetSelection() = with(world) {
+        log.debug { "Selected targets: $targetSelected" }
+
         // play sound effect
         optionSelected()
         // remove selector entities
@@ -208,17 +256,14 @@ class CombatViewModel(
         val player = playerEntities.single()
         val combat = player[Combat]
         combat.targets.clear()
-        if (targetType == ActionTargetType.SINGLE) {
-            combat.targets += enemyEntities[selectedTargetIdx]
-            selectedTargetIdx = -1
-        } else if (targetType == ActionTargetType.ALL) {
-            combat.targets += enemyEntities
-        }
+        combat.targets += enemyEntities.filterIndexed { idx, _ -> targetSelected[idx] }
         // fire event to trigger CombatSystem and start round
         eventService.fire(CombatPlayerActionEvent(player))
     }
 
     companion object {
+        private val log = logger<CombatViewModel>()
+
         private fun Vector2.toUiPosition(from: Viewport, to: Viewport): Vector2 {
             from.project(this)
             to.unproject(this)

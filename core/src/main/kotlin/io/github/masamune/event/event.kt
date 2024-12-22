@@ -61,7 +61,7 @@ data object MapTransitionEndEvent : Event
 // COMBAT EVENTS
 data class CombatStartEvent(val player: Entity, val enemies: EntityBag) : Event
 data class CombatPlayerActionEvent(val player: Entity) : Event
-data object CombatNextTurnEvent : Event
+data class CombatNextTurnEvent(val player: Entity, val enemies: EntityBag) : Event
 data class CombatTurnBeginEvent(val turn: Int) : Event
 data object CombatTurnEndEvent : Event
 data object CombatPlayerDefeatEvent : Event

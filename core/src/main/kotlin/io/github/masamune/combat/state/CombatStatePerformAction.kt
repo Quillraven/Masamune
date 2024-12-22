@@ -55,7 +55,7 @@ class CombatStatePerformAction(
         }
     }
 
-    override fun onUpdate(deltaTime: Float) {
+    override fun onUpdate(deltaTime: Float) = with(world) {
         if (actionStack.isEmpty()) {
             if (!turnEnd) {
                 // all actions of turn performed -> fire turn end event which might add some actions on the stack again
@@ -64,7 +64,9 @@ class CombatStatePerformAction(
                 eventService.fire(CombatTurnEndEvent)
             } else {
                 log.debug { "Combat trigger next turn" }
-                eventService.fire(CombatNextTurnEvent)
+                val player = combatEntities.single { it has Player }
+                val aliveEnemies = combatEntities.filter { it hasNo Player && it[Stats].life > 0 }
+                eventService.fire(CombatNextTurnEvent(player, aliveEnemies))
             }
             return
         }

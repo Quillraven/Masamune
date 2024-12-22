@@ -164,7 +164,7 @@ class CombatScreen(
             val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
             it += graphicCmp
             it += Transform(
-                vec3(gameViewport.worldWidth * 0.5f - 1f, gameViewport.worldHeight - 2f, 0f),
+                vec3(gameViewport.worldWidth * 0.5f - 3f, gameViewport.worldHeight - 2f, 0f),
                 graphicCmp.regionSize
             )
             it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
@@ -173,7 +173,7 @@ class CombatScreen(
         // enemy 2 faster
         world.entity {
             it += Name("Dummy2")
-            it += Stats(strength = 2f, agility = 7f, damage = 30f, armor = 5f, life = 20f, lifeMax = 20f)
+            it += Stats(strength = 2f, agility = 7f, damage = 3f, armor = 5f, life = 20f, lifeMax = 20f)
             it += Facing(FacingDirection.DOWN)
             val animationCmp =
                 Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)
@@ -181,7 +181,7 @@ class CombatScreen(
             val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
             it += graphicCmp
             it += Transform(
-                vec3(gameViewport.worldWidth * 0.5f + 1f, gameViewport.worldHeight - 3f, 0f),
+                vec3(gameViewport.worldWidth * 0.5f - 1f, gameViewport.worldHeight - 3f, 0f),
                 graphicCmp.regionSize
             )
             it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
@@ -198,7 +198,7 @@ class CombatScreen(
             val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
             it += graphicCmp
             it += Transform(
-                vec3(gameViewport.worldWidth * 0.5f - 3f, gameViewport.worldHeight - 4f, 0f),
+                vec3(gameViewport.worldWidth * 0.5f + 1f, gameViewport.worldHeight - 4f, 0f),
                 graphicCmp.regionSize
             )
             it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
