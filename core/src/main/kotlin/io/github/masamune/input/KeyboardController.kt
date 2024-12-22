@@ -2,6 +2,8 @@ package io.github.masamune.input
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
+import io.github.masamune.event.CombatNextTurnEvent
+import io.github.masamune.event.CombatPlayerActionEvent
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.DialogEndEvent
 import io.github.masamune.event.Event
@@ -99,6 +101,8 @@ class KeyboardController(
             is ShopEndEvent -> activeState = gameState
             is MapTransitionBeginEvent -> activeState = disabledState
             is MapTransitionEndEvent -> activeState = gameState
+            is CombatPlayerActionEvent -> activeState = disabledState
+            is CombatNextTurnEvent -> activeState = uiState
             else -> Unit
         }
     }

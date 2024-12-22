@@ -142,7 +142,7 @@ class CombatScreen(
             it += graphicCmp
             it += Transform(vec3(gameViewport.worldWidth * 0.5f + 1f, 1f, 0f), graphicCmp.regionSize)
             it += Combat(
-                availableActions = combatCmp.availableActions.toMutableList(),
+                availableActionTypes = combatCmp.availableActionTypes.toMutableList(),
                 attackSnd = SoundAsset.SWORD_SWIPE
             )
         }
@@ -167,7 +167,7 @@ class CombatScreen(
                 vec3(gameViewport.worldWidth * 0.5f - 1f, gameViewport.worldHeight - 2f, 0f),
                 graphicCmp.regionSize
             )
-            it += Combat(availableActions = listOf(ActionType.ATTACK_SINGLE))
+            it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
         }
 
         // enemy 2 faster
@@ -184,7 +184,7 @@ class CombatScreen(
                 vec3(gameViewport.worldWidth * 0.5f + 1f, gameViewport.worldHeight - 3f, 0f),
                 graphicCmp.regionSize
             )
-            it += Combat(availableActions = listOf(ActionType.ATTACK_SINGLE))
+            it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
         }
 
         // enemy 3 slower
@@ -201,7 +201,7 @@ class CombatScreen(
                 vec3(gameViewport.worldWidth * 0.5f - 3f, gameViewport.worldHeight - 4f, 0f),
                 graphicCmp.regionSize
             )
-            it += Combat(availableActions = listOf(ActionType.ATTACK_SINGLE))
+            it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
         }
     }
 
@@ -265,7 +265,7 @@ class CombatScreen(
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> with(world) {
                 val player = playerEntities.first()
                 player[Combat].run {
-                    action = availableActions.first { it == ActionType.FIREBALL }()
+                    action = availableActionTypes.first { it == ActionType.FIREBALL }()
                     getEnemyTarget(targets, action.targetType)
                 }
                 eventService.fire(CombatPlayerActionEvent(player))
@@ -274,7 +274,7 @@ class CombatScreen(
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> with(world) {
                 val player = playerEntities.first()
                 player[Combat].run {
-                    action = availableActions.first { it == ActionType.FIREBOLT }()
+                    action = availableActionTypes.first { it == ActionType.FIREBOLT }()
                     getEnemyTarget(targets, action.targetType)
                 }
                 eventService.fire(CombatPlayerActionEvent(player))

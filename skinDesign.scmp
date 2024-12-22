@@ -707,6 +707,16 @@ jsonData: {
 		{
 			class: com.ray3k.skincomposer.data.ColorData
 			color: {
+				r: 0
+				g: 0.29803923
+				b: 1
+				a: 1
+			}
+			name: mana
+		}
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
 				r: 0.93333334
 				g: 0.07058824
 				b: 0.11372549

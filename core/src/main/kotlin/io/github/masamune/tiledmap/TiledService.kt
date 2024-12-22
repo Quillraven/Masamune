@@ -361,7 +361,7 @@ class TiledService(
             return
         }
 
-        entity += Combat(availableActions = actionTypes.split(",").map { ActionType.valueOf(it) })
+        entity += Combat(availableActionTypes = actionTypes.split(",").map { ActionType.valueOf(it) })
     }
 
     private fun EntityCreateContext.configurePlayer(world: World, entity: Entity) {

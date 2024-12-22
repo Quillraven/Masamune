@@ -46,17 +46,27 @@ class CombatViewModel(
     var playerMana: Pair<Float, Float> by propertyNotify(0f to 0f)
     var playerName: String by propertyNotify("")
     var playerPosition: Vector2 by propertyNotify(vec2())
+    var playerMagic: List<MagicModel> by propertyNotify(emptyList<MagicModel>())
 
     override fun onEvent(event: Event) = with(world) {
         when (event) {
             is CombatStartEvent -> {
                 val player = event.player
+                // get player stats (life, mana, ...)
                 val playerStats = player[Stats]
                 playerLife = playerStats.life to playerStats.lifeMax
                 playerMana = playerStats.mana to playerStats.manaMax
                 playerName = player[Name].name
+
+                // get play magic
+                playerMagic = player[Combat].magicActions.map {
+                    MagicModel(it.type, bundle["magic.${it.type.name.lowercase()}.name"], it.manaCost)
+                }
+
+                // position UI elements according to player position
                 onResize()
 
+                // store enemy entities for easier target selection
                 enemyEntities += event.enemies
             }
 
@@ -120,6 +130,10 @@ class CombatViewModel(
                 spawnSelectorEntity(enemyEntities.first()[Transform])
             }
 
+            ActionTargetType.ALL -> {
+                enemyEntities.forEach { spawnSelectorEntity(it[Transform]) }
+            }
+
             else -> Unit
         }
     }
@@ -127,9 +141,18 @@ class CombatViewModel(
     fun selectAttack() = with(world) {
         val player = playerEntities.single()
         val combatCmp = player[Combat]
-        combatCmp.action = combatCmp.attackAction()
+        combatCmp.action = combatCmp.attackAction
         targetType = combatCmp.action.targetType
         spawnTargetSelectorEntities()
+    }
+
+    fun selectMagic(magicModel: MagicModel) = with(world) {
+        val player = playerEntities.single()
+        val combatCmp = player[Combat]
+        combatCmp.action = combatCmp.magicActions.single { it.type == magicModel.type }
+        targetType = combatCmp.action.targetType
+        spawnTargetSelectorEntities()
+        optionSelected()
     }
 
     private fun selectSingleTarget(index: Int) = with(world) {
@@ -150,8 +173,8 @@ class CombatViewModel(
             }
 
             selectSingleTarget(selectedTargetIdx)
+            optionChanged()
         }
-        optionChanged()
     }
 
     fun selectNextTarget() {
@@ -163,8 +186,8 @@ class CombatViewModel(
             }
 
             selectSingleTarget(selectedTargetIdx)
+            optionChanged()
         }
-        optionChanged()
     }
 
     fun stopSelection() {
@@ -185,8 +208,12 @@ class CombatViewModel(
         val player = playerEntities.single()
         val combat = player[Combat]
         combat.targets.clear()
-        combat.targets += enemyEntities[selectedTargetIdx]
-        selectedTargetIdx = -1
+        if (targetType == ActionTargetType.SINGLE) {
+            combat.targets += enemyEntities[selectedTargetIdx]
+            selectedTargetIdx = -1
+        } else if (targetType == ActionTargetType.ALL) {
+            combat.targets += enemyEntities
+        }
         // fire event to trigger CombatSystem and start round
         eventService.fire(CombatPlayerActionEvent(player))
     }

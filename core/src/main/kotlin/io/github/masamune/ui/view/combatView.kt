@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import io.github.masamune.ui.model.CombatViewModel
+import io.github.masamune.ui.model.MagicModel
+import io.github.masamune.ui.widget.MagicTable
+import io.github.masamune.ui.widget.magicTable
 import ktx.actors.txt
 import ktx.scene2d.KGroup
 import ktx.scene2d.KWidget
@@ -25,7 +28,7 @@ private enum class UiAction {
 }
 
 private enum class UiCombatState {
-    SELECT_ACTION, SELECT_TARGET;
+    SELECT_ACTION, SELECT_TARGET, SELECT_MAGIC
 }
 
 @Scene2dDsl
@@ -45,6 +48,9 @@ class CombatView(
     private val attackBtn: ImageButton
     private val magicBtn: ImageButton
     private val itemBtn: ImageButton
+
+    private val magicTable: MagicTable
+    private var magicModels: List<MagicModel> = listOf()
 
     private var uiAction: UiAction = UiAction.UNDEFINED
     private var uiState = UiCombatState.SELECT_ACTION
@@ -109,6 +115,8 @@ class CombatView(
             pack()
         }
 
+        magicTable = magicTable(skin) { this.isVisible = false }
+
         registerOnPropertyChanges(model)
     }
 
@@ -127,25 +135,42 @@ class CombatView(
             manaProgressBar.value = (current / max).coerceIn(0f, 1f)
             playerInfoTable.pack()
         }
+        model.onPropertyChange(CombatViewModel::playerMagic) { magicList ->
+            magicModels = magicList
+            magicTable.clearMagic()
+            magicList.forEach { magic -> magicTable.magic(magic.name, magic.mana) }
+            magicTable.pack()
+            magicTable.height = 300f
+        }
         model.onPropertyChange(CombatViewModel::playerPosition) { position ->
             val infoW = playerInfoTable.width
             playerInfoTable.setPosition(position.x - infoW, 5f)
             val actionW = actionTable.width
             actionTable.setPosition(position.x - infoW * 0.5f - actionW * 0.5f, playerInfoTable.height + 10f)
+            magicTable.setPosition(
+                position.x - infoW * 0.5f - magicTable.width * 0.5f,
+                playerInfoTable.height + 20f + actionTable.height
+            )
         }
     }
 
     override fun onUpPressed() {
-        uiAction = UiAction.ATTACK
-        attackBtn.isChecked = false
-        magicBtn.isChecked = true
-        itemBtn.isChecked = true
-        viewModel.optionChanged()
+        if (uiState == UiCombatState.SELECT_ACTION) {
+            uiAction = UiAction.ATTACK
+            attackBtn.isChecked = false
+            magicBtn.isChecked = true
+            itemBtn.isChecked = true
+            viewModel.optionChanged()
+        }
     }
 
     override fun onLeftPressed() {
         if (uiState == UiCombatState.SELECT_TARGET) {
             viewModel.selectPrevTarget()
+            return
+        } else if (uiState == UiCombatState.SELECT_MAGIC) {
+            magicTable.prevMagic()
+            viewModel.optionChanged()
             return
         }
 
@@ -159,6 +184,10 @@ class CombatView(
     override fun onRightPressed() {
         if (uiState == UiCombatState.SELECT_TARGET) {
             viewModel.selectNextTarget()
+            return
+        } else if (uiState == UiCombatState.SELECT_MAGIC) {
+            magicTable.nextMagic()
+            viewModel.optionChanged()
             return
         }
 
@@ -174,6 +203,10 @@ class CombatView(
             uiState = UiCombatState.SELECT_ACTION
             viewModel.stopSelection()
             return
+        } else if (uiState == UiCombatState.SELECT_MAGIC) {
+            magicTable.isVisible = false
+            uiState = UiCombatState.SELECT_ACTION
+            viewModel.optionCancelled()
         }
     }
 
@@ -185,6 +218,11 @@ class CombatView(
             magicBtn.isChecked = true
             itemBtn.isChecked = true
             return
+        } else if (uiState == UiCombatState.SELECT_MAGIC) {
+            uiState = UiCombatState.SELECT_TARGET
+            viewModel.selectMagic(magicModels[magicTable.selectedMagic])
+            magicTable.isVisible = false
+            return
         }
 
         viewModel.optionSelected()
@@ -192,6 +230,11 @@ class CombatView(
             UiAction.ATTACK -> {
                 uiState = UiCombatState.SELECT_TARGET
                 viewModel.selectAttack()
+            }
+
+            UiAction.MAGIC -> {
+                uiState = UiCombatState.SELECT_MAGIC
+                magicTable.isVisible = true
             }
 
             else -> Unit
