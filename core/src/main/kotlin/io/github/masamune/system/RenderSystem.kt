@@ -1,8 +1,11 @@
 package io.github.masamune.system
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.HdpiUtils
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -25,6 +28,11 @@ import io.github.masamune.event.EventListener
 import io.github.masamune.event.MapChangeEvent
 import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.tiledmap.MapTransitionType
+import ktx.graphics.component1
+import ktx.graphics.component2
+import ktx.graphics.component3
+import ktx.graphics.component4
+import ktx.graphics.use
 import ktx.math.component1
 import ktx.math.component2
 import ktx.math.vec2
@@ -43,8 +51,8 @@ class RenderSystem(
 
     private val camera: OrthographicCamera = gameViewport.camera as OrthographicCamera
     private val mapRenderer = OrthogonalTiledMapRenderer(null, UNIT_SCALE, batch)
-    private val background = mutableListOf<TiledMapTileLayer>()
-    private val foreground = mutableListOf<TiledMapTileLayer>()
+    private val backgroundLayers = mutableListOf<TiledMapTileLayer>()
+    private val foregroundLayers = mutableListOf<TiledMapTileLayer>()
     private val batchOrigColor = Color()
 
     // optional map layers for map transition
@@ -52,18 +60,32 @@ class RenderSystem(
     private val transitionForeground = mutableListOf<TiledMapTileLayer>()
     val transitionOffset = vec2()
 
+    var backgroundTex: Texture? = null
+
     override fun onTick() {
+        // optional custom background texture that is drawn with full screen viewport
+        // e.g. used in CombatScreen to draw a blurred version of the GameScreen as background of the combat
+        backgroundTex?.let { texture ->
+            HdpiUtils.glViewport(0, 0, Gdx.graphics.width, Gdx.graphics.height)
+            batch.use(batch.projectionMatrix.idt()) {
+                val (r, g, b, a) = batch.color
+                batch.setColor(r, g, b, 0.4f)
+                it.draw(texture, -1f, 1f, 2f, -2f)
+                batch.setColor(r, g, b, a)
+            }
+        }
+
         gameViewport.apply()
         batchOrigColor.set(batch.color)
         mapRenderer.use(camera) { renderer ->
-            background.forEach(renderer::renderTileLayer)
+            backgroundLayers.forEach(renderer::renderTileLayer)
             renderer.renderTransitionMapLayers(transitionBackground)
 
             // render all entities
             super.onTick()
             batch.setColor(batchOrigColor.r, batchOrigColor.g, batchOrigColor.b, batchOrigColor.a)
 
-            foreground.forEach { renderer.renderTileLayer(it) }
+            foregroundLayers.forEach { renderer.renderTileLayer(it) }
             renderer.renderTransitionMapLayers(transitionForeground)
         }
     }
@@ -192,7 +214,7 @@ class RenderSystem(
             is MapChangeEvent -> {
                 transitionBackground.clear()
                 transitionForeground.clear()
-                updateMapLayers(foreground, background, event.tiledMap)
+                updateMapLayers(foregroundLayers, backgroundLayers, event.tiledMap)
             }
 
             is MapTransitionBeginEvent -> {

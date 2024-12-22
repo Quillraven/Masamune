@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
-import com.badlogic.gdx.graphics.glutils.HdpiUtils
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
@@ -20,6 +19,7 @@ import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.ShaderService.Companion.resize
+import io.github.masamune.asset.ShaderService.Companion.useShader
 import io.github.masamune.asset.SkinAsset
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
@@ -44,11 +44,6 @@ import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
 import ktx.app.KtxScreen
 import ktx.app.gdxError
-import ktx.graphics.component1
-import ktx.graphics.component2
-import ktx.graphics.component3
-import ktx.graphics.component4
-import ktx.graphics.use
 import ktx.log.logger
 import ktx.math.vec3
 
@@ -77,6 +72,9 @@ class CombatScreen(
     private val playerEntities = world.family { all(Player, Combat) }
     private val enemyEntities = world.family { none(Player).all(Combat) }
 
+    // player defeated?
+    private var defeat = false
+
     private fun combatWorld(): World {
         return configureWorld {
             injectables {
@@ -98,6 +96,8 @@ class CombatScreen(
     }
 
     override fun show() {
+        defeat = false
+
         // set controller
         inputProcessor.clear()
         inputProcessor.addProcessor(keyboardController)
@@ -158,7 +158,7 @@ class CombatScreen(
         // enemy 2 faster
         world.entity {
             it += Name("Dummy2")
-            it += Stats(strength = 2f, agility = 7f, damage = 1f, armor = 5f, life = 20f, lifeMax = 20f)
+            it += Stats(strength = 2f, agility = 7f, damage = 30f, armor = 5f, life = 20f, lifeMax = 20f)
             it += Facing(FacingDirection.DOWN)
             val animationCmp =
                 Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)
@@ -196,6 +196,8 @@ class CombatScreen(
             gameScreen.resize(width, height)
             gameScreen.render(0f)
         }
+        // set fbo texture in RenderSystem to draw it as custom background before the world scene
+        world.system<RenderSystem>().backgroundTex = fbo.colorBufferTexture
     }
 
     private fun registerEventListeners() {
@@ -206,6 +208,8 @@ class CombatScreen(
     }
 
     override fun hide() {
+        // in case of defeat we set a grayscale shader -> remove that shader if it was set
+        batch.shader = null
         eventService.clearListeners()
         world.removeAll(clearRecycled = true)
         audioService.playPrevMusic()
@@ -219,19 +223,13 @@ class CombatScreen(
     }
 
     override fun render(delta: Float) {
-        // render blurred out GameScreen as background
-        HdpiUtils.glViewport(0, 0, Gdx.graphics.width, Gdx.graphics.height)
-        batch.use(batch.projectionMatrix.idt()) {
-            val (r, g, b, a) = batch.color
-            batch.setColor(r, g, b, 0.4f)
-            it.draw(fbo.colorBufferTexture, -1f, 1f, 2f, -2f)
-            batch.setColor(r, g, b, a)
-        }
         world.update(delta)
 
-        uiViewport.apply()
-        stage.act(delta)
-        stage.draw()
+        batch.useShader(null) {
+            uiViewport.apply()
+            stage.act(delta)
+            stage.draw()
+        }
 
         // TODO remove debug
         fun getEnemyTarget(targets: MutableEntityBag, targetType: ActionTargetType) {

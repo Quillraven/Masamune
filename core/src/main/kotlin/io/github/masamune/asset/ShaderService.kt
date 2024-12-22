@@ -23,39 +23,43 @@ import ktx.math.vec2
  * Service class for [ShaderProgram] management. Supports loading and usage of following shaders:
  * - outline
  * - blur
+ * - grayscale
  *
  * If the loading of a shader fails then an exception with the shader's error log is thrown.
  */
 class ShaderService(private val fileHandleResolver: FileHandleResolver = InternalFileHandleResolver()) : Disposable {
 
     /** a temporary [FrameBuffer] that can be used in [renderToFbo] (e.g. for blur shader). */
-    var tmpFbo: FrameBuffer = FrameBuffer(FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
+    var tmpFbo = FrameBuffer(FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
         private set
 
     // outline shader
-    private lateinit var outlineShader: ShaderProgram
+    private val outlineShader by lazy { loadShader("default.vert", "outline.frag") }
     private var outlineColorIdx = -1
     private var outlinePixelSizeIdx = -1
 
     // blur shader
-    private var blurFbo: FrameBuffer = FrameBuffer(FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
-    private lateinit var blurShader: ShaderProgram
+    private var blurFbo = FrameBuffer(FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
+    private val blurShader by lazy { loadShader("default.vert", "blur.frag") }
     private var blurRadiusIdx = -1
     private var blurDirectionIdx = -1
     private var blurPixelSizeIdx = -1
+
+    // grayscale shader
+    val grayscaleShader by lazy { loadShader("default.vert", "grayscale.frag") }
 
     /**
      * Loads all shaders and stores uniform locations internally for better performance.
      */
     fun loadAllShader() {
-        outlineShader = loadShader("default.vert", "outline.frag")
         outlineColorIdx = outlineShader.getUniformLocation("u_outlineColor")
         outlinePixelSizeIdx = outlineShader.getUniformLocation("u_pixelSize")
 
-        blurShader = loadShader("default.vert", "blur.frag")
         blurRadiusIdx = blurShader.getUniformLocation("u_radius")
         blurDirectionIdx = blurShader.getUniformLocation("u_direction")
         blurPixelSizeIdx = blurShader.getUniformLocation("u_pixelSize")
+
+        grayscaleShader
     }
 
     /**
@@ -70,22 +74,6 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
             gdxError("Could not compile shader $vertexFile/$fragmentFile! Log:\n${shader.log}")
         }
         return shader
-    }
-
-    /**
-     * Sets the given [shader] as active shader for any draw calls of the [Batch] inside [block].
-     * After the draw [block] is executed, the previous shader of the [Batch] is restored.
-     */
-    private fun Batch.useShader(shader: ShaderProgram, block: () -> Unit) {
-        val origShader = this.shader
-        if (origShader != shader) {
-            this.shader = shader
-        }
-
-        block()
-
-        // reset shader to default
-        this.shader = origShader
     }
 
     /**
@@ -205,6 +193,22 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
                 return FrameBuffer(FBO_FORMAT, width, height, false)
             }
             return this
+        }
+
+        /**
+         * Sets the given [shader] as active shader for any draw calls of the [Batch] inside [block].
+         * After the draw [block] is executed, the previous shader of the [Batch] is restored.
+         */
+        fun Batch.useShader(shader: ShaderProgram?, block: () -> Unit) {
+            val origShader = this.shader
+            if (origShader != shader) {
+                this.shader = shader
+            }
+
+            block()
+
+            // reset shader to default
+            this.shader = origShader
         }
     }
 
