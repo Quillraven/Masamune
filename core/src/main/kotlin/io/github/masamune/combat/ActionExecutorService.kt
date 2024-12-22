@@ -12,6 +12,7 @@ import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Stats
 import io.github.masamune.event.CombatEntityDeadEvent
+import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.EventService
 import ktx.log.logger
@@ -74,7 +75,7 @@ class ActionExecutorService(
 
         when (state) {
             ActionState.START -> {
-                with(world) { source[Stats].mana -= action.manaCost }
+                updateManaBy(source, -action.manaCost.toFloat())
                 action.run { this@ActionExecutorService.onStart() }
                 changeState(ActionState.UPDATE)
             }
@@ -109,12 +110,18 @@ class ActionExecutorService(
         delaySec += seconds
     }
 
+    private fun updateManaBy(target: Entity, amount: Float) = with(world) {
+        val targetStats = target[Stats]
+        targetStats.mana += amount
+        eventService.fire(CombatEntityManaUpdateEvent(target, targetStats.mana, targetStats.manaMax))
+    }
+
     private fun updateLifeBy(target: Entity, amount: Float) = with(world) {
         val targetStats = target[Stats]
         targetStats.life += amount
 
         if (amount < 0f) {
-            eventService.fire(CombatEntityTakeDamageEvent(target, amount))
+            eventService.fire(CombatEntityTakeDamageEvent(target, targetStats.life, targetStats.lifeMax))
         }
 
         if (targetStats.life <= 0f) {

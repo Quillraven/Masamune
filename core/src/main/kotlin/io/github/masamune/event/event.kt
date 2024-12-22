@@ -58,7 +58,7 @@ data class MapTransitionBeginEvent(
 data object MapTransitionEndEvent : Event
 
 // COMBAT EVENTS
-data object CombatStartEvent : Event
+data class CombatStartEvent(val player: Entity) : Event
 data class CombatPlayerActionEvent(val player: Entity) : Event
 data object CombatNextTurnEvent : Event
 data class CombatTurnBeginEvent(val turn: Int) : Event
@@ -66,4 +66,5 @@ data object CombatTurnEndEvent : Event
 data object CombatPlayerDefeatEvent : Event
 data object CombatPlayerVictoryEvent : Event
 data class CombatEntityDeadEvent(val entity: Entity) : Event
-data class CombatEntityTakeDamageEvent(val entity: Entity, val amount: Float) : Event
+data class CombatEntityTakeDamageEvent(val entity: Entity, val life: Float, val maxLife: Float) : Event
+data class CombatEntityManaUpdateEvent(val entity: Entity, val mana: Float, val maxMana: Float) : Event

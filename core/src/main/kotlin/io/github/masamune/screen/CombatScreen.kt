@@ -45,10 +45,14 @@ import io.github.masamune.system.ScaleSystem
 import io.github.masamune.system.ShakeSystem
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
+import io.github.masamune.ui.model.CombatViewModel
+import io.github.masamune.ui.view.View
+import io.github.masamune.ui.view.combatView
 import ktx.app.KtxScreen
 import ktx.app.gdxError
 import ktx.log.logger
 import ktx.math.vec3
+import ktx.scene2d.actors
 
 class CombatScreen(
     private val masamune: Masamune,
@@ -75,8 +79,8 @@ class CombatScreen(
     private val playerEntities = world.family { all(Player, Combat) }
     private val enemyEntities = world.family { none(Player).all(Combat) }
 
-    // player defeated?
-    private var defeat = false
+    // view model
+    private val combatViewModel = CombatViewModel(bundle, world, eventService, gameViewport, uiViewport)
 
     private fun combatWorld(): World {
         return configureWorld {
@@ -102,19 +106,21 @@ class CombatScreen(
     }
 
     override fun show() {
-        defeat = false
-
         // set controller
         inputProcessor.clear()
         inputProcessor.addProcessor(keyboardController)
 
+        // setup UI views
+        stage.clear()
+        stage.actors {
+            combatView(combatViewModel, skin)
+        }
+
         // register all event listeners
         registerEventListeners()
-
         updateBgdFbo(Gdx.graphics.width, Gdx.graphics.height)
 
         spawnDummyCombatEntities()
-        eventService.fire(CombatStartEvent)
     }
 
     fun spawnPlayer(gameScreenWorld: World, gameScreenPlayer: Entity) {
@@ -124,7 +130,7 @@ class CombatScreen(
         val statsCmp = with(gameScreenWorld) { gameScreenPlayer[Stats] }
         val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
 
-        this.world.entity {
+        val combatPlayer = this.world.entity {
             it += nameCmp
             it += playerCmp
             it += Stats.of(statsCmp)
@@ -139,6 +145,7 @@ class CombatScreen(
                 attackSnd = SoundAsset.SWORD_SWIPE
             )
         }
+        eventService.fire(CombatStartEvent(combatPlayer))
     }
 
     private fun spawnDummyCombatEntities() {
@@ -226,6 +233,7 @@ class CombatScreen(
         uiViewport.update(width, height, true)
         fbo = fbo.resize(width, height)
         updateBgdFbo(width, height)
+        combatViewModel.onResize()
     }
 
     override fun render(delta: Float) {
@@ -277,6 +285,14 @@ class CombatScreen(
                     getEnemyTarget(targets, action.targetType)
                 }
                 eventService.fire(CombatPlayerActionEvent(player))
+            }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.R) -> {
+                val view = stage.actors.filterIsInstance<View<*>>().single()
+                stage.root.removeActor(view)
+                stage.actors {
+                    combatView(combatViewModel, skin)
+                }
             }
 
             Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) -> {
