@@ -36,6 +36,7 @@ import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatPlayerActionEvent
 import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.EventService
+import io.github.masamune.input.ControllerStateUI
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CombatSystem
@@ -71,7 +72,7 @@ class CombatScreen(
 
     // other stuff
     private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]
-    private val keyboardController = KeyboardController(eventService)
+    private val keyboardController = KeyboardController(eventService, initialState = ControllerStateUI::class)
     private var fbo = FrameBuffer(ShaderService.FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
 
     // ecs world
@@ -80,7 +81,7 @@ class CombatScreen(
     private val enemyEntities = world.family { none(Player).all(Combat) }
 
     // view model
-    private val combatViewModel = CombatViewModel(bundle, world, eventService, gameViewport, uiViewport)
+    private val combatViewModel = CombatViewModel(bundle, world, eventService, gameViewport, uiViewport, assetService[AtlasAsset.CHARS_AND_PROPS])
 
     private fun combatWorld(): World {
         return configureWorld {
@@ -145,7 +146,8 @@ class CombatScreen(
                 attackSnd = SoundAsset.SWORD_SWIPE
             )
         }
-        eventService.fire(CombatStartEvent(combatPlayer))
+
+        eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))
     }
 
     private fun spawnDummyCombatEntities() {
@@ -260,15 +262,6 @@ class CombatScreen(
         }
 
         when {
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> with(world) {
-                val player = playerEntities.first()
-                player[Combat].run {
-                    action = availableActions.first { it == ActionType.ATTACK_SINGLE }()
-                    getEnemyTarget(targets, action.targetType)
-                }
-                eventService.fire(CombatPlayerActionEvent(player))
-            }
-
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> with(world) {
                 val player = playerEntities.first()
                 player[Combat].run {
@@ -293,9 +286,11 @@ class CombatScreen(
                 stage.actors {
                     combatView(combatViewModel, skin)
                 }
+                eventService.fire(CombatStartEvent(world.family { all(Player) }.single(), enemyEntities.entities))
+                stage.isDebugAll = true
             }
 
-            Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) -> {
+            Gdx.input.isKeyJustPressed(Input.Keys.X) -> {
                 masamune.transitionScreen<GameScreen>(
                     fromType = DefaultTransitionType,
                     toType = BlurTransitionType(

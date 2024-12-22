@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import com.github.quillraven.fleks.collection.EntityBag
 import io.github.masamune.dialog.Dialog
 import io.github.masamune.tiledmap.MapTransitionType
 import io.github.masamune.ui.model.MenuType
@@ -58,7 +59,7 @@ data class MapTransitionBeginEvent(
 data object MapTransitionEndEvent : Event
 
 // COMBAT EVENTS
-data class CombatStartEvent(val player: Entity) : Event
+data class CombatStartEvent(val player: Entity, val enemies: EntityBag) : Event
 data class CombatPlayerActionEvent(val player: Entity) : Event
 data object CombatNextTurnEvent : Event
 data class CombatTurnBeginEvent(val turn: Int) : Event

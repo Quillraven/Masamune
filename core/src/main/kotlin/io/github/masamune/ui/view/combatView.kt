@@ -1,11 +1,13 @@
 package io.github.masamune.ui.view
 
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.Scaling
 import io.github.masamune.ui.model.CombatViewModel
 import ktx.actors.txt
 import ktx.scene2d.KGroup
@@ -13,9 +15,18 @@ import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
 import ktx.scene2d.defaultStyle
+import ktx.scene2d.imageButton
 import ktx.scene2d.label
 import ktx.scene2d.progressBar
 import ktx.scene2d.table
+
+private enum class UiAction {
+    UNDEFINED, ATTACK, MAGIC, ITEM
+}
+
+private enum class UiCombatState {
+    SELECT_ACTION, SELECT_TARGET;
+}
 
 @Scene2dDsl
 class CombatView(
@@ -29,6 +40,14 @@ class CombatView(
     private val lifeProgressBar: ProgressBar
     private val playerManaLabel: Label
     private val manaProgressBar: ProgressBar
+
+    private val actionTable: Table
+    private val attackBtn: ImageButton
+    private val magicBtn: ImageButton
+    private val itemBtn: ImageButton
+
+    private var uiAction: UiAction = UiAction.UNDEFINED
+    private var uiState = UiCombatState.SELECT_ACTION
 
     init {
         playerInfoTable = table(skin) {
@@ -67,6 +86,29 @@ class CombatView(
             pack()
         }
 
+        actionTable = table(skin) {
+            this@CombatView.attackBtn = imageButton("imgBtnSword", skin) {
+                image.setScaling(Scaling.fit)
+                imageCell.size(ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD, ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD)
+                this.isChecked = true
+                it.colspan(2).center().size(ACTION_BTN_SIZE, ACTION_BTN_SIZE).row()
+            }
+            this@CombatView.magicBtn = imageButton("imgBtnMagic", skin) {
+                image.setScaling(Scaling.fit)
+                imageCell.size(ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD, ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD)
+                this.isChecked = true
+                it.padRight(ACTION_BTN_SIZE * 0.5f).size(ACTION_BTN_SIZE, ACTION_BTN_SIZE)
+            }
+            this@CombatView.itemBtn = imageButton("imgBtnItems", skin) {
+                image.setScaling(Scaling.fit)
+                imageCell.size(ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD, ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD)
+                this.isChecked = true
+                it.padLeft(ACTION_BTN_SIZE * 0.5f).size(ACTION_BTN_SIZE, ACTION_BTN_SIZE)
+            }
+
+            pack()
+        }
+
         registerOnPropertyChanges(model)
     }
 
@@ -86,10 +128,80 @@ class CombatView(
             playerInfoTable.pack()
         }
         model.onPropertyChange(CombatViewModel::playerPosition) { position ->
-            playerInfoTable.setPosition(position.x - playerInfoTable.width, position.y)
+            val infoW = playerInfoTable.width
+            playerInfoTable.setPosition(position.x - infoW, 5f)
+            val actionW = actionTable.width
+            actionTable.setPosition(position.x - infoW * 0.5f - actionW * 0.5f, playerInfoTable.height + 10f)
         }
     }
 
+    override fun onUpPressed() {
+        uiAction = UiAction.ATTACK
+        attackBtn.isChecked = false
+        magicBtn.isChecked = true
+        itemBtn.isChecked = true
+        viewModel.optionChanged()
+    }
+
+    override fun onLeftPressed() {
+        if (uiState == UiCombatState.SELECT_TARGET) {
+            viewModel.selectPrevTarget()
+            return
+        }
+
+        uiAction = UiAction.MAGIC
+        attackBtn.isChecked = true
+        magicBtn.isChecked = false
+        itemBtn.isChecked = true
+        viewModel.optionChanged()
+    }
+
+    override fun onRightPressed() {
+        if (uiState == UiCombatState.SELECT_TARGET) {
+            viewModel.selectNextTarget()
+            return
+        }
+
+        uiAction = UiAction.ITEM
+        attackBtn.isChecked = true
+        magicBtn.isChecked = true
+        itemBtn.isChecked = false
+        viewModel.optionChanged()
+    }
+
+    override fun onBackPressed() {
+        if (uiState == UiCombatState.SELECT_TARGET) {
+            uiState = UiCombatState.SELECT_ACTION
+            viewModel.stopSelection()
+            return
+        }
+    }
+
+    override fun onSelectPressed() {
+        if (uiState == UiCombatState.SELECT_TARGET) {
+            viewModel.confirmTargetSelection()
+            uiState = UiCombatState.SELECT_ACTION
+            attackBtn.isChecked = true
+            magicBtn.isChecked = true
+            itemBtn.isChecked = true
+            return
+        }
+
+        viewModel.optionSelected()
+        when (uiAction) {
+            UiAction.ATTACK -> {
+                uiState = UiCombatState.SELECT_TARGET
+                viewModel.selectAttack()
+            }
+
+            else -> Unit
+        }
+    }
+
+    companion object {
+        private const val ACTION_BTN_SIZE = 30f
+        private const val ACTION_BTN_IMG_PAD = 10f
+    }
 }
 
 @Scene2dDsl
