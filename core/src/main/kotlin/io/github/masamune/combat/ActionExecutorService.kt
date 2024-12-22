@@ -102,7 +102,8 @@ class ActionExecutorService(
      * Performs an attack against the [target] entity and waits [delay] seconds before continuing.
      */
     fun attack(target: Entity, delay: Float = 1f) = with(world) {
-        updateLifeBy(target, -source[Stats].damage)
+        val sourceStats = source[Stats]
+        updateLifeBy(target, -(sourceStats.strength + sourceStats.damage))
         play(source[Combat].attackSnd, delay)
     }
 
