@@ -65,3 +65,4 @@ data class CombatTurnBeginEvent(val turn: Int) : Event
 data object CombatTurnEndEvent : Event
 data object CombatPlayerDefeatEvent : Event
 data object CombatPlayerVictoryEvent : Event
+data class CombatEntityDeadEvent(val entity: Entity) : Event

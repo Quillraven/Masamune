@@ -20,6 +20,7 @@ import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.compareEntityBy
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.asset.ShaderService
+import io.github.masamune.component.Dissolve
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Outline
 import io.github.masamune.component.Transform
@@ -125,10 +126,18 @@ class RenderSystem(
         val (sizeX, sizeY) = transform.size
         val realSize = Scaling.fill.apply(regSizeX, regSizeY, sizeX, sizeY)
 
-        batch.drawEntity(graphic, transform, realSize)
-        entity.getOrNull(Outline)?.let { outline ->
-            shaderService.useOutlineShader(batch, outline.color, graphic.region.texture) {
+        val dissolveCmp = entity.getOrNull(Dissolve)
+        if (dissolveCmp != null) {
+            val (_, uvOffset, uvMax, numFragments, value) = dissolveCmp
+            shaderService.useDissolveShader(batch, value, uvOffset, uvMax, numFragments) {
                 batch.drawEntity(graphic, transform, realSize)
+            }
+        } else {
+            batch.drawEntity(graphic, transform, realSize)
+            entity.getOrNull(Outline)?.let { outline ->
+                shaderService.useOutlineShader(batch, outline.color, graphic.region.texture) {
+                    batch.drawEntity(graphic, transform, realSize)
+                }
             }
         }
     }

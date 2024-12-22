@@ -39,7 +39,9 @@ import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CombatSystem
+import io.github.masamune.system.DissolveSystem
 import io.github.masamune.system.RenderSystem
+import io.github.masamune.system.ScaleSystem
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
 import ktx.app.KtxScreen
@@ -90,6 +92,8 @@ class CombatScreen(
             systems {
                 add(CombatSystem())
                 add(AnimationSystem())
+                add(DissolveSystem())
+                add(ScaleSystem())
                 add(RenderSystem())
             }
         }

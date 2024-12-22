@@ -11,6 +11,8 @@ import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Stats
+import io.github.masamune.event.CombatEntityDeadEvent
+import io.github.masamune.event.EventService
 import ktx.log.logger
 import kotlin.math.max
 
@@ -21,6 +23,7 @@ private enum class ActionState {
 class ActionExecutorService(
     private val world: World,
     private val audioService: AudioService = world.inject(),
+    private val eventService: EventService = world.inject(),
 ) {
     private var state: ActionState = ActionState.START
     private var delaySec = 0f
@@ -97,7 +100,7 @@ class ActionExecutorService(
      * Performs an attack against the [target] entity and waits [delay] seconds before continuing.
      */
     fun attack(target: Entity, delay: Float = 1f) = with(world) {
-        target[Stats].life -= source[Stats].damage
+        updateLifeBy(target, -source[Stats].damage)
         play(source[Combat].attackSnd, delay)
     }
 
@@ -105,11 +108,20 @@ class ActionExecutorService(
         delaySec += seconds
     }
 
-    fun dealDamage(physical: Float, magical: Float, target: Entity) = with(world) {
-        target[Stats].life -= (physical + magical)
+    private fun updateLifeBy(target: Entity, amount: Float) = with(world) {
+        val targetStats = target[Stats]
+        targetStats.life += amount
+        if (targetStats.life <= 0f) {
+            log.debug { "$target is dead" }
+            eventService.fire(CombatEntityDeadEvent(target))
+        }
     }
 
-    fun dealDamage(physical: Float, magical: Float, targets: EntityBag) = with(world) {
+    fun dealDamage(physical: Float, magical: Float, target: Entity) {
+        updateLifeBy(target, -(physical + magical))
+    }
+
+    fun dealDamage(physical: Float, magical: Float, targets: EntityBag) {
         targets.forEach { dealDamage(physical, magical, it) }
     }
 

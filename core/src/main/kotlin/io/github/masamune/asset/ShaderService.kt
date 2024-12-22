@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap.Format
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.graphics.glutils.HdpiUtils
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
@@ -24,6 +25,7 @@ import ktx.math.vec2
  * - outline
  * - blur
  * - grayscale
+ * - dissolve
  *
  * If the loading of a shader fails then an exception with the shader's error log is thrown.
  */
@@ -48,6 +50,13 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
     // grayscale shader
     val grayscaleShader by lazy { loadShader("default.vert", "grayscale.frag") }
 
+    // dissolve shader
+    private val dissolveShader by lazy { loadShader("default.vert", "dissolve.frag") }
+    private var dissolveIdx = -1
+    private var dissolveUvOffsetIdx = -1
+    private var dissolveMaxUvIdx = -1
+    private var dissolveNumFragmentsIdx = -1
+
     /**
      * Loads all shaders and stores uniform locations internally for better performance.
      */
@@ -60,6 +69,11 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
         blurPixelSizeIdx = blurShader.getUniformLocation("u_pixelSize")
 
         grayscaleShader
+
+        dissolveIdx = dissolveShader.getUniformLocation("u_dissolve")
+        dissolveUvOffsetIdx = dissolveShader.getUniformLocation("u_uvOffset")
+        dissolveMaxUvIdx = dissolveShader.getUniformLocation("u_atlasMaxUV")
+        dissolveNumFragmentsIdx = dissolveShader.getUniformLocation("u_fragmentNumber")
     }
 
     /**
@@ -140,6 +154,35 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
     }
 
     /**
+     * Applies a **dissolve** shader to the given draw [block] before rendering it via the [batch].
+     * The [value] defines how much of the dissolve effect is applied (0=none, 1=completely dissolved).
+     * The [uvOffset] and [atlasMaxUv] define the u,v and u2,v2 values of the [block] to be drawn.
+     * The [numFragments] defines how many dissolve fragments will be used on the x- and y-axis.
+     * The [block] must be a single draw call to a specific [TextureRegion].
+     */
+    fun useDissolveShader(
+        batch: Batch,
+        value: Float,
+        uvOffset: Vector2,
+        atlasMaxUv: Vector2,
+        numFragments: Vector2,
+        block: () -> Unit
+    ) {
+        // set dissolve shader and its uniforms
+        batch.useShader(dissolveShader) {
+            dissolveShader.use {
+                it.setUniformf(dissolveIdx, value)
+                it.setUniformf(dissolveUvOffsetIdx, uvOffset)
+                it.setUniformf(dissolveMaxUvIdx, atlasMaxUv)
+                it.setUniformf(dissolveNumFragmentsIdx, numFragments)
+            }
+
+            // run render block
+            block()
+        }
+    }
+
+    /**
      * Resizes the internal [FrameBuffer] objects.
      */
     fun resize(width: Int, height: Int) {
@@ -153,6 +196,9 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
      */
     override fun dispose() {
         outlineShader.dispose()
+        blurShader.dispose()
+        grayscaleShader.dispose()
+        dissolveShader.dispose()
         blurFbo.dispose()
         tmpFbo.dispose()
     }
