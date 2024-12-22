@@ -12,6 +12,7 @@ import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Stats
 import io.github.masamune.event.CombatEntityDeadEvent
+import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.EventService
 import ktx.log.logger
 import kotlin.math.max
@@ -111,6 +112,11 @@ class ActionExecutorService(
     private fun updateLifeBy(target: Entity, amount: Float) = with(world) {
         val targetStats = target[Stats]
         targetStats.life += amount
+
+        if (amount < 0f) {
+            eventService.fire(CombatEntityTakeDamageEvent(target, amount))
+        }
+
         if (targetStats.life <= 0f) {
             log.debug { "$target is dead" }
             eventService.fire(CombatEntityDeadEvent(target))

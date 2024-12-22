@@ -42,6 +42,7 @@ import io.github.masamune.system.CombatSystem
 import io.github.masamune.system.DissolveSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
+import io.github.masamune.system.ShakeSystem
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
 import ktx.app.KtxScreen
@@ -94,6 +95,7 @@ class CombatScreen(
                 add(AnimationSystem())
                 add(DissolveSystem())
                 add(ScaleSystem())
+                add(ShakeSystem())
                 add(RenderSystem())
             }
         }
