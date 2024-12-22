@@ -18,6 +18,24 @@ arrow
   orig: 12, 12
   offset: 0, 0
   index: -1
+button_normal
+  rotate: false
+  xy: 842, 886
+  size: 16, 8
+  split: 3, 3, 3, 3
+  pad: 2, 2, 2, 2
+  orig: 16, 8
+  offset: 0, 0
+  index: -1
+button_pressed
+  rotate: false
+  xy: 176, 802
+  size: 16, 8
+  split: 3, 3, 4, 2
+  pad: 2, 2, 3, 1
+  orig: 16, 8
+  offset: 0, 0
+  index: -1
 dialog_choice_frame
   rotate: false
   xy: 842, 926
@@ -70,6 +88,27 @@ hero
   xy: 4, 624
   size: 38, 38
   orig: 38, 38
+  offset: 0, 0
+  index: -1
+icon_items
+  rotate: false
+  xy: 28, 605
+  size: 9, 11
+  orig: 9, 11
+  offset: 0, 0
+  index: -1
+icon_magic
+  rotate: false
+  xy: 890, 909
+  size: 9, 9
+  orig: 9, 9
+  offset: 0, 0
+  index: -1
+icon_sword
+  rotate: false
+  xy: 4, 576
+  size: 7, 16
+  orig: 7, 16
   offset: 0, 0
   index: -1
 merchant

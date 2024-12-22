@@ -136,6 +136,33 @@ io.github.masamune.ui.widget.DialogOptionStyle: {
 		selectImage: arrow
 	}
 }
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: button_normal
+		down: button_pressed
+		checked: button_pressed
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+	default: {
+		parent: default
+	}
+	imgBtnSword: {
+		parent: default
+		imageUp: icon_sword
+		imageDown: icon_sword
+	}
+	imgBtnMagic: {
+		parent: default
+		imageUp: icon_magic
+		imageDown: icon_magic
+	}
+	imgBtnItems: {
+		parent: default
+		imageUp: icon_items
+		imageDown: icon_items
+	}
+}
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
 		font: pixel_arial_16

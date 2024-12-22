@@ -19,9 +19,9 @@ i:b:/shader/grayscale.frag:432:1
 i:b:/shader/blur.frag:1189:1
 i:d:/graphics:0:1
 i:b:/graphics/sfx.atlas:305:1
-i:b:/graphics/chars_and_props.atlas:5483:1
+i:b:/graphics/chars_and_props.atlas:5644:1
 i:b:/graphics/sfx.png:1520:1
-i:b:/graphics/chars_and_props.png:28025:1
+i:b:/graphics/chars_and_props.png:30400:1
 i:d:/maps:0:1
 i:b:/maps/village.tmx:3256:1
 i:b:/maps/tileset.tsx:9032:1
@@ -49,11 +49,11 @@ i:d:/ui:0:1
 i:b:/ui/messages_de.properties:4228:1
 i:b:/ui/fipps_16.fnt:8935:1
 i:b:/ui/PIXEARG_.fnt:10450:1
-i:b:/ui/skin.atlas:2100:1
-i:b:/ui/skin.png:20581:1
+i:b:/ui/skin.atlas:2663:1
+i:b:/ui/skin.png:21156:1
 i:b:/ui/messages.properties:3829:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
-i:b:/ui/skin.json:3521:1
+i:b:/ui/skin.json:4015:1
 c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
 c:b:/com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:9096:1
 c:b:/com/badlogic/gdx/graphics/g3d/particles/particles.fragment.glsl:820:1
