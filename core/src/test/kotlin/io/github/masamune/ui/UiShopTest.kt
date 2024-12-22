@@ -72,13 +72,13 @@ private class UiShopTest : KtxApplicationAdapter {
             it += Inventory(talons = 500)
             it += Equipment(items = mutableEntityBagOf(createItem(world, ItemType.HELMET)))
             it += Stats(
-                    strength = 10f,
-                    agility = 1f,
-                    constitution = 2f,
-                    intelligence = 5f,
-                    damage = 1000f,
-                    armor = 5f,
-                    resistance = 100f,
+                strength = 10f,
+                agility = 1f,
+                constitution = 2f,
+                intelligence = 5f,
+                damage = 1000f,
+                armor = 5f,
+                resistance = 100f,
             )
         }
     }

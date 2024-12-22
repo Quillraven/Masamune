@@ -54,6 +54,7 @@ data class MapTransitionBeginEvent(
     val mapOffset: Vector2,
     val newPlayerPos: Vector2, // position in new map (=toTiledMap)
 ) : Event
+
 data object MapTransitionEndEvent : Event
 
 // COMBAT EVENTS

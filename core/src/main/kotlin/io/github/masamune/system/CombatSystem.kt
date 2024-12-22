@@ -1,13 +1,13 @@
 package io.github.masamune.system
 
 import com.github.quillraven.fleks.IntervalSystem
-import io.github.masamune.combat.CombatState
-import io.github.masamune.combat.CombatStateCheckVictoryDefeat
-import io.github.masamune.combat.CombatStateDefeat
-import io.github.masamune.combat.CombatStateIdle
-import io.github.masamune.combat.CombatStatePerformAction
-import io.github.masamune.combat.CombatStatePrepareRound
-import io.github.masamune.combat.CombatStateVictory
+import io.github.masamune.combat.state.CombatState
+import io.github.masamune.combat.state.CombatStateCheckVictoryDefeat
+import io.github.masamune.combat.state.CombatStateDefeat
+import io.github.masamune.combat.state.CombatStateIdle
+import io.github.masamune.combat.state.CombatStatePerformAction
+import io.github.masamune.combat.state.CombatStatePrepareRound
+import io.github.masamune.combat.state.CombatStateVictory
 import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatPlayerActionEvent
 import io.github.masamune.event.CombatPlayerDefeatEvent

@@ -49,15 +49,15 @@ private class UiStatsTest : KtxApplicationAdapter {
             it += Name("Test Hero")
             it += Experience(level = 2)
             it += Stats(
-                    strength = 10f,
-                    lifeMax = 100f,
-                    life = 100f,
-                    manaMax = 30f,
-                    mana = 30f,
-                    criticalStrike = 0.15f,
-                    arcaneStrike = -0.25f,
-                    physicalEvade = 1f,
-                    magicalEvade = 1.25f,
+                strength = 10f,
+                lifeMax = 100f,
+                life = 100f,
+                manaMax = 30f,
+                mana = 30f,
+                criticalStrike = 0.15f,
+                arcaneStrike = -0.25f,
+                physicalEvade = 1f,
+                magicalEvade = 1.25f,
             )
         }
 

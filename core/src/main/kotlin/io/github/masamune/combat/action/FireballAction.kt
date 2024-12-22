@@ -1,13 +1,10 @@
 package io.github.masamune.combat.action
 
-import com.github.quillraven.fleks.Entity
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.combat.ActionExecutorService
 
-class FireballAction : Action(ActionTargetType.ALL) {
+class FireballAction : Action(ActionTargetType.ALL, manaCost = 5) {
     private var amount = 2
-
-    override fun ActionExecutorService.canPerform(entity: Entity) = hasMana(5)
 
     override fun ActionExecutorService.onUpdate(): Boolean {
         amount--

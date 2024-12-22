@@ -70,6 +70,7 @@ class ActionExecutorService(
 
         when (state) {
             ActionState.START -> {
+                with(world) { source[Stats].mana -= action.manaCost }
                 action.run { this@ActionExecutorService.onStart() }
                 changeState(ActionState.UPDATE)
             }
