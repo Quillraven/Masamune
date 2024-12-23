@@ -19,7 +19,8 @@
                 "ATTACK_SINGLE",
                 "FIREBOLT",
                 "FIREBALL",
-                "UNDEFINED"
+                "UNDEFINED",
+                "HEAL"
             ],
             "valuesAsFlags": true
         },

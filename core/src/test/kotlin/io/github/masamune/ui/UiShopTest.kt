@@ -64,7 +64,7 @@ private class UiShopTest : KtxApplicationAdapter {
     private val tiledService by lazy { mockk<TiledService>() }
     private val world = configureWorld {}
     private val bundle by lazy { I18NBundle.createBundle("ui/messages".toClasspathFile(), Charsets.ISO_8859_1.name()) }
-    private val viewModel by lazy { ShopViewModel(bundle, world, tiledService, eventService) }
+    private val viewModel by lazy { ShopViewModel(bundle, audioService, world, tiledService, eventService) }
     private val audioService by lazy { AudioService(assetService) }
     private val player by lazy {
         world.entity {

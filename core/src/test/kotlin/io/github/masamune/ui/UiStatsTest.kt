@@ -20,6 +20,7 @@ import io.github.masamune.gdxTest
 import io.github.masamune.ui.model.MenuType
 import io.github.masamune.ui.model.StatsViewModel
 import io.github.masamune.ui.view.statsView
+import io.mockk.mockk
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.assets.toClasspathFile
@@ -36,7 +37,7 @@ private class UiStatsTest : KtxApplicationAdapter {
     private val eventService by lazy { EventService() }
     private val world = configureWorld {}
     private val bundle by lazy { I18NBundle.createBundle("ui/messages".toClasspathFile(), Charsets.ISO_8859_1.name()) }
-    private val viewModel by lazy { StatsViewModel(bundle, world, eventService) }
+    private val viewModel by lazy { StatsViewModel(bundle, mockk(), world, eventService) }
 
     override fun create() {
         stage.actors {

@@ -45,7 +45,7 @@ private class UiDialogTest : KtxApplicationAdapter {
 
     override fun create() {
         stage.actors {
-            this@UiDialogTest.dialogView = dialogView(DialogViewModel(mockk(), EventService()), skin)
+            this@UiDialogTest.dialogView = dialogView(DialogViewModel(mockk(), mockk(), EventService()), skin)
         }
         stage.isDebugAll = DEBUG_STAGE
 

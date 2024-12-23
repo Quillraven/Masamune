@@ -12,6 +12,7 @@ import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Stats
 import io.github.masamune.event.CombatEntityDeadEvent
+import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.EventService
@@ -119,10 +120,12 @@ class ActionExecutorService(
 
     private fun updateLifeBy(target: Entity, amount: Float) = with(world) {
         val targetStats = target[Stats]
-        targetStats.life += amount
+        targetStats.life = (targetStats.life + amount).coerceIn(0f, targetStats.lifeMax)
 
         if (amount < 0f) {
             eventService.fire(CombatEntityTakeDamageEvent(target, targetStats.life, targetStats.lifeMax))
+        } else if (amount > 0f) {
+            eventService.fire(CombatEntityHealEvent(target, targetStats.life, targetStats.lifeMax))
         }
 
         if (targetStats.life <= 0f) {
@@ -137,6 +140,10 @@ class ActionExecutorService(
 
     fun dealDamage(physical: Float, magical: Float, targets: EntityBag) {
         targets.forEach { dealDamage(physical, magical, it) }
+    }
+
+    fun heal(amount: Float, target: Entity) {
+        updateLifeBy(target, amount)
     }
 
     fun endAction() {

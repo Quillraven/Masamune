@@ -21,6 +21,7 @@ import io.github.masamune.component.Player
 import io.github.masamune.component.Selector
 import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
+import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.CombatNextTurnEvent
@@ -117,6 +118,14 @@ class CombatViewModel(
                 playerLife = event.life to event.maxLife
             }
 
+            is CombatEntityHealEvent -> {
+                if (event.entity hasNo Player) {
+                    return@with
+                }
+
+                playerLife = event.life to event.maxLife
+            }
+
             is CombatEntityManaUpdateEvent -> {
                 if (event.entity hasNo Player) {
                     return@with
@@ -178,21 +187,21 @@ class CombatViewModel(
         }
     }
 
-    private fun selectPlayerAction(playerCombat: Combat, action: Action, forEnemy: Boolean) {
+    private fun selectPlayerAction(playerCombat: Combat, action: Action) {
         playerCombat.action = action
         targetType = action.targetType
-        spawnTargetSelectorEntities(forEnemy)
+        spawnTargetSelectorEntities(!action.defensive)
         playSndMenuAccept()
     }
 
     fun selectAttack() = with(world) {
         val combatCmp = playerEntities.single()[Combat]
-        selectPlayerAction(combatCmp, combatCmp.attackAction, true)
+        selectPlayerAction(combatCmp, combatCmp.attackAction)
     }
 
     fun selectMagic(magicModel: MagicModel) = with(world) {
         val combatCmp = playerEntities.single()[Combat]
-        selectPlayerAction(combatCmp, combatCmp.magicActions.single { it.type == magicModel.type }, true)
+        selectPlayerAction(combatCmp, combatCmp.magicActions.single { it.type == magicModel.type })
     }
 
     fun selectPrevTarget() {

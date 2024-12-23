@@ -65,4 +65,5 @@ data object CombatPlayerDefeatEvent : Event
 data object CombatPlayerVictoryEvent : Event
 data class CombatEntityDeadEvent(val entity: Entity) : Event
 data class CombatEntityTakeDamageEvent(val entity: Entity, val life: Float, val maxLife: Float) : Event
+data class CombatEntityHealEvent(val entity: Entity, val life: Float, val maxLife: Float) : Event
 data class CombatEntityManaUpdateEvent(val entity: Entity, val mana: Float, val maxMana: Float) : Event
