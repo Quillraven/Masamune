@@ -138,7 +138,7 @@ class CombatView(
         model.onPropertyChange(CombatViewModel::playerMagic) { magicList ->
             magicModels = magicList
             magicTable.clearMagic()
-            magicList.forEach { magic -> magicTable.magic(magic.name, magic.mana) }
+            magicList.forEach { magic -> magicTable.magic(magic.name, magic.targetDescriptor, magic.mana) }
             magicTable.pack()
             magicTable.height = 300f
         }
@@ -200,8 +200,9 @@ class CombatView(
 
     override fun onBackPressed() {
         if (uiState == UiCombatState.SELECT_TARGET) {
-            uiState = UiCombatState.SELECT_ACTION
-            viewModel.stopSelection()
+            if (viewModel.stopOrRevertSelection()) {
+                uiState = UiCombatState.SELECT_ACTION
+            }
             return
         } else if (uiState == UiCombatState.SELECT_MAGIC) {
             magicTable.isVisible = false
@@ -212,11 +213,12 @@ class CombatView(
 
     override fun onSelectPressed() {
         if (uiState == UiCombatState.SELECT_TARGET) {
-            viewModel.confirmTargetSelection()
-            uiState = UiCombatState.SELECT_ACTION
-            attackBtn.isChecked = true
-            magicBtn.isChecked = true
-            itemBtn.isChecked = true
+            if (viewModel.confirmTargetSelection()) {
+                uiState = UiCombatState.SELECT_ACTION
+                attackBtn.isChecked = true
+                magicBtn.isChecked = true
+                itemBtn.isChecked = true
+            }
             return
         } else if (uiState == UiCombatState.SELECT_MAGIC) {
             uiState = UiCombatState.SELECT_TARGET

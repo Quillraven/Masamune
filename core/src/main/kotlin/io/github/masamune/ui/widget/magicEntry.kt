@@ -21,6 +21,7 @@ import ktx.scene2d.label
 @Scene2dDsl
 class MagicEntryWidget(
     title: String,
+    targetDescriptor: String,
     mana: Int,
     skin: Skin,
 ) : Table(skin), KTable {
@@ -34,12 +35,10 @@ class MagicEntryWidget(
             cell.padRight(5f).padLeft(5f)
         }
 
-        label(title, defaultStyle, skin) {
+        val colorMana = skin.getColor("blue")
+        val colorDescriptor = skin.getColor("red")
+        label("$title [#${colorDescriptor}]${targetDescriptor.first()}[] [#$colorMana]${mana}[]", defaultStyle, skin) {
             it.left().expandX()
-        }
-        val colorMana = skin.getColor("mana")
-        label("([#$colorMana]${mana}[])", defaultStyle, skin) {
-            it.right().padLeft(15f)
         }
     }
 
@@ -52,7 +51,8 @@ class MagicEntryWidget(
 @Scene2dDsl
 fun <S> KWidget<S>.magicEntry(
     title: String,
+    targetDescriptor: String,
     mana: Int,
     skin: Skin,
     init: (@Scene2dDsl MagicEntryWidget).(S) -> Unit = {},
-): MagicEntryWidget = actor(MagicEntryWidget(title, mana, skin), init)
+): MagicEntryWidget = actor(MagicEntryWidget(title, targetDescriptor, mana, skin), init)

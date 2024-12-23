@@ -32,8 +32,8 @@ com.badlogic.gdx.graphics.Color: {
 	highlight_red: {
 		hex: b20000ff
 	}
-	mana: {
-		hex: 004cffff
+	blue: {
+		hex: 0000ffff
 	}
 	red: {
 		hex: ee121dff

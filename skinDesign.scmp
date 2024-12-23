@@ -708,11 +708,11 @@ jsonData: {
 			class: com.ray3k.skincomposer.data.ColorData
 			color: {
 				r: 0
-				g: 0.29803923
+				g: 0
 				b: 1
 				a: 1
 			}
-			name: mana
+			name: blue
 		}
 		{
 			class: com.ray3k.skincomposer.data.ColorData

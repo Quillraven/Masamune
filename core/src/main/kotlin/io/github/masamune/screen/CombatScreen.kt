@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.asset.AssetService
@@ -23,7 +22,6 @@ import io.github.masamune.asset.ShaderService.Companion.useShader
 import io.github.masamune.asset.SkinAsset
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
-import io.github.masamune.combat.action.ActionTargetType
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Facing
@@ -33,7 +31,6 @@ import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
-import io.github.masamune.event.CombatPlayerActionEvent
 import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.input.ControllerStateUI
@@ -50,7 +47,6 @@ import io.github.masamune.ui.model.CombatViewModel
 import io.github.masamune.ui.view.View
 import io.github.masamune.ui.view.combatView
 import ktx.app.KtxScreen
-import ktx.app.gdxError
 import ktx.log.logger
 import ktx.math.vec3
 import ktx.scene2d.actors
@@ -248,38 +244,7 @@ class CombatScreen(
         }
 
         // TODO remove debug
-        fun getEnemyTarget(targets: MutableEntityBag, targetType: ActionTargetType) {
-            targets.clear()
-            when (targetType) {
-                ActionTargetType.SINGLE -> targets += enemyEntities.first()
-                ActionTargetType.MULTI -> {
-                    targets += enemyEntities.take(2)
-                }
-
-                ActionTargetType.ALL -> targets += enemyEntities
-                else -> gdxError("Simon what have you done?!")
-            }
-        }
-
         when {
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> with(world) {
-                val player = playerEntities.first()
-                player[Combat].run {
-                    action = availableActionTypes.first { it == ActionType.FIREBALL }()
-                    getEnemyTarget(targets, action.targetType)
-                }
-                eventService.fire(CombatPlayerActionEvent(player))
-            }
-
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> with(world) {
-                val player = playerEntities.first()
-                player[Combat].run {
-                    action = availableActionTypes.first { it == ActionType.FIREBOLT }()
-                    getEnemyTarget(targets, action.targetType)
-                }
-                eventService.fire(CombatPlayerActionEvent(player))
-            }
-
             Gdx.input.isKeyJustPressed(Input.Keys.R) -> {
                 val view = stage.actors.filterIsInstance<View<*>>().single()
                 stage.root.removeActor(view)

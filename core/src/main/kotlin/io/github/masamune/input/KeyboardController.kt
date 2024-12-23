@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatPlayerActionEvent
+import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.DialogEndEvent
 import io.github.masamune.event.Event
@@ -103,6 +104,7 @@ class KeyboardController(
             is MapTransitionEndEvent -> activeState = gameState
             is CombatPlayerActionEvent -> activeState = disabledState
             is CombatNextTurnEvent -> activeState = uiState
+            is CombatStartEvent -> activeState = uiState
             else -> Unit
         }
     }

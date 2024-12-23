@@ -34,8 +34,8 @@ class MagicTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
         selectedMagic = 0
     }
 
-    fun magic(title: String, mana: Int) {
-        val magicEntry = scene2d.magicEntry(title, mana, skin) {
+    fun magic(title: String, targetDescriptor: String, mana: Int) {
+        val magicEntry = scene2d.magicEntry(title, targetDescriptor, mana, skin) {
             select(!this@MagicTable.contentTable.hasChildren())
         }
         val cell = contentTable.add(magicEntry)
