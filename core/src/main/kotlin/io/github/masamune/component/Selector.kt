@@ -6,7 +6,6 @@ import com.github.quillraven.fleks.Entity
 
 data class Selector(
     var target: Entity,
-    var targetIdx: Int,
     var confirmed: Boolean,
 ) : Component<Selector> {
     override fun type() = Selector

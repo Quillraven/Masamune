@@ -40,6 +40,7 @@ import io.github.masamune.system.CombatSystem
 import io.github.masamune.system.DissolveSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
+import io.github.masamune.system.SelectorSystem
 import io.github.masamune.system.ShakeSystem
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
@@ -104,6 +105,7 @@ class CombatScreen(
                 add(DissolveSystem())
                 add(ScaleSystem())
                 add(ShakeSystem())
+                add(SelectorSystem())
                 add(ScreenBgdRenderSystem())
                 add(RenderSystem())
             }

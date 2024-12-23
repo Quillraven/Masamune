@@ -227,7 +227,6 @@ class CombatView(
             return
         }
 
-        viewModel.playSndMenuAccept()
         when (uiAction) {
             UiAction.ATTACK -> {
                 uiState = UiCombatState.SELECT_TARGET

@@ -5,10 +5,13 @@ import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import com.github.quillraven.fleks.collection.compareEntityBy
-import com.github.quillraven.fleks.collection.mutableEntityBagOf
+import com.github.quillraven.fleks.collection.EntityBagIterator
+import com.github.quillraven.fleks.collection.MutableEntityBag
+import com.github.quillraven.fleks.collection.compareEntity
+import com.github.quillraven.fleks.collection.iterator
 import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.ActionTargetType
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
@@ -28,6 +31,7 @@ import io.github.masamune.event.EventService
 import io.github.masamune.tiledmap.AnimationType
 import ktx.log.logger
 import ktx.math.vec2
+import ktx.math.vec3
 
 class CombatViewModel(
     bundle: I18NBundle,
@@ -39,15 +43,19 @@ class CombatViewModel(
     private val charPropAtlas: CachingAtlas,
 ) : ViewModel(bundle, audioService) {
 
-    private val playerEntities = world.family { all(Player, Combat) }
-
     // Separate enemy bag because we sort them by x coordinate which makes it more intuitive for target selection.
     // The left most enemy is the first target while the right most entity is the last target.
     // The normal enemy sorting is by agility which does not make sense for target selection.
-    private val enemyEntities = mutableEntityBagOf()
-    private val enemyComparator = compareEntityBy(Transform, world)
-    private val selectorEntities = world.family { all(Selector) }
+    private val enemyEntities = MutableEntityBag(4)
+    private val playerEntities = MutableEntityBag(4)
+    private val targetComparator = compareEntity(world) { e1, e2 ->
+        e1[Transform].position.x.compareTo(e2[Transform].position.x)
+    }
+
+    // target selection stuff
     private var targetType = ActionTargetType.NONE
+    private val selectorEntities = world.family { all(Selector) }
+    private lateinit var selectEntityIterator: EntityBagIterator
     private var activeSelector = Entity.NONE
 
     // view attributes
@@ -77,19 +85,25 @@ class CombatViewModel(
                     )
                 }
 
-                // position UI elements according to player position
-                onResize()
-
-                // store enemy entities for easier target selection
+                // store entities for easier target selection
                 enemyEntities.clear()
                 enemyEntities += event.enemies
-                enemyEntities.sort(enemyComparator)
+                enemyEntities.sort(targetComparator)
+                playerEntities.clear()
+                playerEntities += player
+                playerEntities.sort(targetComparator)
+
+                // position UI elements according to player position
+                onResize()
             }
 
             is CombatNextTurnEvent -> {
                 enemyEntities.clear()
                 enemyEntities += event.enemies
-                enemyEntities.sort(enemyComparator)
+                enemyEntities.sort(targetComparator)
+                playerEntities.clear()
+                playerEntities += event.player
+                playerEntities.sort(targetComparator)
             }
 
             is CombatEntityTakeDamageEvent -> {
@@ -121,30 +135,39 @@ class CombatViewModel(
         }
     }
 
-    private fun World.spawnSelectorEntity(target: Entity, targetIdx: Int, confirmed: Boolean): Entity = with(world) {
-        val targetTransform = target[Transform]
-        this.entity {
-            it += Transform(targetTransform.position.cpy(), targetTransform.size.cpy(), 1.2f)
-            val animationCmp = Animation.ofAtlas(charPropAtlas, "select", AnimationType.IDLE, speed = SELECTOR_SPEED)
-            it += animationCmp
-            it += Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
-            it += Selector(target, targetIdx, confirmed)
-        }
+    private fun World.spawnSelectorEntity(target: Entity, confirmed: Boolean): Entity = this.entity {
+        // position and size don't matter because they get updated in the SelectorSystem
+        it += Transform(vec3(), vec2(), SELECTOR_SCALE)
+        val animationCmp = Animation.ofAtlas(charPropAtlas, "select", AnimationType.IDLE, speed = SELECTOR_SPEED)
+        it += animationCmp
+        it += Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
+        it += Selector(target, confirmed)
     }
 
-    private fun spawnTargetSelectorEntities() = with(world) {
+    /**
+     * Spawns target selection entities based on the [targetType].
+     * If [forEnemy] is true then only enemy entities can be targeted.
+     * If [forEnemy] is false then only friendly entities can be targeted.
+     */
+    private fun spawnTargetSelectorEntities(forEnemy: Boolean) = with(world) {
+        selectEntityIterator = if (forEnemy) {
+            enemyEntities.iterator()
+        } else {
+            playerEntities.iterator()
+        }
+
         when (targetType) {
             ActionTargetType.SINGLE -> {
-                activeSelector = spawnSelectorEntity(enemyEntities.first(), 0, true)
+                activeSelector = spawnSelectorEntity(selectEntityIterator.next(), true)
             }
 
             ActionTargetType.MULTI -> {
-                activeSelector = spawnSelectorEntity(enemyEntities.first(), 0, false)
+                activeSelector = spawnSelectorEntity(selectEntityIterator.next(), false)
             }
 
             ActionTargetType.ALL -> {
-                enemyEntities.forEachIndexed { idx, entity ->
-                    spawnSelectorEntity(entity, idx, true)
+                while (selectEntityIterator.hasNext()) {
+                    spawnSelectorEntity(selectEntityIterator.next(), true)
                 }
             }
 
@@ -152,60 +175,61 @@ class CombatViewModel(
         }
     }
 
+    private fun selectPlayerAction(playerCombat: Combat, action: Action, forEnemy: Boolean) {
+        playerCombat.action = action
+        targetType = action.targetType
+        spawnTargetSelectorEntities(forEnemy)
+        playSndMenuAccept()
+    }
+
     fun selectAttack() = with(world) {
-        val player = playerEntities.single()
-        val combatCmp = player[Combat]
-        combatCmp.action = combatCmp.attackAction
-        targetType = combatCmp.action.targetType
-        spawnTargetSelectorEntities()
+        val combatCmp = playerEntities.single()[Combat]
+        selectPlayerAction(combatCmp, combatCmp.attackAction, true)
     }
 
     fun selectMagic(magicModel: MagicModel) = with(world) {
-        val player = playerEntities.single()
-        val combatCmp = player[Combat]
-        combatCmp.action = combatCmp.magicActions.single { it.type == magicModel.type }
-        targetType = combatCmp.action.targetType
-        spawnTargetSelectorEntities()
-        this@CombatViewModel.playSndMenuAccept()
+        val combatCmp = playerEntities.single()[Combat]
+        selectPlayerAction(combatCmp, combatCmp.magicActions.single { it.type == magicModel.type }, true)
     }
 
-    private fun updateSelection() = with(world) {
-        log.debug { "Update selection to: ${selectorEntities.map { it[Selector].targetIdx }}" }
+    fun selectPrevTarget() {
+        if (targetType == ActionTargetType.ALL) {
+            return
+        }
 
-        val selectorCmp = activeSelector[Selector]
-        val target = enemyEntities[selectorCmp.targetIdx]
-        val (targetPos, targetSize) = target[Transform]
-        val selectorTransform = activeSelector[Transform]
-        selectorTransform.position.set(targetPos)
-        selectorTransform.size.set(targetSize)
-        selectorCmp.target = target
-    }
-
-    fun selectPrevTarget() = with(world) {
-        if (targetType == ActionTargetType.SINGLE || targetType == ActionTargetType.MULTI) {
-            val selectorCmp = activeSelector[Selector]
-            if (selectorCmp.targetIdx == 0) {
-                selectorCmp.targetIdx = enemyEntities.size - 1
-            } else {
-                selectorCmp.targetIdx = selectorCmp.targetIdx - 1
-            }
-
-            updateSelection()
-            this@CombatViewModel.playSndMenuClick()
+        playSndMenuClick()
+        with(world) {
+            activeSelector[Selector].target = selectEntityIterator.previous(loop = true)
+            log.debug { "Update selection to: ${selectorEntities.map { it[Selector].target }}" }
         }
     }
 
-    fun selectNextTarget() = with(world) {
-        if (targetType == ActionTargetType.SINGLE || targetType == ActionTargetType.MULTI) {
-            val selectorCmp = activeSelector[Selector]
-            if (selectorCmp.targetIdx == enemyEntities.size - 1) {
-                selectorCmp.targetIdx = 0
-            } else {
-                selectorCmp.targetIdx = selectorCmp.targetIdx + 1
-            }
+    fun selectNextTarget() {
+        if (targetType == ActionTargetType.ALL) {
+            return
+        }
 
-            updateSelection()
-            this@CombatViewModel.playSndMenuClick()
+        playSndMenuClick()
+        with(world) {
+            activeSelector[Selector].target = selectEntityIterator.next(loop = true)
+            log.debug { "Update selection to: ${selectorEntities.map { it[Selector].target }}" }
+        }
+    }
+
+    private fun World.confirmSelector(selector: Entity, confirm: Boolean) {
+        selector[Selector].confirmed = confirm
+        if (confirm) {
+            activeSelector[Transform].scale = 0.8f
+            activeSelector[Animation].run {
+                speed = 0f
+                stateTime = 0f
+            }
+            activeSelector[Graphic].color.set(1f, 0.5f, 0.5f, 1f)
+        } else {
+            selector[Animation].speed = SELECTOR_SPEED
+            selector[Transform].scale = SELECTOR_SCALE
+            selector[Graphic].color.set(1f, 1f, 1f, 1f)
+            selectEntityIterator.goToFirst { it == activeSelector[Selector].target }
         }
     }
 
@@ -214,38 +238,28 @@ class CombatViewModel(
             // at least one target was selected -> revert it
             world -= activeSelector
             activeSelector = selectorEntities.first()
-            with(world) {
-                activeSelector[Selector].confirmed = false
-                activeSelector[Animation].speed = SELECTOR_SPEED
-            }
+            world.confirmSelector(activeSelector, false)
+            playSndMenuAbort()
             return false
         }
 
-        selectorEntities.forEach { selector ->
-            world -= selector
-        }
+        selectorEntities.forEach { it.remove() }
         activeSelector = Entity.NONE
         playSndMenuAbort()
         return true
     }
 
     private fun spawnNextMultiSelector() = with(world) {
-        enemyEntities.forEachIndexed { idx, enemy ->
-            if (selectorEntities.none { it[Selector].target == enemy }) {
-                activeSelector = spawnSelectorEntity(enemy, idx, false)
-                this@CombatViewModel.playSndMenuAccept()
-                return@with
-            }
-        }
+        // get first target that has no selector entity linked to it yet
+        val target = selectEntityIterator.goToFirst { enemy -> selectorEntities.none { it[Selector].target == enemy } }
+        activeSelector = spawnSelectorEntity(target, false)
+        playSndMenuAccept()
     }
 
     fun confirmTargetSelection(): Boolean = with(world) {
         if (targetType == ActionTargetType.MULTI && activeSelector[Selector].confirmed == false) {
-            activeSelector[Selector].confirmed = true
-            activeSelector[Animation].run {
-                speed = 0f
-                stateTime = 0f
-            }
+            // multi target selection and selected target was not confirmed yet -> confirm it
+            world.confirmSelector(activeSelector, true)
             if (selectorEntities.numEntities < enemyEntities.size) {
                 // not all targets selected yet
                 spawnNextMultiSelector()
@@ -256,7 +270,7 @@ class CombatViewModel(
         log.debug { "Selected targets: $selectorEntities" }
 
         // play sound effect
-        this@CombatViewModel.playSndMenuAccept()
+        playSndMenuAccept()
         // remove selector entities and update player action's targets
         val player = playerEntities.single()
         val combat = player[Combat]
@@ -274,6 +288,7 @@ class CombatViewModel(
     companion object {
         private val log = logger<CombatViewModel>()
         private const val SELECTOR_SPEED = 1.5f
+        private const val SELECTOR_SCALE = 1.2f
 
         private fun Vector2.toUiPosition(from: Viewport, to: Viewport): Vector2 {
             from.project(this)
