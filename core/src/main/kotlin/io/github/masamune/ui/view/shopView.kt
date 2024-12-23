@@ -174,20 +174,20 @@ class ShopView(
         when (focus) {
             ShopViewFocus.OPTIONS -> {
                 if (optionTable.prevOption()) {
-                    viewModel.optionChanged()
+                    viewModel.playSndMenuClick()
                 }
             }
 
             ShopViewFocus.ITEMS -> {
                 if (itemTable.prevItem()) {
-                    viewModel.optionChanged()
+                    viewModel.playSndMenuClick()
                     updateActiveItem()
                 }
             }
 
             ShopViewFocus.CONFIRM -> {
                 if (popupTable.prevOption()) {
-                    viewModel.optionChanged()
+                    viewModel.playSndMenuClick()
                 }
             }
         }
@@ -197,20 +197,20 @@ class ShopView(
         when (focus) {
             ShopViewFocus.OPTIONS -> {
                 if (optionTable.nextOption()) {
-                    viewModel.optionChanged()
+                    viewModel.playSndMenuClick()
                 }
             }
 
             ShopViewFocus.ITEMS -> {
                 if (itemTable.nextItem()) {
-                    viewModel.optionChanged()
+                    viewModel.playSndMenuClick()
                     updateActiveItem()
                 }
             }
 
             ShopViewFocus.CONFIRM -> {
                 if (popupTable.nextOption()) {
-                    viewModel.optionChanged()
+                    viewModel.playSndMenuClick()
                 }
             }
         }
@@ -276,7 +276,7 @@ class ShopView(
             return
         }
 
-        viewModel.optionOrItemSelected()
+        viewModel.playSndMenuAccept()
         focus = ShopViewFocus.CONFIRM
         itemTable.stopSelectAnimation()
 
@@ -300,7 +300,7 @@ class ShopView(
         when (focus) {
             ShopViewFocus.OPTIONS -> {
                 selectOption()
-                viewModel.optionOrItemSelected()
+                viewModel.playSndMenuAccept()
             }
 
             ShopViewFocus.ITEMS -> onBuyItems()
@@ -308,7 +308,7 @@ class ShopView(
                 closeConfirmPopup()
                 if (popupTable.selectedOption == 0) {
                     // item buy/sell confirmed
-                    viewModel.optionOrItemSelected()
+                    viewModel.playSndMenuAccept()
                     viewModel.buyOrSellItems()
                     itemTable.clearAmounts()
                     if (viewModel.sellMode) {
@@ -317,7 +317,7 @@ class ShopView(
                     }
                     return
                 }
-                viewModel.optionCancelled()
+                viewModel.playSndMenuAbort()
             }
         }
     }
@@ -327,7 +327,7 @@ class ShopView(
             ShopViewFocus.OPTIONS -> {
                 // select 'Quit' option
                 if (optionTable.lastOption()) {
-                    viewModel.optionChanged()
+                    viewModel.playSndMenuClick()
                 }
             }
 
@@ -337,13 +337,13 @@ class ShopView(
                 itemTable.isVisible = false
                 itemInfoTable.isVisible = false
                 optionTable.resumeSelectAnimation()
-                viewModel.optionCancelled()
+                viewModel.playSndMenuAbort()
                 shopStatsTable.clearDiff()
             }
 
             ShopViewFocus.CONFIRM -> {
                 closeConfirmPopup()
-                viewModel.optionCancelled()
+                viewModel.playSndMenuAbort()
             }
         }
     }

@@ -147,13 +147,13 @@ class DialogView(
 
     override fun onUpPressed() {
         if (optionTable.nextOption()) {
-            viewModel.optionChanged()
+            viewModel.playSndMenuClick()
         }
     }
 
     override fun onDownPressed() {
         if (optionTable.prevOption()) {
-            viewModel.optionChanged()
+            viewModel.playSndMenuClick()
         }
     }
 

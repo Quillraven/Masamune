@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.asset.SoundAsset
+import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Stats
@@ -13,7 +15,10 @@ import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-abstract class ViewModel(val bundle: I18NBundle) : EventListener {
+abstract class ViewModel(
+    val bundle: I18NBundle,
+    val audioService: AudioService,
+) : EventListener {
 
     @PublishedApi
     internal val actionsMap = mutableMapOf<KProperty<*>, MutableList<(Any) -> Unit>>()
@@ -106,6 +111,18 @@ abstract class ViewModel(val bundle: I18NBundle) : EventListener {
             "STR" -> "${stats.strength.toInt()}"
             else -> gdxError("Unsupported stat: $statName")
         }
+    }
+
+    fun playSndMenuClick() {
+        audioService.play(SoundAsset.MENU_CLICK)
+    }
+
+    fun playSndMenuAccept() {
+        audioService.play(SoundAsset.MENU_ACCEPT)
+    }
+
+    fun playSndMenuAbort() {
+        audioService.play(SoundAsset.MENU_ABORT)
     }
 
     companion object {

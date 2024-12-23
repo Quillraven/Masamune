@@ -2,11 +2,10 @@ package io.github.masamune.ui.model
 
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Entity
+import io.github.masamune.audio.AudioService
 import io.github.masamune.dialog.Dialog
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.DialogEndEvent
-import io.github.masamune.event.DialogOptionChangeEvent
-import io.github.masamune.event.DialogOptionTriggerEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.ui.model.DialogUiContent.Companion.EMPTY_CONTENT
@@ -24,8 +23,9 @@ data class DialogUiContent(
 
 class DialogViewModel(
     bundle: I18NBundle,
+    audioService: AudioService,
     private val eventService: EventService
-) : ViewModel(bundle) {
+) : ViewModel(bundle, audioService) {
 
     private lateinit var activeDialog: Dialog
     var content: DialogUiContent by propertyNotify(EMPTY_CONTENT)
@@ -33,7 +33,7 @@ class DialogViewModel(
     private var player: Entity = Entity.NONE
 
     fun triggerOption(optionIdx: Int) {
-        eventService.fire(DialogOptionTriggerEvent)
+        playSndMenuAccept()
         if (activeDialog.triggerOption(optionIdx)) {
             // dialog finished
             content = EMPTY_CONTENT
@@ -43,10 +43,6 @@ class DialogViewModel(
 
         // go to next page
         updateContent()
-    }
-
-    fun optionChanged() {
-        eventService.fire(DialogOptionChangeEvent)
     }
 
     private fun updateContent() {

@@ -5,14 +5,9 @@ import com.badlogic.gdx.audio.Sound
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.SoundAsset
-import io.github.masamune.event.DialogBackEvent
-import io.github.masamune.event.DialogOptionChangeEvent
-import io.github.masamune.event.DialogOptionTriggerEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.MapChangeEvent
-import io.github.masamune.event.MenuBeginEvent
-import io.github.masamune.ui.model.MenuType
 import ktx.log.logger
 import ktx.tiled.propertyOrNull
 
@@ -98,10 +93,6 @@ class AudioService(
 
     override fun onEvent(event: Event) {
         when {
-            event is DialogOptionChangeEvent -> play(SoundAsset.MENU_CLICK)
-            event is DialogOptionTriggerEvent -> play(SoundAsset.MENU_ACCEPT)
-            event is DialogBackEvent -> play(SoundAsset.MENU_ABORT)
-            event is MenuBeginEvent && event.type == MenuType.GAME -> play(SoundAsset.MENU_ACCEPT)
             event is MapChangeEvent -> {
                 event.tiledMap.propertyOrNull<String>("music")?.let { musicAssetStr ->
                     val musicAsset = MusicAsset.valueOf(musicAssetStr)

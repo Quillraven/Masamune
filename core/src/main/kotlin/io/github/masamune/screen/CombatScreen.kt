@@ -76,7 +76,15 @@ class CombatScreen(
     private val enemyEntities = world.family { none(Player).all(Combat) }
 
     // view model
-    private val combatViewModel = CombatViewModel(bundle, world, eventService, gameViewport, uiViewport, assetService[AtlasAsset.CHARS_AND_PROPS])
+    private val combatViewModel = CombatViewModel(
+        bundle,
+        audioService,
+        world,
+        eventService,
+        gameViewport,
+        uiViewport,
+        assetService[AtlasAsset.CHARS_AND_PROPS]
+    )
 
     private fun combatWorld(): World {
         return configureWorld {

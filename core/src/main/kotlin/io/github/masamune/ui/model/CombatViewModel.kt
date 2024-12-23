@@ -8,6 +8,7 @@ import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.compareEntityBy
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import io.github.masamune.asset.CachingAtlas
+import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.action.ActionTargetType
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
@@ -22,9 +23,6 @@ import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatPlayerActionEvent
 import io.github.masamune.event.CombatStartEvent
-import io.github.masamune.event.DialogBackEvent
-import io.github.masamune.event.DialogOptionChangeEvent
-import io.github.masamune.event.DialogOptionTriggerEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.tiledmap.AnimationType
@@ -33,20 +31,26 @@ import ktx.math.vec2
 
 class CombatViewModel(
     bundle: I18NBundle,
+    audioService: AudioService,
     private val world: World,
     private val eventService: EventService,
     private val gameViewport: Viewport,
     private val uiViewport: Viewport,
     private val charPropAtlas: CachingAtlas,
-) : ViewModel(bundle) {
+) : ViewModel(bundle, audioService) {
 
     private val playerEntities = world.family { all(Player, Combat) }
+
+    // Separate enemy bag because we sort them by x coordinate which makes it more intuitive for target selection.
+    // The left most enemy is the first target while the right most entity is the last target.
+    // The normal enemy sorting is by agility which does not make sense for target selection.
     private val enemyEntities = mutableEntityBagOf()
+    private val enemyComparator = compareEntityBy(Transform, world)
     private val selectorEntities = world.family { all(Selector) }
     private var targetType = ActionTargetType.NONE
-    private var activeSelector = Entity.NONE // only needed for MULTI target type
-    private val enemyComparator = compareEntityBy(Transform, world)
+    private var activeSelector = Entity.NONE
 
+    // view attributes
     var playerLife: Pair<Float, Float> by propertyNotify(0f to 0f)
     var playerMana: Pair<Float, Float> by propertyNotify(0f to 0f)
     var playerName: String by propertyNotify("")
@@ -109,26 +113,12 @@ class CombatViewModel(
     }
 
     fun onResize() = with(world) {
+        // update player position to also trigger an update of view element positions in CombatView
         playerEntities.singleOrNull()?.let { player ->
             val playerPos = player[Transform].position
             playerPosition.set(playerPos.x, playerPos.y).toUiPosition(gameViewport, uiViewport)
             notify(CombatViewModel::playerPosition, playerPosition)
         }
-    }
-
-    fun optionChanged() {
-        // this triggers a sound effect
-        eventService.fire(DialogOptionChangeEvent)
-    }
-
-    fun optionSelected() {
-        // this triggers a sound effect
-        eventService.fire(DialogOptionTriggerEvent)
-    }
-
-    fun optionCancelled() {
-        // this triggers a sound effect
-        eventService.fire(DialogBackEvent)
     }
 
     private fun World.spawnSelectorEntity(target: Entity, targetIdx: Int, confirmed: Boolean): Entity = with(world) {
@@ -176,7 +166,7 @@ class CombatViewModel(
         combatCmp.action = combatCmp.magicActions.single { it.type == magicModel.type }
         targetType = combatCmp.action.targetType
         spawnTargetSelectorEntities()
-        optionSelected()
+        this@CombatViewModel.playSndMenuAccept()
     }
 
     private fun updateSelection() = with(world) {
@@ -201,7 +191,7 @@ class CombatViewModel(
             }
 
             updateSelection()
-            optionChanged()
+            this@CombatViewModel.playSndMenuClick()
         }
     }
 
@@ -215,7 +205,7 @@ class CombatViewModel(
             }
 
             updateSelection()
-            optionChanged()
+            this@CombatViewModel.playSndMenuClick()
         }
     }
 
@@ -235,7 +225,7 @@ class CombatViewModel(
             world -= selector
         }
         activeSelector = Entity.NONE
-        optionCancelled()
+        playSndMenuAbort()
         return true
     }
 
@@ -243,7 +233,7 @@ class CombatViewModel(
         enemyEntities.forEachIndexed { idx, enemy ->
             if (selectorEntities.none { it[Selector].target == enemy }) {
                 activeSelector = spawnSelectorEntity(enemy, idx, false)
-                optionSelected()
+                this@CombatViewModel.playSndMenuAccept()
                 return@with
             }
         }
@@ -266,7 +256,7 @@ class CombatViewModel(
         log.debug { "Selected targets: $selectorEntities" }
 
         // play sound effect
-        optionSelected()
+        this@CombatViewModel.playSndMenuAccept()
         // remove selector entities and update player action's targets
         val player = playerEntities.single()
         val combat = player[Combat]

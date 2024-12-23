@@ -15,6 +15,7 @@ import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.SkinAsset
 import io.github.masamune.asset.TiledMapAsset
+import io.github.masamune.audio.AudioService
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
@@ -54,6 +55,7 @@ class GameScreen(
     private val shaderService: ShaderService = masamune.shader,
     private val mapTransitionService: MapTransitionService = masamune.mapTransition,
     private val assetService: AssetService = masamune.asset,
+    private val audioService: AudioService = masamune.audio,
 ) : KtxScreen {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
@@ -117,10 +119,10 @@ class GameScreen(
         // setup UI views
         stage.clear()
         stage.actors {
-            dialogView(DialogViewModel(bundle, eventService), skin) { isVisible = false }
-            gameMenuView(GameMenuViewModel(bundle, eventService), skin) { isVisible = false }
-            statsView(StatsViewModel(bundle, world, eventService), skin) { isVisible = false }
-            shopView(ShopViewModel(bundle, world, tiledService), skin) { isVisible = false }
+            dialogView(DialogViewModel(bundle, audioService, eventService), skin) { isVisible = false }
+            gameMenuView(GameMenuViewModel(bundle, audioService, eventService), skin) { isVisible = false }
+            statsView(StatsViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
+            shopView(ShopViewModel(bundle, audioService, world, tiledService), skin) { isVisible = false }
         }
 
         // register all event listeners

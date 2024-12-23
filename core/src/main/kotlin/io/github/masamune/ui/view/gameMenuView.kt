@@ -44,13 +44,13 @@ class GameMenuView(
 
     override fun onDownPressed() {
         if (optionTable.nextOption()) {
-            viewModel.optionChanged()
+            viewModel.playSndMenuClick()
         }
     }
 
     override fun onUpPressed() {
         if (optionTable.prevOption()) {
-            viewModel.optionChanged()
+            viewModel.playSndMenuClick()
         }
     }
 

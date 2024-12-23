@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
@@ -13,9 +14,6 @@ import io.github.masamune.component.Inventory.Companion.removeItem
 import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Stats
-import io.github.masamune.event.DialogBackEvent
-import io.github.masamune.event.DialogOptionChangeEvent
-import io.github.masamune.event.DialogOptionTriggerEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.ShopBeginEvent
@@ -27,10 +25,11 @@ import ktx.log.logger
 
 class ShopViewModel(
     bundle: I18NBundle,
+    audioService: AudioService,
     private val world: World,
     private val tiledService: TiledService,
     private val eventService: EventService = tiledService.eventService,
-) : ViewModel(bundle) {
+) : ViewModel(bundle, audioService) {
 
     private val weaponOption = ShopOption.WEAPON to bundle["menu.option.weapon"]
     private val armorOption = ShopOption.ARMOR to bundle["menu.option.armor"]
@@ -140,8 +139,7 @@ class ShopViewModel(
         val selectedItem = activeItems[itemIdx]
         if (sellMode) {
             if (selectedItem.selected < selectedItem.amount) {
-                // this triggers a sound effect
-                eventService.fire(DialogOptionChangeEvent)
+                playSndMenuClick()
                 totalCost += selectedItem.cost
                 ++selectedItem.selected
             }
@@ -154,8 +152,7 @@ class ShopViewModel(
             return@with selectedItem.selected
         }
 
-        // this triggers a sound effect
-        eventService.fire(DialogOptionChangeEvent)
+        playSndMenuClick()
         totalCost += selectedItem.cost
         return ++selectedItem.selected
     }
@@ -167,8 +164,7 @@ class ShopViewModel(
             return 0
         }
 
-        // this triggers a sound effect
-        eventService.fire(DialogOptionChangeEvent)
+        playSndMenuClick()
         totalCost -= selectedItem.cost
         return --selectedItem.selected
     }
@@ -225,21 +221,6 @@ class ShopViewModel(
         }
 
         buyItems()
-    }
-
-    fun optionChanged() {
-        // this triggers a sound effect
-        eventService.fire(DialogOptionChangeEvent)
-    }
-
-    fun optionOrItemSelected() {
-        // this triggers a sound effect
-        eventService.fire(DialogOptionTriggerEvent)
-    }
-
-    fun optionCancelled() {
-        // this triggers a sound effect
-        eventService.fire(DialogBackEvent)
     }
 
     fun calcDiff(selectedItem: ItemModel): Map<UIStats, Int> {

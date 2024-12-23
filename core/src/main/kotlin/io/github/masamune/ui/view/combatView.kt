@@ -160,7 +160,7 @@ class CombatView(
             attackBtn.isChecked = false
             magicBtn.isChecked = true
             itemBtn.isChecked = true
-            viewModel.optionChanged()
+            viewModel.playSndMenuClick()
         }
     }
 
@@ -170,7 +170,7 @@ class CombatView(
             return
         } else if (uiState == UiCombatState.SELECT_MAGIC) {
             magicTable.prevMagic()
-            viewModel.optionChanged()
+            viewModel.playSndMenuClick()
             return
         }
 
@@ -178,7 +178,7 @@ class CombatView(
         attackBtn.isChecked = true
         magicBtn.isChecked = false
         itemBtn.isChecked = true
-        viewModel.optionChanged()
+        viewModel.playSndMenuClick()
     }
 
     override fun onRightPressed() {
@@ -187,7 +187,7 @@ class CombatView(
             return
         } else if (uiState == UiCombatState.SELECT_MAGIC) {
             magicTable.nextMagic()
-            viewModel.optionChanged()
+            viewModel.playSndMenuClick()
             return
         }
 
@@ -195,7 +195,7 @@ class CombatView(
         attackBtn.isChecked = true
         magicBtn.isChecked = true
         itemBtn.isChecked = false
-        viewModel.optionChanged()
+        viewModel.playSndMenuClick()
     }
 
     override fun onBackPressed() {
@@ -207,7 +207,7 @@ class CombatView(
         } else if (uiState == UiCombatState.SELECT_MAGIC) {
             magicTable.isVisible = false
             uiState = UiCombatState.SELECT_ACTION
-            viewModel.optionCancelled()
+            viewModel.playSndMenuAbort()
         }
     }
 
@@ -227,7 +227,7 @@ class CombatView(
             return
         }
 
-        viewModel.optionSelected()
+        viewModel.playSndMenuAccept()
         when (uiAction) {
             UiAction.ATTACK -> {
                 uiState = UiCombatState.SELECT_TARGET

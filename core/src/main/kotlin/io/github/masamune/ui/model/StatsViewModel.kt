@@ -2,6 +2,7 @@ package io.github.masamune.ui.model
 
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.World
+import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Name
@@ -14,9 +15,10 @@ import io.github.masamune.event.MenuEndEvent
 
 class StatsViewModel(
     bundle: I18NBundle,
+    audioService: AudioService,
     private val world: World,
     private val eventService: EventService,
-) : ViewModel(bundle) {
+) : ViewModel(bundle, audioService) {
 
     private val playerEntities = world.family { all(Player) }
 
