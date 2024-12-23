@@ -151,19 +151,22 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		parent: default
 	}
 	imgBtnSword: {
-		parent: default
 		imageUp: icon_sword
 		imageDown: icon_sword
+		up: button_pressed
+		checked: button_normal
 	}
 	imgBtnMagic: {
-		parent: default
 		imageUp: icon_magic
 		imageDown: icon_magic
+		up: button_pressed
+		checked: button_normal
 	}
 	imgBtnItems: {
-		parent: default
 		imageUp: icon_items
 		imageDown: icon_items
+		up: button_pressed
+		checked: button_normal
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {

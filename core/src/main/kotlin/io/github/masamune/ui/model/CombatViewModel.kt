@@ -64,6 +64,7 @@ class CombatViewModel(
     var playerName: String by propertyNotify("")
     var playerPosition: Vector2 by propertyNotify(vec2())
     var playerMagic: List<MagicModel> by propertyNotify(emptyList<MagicModel>())
+    var combatTurn: Int by propertyNotify(-1)
 
     override fun onEvent(event: Event) = with(world) {
         when (event) {
@@ -95,6 +96,7 @@ class CombatViewModel(
 
                 // position UI elements according to player position
                 onResize()
+                combatTurn = 0
             }
 
             is CombatNextTurnEvent -> {
@@ -104,6 +106,7 @@ class CombatViewModel(
                 playerEntities.clear()
                 playerEntities += event.player
                 playerEntities.sort(targetComparator)
+                ++combatTurn
             }
 
             is CombatEntityTakeDamageEvent -> {

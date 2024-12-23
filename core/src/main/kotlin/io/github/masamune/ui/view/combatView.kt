@@ -1,6 +1,7 @@
 package io.github.masamune.ui.view
 
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
@@ -12,11 +13,14 @@ import io.github.masamune.ui.model.CombatViewModel
 import io.github.masamune.ui.model.MagicModel
 import io.github.masamune.ui.widget.MagicTable
 import io.github.masamune.ui.widget.magicTable
+import ktx.actors.plusAssign
 import ktx.actors.txt
+import ktx.scene2d.KButtonTable
 import ktx.scene2d.KGroup
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
+import ktx.scene2d.buttonGroup
 import ktx.scene2d.defaultStyle
 import ktx.scene2d.imageButton
 import ktx.scene2d.label
@@ -44,7 +48,7 @@ class CombatView(
     private val playerManaLabel: Label
     private val manaProgressBar: ProgressBar
 
-    private val actionTable: Table
+    private val actionTable: KButtonTable
     private val attackBtn: ImageButton
     private val magicBtn: ImageButton
     private val itemBtn: ImageButton
@@ -92,23 +96,23 @@ class CombatView(
             pack()
         }
 
-        actionTable = table(skin) {
+        actionTable = buttonGroup(minCheckedCount = 0, maxCheckedCount = 1, skin) {
             this@CombatView.attackBtn = imageButton("imgBtnSword", skin) {
                 image.setScaling(Scaling.fit)
                 imageCell.size(ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD, ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD)
-                this.isChecked = true
+                this.isChecked = false
                 it.colspan(2).center().size(ACTION_BTN_SIZE, ACTION_BTN_SIZE).row()
             }
             this@CombatView.magicBtn = imageButton("imgBtnMagic", skin) {
                 image.setScaling(Scaling.fit)
                 imageCell.size(ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD, ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD)
-                this.isChecked = true
+                this.isChecked = false
                 it.padRight(ACTION_BTN_SIZE * 0.5f).size(ACTION_BTN_SIZE, ACTION_BTN_SIZE)
             }
             this@CombatView.itemBtn = imageButton("imgBtnItems", skin) {
                 image.setScaling(Scaling.fit)
                 imageCell.size(ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD, ACTION_BTN_SIZE - ACTION_BTN_IMG_PAD)
-                this.isChecked = true
+                this.isChecked = false
                 it.padLeft(ACTION_BTN_SIZE * 0.5f).size(ACTION_BTN_SIZE, ACTION_BTN_SIZE)
             }
 
@@ -145,100 +149,113 @@ class CombatView(
         model.onPropertyChange(CombatViewModel::playerPosition) { position ->
             val infoW = playerInfoTable.width
             playerInfoTable.setPosition(position.x - infoW, 5f)
+            playerInfoTable.toFront()
             val actionW = actionTable.width
-            actionTable.setPosition(position.x - infoW * 0.5f - actionW * 0.5f, playerInfoTable.height + 10f)
+            actionTable.setPosition(
+                position.x - infoW * 0.5f - actionW * 0.5f,
+                playerInfoTable.height - actionTable.height * 0.7f
+            )
             magicTable.setPosition(
                 position.x - infoW * 0.5f - magicTable.width * 0.5f,
                 playerInfoTable.height + 20f + actionTable.height
             )
+        }
+        model.onPropertyChange(CombatViewModel::combatTurn) {
+            playerInfoTable.height + 10f
+            actionTable.actions.clear()
+            actionTable += Actions.moveBy(0f, actionTable.height * 0.7f + 10f, 1f, Interpolation.bounceIn)
         }
     }
 
     override fun onUpPressed() {
         if (uiState == UiCombatState.SELECT_ACTION) {
             uiAction = UiAction.ATTACK
-            attackBtn.isChecked = false
-            magicBtn.isChecked = true
-            itemBtn.isChecked = true
+            attackBtn.isChecked = true
             viewModel.playSndMenuClick()
         }
     }
 
     override fun onLeftPressed() {
-        if (uiState == UiCombatState.SELECT_TARGET) {
-            viewModel.selectPrevTarget()
-            return
-        } else if (uiState == UiCombatState.SELECT_MAGIC) {
-            magicTable.prevMagic()
-            viewModel.playSndMenuClick()
-            return
-        }
+        when (uiState) {
+            UiCombatState.SELECT_ACTION -> {
+                uiAction = UiAction.MAGIC
+                magicBtn.isChecked = true
+                viewModel.playSndMenuClick()
+            }
 
-        uiAction = UiAction.MAGIC
-        attackBtn.isChecked = true
-        magicBtn.isChecked = false
-        itemBtn.isChecked = true
-        viewModel.playSndMenuClick()
+            UiCombatState.SELECT_TARGET -> viewModel.selectPrevTarget()
+            UiCombatState.SELECT_MAGIC -> {
+                magicTable.prevMagic()
+                viewModel.playSndMenuClick()
+            }
+        }
     }
 
     override fun onRightPressed() {
-        if (uiState == UiCombatState.SELECT_TARGET) {
-            viewModel.selectNextTarget()
-            return
-        } else if (uiState == UiCombatState.SELECT_MAGIC) {
-            magicTable.nextMagic()
-            viewModel.playSndMenuClick()
-            return
-        }
+        when (uiState) {
+            UiCombatState.SELECT_ACTION -> {
+                uiAction = UiAction.ITEM
+                itemBtn.isChecked = true
+                viewModel.playSndMenuClick()
+            }
 
-        uiAction = UiAction.ITEM
-        attackBtn.isChecked = true
-        magicBtn.isChecked = true
-        itemBtn.isChecked = false
-        viewModel.playSndMenuClick()
+            UiCombatState.SELECT_TARGET -> viewModel.selectNextTarget()
+            UiCombatState.SELECT_MAGIC -> {
+                magicTable.nextMagic()
+                viewModel.playSndMenuClick()
+            }
+        }
     }
 
     override fun onBackPressed() {
-        if (uiState == UiCombatState.SELECT_TARGET) {
-            if (viewModel.stopOrRevertSelection()) {
-                uiState = UiCombatState.SELECT_ACTION
+        when (uiState) {
+            UiCombatState.SELECT_TARGET -> {
+                if (viewModel.stopOrRevertSelection()) {
+                    uiState = UiCombatState.SELECT_ACTION
+                }
             }
-            return
-        } else if (uiState == UiCombatState.SELECT_MAGIC) {
-            magicTable.isVisible = false
-            uiState = UiCombatState.SELECT_ACTION
-            viewModel.playSndMenuAbort()
+
+            UiCombatState.SELECT_MAGIC -> {
+                magicTable.isVisible = false
+                uiState = UiCombatState.SELECT_ACTION
+                viewModel.playSndMenuAbort()
+            }
+
+            UiCombatState.SELECT_ACTION -> Unit
         }
     }
 
     override fun onSelectPressed() {
-        if (uiState == UiCombatState.SELECT_TARGET) {
-            if (viewModel.confirmTargetSelection()) {
-                uiState = UiCombatState.SELECT_ACTION
-                attackBtn.isChecked = true
-                magicBtn.isChecked = true
-                itemBtn.isChecked = true
-            }
-            return
-        } else if (uiState == UiCombatState.SELECT_MAGIC) {
-            uiState = UiCombatState.SELECT_TARGET
-            viewModel.selectMagic(magicModels[magicTable.selectedMagic])
-            magicTable.isVisible = false
-            return
-        }
+        when (uiState) {
+            UiCombatState.SELECT_ACTION -> when (uiAction) {
+                UiAction.ATTACK -> {
+                    uiState = UiCombatState.SELECT_TARGET
+                    viewModel.selectAttack()
+                }
 
-        when (uiAction) {
-            UiAction.ATTACK -> {
+                UiAction.MAGIC -> {
+                    uiState = UiCombatState.SELECT_MAGIC
+                    magicTable.isVisible = true
+                }
+
+                else -> Unit
+            }
+
+            UiCombatState.SELECT_TARGET -> {
+                if (viewModel.confirmTargetSelection()) {
+                    uiState = UiCombatState.SELECT_ACTION
+                    actionTable.buttonGroup.uncheckAll()
+                    // hide action table again
+                    actionTable.actions.clear()
+                    actionTable += Actions.moveBy(0f, -actionTable.height * 0.7f - 10f, 1f, Interpolation.bounceOut)
+                }
+            }
+
+            UiCombatState.SELECT_MAGIC -> {
                 uiState = UiCombatState.SELECT_TARGET
-                viewModel.selectAttack()
+                viewModel.selectMagic(magicModels[magicTable.selectedMagic])
+                magicTable.isVisible = false
             }
-
-            UiAction.MAGIC -> {
-                uiState = UiCombatState.SELECT_MAGIC
-                magicTable.isVisible = true
-            }
-
-            else -> Unit
         }
     }
 
