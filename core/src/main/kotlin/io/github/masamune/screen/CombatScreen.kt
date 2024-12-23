@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.glutils.FrameBuffer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
@@ -17,7 +17,6 @@ import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.ShaderService
-import io.github.masamune.asset.ShaderService.Companion.resize
 import io.github.masamune.asset.ShaderService.Companion.useShader
 import io.github.masamune.asset.SkinAsset
 import io.github.masamune.asset.SoundAsset
@@ -29,6 +28,7 @@ import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
+import io.github.masamune.component.ScreenBgd
 import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatStartEvent
@@ -48,6 +48,7 @@ import io.github.masamune.ui.view.View
 import io.github.masamune.ui.view.combatView
 import ktx.app.KtxScreen
 import ktx.log.logger
+import ktx.math.vec2
 import ktx.math.vec3
 import ktx.scene2d.actors
 
@@ -69,11 +70,9 @@ class CombatScreen(
     // other stuff
     private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]
     private val keyboardController = KeyboardController(eventService, initialState = ControllerStateUI::class)
-    private var fbo = FrameBuffer(ShaderService.FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
 
     // ecs world
     private val world = combatWorld()
-    private val playerEntities = world.family { all(Player, Combat) }
     private val enemyEntities = world.family { none(Player).all(Combat) }
 
     // view model
@@ -97,6 +96,7 @@ class CombatScreen(
                 add(DissolveSystem())
                 add(ScaleSystem())
                 add(ShakeSystem())
+                add(ScreenBgdRenderSystem())
                 add(RenderSystem())
             }
         }
@@ -115,9 +115,21 @@ class CombatScreen(
 
         // register all event listeners
         registerEventListeners()
-        updateBgdFbo(Gdx.graphics.width, Gdx.graphics.height)
 
-        spawnDummyCombatEntities()
+        // special screen background entity to render GameScreen as blurred background
+        world.entity {
+            it += ScreenBgd(alpha = 0.4f) { batch, fbo ->
+                shaderService.useBlurShader(batch, 6f, fbo) {
+                    val gameScreen = masamune.getScreen<GameScreen>()
+                    gameScreen.resize(fbo.width, fbo.height)
+                    gameScreen.render(0f)
+                }
+            }
+        }
+
+        spawnDummyCombatEntity(agility = 3f, damage = 2f, offsetXY = vec2(-3f, -2f))
+        spawnDummyCombatEntity(agility = 7f, damage = 3f, offsetXY = vec2(-1f, -4f))
+        spawnDummyCombatEntity(agility = 1f, damage = 1f, offsetXY = vec2(1f, -3f))
     }
 
     fun spawnPlayer(gameScreenWorld: World, gameScreenPlayer: Entity) {
@@ -146,13 +158,12 @@ class CombatScreen(
         eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))
     }
 
-    private fun spawnDummyCombatEntities() {
+    private fun spawnDummyCombatEntity(agility: Float, damage: Float, offsetXY: Vector2) {
         val atlas = assetService[AtlasAsset.CHARS_AND_PROPS]
 
-        // enemy 1 slower
         world.entity {
             it += Name("Dummy1")
-            it += Stats(strength = 2f, agility = 3f, damage = 2f, armor = 5f, life = 20f, lifeMax = 20f)
+            it += Stats(strength = 2f, agility = agility, damage = damage, armor = 5f, life = 20f, lifeMax = 20f)
             it += Facing(FacingDirection.DOWN)
             val animationCmp =
                 Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)
@@ -160,55 +171,11 @@ class CombatScreen(
             val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
             it += graphicCmp
             it += Transform(
-                vec3(gameViewport.worldWidth * 0.5f - 3f, gameViewport.worldHeight - 2f, 0f),
+                vec3(gameViewport.worldWidth * 0.5f + offsetXY.x, gameViewport.worldHeight + offsetXY.y, 0f),
                 graphicCmp.regionSize
             )
             it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
         }
-
-        // enemy 2 faster
-        world.entity {
-            it += Name("Dummy2")
-            it += Stats(strength = 2f, agility = 7f, damage = 3f, armor = 5f, life = 20f, lifeMax = 20f)
-            it += Facing(FacingDirection.DOWN)
-            val animationCmp =
-                Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)
-            it += animationCmp
-            val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
-            it += graphicCmp
-            it += Transform(
-                vec3(gameViewport.worldWidth * 0.5f - 1f, gameViewport.worldHeight - 3f, 0f),
-                graphicCmp.regionSize
-            )
-            it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
-        }
-
-        // enemy 3 slower
-        world.entity {
-            it += Name("Dummy3")
-            it += Stats(strength = 2f, agility = 1f, damage = 1f, armor = 5f, life = 20f, lifeMax = 20f)
-            it += Facing(FacingDirection.DOWN)
-            val animationCmp =
-                Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)
-            it += animationCmp
-            val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
-            it += graphicCmp
-            it += Transform(
-                vec3(gameViewport.worldWidth * 0.5f + 1f, gameViewport.worldHeight - 4f, 0f),
-                graphicCmp.regionSize
-            )
-            it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
-        }
-    }
-
-    private fun updateBgdFbo(width: Int, height: Int) {
-        shaderService.useBlurShader(batch, 6f, fbo) {
-            val gameScreen = masamune.getScreen<GameScreen>()
-            gameScreen.resize(width, height)
-            gameScreen.render(0f)
-        }
-        // set fbo texture in RenderSystem to draw it as custom background before the world scene
-        world.system<RenderSystem>().backgroundTex = fbo.colorBufferTexture
     }
 
     private fun registerEventListeners() {
@@ -229,8 +196,7 @@ class CombatScreen(
     override fun resize(width: Int, height: Int) {
         gameViewport.update(width, height, true)
         uiViewport.update(width, height, true)
-        fbo = fbo.resize(width, height)
-        updateBgdFbo(width, height)
+        world.system<ScreenBgdRenderSystem>().onResize(width, height)
         combatViewModel.onResize()
     }
 
@@ -267,6 +233,10 @@ class CombatScreen(
                     )
                 )
             }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.Z) -> {
+                world.family { all(ScreenBgd) }.forEach { it.remove() }
+            }
         }
     }
 
@@ -274,7 +244,6 @@ class CombatScreen(
         log.debug { "Disposing world with '${world.numEntities}' entities" }
         world.dispose()
         stage.dispose()
-        fbo.dispose()
     }
 
     companion object {
