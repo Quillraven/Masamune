@@ -1,5 +1,6 @@
 i:d:/sound:0:1
 i:b:/sound/menu_abort.wav:73332:1
+i:b:/sound/heal1.wav:134072:1
 i:b:/sound/explosion1.wav:50062:1
 i:b:/sound/sword_swipe.wav:117714:1
 i:b:/sound/attack_swipe.wav:117714:1
@@ -25,7 +26,7 @@ i:b:/graphics/chars_and_props.png:30400:1
 i:d:/maps:0:1
 i:b:/maps/village.tmx:3256:1
 i:b:/maps/tileset.tsx:9032:1
-i:b:/maps/objects.tsx:10758:1
+i:b:/maps/objects.tsx:10763:1
 i:d:/maps/objects:0:1
 i:b:/maps/objects/boots.png:468:1
 i:b:/maps/objects/studded_leather.png:423:1
@@ -46,14 +47,14 @@ i:b:/maps/path_to_forest.tmx:3554:1
 i:b:/maps/tileset-orig.png:195892:1
 i:b:/maps/tileset.png:473544:1
 i:d:/ui:0:1
-i:b:/ui/messages_de.properties:4366:1
+i:b:/ui/messages_de.properties:4390:1
 i:b:/ui/fipps_16.fnt:8935:1
 i:b:/ui/PIXEARG_.fnt:10450:1
 i:b:/ui/skin.atlas:2663:1
 i:b:/ui/skin.png:21156:1
-i:b:/ui/messages.properties:3960:1
+i:b:/ui/messages.properties:3981:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
-i:b:/ui/skin.json:4043:1
+i:b:/ui/skin.json:4127:1
 c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
 c:b:/com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:9096:1
 c:b:/com/badlogic/gdx/graphics/g3d/particles/particles.fragment.glsl:820:1
