@@ -31,6 +31,8 @@ import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatPlayerActionEvent
+import io.github.masamune.event.CombatPlayerDefeatEvent
+import io.github.masamune.event.CombatPlayerVictoryEvent
 import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
@@ -80,6 +82,7 @@ class CombatViewModel(
     var combatDamage: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatHeal: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatMana: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
+    var combatDone: Boolean by propertyNotify(false)
 
     fun reset() {
         enemyEntities.clear()
@@ -164,6 +167,8 @@ class CombatViewModel(
                     .toUiPosition(gameViewport, uiViewport)
                 combatMana = uiPos to event.amount.toInt()
             }
+
+            is CombatPlayerVictoryEvent, is CombatPlayerDefeatEvent -> combatDone = true
 
             else -> Unit
         }

@@ -1,7 +1,5 @@
 package io.github.masamune.screen
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Vector2
@@ -33,8 +31,13 @@ import io.github.masamune.component.Player
 import io.github.masamune.component.ScreenBgd
 import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
+import io.github.masamune.event.CombatPlayerDefeatEvent
+import io.github.masamune.event.CombatPlayerVictoryEvent
 import io.github.masamune.event.CombatStartEvent
+import io.github.masamune.event.Event
+import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
+import io.github.masamune.event.UiSelectEvent
 import io.github.masamune.input.ControllerStateUI
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
@@ -63,7 +66,7 @@ class CombatScreen(
     private val assetService: AssetService = masamune.asset,
     private val audioService: AudioService = masamune.audio,
     private val actionExecutorService: ActionExecutorService = masamune.actionExecutor,
-) : KtxScreen {
+) : KtxScreen, EventListener {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(8f, 8f)
     private val uiViewport = ExtendViewport(928f, 522f)
@@ -73,6 +76,7 @@ class CombatScreen(
     // other stuff
     private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]
     private val keyboardController = KeyboardController(eventService, initialState = ControllerStateUI::class)
+    private var combatDone = false
 
     // ecs world
     private val world = combatWorld()
@@ -117,6 +121,8 @@ class CombatScreen(
     }
 
     override fun show() {
+        combatDone = false
+
         // set action executor entity world
         actionExecutorService.world = world
 
@@ -202,6 +208,7 @@ class CombatScreen(
         eventService += stage
         eventService += keyboardController
         eventService += masamune.audio
+        eventService += this
     }
 
     override fun hide() {
@@ -223,15 +230,22 @@ class CombatScreen(
     override fun render(delta: Float) {
         world.update(delta)
 
+        // we need to call useShader because there might be a grayscale shader set for world rendering,
+        // and we need to restore to that shader after UI rendering is done
         batch.useShader(null) {
             uiViewport.apply()
             stage.act(delta)
             stage.draw()
         }
+    }
 
-        // TODO remove debug
+    override fun onEvent(event: Event) {
         when {
-            Gdx.input.isKeyJustPressed(Input.Keys.X) -> {
+            event is CombatPlayerVictoryEvent || event is CombatPlayerDefeatEvent -> {
+                combatDone = true
+            }
+
+            combatDone && event is UiSelectEvent -> {
                 masamune.transitionScreen<GameScreen>(
                     fromType = DefaultTransitionType,
                     toType = BlurTransitionType(

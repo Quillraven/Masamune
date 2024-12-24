@@ -40,7 +40,7 @@ private enum class UiAction {
 }
 
 private enum class UiCombatState {
-    SELECT_ACTION, SELECT_TARGET, SELECT_MAGIC, SELECT_ITEM
+    SELECT_ACTION, SELECT_TARGET, SELECT_MAGIC, SELECT_ITEM, VICTORY_DEFEAT
 }
 
 @Scene2dDsl
@@ -213,6 +213,13 @@ class CombatView(
         model.onPropertyChange(CombatViewModel::combatMana) { (position, amount) ->
             combatTxt(amount, "{JUMP=0.5;5;1;1}", skin.getColor("blue"), position, 2f)
         }
+
+        // victory / defeat
+        model.onPropertyChange(CombatViewModel::combatDone) { isDone ->
+            if (isDone) {
+                uiState = UiCombatState.VICTORY_DEFEAT
+            }
+        }
     }
 
     private fun combatTxt(amount: Int, effect: String, color: Color, position: Vector2, duration: Float) {
@@ -259,6 +266,7 @@ class CombatView(
                 itemTable.prevItem()
                 viewModel.playSndMenuClick()
             }
+            UiCombatState.VICTORY_DEFEAT -> Unit
         }
     }
 
@@ -279,6 +287,7 @@ class CombatView(
                 itemTable.nextItem()
                 viewModel.playSndMenuClick()
             }
+            UiCombatState.VICTORY_DEFEAT -> Unit
         }
     }
 
@@ -319,6 +328,7 @@ class CombatView(
             }
 
             UiCombatState.SELECT_ACTION -> Unit
+            UiCombatState.VICTORY_DEFEAT -> Unit
         }
     }
 
@@ -350,6 +360,7 @@ class CombatView(
             UiCombatState.SELECT_TARGET -> {
                 if (viewModel.confirmTargetSelection()) {
                     uiState = UiCombatState.SELECT_ACTION
+                    uiAction = UiAction.UNDEFINED
                     actionTable.buttonGroup.uncheckAll()
                     // hide action table again
                     actionTable.actions.clear()
@@ -378,6 +389,7 @@ class CombatView(
                 viewModel.selectItem(itemModels[itemTable.selectedItem])
                 itemTable.isVisible = false
             }
+            UiCombatState.VICTORY_DEFEAT -> Unit
         }
     }
 
