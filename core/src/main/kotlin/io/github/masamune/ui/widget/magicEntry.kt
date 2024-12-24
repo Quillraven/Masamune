@@ -1,5 +1,6 @@
 package io.github.masamune.ui.widget
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.delay
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut
@@ -23,6 +24,7 @@ class MagicEntryWidget(
     title: String,
     targetDescriptor: String,
     mana: Int,
+    val canPerform: Boolean,
     skin: Skin,
 ) : Table(skin), KTable {
 
@@ -35,9 +37,18 @@ class MagicEntryWidget(
             cell.padRight(5f).padLeft(5f)
         }
 
-        val colorMana = skin.getColor("blue")
-        val colorDescriptor = skin.getColor("red")
-        label("$title [#${colorDescriptor}]${targetDescriptor.first()}[] [#$colorMana]${mana}[]", defaultStyle, skin) {
+        val mulColor = if (!canPerform) {
+            Color.GRAY
+        } else {
+            Color.WHITE
+        }
+
+        val labelTxt = buildString {
+            append("[#${skin.getColor("white").cpy().mul(mulColor)}]$title[]")
+            append(" [#${skin.getColor("red").cpy().mul(mulColor)}]${targetDescriptor.first()}[]")
+            append(" [#${skin.getColor("blue").cpy().mul(mulColor)}]${mana}[]")
+        }
+        label(labelTxt, defaultStyle, skin) {
             it.left().expandX()
         }
     }
@@ -53,6 +64,7 @@ fun <S> KWidget<S>.magicEntry(
     title: String,
     targetDescriptor: String,
     mana: Int,
+    canPerform: Boolean,
     skin: Skin,
     init: (@Scene2dDsl MagicEntryWidget).(S) -> Unit = {},
-): MagicEntryWidget = actor(MagicEntryWidget(title, targetDescriptor, mana, skin), init)
+): MagicEntryWidget = actor(MagicEntryWidget(title, targetDescriptor, mana, canPerform, skin), init)

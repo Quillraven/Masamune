@@ -46,7 +46,6 @@ import io.github.masamune.system.ShakeSystem
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.ui.model.CombatViewModel
-import io.github.masamune.ui.view.View
 import io.github.masamune.ui.view.combatView
 import ktx.app.KtxScreen
 import ktx.log.logger
@@ -208,6 +207,7 @@ class CombatScreen(
         eventService.clearListeners()
         world.removeAll(clearRecycled = true)
         audioService.playPrevMusic()
+        combatViewModel.reset()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -228,16 +228,6 @@ class CombatScreen(
 
         // TODO remove debug
         when {
-            Gdx.input.isKeyJustPressed(Input.Keys.R) -> {
-                val view = stage.actors.filterIsInstance<View<*>>().single()
-                stage.root.removeActor(view)
-                stage.actors {
-                    combatView(combatViewModel, skin)
-                }
-                eventService.fire(CombatStartEvent(world.family { all(Player) }.single(), enemyEntities.entities))
-                stage.isDebugAll = true
-            }
-
             Gdx.input.isKeyJustPressed(Input.Keys.X) -> {
                 masamune.transitionScreen<GameScreen>(
                     fromType = DefaultTransitionType,

@@ -142,7 +142,9 @@ class CombatView(
         model.onPropertyChange(CombatViewModel::playerMagic) { magicList ->
             magicModels = magicList
             magicTable.clearMagic()
-            magicList.forEach { magic -> magicTable.magic(magic.name, magic.targetDescriptor, magic.mana) }
+            magicList.forEach { (_, name, targetDescriptor, mana, canPerform) ->
+                magicTable.magic(name, targetDescriptor, mana, canPerform)
+            }
             magicTable.pack()
             magicTable.height = 300f
         }
@@ -164,14 +166,25 @@ class CombatView(
             playerInfoTable.height + 10f
             actionTable.actions.clear()
             actionTable += Actions.moveBy(0f, actionTable.height * 0.7f + 10f, 1f, Interpolation.bounceIn)
+            actionTable.buttonGroup.uncheckAll()
+            uiAction = UiAction.UNDEFINED
         }
     }
 
     override fun onUpPressed() {
-        if (uiState == UiCombatState.SELECT_ACTION) {
-            uiAction = UiAction.ATTACK
-            attackBtn.isChecked = true
-            viewModel.playSndMenuClick()
+        when (uiState) {
+            UiCombatState.SELECT_ACTION -> {
+                uiAction = UiAction.ATTACK
+                attackBtn.isChecked = true
+                viewModel.playSndMenuClick()
+            }
+
+            UiCombatState.SELECT_MAGIC -> {
+                magicTable.prevMagic(MagicTable.MAGIC_PER_ROW)
+                viewModel.playSndMenuClick()
+            }
+
+            else -> Unit
         }
     }
 
@@ -207,6 +220,13 @@ class CombatView(
         }
     }
 
+    override fun onDownPressed() {
+        if (uiState == UiCombatState.SELECT_MAGIC) {
+            magicTable.nextMagic(MagicTable.MAGIC_PER_ROW)
+            viewModel.playSndMenuClick()
+        }
+    }
+
     override fun onBackPressed() {
         when (uiState) {
             UiCombatState.SELECT_TARGET -> {
@@ -236,6 +256,8 @@ class CombatView(
                 UiAction.MAGIC -> {
                     uiState = UiCombatState.SELECT_MAGIC
                     magicTable.isVisible = true
+                    magicTable.selectFirstMagic()
+                    viewModel.playSndMenuAccept()
                 }
 
                 else -> Unit
@@ -252,6 +274,11 @@ class CombatView(
             }
 
             UiCombatState.SELECT_MAGIC -> {
+                if (magicTable.hasNoMagic()) {
+                    // cannot perform any magic -> do nothing
+                    return
+                }
+
                 uiState = UiCombatState.SELECT_TARGET
                 viewModel.selectMagic(magicModels[magicTable.selectedMagic])
                 magicTable.isVisible = false

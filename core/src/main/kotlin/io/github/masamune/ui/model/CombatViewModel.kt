@@ -58,7 +58,9 @@ class CombatViewModel(
     // target selection stuff
     private var targetType = ActionTargetType.NONE
     private val selectorEntities = world.family { all(Selector) }
-    private lateinit var selectEntityIterator: EntityBagIterator
+
+    // init with any iterator in order for reset to not crash. Iterator will be overridden correctly later on.
+    private var selectEntityIterator: EntityBagIterator = selectorEntities.iterator()
     private var activeSelector = Entity.NONE
 
     // view attributes
@@ -68,6 +70,13 @@ class CombatViewModel(
     var playerPosition: Vector2 by propertyNotify(vec2())
     var playerMagic: List<MagicModel> by propertyNotify(emptyList<MagicModel>())
     var combatTurn: Int by propertyNotify(-1)
+
+    fun reset() {
+        enemyEntities.clear()
+        playerEntities.clear()
+        selectEntityIterator.reset()
+        activeSelector = Entity.NONE
+    }
 
     override fun onEvent(event: Event) = with(world) {
         when (event) {

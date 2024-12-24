@@ -7,4 +7,5 @@ data class MagicModel(
     val name: String,
     val targetDescriptor: String,
     val mana: Int,
+    val canPerform: Boolean,
 )
