@@ -234,7 +234,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
          * given new [width] and [height].
          */
         fun FrameBuffer.resize(width: Int, height: Int): FrameBuffer {
-            if (this.width != width || this.height != height) {
+            if (width > 0 && height > 0 && (this.width != width || this.height != height)) {
                 this.dispose()
                 return FrameBuffer(FBO_FORMAT, width, height, false)
             }
