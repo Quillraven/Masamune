@@ -1,6 +1,8 @@
 package io.github.masamune.ui.view
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -17,6 +19,7 @@ import io.github.masamune.ui.widget.MagicTable
 import io.github.masamune.ui.widget.itemCombatTable
 import io.github.masamune.ui.widget.magicTable
 import ktx.actors.plusAssign
+import ktx.actors.then
 import ktx.actors.txt
 import ktx.scene2d.KButtonTable
 import ktx.scene2d.KGroup
@@ -28,6 +31,7 @@ import ktx.scene2d.defaultStyle
 import ktx.scene2d.imageButton
 import ktx.scene2d.label
 import ktx.scene2d.progressBar
+import ktx.scene2d.scene2d
 import ktx.scene2d.table
 import kotlin.math.max
 
@@ -134,6 +138,7 @@ class CombatView(
     }
 
     private fun registerOnPropertyChanges(model: CombatViewModel) {
+        // player related property events
         model.onPropertyChange(CombatViewModel::playerName) {
             playerNameLabel.txt = it
             playerInfoTable.pack()
@@ -168,6 +173,8 @@ class CombatView(
             itemTable.height = 300f
             itemTable.width = max(itemTable.width, 400f)
         }
+
+        // ui position update
         model.onPropertyChange(CombatViewModel::playerPosition) { position ->
             val infoW = playerInfoTable.width
             playerInfoTable.setPosition(position.x - infoW, 5f)
@@ -186,6 +193,8 @@ class CombatView(
                 playerInfoTable.height + 20f + actionTable.height
             )
         }
+
+        // action table fade in effect
         model.onPropertyChange(CombatViewModel::combatTurn) {
             playerInfoTable.height + 10f
             actionTable.actions.clear()
@@ -193,6 +202,27 @@ class CombatView(
             actionTable.buttonGroup.uncheckAll()
             uiAction = UiAction.UNDEFINED
         }
+
+        // damage/heal/mana indicators
+        model.onPropertyChange(CombatViewModel::combatDamage) { (position, amount) ->
+            combatTxt(amount, "{JUMP=1.5;5;1;1}", skin.getColor("red"), position, 2.5f)
+        }
+        model.onPropertyChange(CombatViewModel::combatHeal) { (position, amount) ->
+            combatTxt(amount, "{JUMP=0.5;5;1;1}", skin.getColor("green"), position, 2f)
+        }
+        model.onPropertyChange(CombatViewModel::combatMana) { (position, amount) ->
+            combatTxt(amount, "{JUMP=0.5;5;1;1}", skin.getColor("blue"), position, 2f)
+        }
+    }
+
+    private fun combatTxt(amount: Int, effect: String, color: Color, position: Vector2, duration: Float) {
+        val label = scene2d.typingLabel("$effect$amount", "combat_number", skin) {
+            this.color = color
+            this.setPosition(position.x, position.y)
+        }
+        val transparentColor = Color(color.r, color.g, color.b, 0f)
+        label += Actions.color(transparentColor, duration, Interpolation.pow3OutInverse) then Actions.removeActor()
+        stage.addActor(label)
     }
 
     override fun onUpPressed() {

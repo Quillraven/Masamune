@@ -640,10 +640,50 @@ atlasData: {
 			type: FONT
 			hidden: false
 		}
+		{
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_24_border.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: pixel_arial_24_border
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: FONT
+			hidden: false
+		}
 	]
 }
 jsonData: {
 	colors: [
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
+				r: 0
+				g: 0
+				b: 0
+				a: 1
+			}
+			name: black
+		}
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
+				r: 0
+				g: 0
+				b: 1
+				a: 1
+			}
+			name: blue
+		}
 		{
 			class: com.ray3k.skincomposer.data.ColorData
 			color: {
@@ -707,16 +747,6 @@ jsonData: {
 		{
 			class: com.ray3k.skincomposer.data.ColorData
 			color: {
-				r: 0
-				g: 0
-				b: 1
-				a: 1
-			}
-			name: blue
-		}
-		{
-			class: com.ray3k.skincomposer.data.ColorData
-			color: {
 				r: 0.93333334
 				g: 0.07058824
 				b: 0.11372549
@@ -751,6 +781,14 @@ jsonData: {
 			markupEnabled: true
 			scaling: -1
 			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/PIXEARG_.fnt
+		}
+		{
+			class: com.ray3k.skincomposer.data.FontData
+			name: pixel_arial_24_border
+			flip: false
+			markupEnabled: true
+			scaling: -1
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_24_border.fnt
 		}
 	]
 	freeTypeFonts: []
@@ -1767,6 +1805,33 @@ jsonData: {
 						name: background
 						optional: true
 						value: dialog_choice_frame
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: combat_number
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: pixel_arial_24_border
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: white
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
 					}
 				}
 				deletable: true
@@ -3131,9 +3196,9 @@ preferences: {
 	}
 	preview-bg-color: {
 		class: com.badlogic.gdx.graphics.Color
-		r: 0
-		g: 0
-		b: 0
+		r: 1
+		g: 1
+		b: 1
 		a: 1
 	}
 	last-import-export-path: {

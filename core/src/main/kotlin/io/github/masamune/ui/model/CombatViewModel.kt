@@ -1,5 +1,6 @@
 package io.github.masamune.ui.model
 
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -76,6 +77,9 @@ class CombatViewModel(
     var playerMagic: List<MagicModel> by propertyNotify(emptyList<MagicModel>())
     var playerItems: List<ItemCombatModel> by propertyNotify(emptyList<ItemCombatModel>())
     var combatTurn: Int by propertyNotify(-1)
+    var combatDamage: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
+    var combatHeal: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
+    var combatMana: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
 
     fun reset() {
         enemyEntities.clear()
@@ -84,7 +88,7 @@ class CombatViewModel(
         activeSelector = Entity.NONE
     }
 
-    override fun onEvent(event: Event) = with(world) {
+    override fun onEvent(event: Event): Unit = with(world) {
         when (event) {
             is CombatStartEvent -> {
                 val player = event.player
@@ -129,27 +133,36 @@ class CombatViewModel(
             }
 
             is CombatEntityTakeDamageEvent -> {
-                if (event.entity hasNo Player) {
-                    return@with
+                if (event.entity has Player) {
+                    playerLife = event.life to event.maxLife
                 }
 
-                playerLife = event.life to event.maxLife
+                val (position, size) = event.entity[Transform]
+                val uiPos = vec2(position.x + MathUtils.random(size.x * 0.1f, size.x * 0.3f), position.y)
+                    .toUiPosition(gameViewport, uiViewport)
+                combatDamage = uiPos to event.amount.toInt()
             }
 
             is CombatEntityHealEvent -> {
-                if (event.entity hasNo Player) {
-                    return@with
+                if (event.entity has Player) {
+                    playerLife = event.life to event.maxLife
                 }
 
-                playerLife = event.life to event.maxLife
+                val (position, size) = event.entity[Transform]
+                val uiPos = vec2(position.x + MathUtils.random(size.x * 0.1f, size.x * 0.3f), position.y)
+                    .toUiPosition(gameViewport, uiViewport)
+                combatHeal = uiPos to event.amount.toInt()
             }
 
             is CombatEntityManaUpdateEvent -> {
-                if (event.entity hasNo Player) {
-                    return@with
+                if (event.entity has Player) {
+                    playerMana = event.mana to event.maxMana
                 }
 
-                playerMana = event.mana to event.maxMana
+                val (position, size) = event.entity[Transform]
+                val uiPos = vec2(position.x + MathUtils.random(size.x * 0.1f, size.x * 0.3f), position.y)
+                    .toUiPosition(gameViewport, uiViewport)
+                combatMana = uiPos to event.amount.toInt()
             }
 
             else -> Unit
@@ -362,6 +375,7 @@ class CombatViewModel(
             this.y = to.worldHeight - this.y
             return this
         }
+
     }
 
 }

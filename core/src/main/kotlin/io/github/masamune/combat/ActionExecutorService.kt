@@ -19,6 +19,7 @@ import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.EventService
 import ktx.log.logger
+import kotlin.math.abs
 import kotlin.math.max
 
 private enum class ActionState {
@@ -132,7 +133,7 @@ class ActionExecutorService(
         val targetStats = target[Stats]
         targetStats.mana = (targetStats.mana + amount).coerceIn(0f, targetStats.manaMax)
         if (amount != 0f) {
-            eventService.fire(CombatEntityManaUpdateEvent(target, targetStats.mana, targetStats.manaMax))
+            eventService.fire(CombatEntityManaUpdateEvent(target, abs(amount), targetStats.mana, targetStats.manaMax))
         }
     }
 
@@ -141,9 +142,9 @@ class ActionExecutorService(
         targetStats.life = (targetStats.life + amount).coerceIn(0f, targetStats.lifeMax)
 
         if (amount < 0f) {
-            eventService.fire(CombatEntityTakeDamageEvent(target, targetStats.life, targetStats.lifeMax))
+            eventService.fire(CombatEntityTakeDamageEvent(target, -amount, targetStats.life, targetStats.lifeMax))
         } else if (amount > 0f) {
-            eventService.fire(CombatEntityHealEvent(target, targetStats.life, targetStats.lifeMax))
+            eventService.fire(CombatEntityHealEvent(target, amount, targetStats.life, targetStats.lifeMax))
         }
 
         if (targetStats.life <= 0f) {

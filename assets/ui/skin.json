@@ -12,8 +12,20 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 		markupEnabled: true
 		flip: false
 	}
+	pixel_arial_24_border: {
+		file: pixel_arial_24_border.fnt
+		scaledSize: -1
+		markupEnabled: true
+		flip: false
+	}
 }
 com.badlogic.gdx.graphics.Color: {
+	black: {
+		hex: 000000ff
+	}
+	blue: {
+		hex: 0000ffff
+	}
 	bright: {
 		hex: f5f7edff
 	}
@@ -31,9 +43,6 @@ com.badlogic.gdx.graphics.Color: {
 	}
 	highlight_red: {
 		hex: b20000ff
-	}
-	blue: {
-		hex: 0000ffff
 	}
 	red: {
 		hex: ee121dff
@@ -186,6 +195,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		font: pixel_arial_16
 		fontColor: dark_grey
 		background: dialog_choice_frame
+	}
+	combat_number: {
+		font: pixel_arial_24_border
+		fontColor: white
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {

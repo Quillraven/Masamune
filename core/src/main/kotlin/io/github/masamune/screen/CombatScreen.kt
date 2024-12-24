@@ -243,10 +243,6 @@ class CombatScreen(
                     )
                 )
             }
-
-            Gdx.input.isKeyJustPressed(Input.Keys.Z) -> {
-                world.family { all(ScreenBgd) }.forEach { it.remove() }
-            }
         }
     }
 
