@@ -18,7 +18,11 @@ data class Combat(
     val attackAction: Action by lazy { availableActionTypes.single { it == ActionType.ATTACK_SINGLE }() }
 
     val magicActions: List<Action> by lazy {
-        availableActionTypes.filter { it != ActionType.ATTACK_SINGLE }.map { it() }
+        availableActionTypes
+            // attack actions should not show up as "magic" actions in combat
+            // use item action should also not show up us "magic"
+            .filter { it != ActionType.ATTACK_SINGLE && it != ActionType.USE_ITEM }
+            .map { it() }
     }
 
     override fun type() = Combat

@@ -11,7 +11,7 @@ enum class ActionTargetType {
 sealed class Action(
     val type: ActionType,
     val targetType: ActionTargetType,
-    val manaCost: Int,
+    val manaCost: Int = 0,
     val defensive: Boolean = false,
 ) {
     open fun ActionExecutorService.canPerform(entity: Entity): Boolean = hasMana(entity, manaCost)

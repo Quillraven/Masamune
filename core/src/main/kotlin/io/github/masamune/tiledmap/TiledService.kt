@@ -379,11 +379,20 @@ class TiledService(
 
     private fun EntityCreateContext.configureItem(entity: Entity, tile: TiledMapTile) {
         val itemType = ItemType.valueOf(tile.itemType)
+        val itemAction = tile.action
+        val actionType = if (itemAction.isEmpty()) {
+            ActionType.UNDEFINED
+        } else {
+            ActionType.valueOf(itemAction)
+        }
+
         entity += Item(
             type = itemType,
             cost = tile.cost,
             category = ItemCategory.valueOf(tile.category),
-            descriptionKey = "item.${itemType.name.lowercase()}.description"
+            actionType = actionType,
+            descriptionKey = "item.${itemType.name.lowercase()}.description",
+            onlyCombat = tile.onlyCombat,
         )
     }
 

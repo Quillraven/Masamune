@@ -8,7 +8,10 @@ enum class ActionType(private val actionFactory: () -> Action) {
     FIREBALL(::FireballAction),
     FIREBOLT(::FireboltAction),
     HEAL(::HealAction),
+    ITEM_MANA_RESTORE(::ItemManaRestoreAction),
+    SCROLL_INFERNO(::ScrollInfernoAction),
     UNDEFINED({ DefaultAction }),
+    USE_ITEM(::UseItemAction),
     ;
 
     operator fun invoke() = actionFactory()

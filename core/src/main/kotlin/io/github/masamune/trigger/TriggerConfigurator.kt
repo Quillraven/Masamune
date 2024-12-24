@@ -70,6 +70,7 @@ class TriggerConfigurator {
                     actionShop(
                         triggeringEntity, scriptEntity, I18NKey.NPC_MERCHANT_TITLE, listOf(
                             ItemType.SMALL_MANA_POTION,
+                            ItemType.SCROLL_INFERNO,
                         )
                     )
                 }

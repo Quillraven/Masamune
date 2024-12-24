@@ -92,7 +92,7 @@ class ShopViewModel(
     private fun Entity.toItemModel(): ItemModel = with(world) {
         val itemEntity = this@toItemModel
         // and transform items into UI ItemModel objects
-        val (type, cost, category, descriptionKey, amount) = itemEntity[Item]
+        val (type, cost, category, descriptionKey, _, amount) = itemEntity[Item]
         val itemName = itemEntity[Name].name
         val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
         val itemStats = itemEntity.getOrNull(Stats) ?: TiledStats.NULL_STATS

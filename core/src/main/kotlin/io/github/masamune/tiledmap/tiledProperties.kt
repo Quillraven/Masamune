@@ -59,6 +59,9 @@ val MapObject.userData: String?
 val MapObject.targetPortalId: Int
     get() = this.property<Int>("targetPortalId", 0)
 
+val TiledMapTile.action: String
+    get() = this.property<String>("action", "")
+
 val TiledMapTile.category: String
     get() = this.property<String>("category", "WEAPON")
 
@@ -67,3 +70,6 @@ val TiledMapTile.cost: Int
 
 val TiledMapTile.itemType: String
     get() = this.property<String>("itemType", "UNDEFINED")
+
+val TiledMapTile.onlyCombat: Boolean
+    get() = this.property<Boolean>("onlyCombat", false)

@@ -10,8 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import io.github.masamune.ui.model.CombatViewModel
+import io.github.masamune.ui.model.ItemCombatModel
 import io.github.masamune.ui.model.MagicModel
+import io.github.masamune.ui.widget.ItemCombatTable
 import io.github.masamune.ui.widget.MagicTable
+import io.github.masamune.ui.widget.itemCombatTable
 import io.github.masamune.ui.widget.magicTable
 import ktx.actors.plusAssign
 import ktx.actors.txt
@@ -26,13 +29,14 @@ import ktx.scene2d.imageButton
 import ktx.scene2d.label
 import ktx.scene2d.progressBar
 import ktx.scene2d.table
+import kotlin.math.max
 
 private enum class UiAction {
     UNDEFINED, ATTACK, MAGIC, ITEM
 }
 
 private enum class UiCombatState {
-    SELECT_ACTION, SELECT_TARGET, SELECT_MAGIC
+    SELECT_ACTION, SELECT_TARGET, SELECT_MAGIC, SELECT_ITEM
 }
 
 @Scene2dDsl
@@ -55,6 +59,9 @@ class CombatView(
 
     private val magicTable: MagicTable
     private var magicModels: List<MagicModel> = listOf()
+
+    private val itemTable: ItemCombatTable
+    private var itemModels: List<ItemCombatModel> = listOf()
 
     private var uiAction: UiAction = UiAction.UNDEFINED
     private var uiState = UiCombatState.SELECT_ACTION
@@ -121,6 +128,8 @@ class CombatView(
 
         magicTable = magicTable(skin) { this.isVisible = false }
 
+        itemTable = itemCombatTable(skin) { this.isVisible = false }
+
         registerOnPropertyChanges(model)
     }
 
@@ -147,6 +156,17 @@ class CombatView(
             }
             magicTable.pack()
             magicTable.height = 300f
+            magicTable.width = max(magicTable.width, 400f)
+        }
+        model.onPropertyChange(CombatViewModel::playerItems) { itemList ->
+            itemModels = itemList
+            itemTable.clearItems()
+            itemList.forEach { (_, name, targetDescriptor, amount) ->
+                itemTable.item(name, targetDescriptor, amount)
+            }
+            itemTable.pack()
+            itemTable.height = 300f
+            itemTable.width = max(itemTable.width, 400f)
         }
         model.onPropertyChange(CombatViewModel::playerPosition) { position ->
             val infoW = playerInfoTable.width
@@ -159,6 +179,10 @@ class CombatView(
             )
             magicTable.setPosition(
                 position.x - infoW * 0.5f - magicTable.width * 0.5f,
+                playerInfoTable.height + 20f + actionTable.height
+            )
+            itemTable.setPosition(
+                position.x - infoW * 0.5f - itemTable.width * 0.5f,
                 playerInfoTable.height + 20f + actionTable.height
             )
         }
@@ -201,6 +225,10 @@ class CombatView(
                 magicTable.prevMagic()
                 viewModel.playSndMenuClick()
             }
+            UiCombatState.SELECT_ITEM -> {
+                itemTable.prevItem()
+                viewModel.playSndMenuClick()
+            }
         }
     }
 
@@ -217,13 +245,26 @@ class CombatView(
                 magicTable.nextMagic()
                 viewModel.playSndMenuClick()
             }
+            UiCombatState.SELECT_ITEM -> {
+                itemTable.nextItem()
+                viewModel.playSndMenuClick()
+            }
         }
     }
 
     override fun onDownPressed() {
-        if (uiState == UiCombatState.SELECT_MAGIC) {
-            magicTable.nextMagic(MagicTable.MAGIC_PER_ROW)
-            viewModel.playSndMenuClick()
+        when (uiState) {
+            UiCombatState.SELECT_MAGIC -> {
+                magicTable.nextMagic(MagicTable.MAGIC_PER_ROW)
+                viewModel.playSndMenuClick()
+            }
+
+            UiCombatState.SELECT_ITEM -> {
+                itemTable.nextItem(ItemCombatTable.ITEMS_PER_ROW)
+                viewModel.playSndMenuClick()
+            }
+
+            else -> Unit
         }
     }
 
@@ -237,6 +278,12 @@ class CombatView(
 
             UiCombatState.SELECT_MAGIC -> {
                 magicTable.isVisible = false
+                uiState = UiCombatState.SELECT_ACTION
+                viewModel.playSndMenuAbort()
+            }
+
+            UiCombatState.SELECT_ITEM -> {
+                itemTable.isVisible = false
                 uiState = UiCombatState.SELECT_ACTION
                 viewModel.playSndMenuAbort()
             }
@@ -257,6 +304,13 @@ class CombatView(
                     uiState = UiCombatState.SELECT_MAGIC
                     magicTable.isVisible = true
                     magicTable.selectFirstMagic()
+                    viewModel.playSndMenuAccept()
+                }
+
+                UiAction.ITEM -> {
+                    uiState = UiCombatState.SELECT_ITEM
+                    itemTable.isVisible = true
+                    itemTable.selectFirstItem()
                     viewModel.playSndMenuAccept()
                 }
 
@@ -282,6 +336,17 @@ class CombatView(
                 uiState = UiCombatState.SELECT_TARGET
                 viewModel.selectMagic(magicModels[magicTable.selectedMagic])
                 magicTable.isVisible = false
+            }
+
+            UiCombatState.SELECT_ITEM -> {
+                if (itemTable.hasNoItem()) {
+                    // no items to use -> do nothing
+                    return
+                }
+
+                uiState = UiCombatState.SELECT_TARGET
+                viewModel.selectItem(itemModels[itemTable.selectedItem])
+                itemTable.isVisible = false
             }
         }
     }

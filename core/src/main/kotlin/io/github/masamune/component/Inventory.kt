@@ -19,19 +19,19 @@ data class Inventory(
         private val log = logger<Inventory>()
 
         fun World.addItem(itemEntity: Entity, to: Entity) {
-            val (type, _, _, _, amount) = itemEntity[Item]
+            val itemCmp = itemEntity[Item]
             val items = to[Inventory].items
-            val existingItem = items.firstOrNull { it[Item].type == type }
+            val existingItem = items.firstOrNull { it[Item].type == itemCmp.type }
             if (existingItem == null) {
                 // item not yet in inventory -> add it
-                log.debug { "Adding new item of type $type to inventory" }
+                log.debug { "Adding new item of type ${itemCmp.type} to inventory" }
                 items += itemEntity
                 return
             }
 
             // item already in inventory -> increase amount
-            log.debug { "Increasing amount of item $type by $amount" }
-            existingItem[Item].amount += amount
+            log.debug { "Increasing amount of item ${itemCmp.type} by ${itemCmp.amount}" }
+            existingItem[Item].amount += itemCmp.amount
         }
 
         fun World.removeItem(type: ItemType, amount: Int, from: Entity) {

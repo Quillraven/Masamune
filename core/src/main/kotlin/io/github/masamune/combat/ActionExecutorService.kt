@@ -10,6 +10,8 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
+import io.github.masamune.component.Inventory.Companion.removeItem
+import io.github.masamune.component.Item
 import io.github.masamune.component.Stats
 import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
@@ -30,8 +32,10 @@ class ActionExecutorService(
     private var state: ActionState = ActionState.START
     private var delaySec = 0f
     private val targets = mutableEntityBagOf()
-    private var source: Entity = Entity.NONE
+    var source: Entity = Entity.NONE
+        private set
     private var action: Action = DefaultAction
+    private var itemOwner: Entity = Entity.NONE
     lateinit var world: World
 
     val isFinished: Boolean
@@ -49,6 +53,12 @@ class ActionExecutorService(
     val deltaTime: Float
         get() = world.deltaTime
 
+    val Entity.stats: Stats
+        get() = with(world) { this@stats[Stats] }
+
+    val Entity.itemAction: Action
+        get() = with(world) { this@itemAction[Item].action }
+
     fun perform(source: Entity, action: Action, targets: EntityBag) {
         log.debug { "Performing action ${action::class.simpleName}: source=$source, targets(${targets.size})=$targets" }
 
@@ -58,6 +68,12 @@ class ActionExecutorService(
         this.action = action
         this.targets.clear()
         this.targets += targets
+    }
+
+    fun performItemAction(itemOwner: Entity, item: Entity, action: Action, targets: EntityBag) {
+        this.itemOwner = itemOwner
+        with(world) { removeItem(item[Item].type, 1, itemOwner) }
+        perform(item, action, targets)
     }
 
     private fun changeState(newState: ActionState) {
@@ -114,8 +130,10 @@ class ActionExecutorService(
 
     private fun updateManaBy(target: Entity, amount: Float) = with(world) {
         val targetStats = target[Stats]
-        targetStats.mana += amount
-        eventService.fire(CombatEntityManaUpdateEvent(target, targetStats.mana, targetStats.manaMax))
+        targetStats.mana = (targetStats.mana + amount).coerceIn(0f, targetStats.manaMax)
+        if (amount != 0f) {
+            eventService.fire(CombatEntityManaUpdateEvent(target, targetStats.mana, targetStats.manaMax))
+        }
     }
 
     private fun updateLifeBy(target: Entity, amount: Float) = with(world) {
@@ -142,8 +160,13 @@ class ActionExecutorService(
         targets.forEach { dealDamage(physical, magical, it) }
     }
 
-    fun heal(amount: Float, target: Entity) {
-        updateLifeBy(target, amount)
+    fun heal(life: Float, mana: Float, target: Entity) {
+        if (life > 0f) {
+            updateLifeBy(target, life)
+        }
+        if (mana > 0f) {
+            updateManaBy(target, mana)
+        }
     }
 
     fun endAction() {
@@ -160,7 +183,12 @@ class ActionExecutorService(
     }
 
     fun clearAction() = with(world) {
-        source[Combat].clearAction()
+        if (itemOwner != Entity.NONE) {
+            itemOwner[Combat].clearAction()
+            itemOwner = Entity.NONE
+        } else {
+            source[Combat].clearAction()
+        }
         action = DefaultAction
     }
 

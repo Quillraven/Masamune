@@ -14,9 +14,12 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.ActionTargetType
+import io.github.masamune.combat.action.UseItemAction
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Graphic
+import io.github.masamune.component.Inventory
+import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Selector
@@ -30,7 +33,9 @@ import io.github.masamune.event.CombatPlayerActionEvent
 import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
+import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
+import io.github.masamune.tiledmap.ItemCategory
 import ktx.log.logger
 import ktx.math.vec2
 import ktx.math.vec3
@@ -69,6 +74,7 @@ class CombatViewModel(
     var playerName: String by propertyNotify("")
     var playerPosition: Vector2 by propertyNotify(vec2())
     var playerMagic: List<MagicModel> by propertyNotify(emptyList<MagicModel>())
+    var playerItems: List<ItemCombatModel> by propertyNotify(emptyList<ItemCombatModel>())
     var combatTurn: Int by propertyNotify(-1)
 
     fun reset() {
@@ -90,6 +96,8 @@ class CombatViewModel(
 
                 // get player magic
                 updatePlayerMagic(player)
+                // get player items
+                updatePlayerItems(player)
 
                 // store entities for easier target selection
                 enemyEntities.clear()
@@ -107,6 +115,8 @@ class CombatViewModel(
             is CombatNextTurnEvent -> {
                 // update player magic because some of them might not be available due to missing mana or silence
                 updatePlayerMagic(event.player)
+                // update player items because some of them might have been used in the previous turn
+                updatePlayerItems(event.player)
 
                 // update entities because some of them could be dead
                 enemyEntities.clear()
@@ -156,6 +166,22 @@ class CombatViewModel(
                 it.run { actionExecutorService.canPerform(player) },
             )
         }
+    }
+    fun updatePlayerItems(player: Entity) = with(world) {
+        playerItems = player[Inventory].items
+            .filter {
+                val itemCmp = it[Item]
+                itemCmp.category == ItemCategory.OTHER && itemCmp.actionType != ActionType.UNDEFINED
+            }
+            .map {
+                val itemCmp = it[Item]
+                ItemCombatModel(
+                    itemCmp.type,
+                    bundle["item.${itemCmp.type.name.lowercase()}.name"],
+                    bundle["magic.target.${itemCmp.action.targetType.name.lowercase()}"],
+                    itemCmp.amount,
+                )
+            }
     }
 
     fun onResize() = with(world) {
@@ -222,6 +248,14 @@ class CombatViewModel(
     fun selectMagic(magicModel: MagicModel) = with(world) {
         val combatCmp = playerEntities.single()[Combat]
         selectPlayerAction(combatCmp, combatCmp.magicActions.single { it.type == magicModel.type })
+    }
+
+    fun selectItem(itemModel: ItemCombatModel) = with(world) {
+        val player = playerEntities.single()
+        val inventoryCmp = player[Inventory]
+        val item = inventoryCmp.items.single { it[Item].type == itemModel.type }
+        val itemCmp = item[Item]
+        selectPlayerAction(player[Combat], UseItemAction(item, itemCmp.action.targetType, itemCmp.action.defensive))
     }
 
     fun selectPrevTarget() {

@@ -27,6 +27,7 @@ import io.github.masamune.component.Combat
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Graphic
+import io.github.masamune.component.Inventory
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.ScreenBgd
@@ -155,6 +156,7 @@ class CombatScreen(
         val statsCmp = with(gameScreenWorld) { gameScreenPlayer[Stats] }
         val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
 
+        val inventory = Inventory()
         val combatPlayer = this.world.entity {
             it += nameCmp
             it += playerCmp
@@ -169,6 +171,7 @@ class CombatScreen(
                 availableActionTypes = combatCmp.availableActionTypes.toMutableList(),
                 attackSnd = SoundAsset.SWORD_SWIPE
             )
+            it += inventory
         }
 
         eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))

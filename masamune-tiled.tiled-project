@@ -20,7 +20,10 @@
                 "FIREBOLT",
                 "FIREBALL",
                 "UNDEFINED",
-                "HEAL"
+                "HEAL",
+                "SCROLL_INFERNO",
+                "ITEM_MANA_RESTORE",
+                "USE_ITEM"
             ],
             "valuesAsFlags": true
         },
@@ -125,6 +128,12 @@
             "id": 9,
             "members": [
                 {
+                    "name": "action",
+                    "propertyType": "ActionType",
+                    "type": "string",
+                    "value": ""
+                },
+                {
                     "name": "atlas",
                     "propertyType": "AtlasAsset",
                     "type": "string",
@@ -151,6 +160,11 @@
                     "propertyType": "ItemType",
                     "type": "string",
                     "value": "UNDEFINED"
+                },
+                {
+                    "name": "onlyCombat",
+                    "type": "bool",
+                    "value": false
                 },
                 {
                     "name": "stats",
@@ -186,7 +200,8 @@
                 "BOOTS",
                 "HELMET",
                 "RING",
-                "SMALL_MANA_POTION"
+                "SMALL_MANA_POTION",
+                "SCROLL_INFERNO"
             ],
             "valuesAsFlags": false
         },

@@ -4,10 +4,12 @@ import io.github.masamune.asset.SoundAsset
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.tiledmap.ActionType
 
-class HealAction : Action(ActionType.HEAL, ActionTargetType.SINGLE, manaCost = 7, defensive = true) {
+class ScrollInfernoAction : Action(ActionType.SCROLL_INFERNO, ActionTargetType.ALL) {
+
     override fun ActionExecutorService.onUpdate(): Boolean {
-        heal(life = 20f, mana = 0f, target = singleTarget)
-        play(SoundAsset.HEAL1, 1.5f)
+        dealDamage(physical = 0f, magical = source.stats.damage, targets = allTargets)
+        play(SoundAsset.EXPLOSION1, 1f)
         return true
     }
+
 }
