@@ -2,18 +2,16 @@ package io.github.masamune.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import ktx.scene2d.KGroup
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
 import ktx.scene2d.scene2d
-import ktx.scene2d.table
 
 @Scene2dDsl
 class MagicTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
 
-    private val contentTable: Table
+    private val contentTable: TypedTable<MagicEntryWidget>
     var selectedMagic: Int = 0
         private set
 
@@ -24,7 +22,8 @@ class MagicTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
         setOverscroll(false, false)
         setScrollingDisabled(true, false)
 
-        contentTable = scene2d.table(skin).top().padTop(5f).padRight(10f)
+        contentTable = scene2d.typedTable(skin)
+        contentTable.top().padTop(5f).padRight(10f)
 
         actor = contentTable
     }
@@ -53,14 +52,14 @@ class MagicTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
         }
 
         for (i in fromIdx + 1 until contentTable.children.size) {
-            val entry = contentTable.children[i] as MagicEntryWidget
+            val entry = contentTable[i]
             if (entry.canPerform) {
                 return i
             }
         }
         // search in opposite direction because there is no performable magic afterward
         for (i in fromIdx - 1 downTo 0) {
-            val entry = contentTable.children[i] as MagicEntryWidget
+            val entry = contentTable[i]
             if (entry.canPerform) {
                 return i
             }
@@ -74,14 +73,14 @@ class MagicTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
         }
 
         for (i in fromIdx - 1 downTo 0) {
-            val entry = contentTable.children[i] as MagicEntryWidget
+            val entry = contentTable[i]
             if (entry.canPerform) {
                 return i
             }
         }
         // search in opposite direction because there is no performable magic afterward
         for (i in fromIdx + 1 until contentTable.children.size) {
-            val entry = contentTable.children[i] as MagicEntryWidget
+            val entry = contentTable[i]
             if (entry.canPerform) {
                 return i
             }
@@ -112,13 +111,13 @@ class MagicTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
             return
         }
 
-        contentTable.children.forEach { (it as MagicEntryWidget).select(false) }
-        val entry = contentTable.children.first { (it as MagicEntryWidget).canPerform }
-        (entry as MagicEntryWidget).select(true)
+        contentTable.forEach { it.select(false) }
+        val entry = contentTable.first { it.canPerform }
+        entry.select(true)
         selectedMagic = contentTable.children.indexOf(entry, true)
     }
 
-    fun hasNoMagic(): Boolean = contentTable.children.count { (it as MagicEntryWidget).canPerform } == 0
+    fun hasNoMagic(): Boolean = contentTable.count { it.canPerform } == 0
 
     private fun selectOption(idx: Int): Boolean {
         if (hasNoMagic()) {
@@ -135,9 +134,9 @@ class MagicTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
             return false
         }
 
-        (contentTable.getChild(selectedMagic) as MagicEntryWidget).select(false)
+        contentTable[selectedMagic].select(false)
         selectedMagic = realIdx
-        (contentTable.getChild(selectedMagic) as MagicEntryWidget).select(true)
+        contentTable[selectedMagic].select(true)
         return true
     }
 

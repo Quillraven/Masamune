@@ -2,18 +2,16 @@ package io.github.masamune.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import ktx.scene2d.KGroup
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
 import ktx.scene2d.scene2d
-import ktx.scene2d.table
 
 @Scene2dDsl
 class ItemCombatTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
 
-    private val contentTable: Table
+    private val contentTable: TypedTable<ItemEntryWidget>
     var selectedItem: Int = 0
         private set
 
@@ -24,7 +22,8 @@ class ItemCombatTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
         setOverscroll(false, false)
         setScrollingDisabled(true, false)
 
-        contentTable = scene2d.table(skin).top().padTop(5f).padRight(10f)
+        contentTable = scene2d.typedTable(skin)
+        contentTable.top().padTop(5f).padRight(10f)
 
         actor = contentTable
     }
@@ -82,9 +81,9 @@ class ItemCombatTable(private val skin: Skin) : ScrollPane(null, skin), KGroup {
             return false
         }
 
-        (contentTable.getChild(selectedItem) as ItemEntryWidget).select(false)
+        contentTable[selectedItem].select(false)
         selectedItem = realIdx
-        (contentTable.getChild(selectedItem) as ItemEntryWidget).select(true)
+        contentTable[selectedItem].select(true)
         return true
     }
 

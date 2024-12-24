@@ -2,18 +2,16 @@ package io.github.masamune.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import ktx.scene2d.KGroup
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
 import ktx.scene2d.scene2d
-import ktx.scene2d.table
 
 @Scene2dDsl
 class ItemTable(skin: Skin) : ScrollPane(null, skin), KGroup {
 
-    private val contentTable: Table
+    private val contentTable: TypedTable<ShopItemWidget>
     var selectedItem: Int = 0
         private set
 
@@ -24,7 +22,8 @@ class ItemTable(skin: Skin) : ScrollPane(null, skin), KGroup {
         setOverscroll(false, false)
         setScrollingDisabled(true, false)
 
-        contentTable = scene2d.table(skin).top().padTop(5f)
+        contentTable = scene2d.typedTable(skin)
+        contentTable.top().padTop(5f)
         actor = contentTable
     }
 
@@ -34,9 +33,7 @@ class ItemTable(skin: Skin) : ScrollPane(null, skin), KGroup {
     }
 
     fun clearAmounts() {
-        contentTable.children.forEach {
-            (it as ShopItemWidget).amount(0)
-        }
+        contentTable.forEach { it.amount(0) }
     }
 
     fun item(title: String, cost: Int) {
@@ -47,7 +44,7 @@ class ItemTable(skin: Skin) : ScrollPane(null, skin), KGroup {
     }
 
     fun amount(value: Int) {
-        (contentTable.getChild(selectedItem) as ShopItemWidget).amount(value)
+        contentTable[selectedItem].amount(value)
     }
 
     fun prevItem(): Boolean = selectOption(selectedItem - 1)
@@ -71,18 +68,18 @@ class ItemTable(skin: Skin) : ScrollPane(null, skin), KGroup {
             return false
         }
 
-        (contentTable.getChild(selectedItem) as ShopItemWidget).select(false)
+        contentTable[selectedItem].select(false)
         selectedItem = realIdx
-        (contentTable.getChild(selectedItem) as ShopItemWidget).select(true)
+        contentTable[selectedItem].select(true)
         return true
     }
 
     fun stopSelectAnimation() {
-        (contentTable.getChild(selectedItem) as ShopItemWidget).stopSelectAnimation()
+        contentTable[selectedItem].stopSelectAnimation()
     }
 
     fun resumeSelectAnimation() {
-        (contentTable.getChild(selectedItem) as ShopItemWidget).resumeSelectAnimation()
+        contentTable[selectedItem].resumeSelectAnimation()
     }
 
 }
