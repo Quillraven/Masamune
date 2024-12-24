@@ -16,7 +16,7 @@ import ktx.log.logger
 class CombatStatePerformAction(
     private val world: World,
     private val eventService: EventService = world.inject(),
-    private val actionExecutorService: ActionExecutorService = ActionExecutorService(world),
+    private val actionExecutorService: ActionExecutorService = world.inject(),
 ) : CombatState {
     private val combatEntities = world.family { all(Combat) }
     private val actionStack = ArrayDeque<Triple<Entity, Action, EntityBag>>()

@@ -21,6 +21,7 @@ import io.github.masamune.asset.ShaderService.Companion.useShader
 import io.github.masamune.asset.SkinAsset
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Facing
@@ -61,6 +62,7 @@ class CombatScreen(
     private val shaderService: ShaderService = masamune.shader,
     private val assetService: AssetService = masamune.asset,
     private val audioService: AudioService = masamune.audio,
+    private val actionExecutorService: ActionExecutorService = masamune.actionExecutor,
 ) : KtxScreen {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(8f, 8f)
@@ -84,7 +86,8 @@ class CombatScreen(
         eventService,
         gameViewport,
         uiViewport,
-        assetService[AtlasAsset.CHARS_AND_PROPS]
+        assetService[AtlasAsset.CHARS_AND_PROPS],
+        actionExecutorService
     )
 
     private fun combatWorld(): World {
@@ -97,6 +100,7 @@ class CombatScreen(
                 add(assetService)
                 add(masamune)
                 add(audioService)
+                add(actionExecutorService)
             }
 
             systems {
@@ -113,6 +117,9 @@ class CombatScreen(
     }
 
     override fun show() {
+        // set action executor entity world
+        actionExecutorService.world = world
+
         // set controller
         inputProcessor.clear()
         inputProcessor.addProcessor(keyboardController)

@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Disposable
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.event.EventService
 import io.github.masamune.screen.ScreenTransitionService
 import io.github.masamune.tiledmap.ImmediateMapTransitionService
@@ -21,6 +22,7 @@ interface ServiceLocator : Disposable {
     val mapTransition: MapTransitionService
     val audio: AudioService
     val screenTransition: ScreenTransitionService
+    val actionExecutor: ActionExecutorService
 }
 
 class LazyServiceLocator(
@@ -38,8 +40,10 @@ class LazyServiceLocator(
     screenTransitionServiceInitializer: (Batch, ShaderService) -> ScreenTransitionService = { batch, shaderService ->
         ScreenTransitionService(batch, shaderService)
     },
+    actionExecutorServiceInitializer: (AudioService, EventService) -> ActionExecutorService = { audioService, eventService ->
+        ActionExecutorService(audioService, eventService)
+    },
 ) : ServiceLocator {
-
     override val batch: Batch by lazy(batchInitializer)
     override val asset: AssetService by lazy(assetServiceInitializer)
     override val event: EventService by lazy(eventServiceInitializer)
@@ -48,6 +52,7 @@ class LazyServiceLocator(
     override val mapTransition: MapTransitionService by lazy { mapTransitionServiceInitializer(tiled) }
     override val audio: AudioService by lazy { audioServiceInitializer(asset) }
     override val screenTransition: ScreenTransitionService by lazy { screenTransitionServiceInitializer(batch, shader) }
+    override val actionExecutor: ActionExecutorService by lazy { actionExecutorServiceInitializer(audio, event) }
 
     override fun dispose() {
         batch.dispose()

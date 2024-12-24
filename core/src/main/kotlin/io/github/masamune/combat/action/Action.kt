@@ -14,7 +14,7 @@ sealed class Action(
     val manaCost: Int,
     val defensive: Boolean = false,
 ) {
-    open fun ActionExecutorService.canPerform(entity: Entity): Boolean = hasMana(manaCost)
+    open fun ActionExecutorService.canPerform(entity: Entity): Boolean = hasMana(entity, manaCost)
     open fun ActionExecutorService.onStart() = Unit
     open fun ActionExecutorService.onUpdate(): Boolean = true
     open fun ActionExecutorService.onFinish() = Unit

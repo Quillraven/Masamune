@@ -11,6 +11,7 @@ import com.github.quillraven.fleks.collection.compareEntity
 import com.github.quillraven.fleks.collection.iterator
 import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.ActionTargetType
 import io.github.masamune.component.Animation
@@ -42,6 +43,7 @@ class CombatViewModel(
     private val gameViewport: Viewport,
     private val uiViewport: Viewport,
     private val charPropAtlas: CachingAtlas,
+    private val actionExecutorService: ActionExecutorService,
 ) : ViewModel(bundle, audioService) {
 
     // Separate enemy bag because we sort them by x coordinate which makes it more intuitive for target selection.
@@ -78,14 +80,7 @@ class CombatViewModel(
                 playerName = player[Name].name
 
                 // get player magic
-                playerMagic = player[Combat].magicActions.map {
-                    MagicModel(
-                        it.type,
-                        bundle["magic.${it.type.name.lowercase()}.name"],
-                        bundle["magic.target.${it.targetType.name.lowercase()}"],
-                        it.manaCost
-                    )
-                }
+                updatePlayerMagic(player)
 
                 // store entities for easier target selection
                 enemyEntities.clear()
@@ -101,6 +96,10 @@ class CombatViewModel(
             }
 
             is CombatNextTurnEvent -> {
+                // update player magic because some of them might not be available due to missing mana or silence
+                updatePlayerMagic(event.player)
+
+                // update entities because some of them could be dead
                 enemyEntities.clear()
                 enemyEntities += event.enemies
                 enemyEntities.sort(targetComparator)
@@ -135,6 +134,18 @@ class CombatViewModel(
             }
 
             else -> Unit
+        }
+    }
+
+    fun updatePlayerMagic(player: Entity) = with(world) {
+        playerMagic = player[Combat].magicActions.map {
+            MagicModel(
+                it.type,
+                bundle["magic.${it.type.name.lowercase()}.name"],
+                bundle["magic.target.${it.targetType.name.lowercase()}"],
+                it.manaCost,
+                it.run { actionExecutorService.canPerform(player) },
+            )
         }
     }
 

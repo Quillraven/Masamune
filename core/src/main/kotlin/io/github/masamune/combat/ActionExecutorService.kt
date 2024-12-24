@@ -24,15 +24,15 @@ private enum class ActionState {
 }
 
 class ActionExecutorService(
-    private val world: World,
-    private val audioService: AudioService = world.inject(),
-    private val eventService: EventService = world.inject(),
+    private val audioService: AudioService,
+    private val eventService: EventService,
 ) {
     private var state: ActionState = ActionState.START
     private var delaySec = 0f
     private val targets = mutableEntityBagOf()
     private var source: Entity = Entity.NONE
     private var action: Action = DefaultAction
+    lateinit var world: World
 
     val isFinished: Boolean
         get() = action == DefaultAction || (state == ActionState.END && delaySec <= 0f)
@@ -150,8 +150,8 @@ class ActionExecutorService(
         state = ActionState.END
     }
 
-    fun hasMana(amount: Int): Boolean = with(world) {
-        source[Stats].mana >= amount
+    fun hasMana(entity: Entity, amount: Int): Boolean = with(world) {
+        entity[Stats].mana >= amount
     }
 
     fun play(soundAsset: SoundAsset, delay: Float = 0.5f) {
