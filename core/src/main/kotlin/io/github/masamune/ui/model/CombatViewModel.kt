@@ -36,6 +36,7 @@ import io.github.masamune.event.CombatPlayerVictoryEvent
 import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
+import io.github.masamune.event.GameResizeEvent
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemCategory
@@ -83,13 +84,6 @@ class CombatViewModel(
     var combatHeal: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatMana: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatDone: Boolean by propertyNotify(false)
-
-    fun reset() {
-        enemyEntities.clear()
-        playerEntities.clear()
-        selectEntityIterator.reset()
-        activeSelector = Entity.NONE
-    }
 
     override fun onEvent(event: Event): Unit = with(world) {
         when (event) {
@@ -170,6 +164,8 @@ class CombatViewModel(
 
             is CombatPlayerVictoryEvent, is CombatPlayerDefeatEvent -> combatDone = true
 
+            is GameResizeEvent -> onResize()
+
             else -> Unit
         }
     }
@@ -202,7 +198,7 @@ class CombatViewModel(
             }
     }
 
-    fun onResize() = with(world) {
+    private fun onResize() = with(world) {
         // update player position to also trigger an update of view element positions in CombatView
         playerEntities.singleOrNull()?.let { player ->
             val playerPos = player[Transform].position

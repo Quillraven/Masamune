@@ -16,6 +16,8 @@ import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.event.MapTransitionEndEvent
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.MenuEndEvent
+import io.github.masamune.event.PlayerInteractCombatBeginEvent
+import io.github.masamune.event.PlayerInteractCombatEndEvent
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.event.ShopEndEvent
 import ktx.app.KtxInputAdapter
@@ -108,6 +110,8 @@ class KeyboardController(
             is CombatNextTurnEvent -> activeState = uiState
             is CombatStartEvent -> activeState = uiState
             is CombatPlayerVictoryEvent, is CombatPlayerDefeatEvent -> activeState = uiState
+            is PlayerInteractCombatBeginEvent -> activeState = disabledState
+            is PlayerInteractCombatEndEvent -> activeState = gameState
             else -> Unit
         }
     }

@@ -15,11 +15,14 @@ sealed interface Event
 // GENERAL EVENTS
 data class PlayerMoveEvent(val direction: Vector2) : Event
 data object GameExitEvent : Event
+data class GameResizeEvent(val width: Int, val height: Int) : Event
 
 // PLAYER INTERACT EVENTS
 data class PlayerInteractBeginContactEvent(val player: Entity, val other: Entity) : Event
 data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) : Event
 data object PlayerInteractEvent : Event
+data object PlayerInteractCombatBeginEvent : Event
+data object PlayerInteractCombatEndEvent : Event
 
 // MENU EVENTS
 data class MenuBeginEvent(val type: MenuType) : Event

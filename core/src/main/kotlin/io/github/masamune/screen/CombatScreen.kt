@@ -37,6 +37,7 @@ import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
+import io.github.masamune.event.PlayerInteractCombatEndEvent
 import io.github.masamune.event.UiSelectEvent
 import io.github.masamune.input.ControllerStateUI
 import io.github.masamune.input.KeyboardController
@@ -82,18 +83,6 @@ class CombatScreen(
     private val world = combatWorld()
     private val enemyEntities = world.family { none(Player).all(Combat) }
 
-    // view model
-    private val combatViewModel = CombatViewModel(
-        bundle,
-        audioService,
-        world,
-        eventService,
-        gameViewport,
-        uiViewport,
-        assetService[AtlasAsset.CHARS_AND_PROPS],
-        actionExecutorService
-    )
-
     private fun combatWorld(): World {
         return configureWorld {
             injectables {
@@ -131,9 +120,19 @@ class CombatScreen(
         inputProcessor.addProcessor(keyboardController)
 
         // setup UI views
+        val model = CombatViewModel(
+            bundle,
+            audioService,
+            world,
+            eventService,
+            gameViewport,
+            uiViewport,
+            assetService[AtlasAsset.CHARS_AND_PROPS],
+            actionExecutorService
+        )
         stage.clear()
         stage.actors {
-            combatView(combatViewModel, skin)
+            combatView(model, skin)
         }
 
         // register all event listeners
@@ -217,14 +216,11 @@ class CombatScreen(
         eventService.clearListeners()
         world.removeAll(clearRecycled = true)
         audioService.playPrevMusic()
-        combatViewModel.reset()
     }
 
     override fun resize(width: Int, height: Int) {
         gameViewport.update(width, height, true)
         uiViewport.update(width, height, true)
-        world.system<ScreenBgdRenderSystem>().onResize(width, height)
-        combatViewModel.onResize()
     }
 
     override fun render(delta: Float) {
@@ -246,6 +242,8 @@ class CombatScreen(
             }
 
             combatDone && event is UiSelectEvent -> {
+                // reset flag to not enter this branch multiple times if user spams SELECT event
+                combatDone = false
                 masamune.transitionScreen<GameScreen>(
                     fromType = DefaultTransitionType,
                     toType = BlurTransitionType(
@@ -255,7 +253,9 @@ class CombatScreen(
                         endAlpha = 1f,
                         startAlpha = 0.4f
                     )
-                )
+                ) {
+                    eventService.fire(PlayerInteractCombatEndEvent)
+                }
             }
         }
     }

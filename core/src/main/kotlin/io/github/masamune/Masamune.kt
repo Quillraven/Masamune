@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.World
+import io.github.masamune.event.GameResizeEvent
 import io.github.masamune.screen.LoadingScreen
 import io.github.masamune.screen.TransitionType
 import io.github.masamune.tiledmap.DefaultMapTransitionService
@@ -44,6 +45,8 @@ class Masamune(
         screenTransition.resize(width, height)
         // 3) resize active screen
         super.resize(width, height)
+        // 4) resize any optional stuff
+        event.fire(GameResizeEvent(width, height))
     }
 
     override fun render() {

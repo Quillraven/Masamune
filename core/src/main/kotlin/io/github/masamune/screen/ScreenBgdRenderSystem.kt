@@ -13,6 +13,9 @@ import com.github.quillraven.fleks.World.Companion.inject
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.ShaderService.Companion.resize
 import io.github.masamune.component.ScreenBgd
+import io.github.masamune.event.Event
+import io.github.masamune.event.EventListener
+import io.github.masamune.event.GameResizeEvent
 import ktx.graphics.component1
 import ktx.graphics.component2
 import ktx.graphics.component3
@@ -22,7 +25,7 @@ import ktx.log.logger
 
 class ScreenBgdRenderSystem(
     private val batch: Batch = inject(),
-) : IteratingSystem(family { all(ScreenBgd) }), FamilyOnAdd, FamilyOnRemove {
+) : IteratingSystem(family { all(ScreenBgd) }), FamilyOnAdd, FamilyOnRemove, EventListener {
     private var fbo = FrameBuffer(ShaderService.FBO_FORMAT, Gdx.graphics.width, Gdx.graphics.height, false)
     private var alpha = 0f
 
@@ -54,12 +57,18 @@ class ScreenBgdRenderSystem(
 
     override fun onTickEntity(entity: Entity) = Unit
 
-    fun onResize(width: Int, height: Int) {
-        fbo = fbo.resize(width, height)
-        family.singleOrNull()?.let { entity ->
-            log.debug { "onResize screen bgd fbo" }
-            val (_, renderBlock) = entity[ScreenBgd]
-            renderBlock(batch, fbo)
+    override fun onEvent(event: Event) {
+        when (event) {
+            is GameResizeEvent -> {
+                fbo = fbo.resize(event.width, event.height)
+                family.singleOrNull()?.let { entity ->
+                    log.debug { "onResize screen bgd fbo" }
+                    val (_, renderBlock) = entity[ScreenBgd]
+                    renderBlock(batch, fbo)
+                }
+            }
+
+            else -> Unit
         }
     }
 

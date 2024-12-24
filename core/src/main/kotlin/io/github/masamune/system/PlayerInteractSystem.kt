@@ -30,6 +30,7 @@ import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
 import io.github.masamune.event.PlayerInteractBeginContactEvent
+import io.github.masamune.event.PlayerInteractCombatBeginEvent
 import io.github.masamune.event.PlayerInteractEndContactEvent
 import io.github.masamune.event.PlayerInteractEvent
 import io.github.masamune.event.PlayerMoveEvent
@@ -105,6 +106,7 @@ class PlayerInteractSystem(
             }
 
             interactEntity has Tag.ENEMY -> {
+                eventService.fire(PlayerInteractCombatBeginEvent)
                 audioService.play(MusicAsset.COMBAT1)
                 masamune.transitionScreen<CombatScreen>(
                     fromType = BlurTransitionType(
