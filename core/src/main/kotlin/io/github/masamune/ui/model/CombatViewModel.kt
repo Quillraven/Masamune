@@ -336,9 +336,22 @@ class CombatViewModel(
         playSndMenuAccept()
     }
 
+    private fun Entity.alreadyConfirmedTarget(target: Entity): Boolean = with(world) {
+        return selectorEntities.any { it != this@alreadyConfirmedTarget && it[Selector].target == target }
+    }
+
     fun confirmTargetSelection(): Boolean = with(world) {
-        if (targetType == ActionTargetType.MULTI && activeSelector[Selector].confirmed == false) {
+        val selectorCmp = activeSelector[Selector]
+        if (targetType == ActionTargetType.MULTI && selectorCmp.confirmed == false) {
             // multi target selection and selected target was not confirmed yet -> confirm it
+            if (activeSelector.alreadyConfirmedTarget(selectorCmp.target)) {
+                // multi select target was already confirmed before -> start action with selected targets
+                activeSelector.remove()
+                setActionTargets()
+                return@with true
+            }
+
+            // target was not selected before -> confirm it
             world.confirmSelector(activeSelector, true)
             if (selectorEntities.numEntities < enemyEntities.size) {
                 // not all targets selected yet
@@ -347,7 +360,12 @@ class CombatViewModel(
             }
         }
 
-        log.debug { "Selected targets: $selectorEntities" }
+        setActionTargets()
+        return@with true
+    }
+
+    private fun setActionTargets() = with(world) {
+        log.debug { "Selected targets: ${selectorEntities.entities.map { it[Selector].target }}" }
 
         // play sound effect
         playSndMenuAccept()
@@ -361,8 +379,6 @@ class CombatViewModel(
         }
         // fire event to trigger CombatSystem and start round
         eventService.fire(CombatPlayerActionEvent(player))
-
-        return@with true
     }
 
     companion object {
