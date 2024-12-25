@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="13" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="14" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="MapObject">
   <properties>
@@ -7,7 +7,7 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="hero"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
-   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,HEAL"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,HEAL,USE_ITEM"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
    <property name="speed" type="float" value="5"/>
    <property name="stats" type="class" propertytype="Stats">
@@ -228,6 +228,7 @@
  </tile>
  <tile id="13" type="ItemObject">
   <properties>
+   <property name="action" propertytype="ActionType" value="ITEM_MANA_RESTORE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="items/small_mana_potion"/>
    <property name="category" propertytype="ItemCategory" value="OTHER"/>
@@ -240,5 +241,22 @@
    </property>
   </properties>
   <image source="objects/small_mana_potion.png" width="9" height="11"/>
+ </tile>
+ <tile id="14" type="ItemObject">
+  <properties>
+   <property name="action" propertytype="ActionType" value="SCROLL_INFERNO"/>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="atlasRegionKey" value="items/scroll_inferno"/>
+   <property name="category" propertytype="ItemCategory" value="OTHER"/>
+   <property name="cost" type="int" value="100"/>
+   <property name="itemType" propertytype="ItemType" value="SCROLL_INFERNO"/>
+   <property name="onlyCombat" type="bool" value="true"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="damage" type="float" value="50"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/scroll_inferno.png" width="16" height="16"/>
  </tile>
 </tileset>
