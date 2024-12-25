@@ -44,6 +44,7 @@ import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CombatSystem
 import io.github.masamune.system.DissolveSystem
+import io.github.masamune.system.MoveBySystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
 import io.github.masamune.system.SelectorSystem
@@ -98,6 +99,7 @@ class CombatScreen(
 
             systems {
                 add(CombatSystem())
+                add(MoveBySystem())
                 add(AnimationSystem())
                 add(DissolveSystem())
                 add(ScaleSystem())
@@ -161,7 +163,6 @@ class CombatScreen(
         val statsCmp = with(gameScreenWorld) { gameScreenPlayer[Stats] }
         val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
 
-        val inventory = Inventory()
         val combatPlayer = this.world.entity {
             it += nameCmp
             it += playerCmp
@@ -176,7 +177,7 @@ class CombatScreen(
                 availableActionTypes = combatCmp.availableActionTypes.toMutableList(),
                 attackSnd = SoundAsset.SWORD_SWIPE
             )
-            it += inventory
+            it += Inventory()
         }
 
         eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))

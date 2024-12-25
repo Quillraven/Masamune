@@ -1,5 +1,6 @@
 package io.github.masamune.combat
 
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
@@ -12,6 +13,8 @@ import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Inventory.Companion.removeItem
 import io.github.masamune.component.Item
+import io.github.masamune.component.MoveBy
+import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
 import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
@@ -19,6 +22,7 @@ import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.EventService
 import ktx.log.logger
+import ktx.math.vec2
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -60,7 +64,7 @@ class ActionExecutorService(
     val Entity.itemAction: Action
         get() = with(world) { this@itemAction[Item].action }
 
-    fun perform(source: Entity, action: Action, targets: EntityBag) {
+    fun perform(source: Entity, action: Action, targets: EntityBag, moveEntity: Boolean = true) {
         log.debug { "Performing action ${action::class.simpleName}: source=$source, targets(${targets.size})=$targets" }
 
         this.state = ActionState.START
@@ -69,12 +73,23 @@ class ActionExecutorService(
         this.action = action
         this.targets.clear()
         this.targets += targets
+        if (moveEntity) {
+            moveEntityBy(source, PERFORM_OFFSET, 0.5f)
+        }
+    }
+
+    fun moveEntityBy(entity: Entity, amount: Float, duration: Float) = with(world) {
+        wait(duration + 0.25f)
+        entity.configure {
+            val direction = if (entity has Player) 1 else -1
+            it += MoveBy(vec2(0f, amount * direction), duration, Interpolation.fastSlow)
+        }
     }
 
     fun performItemAction(itemOwner: Entity, item: Entity, action: Action, targets: EntityBag) {
         this.itemOwner = itemOwner
         with(world) { removeItem(item[Item].type, 1, itemOwner) }
-        perform(item, action, targets)
+        perform(item, action, targets, false)
     }
 
     private fun changeState(newState: ActionState) {
@@ -185,9 +200,11 @@ class ActionExecutorService(
 
     fun clearAction() = with(world) {
         if (itemOwner != Entity.NONE) {
+            moveEntityBy(itemOwner, -PERFORM_OFFSET, 0.3f)
             itemOwner[Combat].clearAction()
             itemOwner = Entity.NONE
         } else {
+            moveEntityBy(source, -PERFORM_OFFSET, 0.3f)
             source[Combat].clearAction()
         }
         action = DefaultAction
@@ -199,6 +216,7 @@ class ActionExecutorService(
 
     companion object {
         private val log = logger<ActionExecutorService>()
+        private const val PERFORM_OFFSET = 0.75f // how many units will a unit move up/down when performing its action
     }
 }
 
