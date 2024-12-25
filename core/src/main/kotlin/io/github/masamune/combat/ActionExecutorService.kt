@@ -27,8 +27,8 @@ private enum class ActionState {
 }
 
 class ActionExecutorService(
-    private val audioService: AudioService,
-    private val eventService: EventService,
+    val audioService: AudioService,
+    val eventService: EventService,
 ) {
     private var state: ActionState = ActionState.START
     private var delaySec = 0f
