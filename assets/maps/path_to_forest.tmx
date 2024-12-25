@@ -21,9 +21,21 @@
   </data>
  </layer>
  <objectgroup id="4" name="object">
-  <object id="8" gid="4103" x="128" y="64" width="16" height="16"/>
-  <object id="9" gid="4104" x="128" y="32" width="16" height="16"/>
-  <object id="10" gid="4105" x="144" y="16" width="16" height="16"/>
+  <object id="8" gid="4103" x="128" y="64" width="16" height="16">
+   <properties>
+    <property name="enemies" value="BUTTERFLY=2"/>
+   </properties>
+  </object>
+  <object id="9" gid="4104" x="128" y="32" width="16" height="16">
+   <properties>
+    <property name="enemies" value="LARVA=1"/>
+   </properties>
+  </object>
+  <object id="10" gid="4105" x="144" y="16" width="16" height="16">
+   <properties>
+    <property name="enemies" value="MUSHROOM=2"/>
+   </properties>
+  </object>
   <object id="12" name="Player" gid="4097" x="80" y="656" width="16" height="16"/>
   <object id="13" gid="4107" x="160" y="48" width="48" height="48"/>
   <object id="14" gid="4107" x="192" y="64" width="48" height="48"/>

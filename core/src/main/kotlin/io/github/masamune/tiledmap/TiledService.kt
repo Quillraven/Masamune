@@ -23,6 +23,7 @@ import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Dialog
+import io.github.masamune.component.Enemy
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Facing
@@ -246,16 +247,35 @@ class TiledService(
             configurePhysic(it, tile, world, x, y)
             configureDialog(it, tile)
             configureTrigger(it, tile)
-            configureStats(it, tile)
-            configureCombat(it, tile)
-            if (objType == TiledObjectType.ENEMY) {
-                it += Tag.ENEMY
+            if (tile.enemy) {
+                configureEnemy(it, tiledObj)
             }
 
             if (isPlayerObj) {
                 configurePlayer(world, it)
+                configureStats(it, tile)
+                configureCombat(it, tile)
             }
         }
+    }
+
+    private fun EntityCreateContext.configureEnemy(entity: Entity, tiledObj: TiledMapTileMapObject) {
+        val enemiesStr = tiledObj.property("enemies", "")
+        if (enemiesStr.isBlank()) {
+            gdxError("No enemies configured for object ${tiledObj.id}")
+        }
+
+        val combatEntities = enemiesStr.split(";").associate { str ->
+            val splits = str.split("=")
+            if (splits.size != 2) {
+                gdxError("Wrong enemy format for object ${tiledObj.id}. Format must be 'TiledObjectType=number': $str")
+            }
+            val type = TiledObjectType.valueOf(splits[0])
+            val amount = splits[1].toInt()
+            type to amount
+        }
+        log.debug { "Encounter for object ${tiledObj.id}: $combatEntities" }
+        entity += Enemy(combatEntities)
     }
 
     private fun EntityCreateContext.configureTiled(
@@ -416,6 +436,32 @@ class TiledService(
         }
 
         gdxError("There is no item with type $itemType")
+    }
+
+    fun loadEnemy(world: World, type: TiledObjectType, x: Float, y: Float): Entity {
+        val objectsTileSet = currentMap?.tileSets?.getTileSet("objects")
+            ?: gdxError("Objects TileSet is not available")
+
+        objectsTileSet.iterator().forEach { tile ->
+            if (tile.objType != type.name) {
+                return@forEach
+            }
+
+            return world.entity {
+                log.debug { "Loading enemy $type as entity $it" }
+
+                val graphic = configureGraphic(it, tile)
+                it += graphic
+                it += Transform(vec3(x, y, 0f), graphic.regionSize)
+                it += Name(tile.objType.lowercase())
+                configureStats(it, tile)
+                it += Facing(FacingDirection.DOWN)
+                configureGraphic(it, tile)
+                configureCombat(it, tile)
+            }
+        }
+
+        gdxError("There is no enemy with type $type")
     }
 
     companion object {

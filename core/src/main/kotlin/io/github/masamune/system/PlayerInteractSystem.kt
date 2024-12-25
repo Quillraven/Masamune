@@ -15,6 +15,7 @@ import io.github.masamune.PhysicContactHandler.Companion.testPoint
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Dialog
+import io.github.masamune.component.Enemy
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Interact
 import io.github.masamune.component.Outline
@@ -60,7 +61,7 @@ class PlayerInteractSystem(
     private val filteredDirectionEntities = MutableEntityBag(4)
     private val distanceComparator = compareEntity { e1, e2 -> (euclideanDist(e1).compareTo(euclideanDist(e2))) }
 
-    override fun onTickEntity(entity: Entity) = with(entity[Interact]) {
+    override fun onTickEntity(player: Entity) = with(player[Interact]) {
         triggerTimer = (triggerTimer - deltaTime).coerceAtLeast(0f)
 
         if (nearbyEntities.isEmpty()) {
@@ -69,14 +70,14 @@ class PlayerInteractSystem(
         }
 
         // playerCenter is used in handleMapTrigger and tagClosestEntity below
-        entity[Transform].centerTo(playerCenter)
+        player[Transform].centerTo(playerCenter)
         // check for map trigger entities (=entities that are not rendered/visible to the player)
-        if (handleMapTrigger(entity)) {
+        if (handleMapTrigger(player)) {
             return@with
         }
 
         // check for map portal entities
-        if (handlePortals(entity)) {
+        if (handlePortals(player)) {
             // player entered portal to a new map -> skip remaining system logic
             return@with
         }
@@ -89,23 +90,27 @@ class PlayerInteractSystem(
         }
 
         triggerTimer = 0f
+        onPlayerInteract(player)
+    }
+
+    private fun Interact.onPlayerInteract(player: Entity) {
         when {
             interactEntity == Entity.NONE -> {
                 // no entity to interact
-                return@with
+                return
             }
 
             interactEntity has Dialog -> {
-                val namedDialog = dialogConfigurator[interactEntity[Dialog].dialogName, world, entity]
-                eventService.fire(DialogBeginEvent(world, entity, namedDialog))
+                val namedDialog = dialogConfigurator[interactEntity[Dialog].dialogName, world, player]
+                eventService.fire(DialogBeginEvent(world, player, namedDialog))
             }
 
             interactEntity has Trigger -> {
                 interactEntity.configure { it += Tag.EXECUTE_TRIGGER }
-                interactEntity[Trigger].triggeringEntity = entity
+                interactEntity[Trigger].triggeringEntity = player
             }
 
-            interactEntity has Tag.ENEMY -> {
+            interactEntity has Enemy -> {
                 eventService.fire(PlayerInteractCombatBeginEvent)
                 audioService.play(MusicAsset.COMBAT1)
                 masamune.transitionScreen<CombatScreen>(
@@ -118,7 +123,10 @@ class PlayerInteractSystem(
                     ),
                     toType = DefaultTransitionType,
                 ) { combatScreen ->
-                    combatScreen.spawnPlayer(world, entity)
+                    combatScreen.spawnEnemies(interactEntity[Enemy].combatEntities)
+                    // call spawnPlayer method AFTER spawnEnemies because it fires an event
+                    // that starts the combat, and we need the enemy entities at that point already.
+                    combatScreen.spawnPlayer(world, player)
                 }
             }
         }
@@ -168,7 +176,7 @@ class PlayerInteractSystem(
 
         val closestEntity: Entity? = filteredDirectionEntities.firstOrNull()
         if (closestEntity != null && closestEntity != interactEntity) {
-            val outlineColor = if (closestEntity has Tag.ENEMY) Outline.COLOR_ENEMY else Outline.COLOR_NEUTRAL
+            val outlineColor = if (closestEntity has Enemy) Outline.COLOR_ENEMY else Outline.COLOR_NEUTRAL
             closestEntity.configure { it += Outline(outlineColor) }
             if (interactEntity != Entity.NONE) {
                 interactEntity.configure { it -= Outline }
@@ -213,7 +221,7 @@ class PlayerInteractSystem(
     }
 
     private fun Entity.isNotInteractable(): Boolean {
-        return this hasNo Dialog && this hasNo Trigger && this hasNo Portal && this hasNo Tag.ENEMY
+        return this hasNo Dialog && this hasNo Trigger && this hasNo Portal && this hasNo Enemy
     }
 
     private fun onPlayerBeginInteract(player: Entity, other: Entity) {

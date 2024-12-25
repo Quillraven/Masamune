@@ -29,6 +29,9 @@ val TiledMapTile.combatActions: String
 val TiledMapTile.dialogName: String
     get() = this.property<String>("dialogName", "")
 
+val TiledMapTile.enemy: Boolean
+    get() = this.property<Boolean>("enemy", false)
+
 val TiledMapTile.objType: String
     get() = this.property<String>("objType", "UNDEFINED")
 

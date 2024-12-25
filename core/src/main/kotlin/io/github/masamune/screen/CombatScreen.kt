@@ -2,7 +2,7 @@ package io.github.masamune.screen
 
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
@@ -49,13 +49,14 @@ import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
 import io.github.masamune.system.SelectorSystem
 import io.github.masamune.system.ShakeSystem
-import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
+import io.github.masamune.tiledmap.TiledObjectType
+import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.ui.model.CombatViewModel
 import io.github.masamune.ui.view.combatView
 import ktx.app.KtxScreen
+import ktx.app.gdxError
 import ktx.log.logger
-import ktx.math.vec2
 import ktx.math.vec3
 import ktx.scene2d.actors
 
@@ -68,6 +69,7 @@ class CombatScreen(
     private val assetService: AssetService = masamune.asset,
     private val audioService: AudioService = masamune.audio,
     private val actionExecutorService: ActionExecutorService = masamune.actionExecutor,
+    private val tiledService: TiledService = masamune.tiled,
 ) : KtxScreen, EventListener {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(8f, 8f)
@@ -150,10 +152,6 @@ class CombatScreen(
                 }
             }
         }
-
-        spawnDummyCombatEntity(agility = 3f, damage = 2f, offsetXY = vec2(-3f, -2f))
-        spawnDummyCombatEntity(agility = 7f, damage = 3f, offsetXY = vec2(-1f, -4f))
-        spawnDummyCombatEntity(agility = 1f, damage = 1f, offsetXY = vec2(1f, -3f))
     }
 
     fun spawnPlayer(gameScreenWorld: World, gameScreenPlayer: Entity) {
@@ -183,23 +181,24 @@ class CombatScreen(
         eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))
     }
 
-    private fun spawnDummyCombatEntity(agility: Float, damage: Float, offsetXY: Vector2) {
-        val atlas = assetService[AtlasAsset.CHARS_AND_PROPS]
+    fun spawnEnemies(enemiesMap: Map<TiledObjectType, Int>) {
+        if (enemiesMap.isEmpty()) {
+            gdxError("Cannot start a combat without enemies")
+        }
 
-        world.entity {
-            it += Name("Dummy1")
-            it += Stats(strength = 2f, agility = agility, damage = damage, armor = 5f, life = 20f, lifeMax = 20f)
-            it += Facing(FacingDirection.DOWN)
-            val animationCmp =
-                Animation.ofAtlas(atlas, "butterfly", AnimationType.WALK, FacingDirection.DOWN, speed = 0.4f)
-            it += animationCmp
-            val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
-            it += graphicCmp
-            it += Transform(
-                vec3(gameViewport.worldWidth * 0.5f + offsetXY.x, gameViewport.worldHeight + offsetXY.y, 0f),
-                graphicCmp.regionSize
-            )
-            it += Combat(availableActionTypes = listOf(ActionType.ATTACK_SINGLE))
+        val totalEnemies = enemiesMap.values.sum()
+        val diffX = gameViewport.worldWidth / (1 + totalEnemies)
+        val y = gameViewport.worldHeight - 2
+        var x = diffX
+
+        enemiesMap.forEach { (type, amount) ->
+            repeat(amount) {
+                val spawnX = x + MathUtils.random(-0.5f, 0.5f)
+                val spawnY = y + MathUtils.random(-2f, 1f)
+                val enemy = tiledService.loadEnemy(world, type, spawnX, spawnY)
+                with(world) { enemy[Animation].speed = 0.4f }
+                x += diffX
+            }
         }
     }
 

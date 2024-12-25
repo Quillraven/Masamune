@@ -125,7 +125,17 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="butterfly"/>
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
-   <property name="objType" propertytype="MapObjectType" value="ENEMY"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT"/>
+   <property name="enemy" type="bool" value="true"/>
+   <property name="objType" propertytype="MapObjectType" value="BUTTERFLY"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="agility" type="float" value="5"/>
+     <property name="damage" type="float" value="3"/>
+     <property name="life" type="float" value="20"/>
+     <property name="lifeMax" type="float" value="20"/>
+    </properties>
+   </property>
   </properties>
   <image source="objects/butterfly.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
@@ -142,7 +152,18 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="larva"/>
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
-   <property name="objType" propertytype="MapObjectType" value="ENEMY"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
+   <property name="enemy" type="bool" value="true"/>
+   <property name="objType" propertytype="MapObjectType" value="LARVA"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="agility" type="float" value="2"/>
+     <property name="damage" type="float" value="4"/>
+     <property name="life" type="float" value="27"/>
+     <property name="lifeMax" type="float" value="27"/>
+     <property name="resistance" type="float" value="0.25"/>
+    </properties>
+   </property>
   </properties>
   <image source="objects/larva.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
@@ -159,7 +180,18 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="mushroom"/>
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
-   <property name="objType" propertytype="MapObjectType" value="ENEMY"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
+   <property name="enemy" type="bool" value="true"/>
+   <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="agility" type="float" value="3"/>
+     <property name="damage" type="float" value="6"/>
+     <property name="life" type="float" value="17"/>
+     <property name="lifeMax" type="float" value="17"/>
+     <property name="physicalEvade" type="float" value="0.1"/>
+    </properties>
+   </property>
   </properties>
   <image source="objects/mushroom.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">

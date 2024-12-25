@@ -250,6 +250,11 @@
                     "value": ""
                 },
                 {
+                    "name": "enemy",
+                    "type": "bool",
+                    "value": false
+                },
+                {
                     "name": "objType",
                     "propertyType": "MapObjectType",
                     "type": "string",
@@ -293,9 +298,11 @@
                 "MERCHANT",
                 "SMITH",
                 "PORTAL",
-                "ENEMY",
                 "ITEM",
-                "TRIGGER"
+                "TRIGGER",
+                "LARVA",
+                "BUTTERFLY",
+                "MUSHROOM"
             ],
             "valuesAsFlags": false
         },
