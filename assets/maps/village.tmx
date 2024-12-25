@@ -35,7 +35,11 @@
   <object id="5" name="Smith" gid="4102" x="16" y="288" width="16" height="16"/>
   <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
   <object id="13" gid="4107" x="122" y="132" width="48" height="48"/>
-  <object id="14" gid="4103" x="205" y="176" width="16" height="16"/>
+  <object id="14" gid="4103" x="205" y="176" width="16" height="16">
+   <properties>
+    <property name="enemies" value="BUTTERFLY=2;LARVA=1"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
   <object id="7" name="villageExit" x="32" y="-12" width="80" height="44">
