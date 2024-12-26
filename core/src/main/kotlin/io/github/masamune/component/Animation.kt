@@ -13,7 +13,12 @@ class GdxAnimation(
     keyFrames: GdxArray<AtlasRegion>,
     val atlasKey: String,
     val type: AnimationType,
-) : com.badlogic.gdx.graphics.g2d.Animation<AtlasRegion>(frameDuration, keyFrames)
+    val direction: FacingDirection,
+) : com.badlogic.gdx.graphics.g2d.Animation<AtlasRegion>(frameDuration, keyFrames) {
+    operator fun component1(): String = atlasKey
+    operator fun component2(): AnimationType = type
+    operator fun component3(): FacingDirection = direction
+}
 
 data class Animation(
     val atlas: CachingAtlas,
@@ -37,6 +42,12 @@ data class Animation(
         ): Animation {
             val gdxAnimation = atlas.gdxAnimation(mainKey, animationType, direction)
             return Animation(atlas, gdxAnimation, speed = speed)
+        }
+
+        fun ofAnimation(animation: Animation): Animation {
+            val (atlas, gdxAnimation, _, speed) = animation
+            val (atlasKey, animationType, direction) = gdxAnimation
+            return Animation(atlas, atlas.gdxAnimation(atlasKey, animationType, direction), speed)
         }
     }
 }
