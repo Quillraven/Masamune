@@ -78,7 +78,7 @@ class GameScreen(
     private val triggerConfigurator = TriggerConfigurator()
 
     // ecs world
-    private val world = gameWorld()
+    val world = gameWorld()
 
     private fun gameWorld() = configureWorld {
         injectables {
