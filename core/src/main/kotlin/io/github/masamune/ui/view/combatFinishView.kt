@@ -4,7 +4,9 @@ import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import io.github.masamune.ui.model.CombatFinishViewModel
 import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.UiCombatFinishState
@@ -19,6 +21,7 @@ import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
 import ktx.scene2d.defaultStyle
 import ktx.scene2d.label
+import ktx.scene2d.scene2d
 import ktx.scene2d.table
 
 @Scene2dDsl
@@ -28,29 +31,35 @@ class CombatFinishView(
 ) : View<CombatFinishViewModel>(skin, viewModel), KTable {
 
     private val xpLabel: Label
-    private val content: Label
+    private val talonsLabel: Label
+    private val levelUpLabel: TypingLabel
+    private val combatSummary: Label
     private val optionTable: OptionTable
+    private val centeredTable: Table
 
     init {
         setFillParent(true)
 
         // nested inner table to center the content of the dialog automatically
-        table(skin) {
+        centeredTable = table(skin) {
             background = skin.getDrawable("dialog_frame")
 
-            this@CombatFinishView.xpLabel = label("", defaultStyle, skin) {
+            this@CombatFinishView.xpLabel = scene2d.label("", defaultStyle, skin) {
                 setAlignment(Align.topLeft)
                 color = skin.getColor("dark_grey")
-                it.grow().padBottom(5f).row()
             }
-            this@CombatFinishView.content = label("", defaultStyle, skin) {
+            this@CombatFinishView.talonsLabel = scene2d.label("", defaultStyle, skin) {
                 setAlignment(Align.topLeft)
                 color = skin.getColor("dark_grey")
-                it.grow().padBottom(10f).row()
             }
-            this@CombatFinishView.optionTable = optionTable(skin) {
-                it.fill().align(Align.left)
+            this@CombatFinishView.levelUpLabel = scene2d.typingLabel("", defaultStyle, skin) {
+                setAlignment(Align.topLeft)
             }
+            this@CombatFinishView.combatSummary = scene2d.label("", defaultStyle, skin) {
+                setAlignment(Align.topLeft)
+                color = skin.getColor("dark_grey")
+            }
+            this@CombatFinishView.optionTable = scene2d.optionTable(skin)
         }
 
         registerOnPropertyChanges()
@@ -64,8 +73,24 @@ class CombatFinishView(
                 append(xp)
             }
         }
+        viewModel.onPropertyChange(CombatFinishViewModel::talonsToGain) { talons ->
+            talonsLabel.txt = buildString {
+                append(i18nTxt(I18NKey.COMBAT_TOTAL_TALONS))
+                append(": ")
+                append(talons)
+            }
+        }
+        viewModel.onPropertyChange(CombatFinishViewModel::levelsToGain) { lvl ->
+            levelUpLabel.isVisible = lvl > 0
+            levelUpLabel.txt = buildString {
+                append("{RAINBOW}")
+                append(i18nTxt(I18NKey.COMBAT_LEVEL_UPS))
+                append(": ")
+                append(lvl)
+            }
+        }
         viewModel.onPropertyChange(CombatFinishViewModel::combatSummary) { combatSummary ->
-            content.txt = buildString {
+            this.combatSummary.txt = buildString {
                 append(i18nTxt(I18NKey.COMBAT_DEFEATED_ENEMIES))
                 appendLine(":")
                 append(combatSummary.map { "${it.key}: ${it.value}x" }.joinToString("\n"))
@@ -77,12 +102,23 @@ class CombatFinishView(
             }
 
             optionTable.clearOptions()
+            centeredTable.clearChildren()
             if (state == UiCombatFinishState.DEFEAT) {
-                xpLabel.txt = ""
-                content.txt = i18nTxt(I18NKey.COMBAT_DEFEAT)
+                centeredTable.add(combatSummary).grow().padBottom(30f).padTop(10f).row()
+                centeredTable.add(optionTable).fill().align(Align.left)
+
+                combatSummary.txt = i18nTxt(I18NKey.COMBAT_DEFEAT)
                 optionTable.option(i18nTxt(I18NKey.GENERAL_YES))
                 optionTable.option(i18nTxt(I18NKey.GENERAL_NO))
             } else {
+                centeredTable.add(xpLabel).grow().padBottom(5f).row()
+                centeredTable.add(talonsLabel).grow().padBottom(5f).row()
+                if (levelUpLabel.isVisible) {
+                    centeredTable.add(levelUpLabel).grow().padBottom(10f).padTop(10f).row()
+                }
+                centeredTable.add(combatSummary).grow().padBottom(30f).padTop(30f).row()
+                centeredTable.add(optionTable).fill().align(Align.left)
+
                 optionTable.option(i18nTxt(I18NKey.DIALOG_OPTION_OK))
             }
 

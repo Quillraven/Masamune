@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.asset.AssetService
@@ -23,10 +24,12 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
+import io.github.masamune.component.Experience
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
+import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.ScreenBgd
@@ -36,6 +39,7 @@ import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.input.ControllerStateUI
 import io.github.masamune.input.KeyboardController
+import io.github.masamune.removeItem
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CombatSystem
 import io.github.masamune.system.DissolveSystem
@@ -45,6 +49,7 @@ import io.github.masamune.system.ScaleSystem
 import io.github.masamune.system.SelectorSystem
 import io.github.masamune.system.ShakeSystem
 import io.github.masamune.tiledmap.AnimationType
+import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.ui.model.CombatFinishViewModel
@@ -88,6 +93,7 @@ class CombatScreen(
     private lateinit var enemiesMap: Map<TiledObjectType, Int>
     lateinit var gameScreenEnemy: Entity
         private set
+    private lateinit var combatPlayer: Entity
 
     private fun combatWorld(): World {
         return configureWorld {
@@ -100,6 +106,7 @@ class CombatScreen(
                 add(masamune)
                 add(audioService)
                 add(actionExecutorService)
+                add(AtlasAsset.CHARS_AND_PROPS.name, assetService[AtlasAsset.CHARS_AND_PROPS])
             }
 
             systems {
@@ -154,7 +161,6 @@ class CombatScreen(
             eventService,
             gameViewport,
             uiViewport,
-            assetService[AtlasAsset.CHARS_AND_PROPS],
             actionExecutorService
         )
         stage.clear()
@@ -170,18 +176,32 @@ class CombatScreen(
         this.gameScreenWorld = gameScreenWorld
         this.gameScreenPlayer = gameScreenPlayer
 
-        val atlas = assetService[AtlasAsset.CHARS_AND_PROPS]
+        val aniCmp = with(gameScreenWorld) { gameScreenPlayer[Animation] }
         val nameCmp = with(gameScreenWorld) { gameScreenPlayer[Name] }
         val playerCmp = with(gameScreenWorld) { gameScreenPlayer[Player] }
         val statsCmp = with(gameScreenWorld) { gameScreenPlayer[Stats] }
         val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
+        val xpCmp = with(gameScreenWorld) { gameScreenPlayer[Experience] }
+        // clone OTHER items; they are the only ones that can be used during combat
+        val clonedItems = MutableEntityBag()
+        with(gameScreenWorld) {
+            gameScreenPlayer[Inventory].items
+                .filter { it[Item].category == ItemCategory.OTHER }
+                .forEach {
+                    val clonedItem = tiledService.loadItem(world, it[Item].type, it[Item].amount)
+                    clonedItems += clonedItem
+                }
+        }
 
-        val combatPlayer = this.world.entity {
+        combatPlayer = this.world.entity {
             it += nameCmp
             it += playerCmp
+            it += xpCmp
             it += Stats.of(statsCmp)
             it += Facing(FacingDirection.UP)
-            val animationCmp = Animation.ofAtlas(atlas, "hero", AnimationType.WALK, FacingDirection.UP, speed = 0.4f)
+            val animationCmp = Animation.ofAnimation(aniCmp)
+            animationCmp.changeTo = AnimationType.WALK
+            animationCmp.speed = 0.4f
             it += animationCmp
             val graphicCmp = Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
             it += graphicCmp
@@ -190,10 +210,61 @@ class CombatScreen(
                 availableActionTypes = combatCmp.availableActionTypes.toMutableList(),
                 attackSnd = SoundAsset.SWORD_SWIPE
             )
-            it += Inventory()
+            it += Inventory(clonedItems)
         }
 
         eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))
+    }
+
+    fun updatePlayerAfterVictory(xpGained: Int, talonsGained: Int) {
+        // update life and mana
+        val combatStats = with(world) { combatPlayer[Stats] }
+        val gameStats = with(gameScreenWorld) { gameScreenPlayer[Stats] }
+        gameStats.life = combatStats.life
+        gameStats.mana = combatStats.mana
+
+        // update consumable items
+        updatePlayerItemsAfterCombat()
+
+        // update xp and talons
+        with(gameScreenWorld) {
+            gameScreenPlayer[Experience].gainXp(xpGained)
+            gameScreenPlayer[Inventory].talons += talonsGained
+        }
+    }
+
+    fun updatePlayerAfterDefeat() {
+        // update life and mana
+        val combatStats = with(world) { combatPlayer[Stats] }
+        val gameStats = with(gameScreenWorld) { gameScreenPlayer[Stats] }
+        gameStats.life = 1f
+        gameStats.mana = combatStats.mana
+
+        // update consumable items
+        updatePlayerItemsAfterCombat()
+    }
+
+    private fun updatePlayerItemsAfterCombat() {
+        val combatItemCmps = with(world) {
+            combatPlayer[Inventory].items.map { it[Item] }
+        }
+        with(gameScreenWorld) {
+            val toRemove = MutableEntityBag(4)
+            gameScreenPlayer[Inventory].items
+                .filter { it[Item].category == ItemCategory.OTHER }
+                .forEach { itemEntity ->
+                    val itemCmp = itemEntity[Item]
+                    val matchingItemCmp = combatItemCmps.firstOrNull { it.type == itemCmp.type }
+                    if (matchingItemCmp == null || matchingItemCmp.amount == 0) {
+                        // item was completely consumed during combat
+                        toRemove += itemEntity
+                    } else {
+                        // item is still available -> update amount
+                        itemCmp.amount = matchingItemCmp.amount
+                    }
+                }
+            toRemove.forEach { this.removeItem(it, gameScreenPlayer) }
+        }
     }
 
     fun spawnEnemies(gameScreenEnemy: Entity, enemiesMap: Map<TiledObjectType, Int>) {

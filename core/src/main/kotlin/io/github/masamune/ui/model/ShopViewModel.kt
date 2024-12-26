@@ -5,12 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.addItem
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
-import io.github.masamune.component.Inventory.Companion.addItem
-import io.github.masamune.component.Inventory.Companion.removeItem
 import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Stats
@@ -18,6 +17,7 @@ import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.event.ShopEndEvent
+import io.github.masamune.removeItem
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.tiledmap.TiledStats

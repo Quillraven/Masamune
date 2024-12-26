@@ -10,7 +10,8 @@ import com.github.quillraven.fleks.collection.EntityBagIterator
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.collection.compareEntity
 import com.github.quillraven.fleks.collection.iterator
-import io.github.masamune.asset.CachingAtlas
+import io.github.masamune.SELECTOR_SCALE
+import io.github.masamune.SELECTOR_SPEED
 import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.action.Action
@@ -37,12 +38,11 @@ import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.GameResizeEvent
+import io.github.masamune.selectorEntity
 import io.github.masamune.tiledmap.ActionType
-import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemCategory
 import ktx.log.logger
 import ktx.math.vec2
-import ktx.math.vec3
 
 class CombatViewModel(
     bundle: I18NBundle,
@@ -51,7 +51,6 @@ class CombatViewModel(
     private val eventService: EventService,
     private val gameViewport: Viewport,
     private val uiViewport: Viewport,
-    private val charPropAtlas: CachingAtlas,
     private val actionExecutorService: ActionExecutorService,
 ) : ViewModel(bundle, audioService) {
 
@@ -186,7 +185,7 @@ class CombatViewModel(
         playerItems = player[Inventory].items
             .filter {
                 val itemCmp = it[Item]
-                itemCmp.category == ItemCategory.OTHER && itemCmp.actionType != ActionType.UNDEFINED
+                itemCmp.category == ItemCategory.OTHER && itemCmp.actionType != ActionType.UNDEFINED && itemCmp.amount > 0
             }
             .map {
                 val itemCmp = it[Item]
@@ -208,15 +207,6 @@ class CombatViewModel(
         }
     }
 
-    private fun World.spawnSelectorEntity(target: Entity, confirmed: Boolean): Entity = this.entity {
-        // position and size don't matter because they get updated in the SelectorSystem
-        it += Transform(vec3(), vec2(), SELECTOR_SCALE)
-        val animationCmp = Animation.ofAtlas(charPropAtlas, "select", AnimationType.IDLE, speed = SELECTOR_SPEED)
-        it += animationCmp
-        it += Graphic(animationCmp.gdxAnimation.getKeyFrame(0f))
-        it += Selector(target, confirmed)
-    }
-
     /**
      * Spawns target selection entities based on the [targetType].
      * If [forEnemy] is true then only enemy entities can be targeted.
@@ -231,16 +221,16 @@ class CombatViewModel(
 
         when (targetType) {
             ActionTargetType.SINGLE -> {
-                activeSelector = spawnSelectorEntity(selectEntityIterator.next(), true)
+                activeSelector = selectorEntity(selectEntityIterator.next(), true)
             }
 
             ActionTargetType.MULTI -> {
-                activeSelector = spawnSelectorEntity(selectEntityIterator.next(), false)
+                activeSelector = selectorEntity(selectEntityIterator.next(), false)
             }
 
             ActionTargetType.ALL -> {
                 while (selectEntityIterator.hasNext()) {
-                    spawnSelectorEntity(selectEntityIterator.next(), true)
+                    selectorEntity(selectEntityIterator.next(), true)
                 }
             }
 
@@ -333,7 +323,7 @@ class CombatViewModel(
     private fun spawnNextMultiSelector() = with(world) {
         // get first target that has no selector entity linked to it yet
         val target = selectEntityIterator.goToFirst { enemy -> selectorEntities.none { it[Selector].target == enemy } }
-        activeSelector = spawnSelectorEntity(target, false)
+        activeSelector = selectorEntity(target, false)
         playSndMenuAccept()
     }
 
@@ -384,8 +374,6 @@ class CombatViewModel(
 
     companion object {
         private val log = logger<CombatViewModel>()
-        private const val SELECTOR_SPEED = 1.5f
-        private const val SELECTOR_SCALE = 1.2f
 
         private fun Vector2.toUiPosition(from: Viewport, to: Viewport): Vector2 {
             from.project(this)

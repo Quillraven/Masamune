@@ -1,10 +1,12 @@
 package io.github.masamune.ui.model
 
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Experience
+import io.github.masamune.component.Experience.Companion.calcLevelUps
 import io.github.masamune.component.Tiled
 import io.github.masamune.event.CombatPlayerDefeatEvent
 import io.github.masamune.event.CombatPlayerVictoryEvent
@@ -31,6 +33,8 @@ class CombatFinishViewModel(
 ) : ViewModel(bundle, audioService) {
 
     var xpToGain: Int by propertyNotify(0)
+    var talonsToGain: Int by propertyNotify(0)
+    var levelsToGain: Int by propertyNotify(0)
     val combatSummary: MutableMap<String, Int> by propertyNotify(mutableMapOf())
     var state: UiCombatFinishState by propertyNotify(UiCombatFinishState.UNDEFINED)
 
@@ -40,21 +44,30 @@ class CombatFinishViewModel(
                 state = UiCombatFinishState.UNDEFINED
                 with(world) {
                     var totalXp = 0
+                    var totalTalons = 0
                     combatSummary.clear()
                     event.enemies.forEach { enemy ->
-                        totalXp += enemy[Experience].current
+                        val (level, xp) = enemy[Experience]
+                        totalXp += xp
+                        totalTalons += level * MathUtils.random(5, 9)
+
                         val type = enemy[Tiled].objType
                         val name = bundle["enemy.${type.name.lowercase()}.name"]
                         combatSummary.merge(name, 1, Int::plus)
                     }
 
-                    log.debug { "Total XP to gain: $totalXp" }
-                    xpToGain = event.enemies.map { it[Experience].current }.sum()
+                    xpToGain = totalXp
+                    talonsToGain = totalTalons
+                    val (playerLevel, playerXp) = event.player[Experience]
+                    levelsToGain = calcLevelUps(playerLevel, playerXp, xpToGain)
+                    log.debug { "Total XP/talons to gain: xp=$xpToGain, talons=$talonsToGain, levels=$levelsToGain" }
                     notify(CombatFinishViewModel::combatSummary, combatSummary)
                 }
             }
 
-            is CombatPlayerVictoryEvent -> state = UiCombatFinishState.VICTORY
+            is CombatPlayerVictoryEvent -> {
+                state = UiCombatFinishState.VICTORY
+            }
 
             is CombatPlayerDefeatEvent -> state = UiCombatFinishState.DEFEAT
 
@@ -63,6 +76,14 @@ class CombatFinishViewModel(
     }
 
     fun quitCombat() {
+        val victory = state == UiCombatFinishState.VICTORY
+        val combatScreen = masamune.getScreen<CombatScreen>()
+        if (victory) {
+            combatScreen.updatePlayerAfterVictory(xpToGain, talonsToGain)
+        } else {
+            combatScreen.updatePlayerAfterDefeat()
+        }
+
         masamune.transitionScreen<GameScreen>(
             fromType = DefaultTransitionType,
             toType = BlurTransitionType(
@@ -73,8 +94,7 @@ class CombatFinishViewModel(
                 startAlpha = 0.4f
             )
         ) {
-            val victory = state == UiCombatFinishState.VICTORY
-            val gameScreenEntity = masamune.getScreen<CombatScreen>().gameScreenEnemy
+            val gameScreenEntity = combatScreen.gameScreenEnemy
             eventService.fire(PlayerInteractCombatEndEvent(victory, gameScreenEntity))
         }
     }
