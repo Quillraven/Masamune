@@ -2,7 +2,6 @@ package io.github.masamune.component
 
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
-import kotlin.math.floor
 
 data class Experience(
     var level: Int = 1,
@@ -11,15 +10,31 @@ data class Experience(
 ) : Component<Experience> {
 
     init {
-        calcLevelUpXp()
-    }
-
-    fun calcLevelUpXp() {
-        val xpNeeded: Float = 250f + ((level - 1) * 200) * 1.25f
-        forLevelUp = (floor(xpNeeded / 10) * 10).toInt()
+        forLevelUp = calcLevelUpXp(level)
     }
 
     override fun type() = Experience
 
-    companion object : ComponentType<Experience>()
+    fun gainXp(xpGained: Int) {
+        current += xpGained
+        while (current >= forLevelUp) {
+            forLevelUp = calcLevelUpXp(++level)
+        }
+    }
+
+    companion object : ComponentType<Experience>() {
+        fun calcLevelUpXp(forLevel: Int): Int = (250f + ((forLevel - 1) * 200) * 1.25f).toInt()
+
+        fun calcLevelUps(level: Int, currentXp: Int, xpGain: Int): Int {
+            var tmpLvl = level
+            val tmpXp = currentXp + xpGain
+            var tmpNeededXp = calcLevelUpXp(level)
+            var levelUps = 0
+            while (tmpXp >= tmpNeededXp) {
+                ++levelUps
+                tmpNeededXp = calcLevelUpXp(++tmpLvl)
+            }
+            return levelUps
+        }
+    }
 }
