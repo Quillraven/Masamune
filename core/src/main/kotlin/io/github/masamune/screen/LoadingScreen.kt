@@ -59,7 +59,6 @@ class LoadingScreen(
 
     private fun setupUI(skin: Skin) {
         stage.clear()
-        stage.isDebugAll = false
         stage.actors {
             table(skin) {
                 setFillParent(true)
