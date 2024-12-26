@@ -28,5 +28,5 @@ inline fun <reified T : Actor> KWidget<Actor>.typedTable(
     skin: Skin,
     init: TypedTable<T>.(Actor) -> Unit = {},
 ): TypedTable<T> {
-    return actor(TypedTable<T>(skin), init)
+    return actor(TypedTable(skin), init)
 }

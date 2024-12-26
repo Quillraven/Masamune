@@ -32,6 +32,9 @@ val TiledMapTile.dialogName: String
 val TiledMapTile.enemy: Boolean
     get() = this.property<Boolean>("enemy", false)
 
+val TiledMapTile.level: Int
+    get() = this.property<Int>("level", 0)
+
 val TiledMapTile.objType: String
     get() = this.property<String>("objType", "UNDEFINED")
 
@@ -43,6 +46,9 @@ val TiledMapTile.stats: TiledStats?
 
 val TiledMapTile.triggerName: String
     get() = this.property<String>("triggerName", "")
+
+val TiledMapTile.xp: Int
+    get() = this.property<Int>("xp", 0)
 
 val MapObject.density: Float
     get() = this.property<Float>("density", 0f)

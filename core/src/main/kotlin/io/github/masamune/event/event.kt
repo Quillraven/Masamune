@@ -22,7 +22,7 @@ data class PlayerInteractBeginContactEvent(val player: Entity, val other: Entity
 data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) : Event
 data object PlayerInteractEvent : Event
 data object PlayerInteractCombatBeginEvent : Event
-data object PlayerInteractCombatEndEvent : Event
+data class PlayerInteractCombatEndEvent(val victory: Boolean, val enemy: Entity) : Event
 
 // MENU EVENTS
 data class MenuBeginEvent(val type: MenuType) : Event

@@ -8,6 +8,7 @@ import io.github.masamune.combat.action.Action
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
+import io.github.masamune.component.isEntityDead
 import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatTurnEndEvent
 import io.github.masamune.event.EventService
@@ -39,6 +40,11 @@ class CombatStatePerformAction(
         }
 
         val (nextEntity, nextAction, nextTargets) = actionStack.first()
+        if (world.isEntityDead(nextEntity)) {
+            // entity died already -> remove its action from the stack and do nothing
+            actionStack.removeFirst()
+            return
+        }
         actionExecutorService.perform(nextEntity, nextAction, nextTargets)
     }
 

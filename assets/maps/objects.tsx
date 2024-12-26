@@ -127,6 +127,7 @@
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT"/>
    <property name="enemy" type="bool" value="true"/>
+   <property name="level" type="int" value="1"/>
    <property name="objType" propertytype="MapObjectType" value="BUTTERFLY"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
@@ -136,6 +137,7 @@
      <property name="lifeMax" type="float" value="20"/>
     </properties>
    </property>
+   <property name="xp" type="int" value="10"/>
   </properties>
   <image source="objects/butterfly.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
@@ -154,6 +156,7 @@
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
    <property name="enemy" type="bool" value="true"/>
+   <property name="level" type="int" value="1"/>
    <property name="objType" propertytype="MapObjectType" value="LARVA"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
@@ -164,6 +167,7 @@
      <property name="resistance" type="float" value="0.25"/>
     </properties>
    </property>
+   <property name="xp" type="int" value="14"/>
   </properties>
   <image source="objects/larva.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
@@ -182,6 +186,7 @@
    <property name="bodyType" propertytype="BodyType" value="KinematicBody"/>
    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
    <property name="enemy" type="bool" value="true"/>
+   <property name="level" type="int" value="2"/>
    <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
@@ -192,6 +197,7 @@
      <property name="physicalEvade" type="float" value="0.1"/>
     </properties>
    </property>
+   <property name="xp" type="int" value="17"/>
   </properties>
   <image source="objects/mushroom.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">

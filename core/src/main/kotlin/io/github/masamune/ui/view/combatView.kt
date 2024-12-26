@@ -80,7 +80,7 @@ class CombatView(
                 it.padBottom(10f).row()
             }
 
-            table(skin) {
+            table(skin) { tblCell ->
                 this@CombatView.lifeProgressBar = progressBar(0f, 1f, 0.01f, false, "green", skin) {
                     this.value = 1f
                     this.setAnimateDuration(1f)
@@ -89,10 +89,10 @@ class CombatView(
                 }
                 this@CombatView.playerLifeLabel = label("", defaultStyle, skin)
 
-                it.growX().row()
+                tblCell.growX().row()
             }
 
-            table(skin) {
+            table(skin) { tblCell ->
                 this@CombatView.manaProgressBar = progressBar(0f, 1f, 0.01f, false, "blue", skin) {
                     this.value = 1f
                     this.setAnimateDuration(1f)
@@ -101,7 +101,7 @@ class CombatView(
                 }
                 this@CombatView.playerManaLabel = label("", defaultStyle, skin)
 
-                it.growX().row()
+                tblCell.growX().row()
             }
 
             pack()
@@ -142,6 +142,10 @@ class CombatView(
         model.onPropertyChange(CombatViewModel::playerName) {
             playerNameLabel.txt = it
             playerInfoTable.pack()
+
+            // player name also gets set in case of a combat restart -> reset view states
+            uiAction = UiAction.UNDEFINED
+            uiState = UiCombatState.SELECT_ACTION
         }
         model.onPropertyChange(CombatViewModel::playerLife) { (current, max) ->
             playerLifeLabel.txt = "${current.coerceAtLeast(0f).toInt()}/${max.toInt()}"

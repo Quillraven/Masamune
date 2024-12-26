@@ -23,9 +23,11 @@ class ScaleSystem : IteratingSystem(family { all(Scale, Transform) }), EventList
     }
 
     override fun onEvent(event: Event) {
-        if (event is CombatEntityDeadEvent && event.entity hasNo Player) {
-            event.entity.configure {
-                it += Scale(Interpolation.circleOut, event.entity[Transform].scale, 1.5f, 0.2f)
+        when {
+            event is CombatEntityDeadEvent && event.entity hasNo Player -> {
+                event.entity.configure {
+                    it += Scale(Interpolation.circleOut, it[Transform].scale, 1.5f, 0.2f)
+                }
             }
         }
     }

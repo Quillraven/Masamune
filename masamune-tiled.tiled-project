@@ -255,6 +255,11 @@
                     "value": false
                 },
                 {
+                    "name": "level",
+                    "type": "int",
+                    "value": 0
+                },
+                {
                     "name": "objType",
                     "propertyType": "MapObjectType",
                     "type": "string",
@@ -276,6 +281,11 @@
                     "name": "triggerName",
                     "type": "string",
                     "value": ""
+                },
+                {
+                    "name": "xp",
+                    "type": "int",
+                    "value": 0
                 }
             ],
             "name": "MapObject",

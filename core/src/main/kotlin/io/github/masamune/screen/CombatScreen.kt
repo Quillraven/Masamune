@@ -14,6 +14,7 @@ import io.github.masamune.Masamune
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
+import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.ShaderService.Companion.useShader
 import io.github.masamune.asset.SkinAsset
@@ -31,14 +32,8 @@ import io.github.masamune.component.Player
 import io.github.masamune.component.ScreenBgd
 import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
-import io.github.masamune.event.CombatPlayerDefeatEvent
-import io.github.masamune.event.CombatPlayerVictoryEvent
 import io.github.masamune.event.CombatStartEvent
-import io.github.masamune.event.Event
-import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
-import io.github.masamune.event.PlayerInteractCombatEndEvent
-import io.github.masamune.event.UiSelectEvent
 import io.github.masamune.input.ControllerStateUI
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
@@ -52,7 +47,9 @@ import io.github.masamune.system.ShakeSystem
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.ui.model.CombatFinishViewModel
 import io.github.masamune.ui.model.CombatViewModel
+import io.github.masamune.ui.view.combatFinishView
 import io.github.masamune.ui.view.combatView
 import ktx.app.KtxScreen
 import ktx.app.gdxError
@@ -70,7 +67,7 @@ class CombatScreen(
     private val audioService: AudioService = masamune.audio,
     private val actionExecutorService: ActionExecutorService = masamune.actionExecutor,
     private val tiledService: TiledService = masamune.tiled,
-) : KtxScreen, EventListener {
+) : KtxScreen {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(8f, 8f)
     private val uiViewport = ExtendViewport(928f, 522f)
@@ -80,11 +77,17 @@ class CombatScreen(
     // other stuff
     private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]
     private val keyboardController = KeyboardController(eventService, initialState = ControllerStateUI::class)
-    private var combatDone = false
 
     // ecs world
     private val world = combatWorld()
     private val enemyEntities = world.family { none(Player).all(Combat) }
+
+    // things to remember to restart combat
+    private lateinit var gameScreenWorld: World
+    private lateinit var gameScreenPlayer: Entity
+    private lateinit var enemiesMap: Map<TiledObjectType, Int>
+    lateinit var gameScreenEnemy: Entity
+        private set
 
     private fun combatWorld(): World {
         return configureWorld {
@@ -114,8 +117,6 @@ class CombatScreen(
     }
 
     override fun show() {
-        combatDone = false
-
         // set action executor entity world
         actionExecutorService.world = world
 
@@ -124,6 +125,28 @@ class CombatScreen(
         inputProcessor.addProcessor(keyboardController)
 
         // setup UI views
+        setupUI()
+
+        // register all event listeners
+        registerEventListeners()
+
+        // special screen background entity to render GameScreen as blurred background
+        spawnScreenBgdEntity()
+    }
+
+    private fun spawnScreenBgdEntity() {
+        world.entity {
+            it += ScreenBgd(alpha = 0.4f) { batch, fbo ->
+                shaderService.useBlurShader(batch, 6f, fbo) {
+                    val gameScreen = masamune.getScreen<GameScreen>()
+                    gameScreen.resize(fbo.width, fbo.height)
+                    gameScreen.render(0f)
+                }
+            }
+        }
+    }
+
+    private fun setupUI() {
         val model = CombatViewModel(
             bundle,
             audioService,
@@ -137,24 +160,16 @@ class CombatScreen(
         stage.clear()
         stage.actors {
             combatView(model, skin)
-        }
-
-        // register all event listeners
-        registerEventListeners()
-
-        // special screen background entity to render GameScreen as blurred background
-        world.entity {
-            it += ScreenBgd(alpha = 0.4f) { batch, fbo ->
-                shaderService.useBlurShader(batch, 6f, fbo) {
-                    val gameScreen = masamune.getScreen<GameScreen>()
-                    gameScreen.resize(fbo.width, fbo.height)
-                    gameScreen.render(0f)
-                }
+            combatFinishView(CombatFinishViewModel(bundle, masamune, world), skin) {
+                isVisible = false
             }
         }
     }
 
     fun spawnPlayer(gameScreenWorld: World, gameScreenPlayer: Entity) {
+        this.gameScreenWorld = gameScreenWorld
+        this.gameScreenPlayer = gameScreenPlayer
+
         val atlas = assetService[AtlasAsset.CHARS_AND_PROPS]
         val nameCmp = with(gameScreenWorld) { gameScreenPlayer[Name] }
         val playerCmp = with(gameScreenWorld) { gameScreenPlayer[Player] }
@@ -181,10 +196,12 @@ class CombatScreen(
         eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))
     }
 
-    fun spawnEnemies(enemiesMap: Map<TiledObjectType, Int>) {
+    fun spawnEnemies(gameScreenEnemy: Entity, enemiesMap: Map<TiledObjectType, Int>) {
         if (enemiesMap.isEmpty()) {
             gdxError("Cannot start a combat without enemies")
         }
+        this.enemiesMap = enemiesMap
+        this.gameScreenEnemy = gameScreenEnemy
 
         val totalEnemies = enemiesMap.values.sum()
         val diffX = gameViewport.worldWidth / (1 + totalEnemies)
@@ -202,12 +219,20 @@ class CombatScreen(
         }
     }
 
+    fun restartCombat() {
+        batch.shader = null
+        world.removeAll(clearRecycled = true)
+        spawnScreenBgdEntity()
+        spawnEnemies(gameScreenEnemy, enemiesMap)
+        spawnPlayer(gameScreenWorld, gameScreenPlayer)
+        audioService.play(MusicAsset.COMBAT1, keepPrevious = true)
+    }
+
     private fun registerEventListeners() {
         eventService += world
         eventService += stage
         eventService += keyboardController
         eventService += masamune.audio
-        eventService += this
     }
 
     override fun hide() {
@@ -232,31 +257,6 @@ class CombatScreen(
             uiViewport.apply()
             stage.act(delta)
             stage.draw()
-        }
-    }
-
-    override fun onEvent(event: Event) {
-        when {
-            event is CombatPlayerVictoryEvent || event is CombatPlayerDefeatEvent -> {
-                combatDone = true
-            }
-
-            combatDone && event is UiSelectEvent -> {
-                // reset flag to not enter this branch multiple times if user spams SELECT event
-                combatDone = false
-                masamune.transitionScreen<GameScreen>(
-                    fromType = DefaultTransitionType,
-                    toType = BlurTransitionType(
-                        startBlur = 6f,
-                        endBlur = 0f,
-                        time = 2f,
-                        endAlpha = 1f,
-                        startAlpha = 0.4f
-                    )
-                ) {
-                    eventService.fire(PlayerInteractCombatEndEvent)
-                }
-            }
         }
     }
 

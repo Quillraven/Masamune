@@ -450,6 +450,7 @@ class TiledService(
             return world.entity {
                 log.debug { "Loading enemy $type as entity $it" }
 
+                it += Tiled(tile.id, type)
                 val graphic = configureGraphic(it, tile)
                 it += graphic
                 it += Transform(vec3(x, y, 0f), graphic.regionSize)
@@ -458,6 +459,7 @@ class TiledService(
                 it += Facing(FacingDirection.DOWN)
                 configureGraphic(it, tile)
                 configureCombat(it, tile)
+                it += Experience(tile.level, tile.xp)
             }
         }
 

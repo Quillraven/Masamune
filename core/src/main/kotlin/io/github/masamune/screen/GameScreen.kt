@@ -21,13 +21,16 @@ import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CameraSystem
+import io.github.masamune.system.DissolveSystem
 import io.github.masamune.system.FacingSystem
 import io.github.masamune.system.FadeSystem
 import io.github.masamune.system.MoveSystem
 import io.github.masamune.system.MoveToSystem
 import io.github.masamune.system.PhysicSystem
 import io.github.masamune.system.PlayerInteractSystem
+import io.github.masamune.system.RemoveSystem
 import io.github.masamune.system.RenderSystem
+import io.github.masamune.system.ScaleSystem
 import io.github.masamune.system.StateSystem
 import io.github.masamune.system.TriggerSystem
 import io.github.masamune.tiledmap.MapTransitionService
@@ -99,12 +102,15 @@ class GameScreen(
             add(PlayerInteractSystem())
             add(CameraSystem())
             add(StateSystem())
+            add(DissolveSystem())
+            add(ScaleSystem())
             add(AnimationSystem())
             add(FadeSystem())
             add(RenderSystem())
             add(TriggerSystem())
             // FacingSystem must run at the end of a frame to correctly detect facing changes in any system before
             add(FacingSystem())
+            add(RemoveSystem())
         }
     }
 

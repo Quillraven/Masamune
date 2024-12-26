@@ -17,9 +17,11 @@ class DissolveSystem : IteratingSystem(family { all(Dissolve) }), EventListener 
     }
 
     override fun onEvent(event: Event) {
-        if (event is CombatEntityDeadEvent && event.entity hasNo Player) {
-            event.entity.configure {
-                it += Dissolve.ofRegion(it[Graphic].region, 0.65f)
+        when {
+            event is CombatEntityDeadEvent && event.entity hasNo Player -> {
+                event.entity.configure {
+                    it += Dissolve.ofRegion(it[Graphic].region, 0.65f)
+                }
             }
         }
     }

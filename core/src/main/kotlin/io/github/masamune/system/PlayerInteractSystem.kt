@@ -1,5 +1,6 @@
 package io.github.masamune.system
 
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.MathUtils.atan2Deg360
 import com.badlogic.gdx.math.Vector2
@@ -15,6 +16,7 @@ import io.github.masamune.PhysicContactHandler.Companion.testPoint
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Dialog
+import io.github.masamune.component.Dissolve
 import io.github.masamune.component.Enemy
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Interact
@@ -22,6 +24,8 @@ import io.github.masamune.component.Outline
 import io.github.masamune.component.Physic
 import io.github.masamune.component.Player
 import io.github.masamune.component.Portal
+import io.github.masamune.component.Remove
+import io.github.masamune.component.Scale
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Transform
 import io.github.masamune.component.Trigger
@@ -32,6 +36,7 @@ import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
 import io.github.masamune.event.PlayerInteractBeginContactEvent
 import io.github.masamune.event.PlayerInteractCombatBeginEvent
+import io.github.masamune.event.PlayerInteractCombatEndEvent
 import io.github.masamune.event.PlayerInteractEndContactEvent
 import io.github.masamune.event.PlayerInteractEvent
 import io.github.masamune.event.PlayerMoveEvent
@@ -61,7 +66,7 @@ class PlayerInteractSystem(
     private val filteredDirectionEntities = MutableEntityBag(4)
     private val distanceComparator = compareEntity { e1, e2 -> (euclideanDist(e1).compareTo(euclideanDist(e2))) }
 
-    override fun onTickEntity(player: Entity) = with(player[Interact]) {
+    override fun onTickEntity(entity: Entity) = with(entity[Interact]) {
         triggerTimer = (triggerTimer - deltaTime).coerceAtLeast(0f)
 
         if (nearbyEntities.isEmpty()) {
@@ -70,14 +75,14 @@ class PlayerInteractSystem(
         }
 
         // playerCenter is used in handleMapTrigger and tagClosestEntity below
-        player[Transform].centerTo(playerCenter)
+        entity[Transform].centerTo(playerCenter)
         // check for map trigger entities (=entities that are not rendered/visible to the player)
-        if (handleMapTrigger(player)) {
+        if (handleMapTrigger(entity)) {
             return@with
         }
 
         // check for map portal entities
-        if (handlePortals(player)) {
+        if (handlePortals(entity)) {
             // player entered portal to a new map -> skip remaining system logic
             return@with
         }
@@ -90,7 +95,7 @@ class PlayerInteractSystem(
         }
 
         triggerTimer = 0f
-        onPlayerInteract(player)
+        onPlayerInteract(entity)
     }
 
     private fun Interact.onPlayerInteract(player: Entity) {
@@ -123,7 +128,7 @@ class PlayerInteractSystem(
                     ),
                     toType = DefaultTransitionType,
                 ) { combatScreen ->
-                    combatScreen.spawnEnemies(interactEntity[Enemy].combatEntities)
+                    combatScreen.spawnEnemies(interactEntity, interactEntity[Enemy].combatEntities)
                     // call spawnPlayer method AFTER spawnEnemies because it fires an event
                     // that starts the combat, and we need the enemy entities at that point already.
                     combatScreen.spawnPlayer(world, player)
@@ -262,6 +267,16 @@ class PlayerInteractSystem(
             is PlayerInteractEvent -> family.forEach { it[Interact].triggerTimer = 0.1f }
             is PlayerInteractBeginContactEvent -> onPlayerBeginInteract(event.player, event.other)
             is PlayerInteractEndContactEvent -> onPlayerEndInteract(event.player, event.other)
+            is PlayerInteractCombatEndEvent -> {
+                if (event.victory) {
+                    event.enemy.configure {
+                        it += Scale(Interpolation.circleOut, it[Transform].scale, 2f, 0.3f)
+                        it += Dissolve.ofRegion(it[Graphic].region, 1f)
+                        it -= Physic
+                        it += Remove(2f)
+                    }
+                }
+            }
             else -> Unit
         }
     }

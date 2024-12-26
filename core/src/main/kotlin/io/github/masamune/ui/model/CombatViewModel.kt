@@ -77,8 +77,8 @@ class CombatViewModel(
     var playerMana: Pair<Float, Float> by propertyNotify(0f to 0f)
     var playerName: String by propertyNotify("")
     var playerPosition: Vector2 by propertyNotify(vec2())
-    var playerMagic: List<MagicModel> by propertyNotify(emptyList<MagicModel>())
-    var playerItems: List<ItemCombatModel> by propertyNotify(emptyList<ItemCombatModel>())
+    var playerMagic: List<MagicModel> by propertyNotify(emptyList())
+    var playerItems: List<ItemCombatModel> by propertyNotify(emptyList())
     var combatTurn: Int by propertyNotify(-1)
     var combatDamage: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatHeal: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
@@ -170,7 +170,7 @@ class CombatViewModel(
         }
     }
 
-    fun updatePlayerMagic(player: Entity) = with(world) {
+    private fun updatePlayerMagic(player: Entity) = with(world) {
         playerMagic = player[Combat].magicActions.map {
             MagicModel(
                 it.type,
@@ -181,7 +181,8 @@ class CombatViewModel(
             )
         }
     }
-    fun updatePlayerItems(player: Entity) = with(world) {
+
+    private fun updatePlayerItems(player: Entity) = with(world) {
         playerItems = player[Inventory].items
             .filter {
                 val itemCmp = it[Item]
@@ -341,9 +342,9 @@ class CombatViewModel(
     }
 
     fun confirmTargetSelection(): Boolean = with(world) {
-        val selectorCmp = activeSelector[Selector]
-        if (targetType == ActionTargetType.MULTI && selectorCmp.confirmed == false) {
+        if (targetType == ActionTargetType.MULTI) {
             // multi target selection and selected target was not confirmed yet -> confirm it
+            val selectorCmp = activeSelector[Selector]
             if (activeSelector.alreadyConfirmedTarget(selectorCmp.target)) {
                 // multi select target was already confirmed before -> start action with selected targets
                 activeSelector.remove()
