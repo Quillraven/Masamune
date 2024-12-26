@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
@@ -417,10 +418,13 @@ class TiledService(
         )
     }
 
-    fun loadItem(world: World, itemType: ItemType, amount: Int = 1): Entity {
-        val objectsTileSet = currentMap?.tileSets?.getTileSet("objects")
+    private fun TiledMap?.objectsTileSet(): TiledMapTileSet {
+        return this?.tileSets?.singleOrNull { it.name.contains("objects", true) }
             ?: gdxError("Objects TileSet is not available")
+    }
 
+    fun loadItem(world: World, itemType: ItemType, amount: Int = 1): Entity {
+        val objectsTileSet = currentMap.objectsTileSet()
         objectsTileSet.iterator().forEach { tile ->
             if (tile.itemType != itemType.name) {
                 return@forEach
@@ -440,9 +444,7 @@ class TiledService(
     }
 
     fun loadEnemy(world: World, type: TiledObjectType, x: Float, y: Float): Entity {
-        val objectsTileSet = currentMap?.tileSets?.getTileSet("objects")
-            ?: gdxError("Objects TileSet is not available")
-
+        val objectsTileSet = currentMap.objectsTileSet()
         objectsTileSet.iterator().forEach { tile ->
             if (tile.objType != type.name) {
                 return@forEach
