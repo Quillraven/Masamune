@@ -87,7 +87,7 @@ data class CachingAtlas(
                 }
             }
 
-            GdxAnimation(DEFAULT_FRAME_DURATION, texRegions, atlasMainKey, animationType)
+            GdxAnimation(DEFAULT_FRAME_DURATION, texRegions, atlasMainKey, animationType, direction)
         }
     }
 
