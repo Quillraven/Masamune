@@ -12,8 +12,20 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 		markupEnabled: true
 		flip: false
 	}
+	pixel_arial_24_border: {
+		file: pixel_arial_24_border.fnt
+		scaledSize: -1
+		markupEnabled: true
+		flip: false
+	}
 }
 com.badlogic.gdx.graphics.Color: {
+	black: {
+		hex: 000000ff
+	}
+	blue: {
+		hex: 0000ffff
+	}
 	bright: {
 		hex: f5f7edff
 	}
@@ -136,6 +148,36 @@ io.github.masamune.ui.widget.DialogOptionStyle: {
 		selectImage: arrow
 	}
 }
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: button_normal
+		down: button_pressed
+		checked: button_pressed
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+	default: {
+		parent: default
+	}
+	imgBtnSword: {
+		imageUp: icon_sword
+		imageDown: icon_sword
+		up: button_pressed
+		checked: button_normal
+	}
+	imgBtnMagic: {
+		imageUp: icon_magic
+		imageDown: icon_magic
+		up: button_pressed
+		checked: button_normal
+	}
+	imgBtnItems: {
+		imageUp: icon_items
+		imageDown: icon_items
+		up: button_pressed
+		checked: button_normal
+	}
+}
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
 		font: pixel_arial_16
@@ -153,6 +195,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		font: pixel_arial_16
 		fontColor: dark_grey
 		background: dialog_choice_frame
+	}
+	combat_number: {
+		font: pixel_arial_24_border
+		fontColor: white
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
