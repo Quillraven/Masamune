@@ -24,7 +24,7 @@ class ItemEntryWidget(
     targetDescriptor: String,
     amount: Int,
     skin: Skin,
-) : Table(skin), KTable {
+) : Table(skin), KTable, SelectableWidget {
 
     private val image: Image
 
@@ -40,7 +40,7 @@ class ItemEntryWidget(
         }
     }
 
-    fun select(value: Boolean) {
+    override fun select(value: Boolean) {
         image.isVisible = value
     }
 

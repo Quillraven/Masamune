@@ -159,7 +159,7 @@ class CombatView(
         }
         model.onPropertyChange(CombatViewModel::playerMagic) { magicList ->
             magicModels = magicList
-            magicTable.clearMagic()
+            magicTable.clearEntries()
             magicList.forEach { (_, name, targetDescriptor, mana, canPerform) ->
                 magicTable.magic(name, targetDescriptor, mana, canPerform)
             }
@@ -169,7 +169,7 @@ class CombatView(
         }
         model.onPropertyChange(CombatViewModel::playerItems) { itemList ->
             itemModels = itemList
-            itemTable.clearItems()
+            itemTable.clearEntries()
             itemList.forEach { (_, name, targetDescriptor, amount) ->
                 itemTable.item(name, targetDescriptor, amount)
             }
@@ -245,7 +245,7 @@ class CombatView(
             }
 
             UiCombatState.SELECT_MAGIC -> {
-                magicTable.prevMagic(MagicTable.MAGIC_PER_ROW)
+                magicTable.prevEntry(magicTable.entriesPerRow)
                 viewModel.playSndMenuClick()
             }
 
@@ -263,11 +263,11 @@ class CombatView(
 
             UiCombatState.SELECT_TARGET -> viewModel.selectPrevTarget()
             UiCombatState.SELECT_MAGIC -> {
-                magicTable.prevMagic()
+                magicTable.prevEntry()
                 viewModel.playSndMenuClick()
             }
             UiCombatState.SELECT_ITEM -> {
-                itemTable.prevItem()
+                itemTable.prevEntry()
                 viewModel.playSndMenuClick()
             }
             UiCombatState.VICTORY_DEFEAT -> Unit
@@ -284,11 +284,11 @@ class CombatView(
 
             UiCombatState.SELECT_TARGET -> viewModel.selectNextTarget()
             UiCombatState.SELECT_MAGIC -> {
-                magicTable.nextMagic()
+                magicTable.nextEntry()
                 viewModel.playSndMenuClick()
             }
             UiCombatState.SELECT_ITEM -> {
-                itemTable.nextItem()
+                itemTable.nextEntry()
                 viewModel.playSndMenuClick()
             }
             UiCombatState.VICTORY_DEFEAT -> Unit
@@ -298,12 +298,12 @@ class CombatView(
     override fun onDownPressed() {
         when (uiState) {
             UiCombatState.SELECT_MAGIC -> {
-                magicTable.nextMagic(MagicTable.MAGIC_PER_ROW)
+                magicTable.nextEntry(magicTable.entriesPerRow)
                 viewModel.playSndMenuClick()
             }
 
             UiCombatState.SELECT_ITEM -> {
-                itemTable.nextItem(ItemCombatTable.ITEMS_PER_ROW)
+                itemTable.nextEntry(itemTable.entriesPerRow)
                 viewModel.playSndMenuClick()
             }
 
@@ -347,14 +347,14 @@ class CombatView(
                 UiAction.MAGIC -> {
                     uiState = UiCombatState.SELECT_MAGIC
                     magicTable.isVisible = true
-                    magicTable.selectFirstMagic()
+                    magicTable.selectFirstEntry()
                     viewModel.playSndMenuAccept()
                 }
 
                 UiAction.ITEM -> {
                     uiState = UiCombatState.SELECT_ITEM
                     itemTable.isVisible = true
-                    itemTable.selectFirstItem()
+                    itemTable.selectFirstEntry()
                     viewModel.playSndMenuAccept()
                 }
 
@@ -373,24 +373,24 @@ class CombatView(
             }
 
             UiCombatState.SELECT_MAGIC -> {
-                if (magicTable.hasNoMagic()) {
+                if (magicTable.hasNoEntries()) {
                     // cannot perform any magic -> do nothing
                     return
                 }
 
                 uiState = UiCombatState.SELECT_TARGET
-                viewModel.selectMagic(magicModels[magicTable.selectedMagic])
+                viewModel.selectMagic(magicModels[magicTable.selectedEntryIdx])
                 magicTable.isVisible = false
             }
 
             UiCombatState.SELECT_ITEM -> {
-                if (itemTable.hasNoItem()) {
+                if (itemTable.hasNoEntries()) {
                     // no items to use -> do nothing
                     return
                 }
 
                 uiState = UiCombatState.SELECT_TARGET
-                viewModel.selectItem(itemModels[itemTable.selectedItem])
+                viewModel.selectItem(itemModels[itemTable.selectedEntryIdx])
                 itemTable.isVisible = false
             }
             UiCombatState.VICTORY_DEFEAT -> Unit

@@ -27,7 +27,7 @@ class ShopItemWidget(
     title: String,
     cost: Int,
     skin: Skin,
-) : Table(skin), KTable {
+) : Table(skin), KTable, SelectableWidget {
 
     private val image: Image
     private val amountLabel: Label
@@ -50,7 +50,7 @@ class ShopItemWidget(
         }
     }
 
-    fun select(value: Boolean) {
+    override fun select(value: Boolean) {
         image.isVisible = value
     }
 

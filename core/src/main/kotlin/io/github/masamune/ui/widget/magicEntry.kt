@@ -26,7 +26,7 @@ class MagicEntryWidget(
     mana: Int,
     val canPerform: Boolean,
     skin: Skin,
-) : Table(skin), KTable {
+) : Table(skin), KTable, SelectableWidget {
 
     private val image: Image
 
@@ -53,7 +53,7 @@ class MagicEntryWidget(
         }
     }
 
-    fun select(value: Boolean) {
+    override fun select(value: Boolean) {
         image.isVisible = value
     }
 

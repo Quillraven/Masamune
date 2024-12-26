@@ -160,7 +160,7 @@ class ShopView(
             return
         }
 
-        val selectedItem = activeItems[itemTable.selectedItem]
+        val selectedItem = activeItems[itemTable.selectedEntryIdx]
         itemInfoTable.item(selectedItem.name, selectedItem.description, selectedItem.image)
 
         val diff: Map<UIStats, Int> = viewModel.calcDiff(selectedItem)
@@ -179,7 +179,7 @@ class ShopView(
             }
 
             ShopViewFocus.ITEMS -> {
-                if (itemTable.prevItem()) {
+                if (itemTable.prevEntry()) {
                     viewModel.playSndMenuClick()
                     updateActiveItem()
                 }
@@ -202,7 +202,7 @@ class ShopView(
             }
 
             ShopViewFocus.ITEMS -> {
-                if (itemTable.nextItem()) {
+                if (itemTable.nextEntry()) {
                     viewModel.playSndMenuClick()
                     updateActiveItem()
                 }
@@ -217,20 +217,20 @@ class ShopView(
     }
 
     override fun onRightPressed() {
-        if (focus != ShopViewFocus.ITEMS || itemTable.hasNoItems()) {
+        if (focus != ShopViewFocus.ITEMS || itemTable.hasNoEntries()) {
             return
         }
 
-        val amount = viewModel.incItemAmount(itemTable.selectedItem)
+        val amount = viewModel.incItemAmount(itemTable.selectedEntryIdx)
         itemTable.amount(amount)
     }
 
     override fun onLeftPressed() {
-        if (focus != ShopViewFocus.ITEMS || itemTable.hasNoItems()) {
+        if (focus != ShopViewFocus.ITEMS || itemTable.hasNoEntries()) {
             return
         }
 
-        val amount = viewModel.decItemAmount(itemTable.selectedItem)
+        val amount = viewModel.decItemAmount(itemTable.selectedEntryIdx)
         itemTable.amount(amount)
     }
 
@@ -257,7 +257,7 @@ class ShopView(
         optionTable.stopSelectAnimation()
         itemTable.isVisible = true
         itemInfoTable.isVisible = activeItems.isNotEmpty()
-        itemTable.clearItems()
+        itemTable.clearEntries()
         itemInfoTable.clearItem()
         activeItems.forEach { itemTable.item(itemName(it.name), it.cost) }
         updateActiveItem()
@@ -333,7 +333,7 @@ class ShopView(
 
             ShopViewFocus.ITEMS -> {
                 focus = ShopViewFocus.OPTIONS
-                itemTable.clearItems()
+                itemTable.clearEntries()
                 itemTable.isVisible = false
                 itemInfoTable.isVisible = false
                 optionTable.resumeSelectAnimation()

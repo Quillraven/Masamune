@@ -1,6 +1,7 @@
 package io.github.masamune.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
@@ -9,7 +10,7 @@ import ktx.scene2d.defaultStyle
 import ktx.scene2d.scene2d
 
 @Scene2dDsl
-class OptionTable(skin: Skin) : TypedTable<DialogOptionWidget>(skin) {
+class OptionTable(skin: Skin) : Table(skin) {
 
     var selectedOption: Int = 0
         private set
@@ -50,9 +51,9 @@ class OptionTable(skin: Skin) : TypedTable<DialogOptionWidget>(skin) {
             return false
         }
 
-        this[selectedOption].select(false)
+        (this.getChild(selectedOption) as DialogOptionWidget).select(false)
         selectedOption = realIdx
-        this[selectedOption].select(true)
+        (this.getChild(selectedOption) as DialogOptionWidget).select(true)
         return true
     }
 
@@ -61,11 +62,11 @@ class OptionTable(skin: Skin) : TypedTable<DialogOptionWidget>(skin) {
     }
 
     fun stopSelectAnimation() {
-        this[selectedOption].stopSelectAnimation()
+        (this.getChild(selectedOption) as DialogOptionWidget).stopSelectAnimation()
     }
 
     fun resumeSelectAnimation() {
-        this[selectedOption].resumeSelectAnimation()
+        (this.getChild(selectedOption) as DialogOptionWidget).resumeSelectAnimation()
     }
 
 }
