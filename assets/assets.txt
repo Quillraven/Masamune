@@ -26,7 +26,7 @@ i:b:/graphics/chars_and_props.png:29768:1
 i:d:/maps:0:1
 i:b:/maps/village.tmx:3359:1
 i:b:/maps/tileset.tsx:9032:1
-i:b:/maps/objects.tsx:13182:1
+i:b:/maps/objects.tsx:13470:1
 i:d:/maps/objects:0:1
 i:b:/maps/objects/boots.png:468:1
 i:b:/maps/objects/studded_leather.png:423:1
@@ -48,12 +48,12 @@ i:b:/maps/path_to_forest.tmx:3834:1
 i:b:/maps/tileset-orig.png:195892:1
 i:b:/maps/tileset.png:473544:1
 i:d:/ui:0:1
-i:b:/ui/messages_de.properties:4557:1
+i:b:/ui/messages_de.properties:4771:1
 i:b:/ui/fipps_16.fnt:8935:1
 i:b:/ui/PIXEARG_.fnt:10450:1
 i:b:/ui/skin.atlas:2775:1
 i:b:/ui/skin.png:23094:1
-i:b:/ui/messages.properties:4129:1
+i:b:/ui/messages.properties:4326:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 i:b:/ui/skin.json:4342:1
 i:b:/ui/pixel_arial_24_border.fnt:1617:1
