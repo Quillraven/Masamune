@@ -11,7 +11,6 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
-import io.github.masamune.component.Inventory.Companion.removeItem
 import io.github.masamune.component.Item
 import io.github.masamune.component.MoveBy
 import io.github.masamune.component.Player
@@ -88,7 +87,12 @@ class ActionExecutorService(
 
     fun performItemAction(itemOwner: Entity, item: Entity, action: Action, targets: EntityBag) {
         this.itemOwner = itemOwner
-        with(world) { removeItem(item[Item].type, 1, itemOwner) }
+        with(world) {
+            // Just reduce amount instead of calling world.removeItem because
+            // removeItem will remove the item entity already, but we still need it to get its stats, etc..
+            // The real item removal happens at the end of the combat in the CombatScreen.
+            --item[Item].amount
+        }
         perform(item, action, targets, false)
     }
 
