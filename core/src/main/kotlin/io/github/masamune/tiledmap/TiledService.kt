@@ -397,7 +397,7 @@ class TiledService(
         entity += Experience()
     }
 
-    private fun EntityCreateContext.configureItem(entity: Entity, tile: TiledMapTile) {
+    private fun EntityCreateContext.configureItem(entity: Entity, tile: TiledMapTile, amount: Int = 1) {
         val itemType = ItemType.valueOf(tile.itemType)
         val itemAction = tile.action
         val actionType = if (itemAction.isEmpty()) {
@@ -413,10 +413,11 @@ class TiledService(
             actionType = actionType,
             descriptionKey = "item.${itemType.name.lowercase()}.description",
             onlyCombat = tile.onlyCombat,
+            amount = amount,
         )
     }
 
-    fun loadItem(world: World, itemType: ItemType): Entity {
+    fun loadItem(world: World, itemType: ItemType, amount: Int = 1): Entity {
         val objectsTileSet = currentMap?.tileSets?.getTileSet("objects")
             ?: gdxError("Objects TileSet is not available")
 
@@ -431,7 +432,7 @@ class TiledService(
                 it += Name(tile.itemType.lowercase())
                 configureStats(it, tile)
                 configureGraphic(it, tile)
-                configureItem(it, tile)
+                configureItem(it, tile, amount)
             }
         }
 
