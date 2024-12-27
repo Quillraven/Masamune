@@ -14,6 +14,7 @@ import io.github.masamune.SELECTOR_SCALE
 import io.github.masamune.SELECTOR_SPEED
 import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
+import io.github.masamune.combat.ActionState
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.ActionTargetType
 import io.github.masamune.combat.action.UseItemAction
@@ -155,6 +156,10 @@ class CombatViewModel(
                     playerMana = event.mana to event.maxMana
                 }
 
+                if (event.state == ActionState.START) {
+                    // don't show mana popup for mana cost of action
+                    return@with
+                }
                 val (position, size) = event.entity[Transform]
                 val uiPos = vec2(position.x + MathUtils.random(size.x * 0.1f, size.x * 0.3f), position.y)
                     .toUiPosition(gameViewport, uiViewport)
