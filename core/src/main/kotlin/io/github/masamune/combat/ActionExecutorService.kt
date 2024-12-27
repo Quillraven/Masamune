@@ -160,7 +160,7 @@ class ActionExecutorService(
         updateLifeBy(target, -(sourceStats.strength + sourceStats.damage))
         val combat = source[Combat]
         play(combat.attackSnd, delay)
-        addSfx(target, combat.attackFx, duration = delay * 0.5f, scale = 2f)
+        addSfx(target, combat.attackSFX, duration = delay * 0.5f, scale = 2f)
     }
 
     fun addSfx(to: Entity, sfxAtlasKey: String, duration: Float, scale: Float = 1f) = with(world) {

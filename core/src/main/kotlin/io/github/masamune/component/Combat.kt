@@ -12,7 +12,8 @@ data class Combat(
     val availableActionTypes: List<ActionType>,
     var action: Action = DefaultAction,
     val targets: MutableEntityBag = MutableEntityBag(4),
-    var attackSnd: SoundAsset = SoundAsset.ATTACK_SWIPE,
+    val attackSnd: SoundAsset = SoundAsset.ATTACK_SWIPE,
+    val attackSFX: String = "hit1",
 ) : Component<Combat> {
 
     val attackAction: Action by lazy { availableActionTypes.single { it == ActionType.ATTACK_SINGLE }() }
