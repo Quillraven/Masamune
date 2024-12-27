@@ -31,6 +31,8 @@ import io.github.masamune.tiledmap.AnimationType
 import ktx.log.logger
 import ktx.math.vec2
 import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.max
 
 enum class ActionState {
@@ -157,7 +159,26 @@ class ActionExecutorService(
      */
     fun attack(target: Entity, delay: Float = 1f) = with(world) {
         val sourceStats = source[Stats]
-        updateLifeBy(target, -(sourceStats.totalStrength + sourceStats.totalDamage))
+        var damage = sourceStats.totalStrength + sourceStats.totalDamage
+
+        // critical strike?
+        val critChance = sourceStats.totalCriticalStrike
+        if (critChance > 0f && MathUtils.random() <= critChance) {
+            damage *= 2f
+        }
+
+        // reduce damage by armor
+        val targetStats = target.stats
+        val armor = targetStats.totalArmor
+        val reduction = 100f / (100f + armor)
+        damage *= reduction
+
+        // apply damage
+        val minDamage = ceil(damage * 0.9f)
+        val maxDamage = floor(damage * 1.1f)
+        updateLifeBy(target, -(MathUtils.random(minDamage, maxDamage)))
+
+        // play sound and add SFX
         val combat = source[Combat]
         play(combat.attackSnd, delay)
         addSfx(target, combat.attackSFX, duration = delay * 0.5f, scale = 2f)
@@ -217,12 +238,30 @@ class ActionExecutorService(
         }
     }
 
-    fun dealDamage(physical: Float, magical: Float, target: Entity) {
-        updateLifeBy(target, -(physical + magical))
+    fun dealMagicDamage(amount: Float, target: Entity) = with(world) {
+        val sourceStats = source[Stats]
+        var damage = amount + sourceStats.totalIntelligence
+
+        // arcane strike?
+        val critChance = sourceStats.totalArcaneStrike
+        if (critChance > 0f && MathUtils.random() <= critChance) {
+            damage *= 2f
+        }
+
+        // reduce damage by resistance
+        val targetStats = target[Stats]
+        val resistance = targetStats.totalResistance
+        val reduction = 100f / (100f + resistance)
+        damage *= reduction
+
+        // apply damage
+        val minDamage = ceil(damage * 0.9f)
+        val maxDamage = floor(damage * 1.1f)
+        updateLifeBy(target, -(MathUtils.random(minDamage, maxDamage)))
     }
 
-    fun dealDamage(physical: Float, magical: Float, targets: EntityBag) {
-        targets.forEach { dealDamage(physical, magical, it) }
+    fun dealMagicDamage(amount: Float, targets: EntityBag) {
+        targets.forEach { dealMagicDamage(amount, it) }
     }
 
     fun heal(life: Float, mana: Float, target: Entity) {
