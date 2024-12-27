@@ -137,7 +137,7 @@
                     "name": "atlas",
                     "propertyType": "AtlasAsset",
                     "type": "string",
-                    "value": "CHARS_AND_PROPS"
+                    "value": "UNDEFINED"
                 },
                 {
                     "name": "atlasRegionKey",
@@ -148,7 +148,7 @@
                     "name": "category",
                     "propertyType": "ItemCategory",
                     "type": "string",
-                    "value": "WEAPON"
+                    "value": "OTHER"
                 },
                 {
                     "name": "cost",

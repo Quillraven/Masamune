@@ -34,10 +34,10 @@ fun main() {
     // TiledMapAsset enum. By mocking the VILLAGE's path value we can transition to an arbitrary map.
     mockkObject(TiledMapAsset.VILLAGE)
     every { TiledMapAsset.VILLAGE.path } returns "maps/combatTest.tmx"
-    gdxTest("Combat Test", CombatTest())
+    gdxTest("Combat Test", CombatScreenTest())
 }
 
-private class CombatTest : KtxGame<KtxScreen>() {
+private class CombatScreenTest : KtxGame<KtxScreen>() {
     private val masamune = Masamune()
 
     override fun create() {
@@ -73,7 +73,7 @@ private class CombatTest : KtxGame<KtxScreen>() {
             player.configure {
                 it += Player(gameProgress = 0)
                 it += Inventory(items = spawnPlayerItems(world))
-                it += Equipment()
+                it += Equipment(items = spawnPlayerEquipment(world))
             }
         }
         return player
@@ -83,6 +83,13 @@ private class CombatTest : KtxGame<KtxScreen>() {
         return mutableEntityBagOf(
             masamune.tiled.loadItem(world, ItemType.SCROLL_INFERNO, 3),
             masamune.tiled.loadItem(world, ItemType.SMALL_MANA_POTION, 1),
+        )
+    }
+
+    // elder sword gives bonus damage and heal action
+    private fun spawnPlayerEquipment(world: World): MutableEntityBag {
+        return mutableEntityBagOf(
+            masamune.tiled.loadItem(world, ItemType.ELDER_SWORD, 1),
         )
     }
 

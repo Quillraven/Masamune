@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
- <tileset firstgid="1" name="combatObjects" tilewidth="16" tileheight="16" tilecount="5" columns="0">
+ <tileset firstgid="1" name="combatObjects" tilewidth="16" tileheight="16" tilecount="6" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0" type="MapObject">
    <properties>
     <property name="animationType" propertytype="AnimationType" value="IDLE"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
     <property name="atlasRegionKey" value="hero"/>
-    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,HEAL,USE_ITEM"/>
+    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,USE_ITEM"/>
     <property name="objType" propertytype="MapObjectType" value="HERO"/>
     <property name="stats" type="class" propertytype="Stats">
      <properties>
@@ -95,6 +95,21 @@
     </property>
    </properties>
    <image source="objects/mushroom.png" width="16" height="16"/>
+  </tile>
+  <tile id="5" type="ItemObject">
+   <properties>
+    <property name="action" propertytype="ActionType" value="HEAL"/>
+    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+    <property name="atlasRegionKey" value="items/elder_sword"/>
+    <property name="category" propertytype="ItemCategory" value="WEAPON"/>
+    <property name="itemType" propertytype="ItemType" value="ELDER_SWORD"/>
+    <property name="stats" type="class" propertytype="Stats">
+     <properties>
+      <property name="damage" type="float" value="30"/>
+     </properties>
+    </property>
+   </properties>
+   <image source="objects/elder_sword.png" width="6" height="15"/>
   </tile>
  </tileset>
  <layer id="1" name="Tile Layer 1" width="4" height="4">
