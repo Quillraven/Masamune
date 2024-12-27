@@ -9,6 +9,7 @@ class FireballAction : Action(ActionType.FIREBALL, ActionTargetType.ALL, manaCos
 
     override fun ActionExecutorService.onUpdate(): Boolean {
         amount--
+        addSfx(allTargets, "fire2", 1f, 2f)
         dealDamage(physical = 0f, magical = 10f, targets = allTargets)
         play(SoundAsset.EXPLOSION1, 1f)
 

@@ -46,3 +46,5 @@ Imagine an epic story here. Will be updated later.
 - [JRPG Collection](https://opengameart.org/content/jrpg-collection)
 - [Minifantasy Dungeon SFX Pack](https://leohpaz.itch.io/minifantasy-dungeon-sfx-pack)
 - [jsfxr](https://sfxr.me/)
+- [Effect and FX Pixel Part 12](https://bdragon1727.itch.io/effect-and-fx-pixel-part-12)
+- [Effect and FX Pixel Part 13](https://bdragon1727.itch.io/effect-and-fx-pixel-part-13)

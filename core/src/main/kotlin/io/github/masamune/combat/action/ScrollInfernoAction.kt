@@ -7,6 +7,7 @@ import io.github.masamune.tiledmap.ActionType
 class ScrollInfernoAction : Action(ActionType.SCROLL_INFERNO, ActionTargetType.ALL) {
 
     override fun ActionExecutorService.onUpdate(): Boolean {
+        addSfx(allTargets, "fire3", 1f, 2f)
         dealDamage(physical = 0f, magical = source.stats.damage, targets = allTargets)
         play(SoundAsset.EXPLOSION1, 1f)
         return true
