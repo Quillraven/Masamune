@@ -31,6 +31,7 @@ import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
+import io.github.masamune.event.CombatMissEvent
 import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatPlayerActionEvent
 import io.github.masamune.event.CombatPlayerDefeatEvent
@@ -83,6 +84,7 @@ class CombatViewModel(
     var combatDamage: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatHeal: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatMana: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
+    var combatMiss: Vector2 by propertyNotify(Vector2.Zero)
     var combatDone: Boolean by propertyNotify(false)
 
     override fun onEvent(event: Event): Unit = with(world) {
@@ -149,6 +151,12 @@ class CombatViewModel(
                 val uiPos = vec2(position.x + MathUtils.random(size.x * 0.1f, size.x * 0.3f), position.y)
                     .toUiPosition(gameViewport, uiViewport)
                 combatHeal = uiPos to event.amount.toInt()
+            }
+
+            is CombatMissEvent -> {
+                val (position, size) = event.entity[Transform]
+                combatMiss = vec2(position.x + MathUtils.random(size.x * 0.1f, size.x * 0.3f), position.y)
+                    .toUiPosition(gameViewport, uiViewport)
             }
 
             is CombatEntityManaUpdateEvent -> {

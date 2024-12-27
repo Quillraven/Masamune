@@ -26,6 +26,7 @@ import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
+import io.github.masamune.event.CombatMissEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.tiledmap.AnimationType
 import ktx.log.logger
@@ -158,6 +159,16 @@ class ActionExecutorService(
      * Performs an attack against the [target] entity and waits [delay] seconds before continuing.
      */
     fun attack(target: Entity, delay: Float = 1f) = with(world) {
+        // will target evade?
+        val targetStats = target.stats
+        val evadeChance = targetStats.totalPhysicalEvade
+        if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
+            eventService.fire(CombatMissEvent(target))
+            play(SoundAsset.ATTACK_MISS, delay)
+            return@with
+        }
+
+        // add strength to physical damage
         val sourceStats = source[Stats]
         var damage = sourceStats.totalStrength + sourceStats.totalDamage
 
@@ -168,7 +179,6 @@ class ActionExecutorService(
         }
 
         // reduce damage by armor
-        val targetStats = target.stats
         val armor = targetStats.totalArmor
         val reduction = 100f / (100f + armor)
         damage *= reduction
@@ -239,6 +249,15 @@ class ActionExecutorService(
     }
 
     fun dealMagicDamage(amount: Float, target: Entity) = with(world) {
+        // will target evade?
+        val targetStats = target.stats
+        val evadeChance = targetStats.totalMagicalEvade
+        if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
+            eventService.fire(CombatMissEvent(target))
+            return@with
+        }
+
+        // add intelligence to magic damage
         val sourceStats = source[Stats]
         var damage = amount + sourceStats.totalIntelligence
 
@@ -249,7 +268,6 @@ class ActionExecutorService(
         }
 
         // reduce damage by resistance
-        val targetStats = target[Stats]
         val resistance = targetStats.totalResistance
         val reduction = 100f / (100f + resistance)
         damage *= reduction

@@ -77,3 +77,4 @@ data class CombatEntityManaUpdateEvent(
     val maxMana: Float,
     val state: ActionState,
 ) : Event
+data class CombatMissEvent(val entity: Entity) : Event

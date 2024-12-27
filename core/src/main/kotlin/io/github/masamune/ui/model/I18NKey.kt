@@ -7,6 +7,7 @@ enum class I18NKey(val key: String) {
     COMBAT_DEFEAT("combat.defeat"),
     COMBAT_DEFEATED_ENEMIES("combat.defeatedEnemies"),
     COMBAT_LEVEL_UPS("combat.levelUps"),
+    COMBAT_MISS("combat.miss"),
     COMBAT_TOTAL_TALONS("combat.totalTalons"),
     COMBAT_TOTAL_XP("combat.totalXp"),
     DIALOG_ELDER_00_PAGE1("dialog.elder_00.page1"),

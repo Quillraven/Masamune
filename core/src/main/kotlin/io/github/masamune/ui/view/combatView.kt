@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import io.github.masamune.ui.model.CombatViewModel
+import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.ItemCombatModel
 import io.github.masamune.ui.model.MagicModel
 import io.github.masamune.ui.widget.ItemCombatTable
@@ -217,6 +218,9 @@ class CombatView(
         model.onPropertyChange(CombatViewModel::combatMana) { (position, amount) ->
             combatTxt(amount, "{JUMP=0.5;5;1;1}", skin.getColor("blue"), position, 2f)
         }
+        model.onPropertyChange(CombatViewModel::combatMiss) { position ->
+            combatTxt(i18nTxt(I18NKey.COMBAT_MISS), "{JUMP=0.5;5;1;1}", skin.getColor("white"), position, 2.5f)
+        }
 
         // victory / defeat
         model.onPropertyChange(CombatViewModel::combatDone) { isDone ->
@@ -228,6 +232,21 @@ class CombatView(
 
     private fun combatTxt(amount: Int, effect: String, color: Color, position: Vector2, duration: Float) {
         val label = scene2d.typingLabel("$effect$amount", "combat_number", skin) {
+            this.color = color
+            this.setPosition(position.x, position.y)
+        }
+        val transparentColor = Color(color.r, color.g, color.b, 0f)
+        label += Actions.color(transparentColor, duration, Interpolation.pow3OutInverse) then Actions.removeActor()
+        stage.addActor(label)
+    }
+
+    private fun combatTxt(text: String, effect: String, color: Color, position: Vector2, duration: Float) {
+        val labelText = if (text.length > 4) {
+            "$effect${text.substring(0, 4)}."
+        } else {
+            "$effect$text"
+        }
+        val label = scene2d.typingLabel(labelText, "combat_number", skin) {
             this.color = color
             this.setPosition(position.x, position.y)
         }

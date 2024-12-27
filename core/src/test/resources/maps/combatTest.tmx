@@ -12,7 +12,7 @@
     <property name="stats" type="class" propertytype="Stats">
      <properties>
       <property name="agility" type="float" value="3"/>
-      <property name="arcaneStrike" type="float" value="1"/>
+      <property name="arcaneStrike" type="float" value="0"/>
       <property name="criticalStrike" type="float" value="0"/>
       <property name="damage" type="float" value="1"/>
       <property name="life" type="float" value="100"/>
@@ -90,9 +90,14 @@
     <property name="stats" type="class" propertytype="Stats">
      <properties>
       <property name="agility" type="float" value="5"/>
+      <property name="armor" type="float" value="0"/>
+      <property name="criticalStrike" type="float" value="0"/>
       <property name="damage" type="float" value="2"/>
       <property name="life" type="float" value="30"/>
       <property name="lifeMax" type="float" value="30"/>
+      <property name="magicalEvade" type="float" value="0"/>
+      <property name="physicalEvade" type="float" value="0"/>
+      <property name="resistance" type="float" value="0"/>
      </properties>
     </property>
    </properties>
