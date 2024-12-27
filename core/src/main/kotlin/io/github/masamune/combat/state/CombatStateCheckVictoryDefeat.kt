@@ -9,6 +9,7 @@ import io.github.masamune.event.CombatPlayerVictoryEvent
 import io.github.masamune.event.EventService
 import ktx.log.logger
 
+// global state
 class CombatStateCheckVictoryDefeat(
     private val world: World,
     private val eventService: EventService = world.inject(),

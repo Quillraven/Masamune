@@ -5,7 +5,7 @@ import io.github.masamune.tiledmap.ActionType
 
 class AttackSingleAction : Action(ActionType.ATTACK_SINGLE, ActionTargetType.SINGLE) {
     override fun ActionExecutorService.onStart() {
-        attack(target = singleTarget)
+        attack(singleTarget)
         endAction()
     }
 }

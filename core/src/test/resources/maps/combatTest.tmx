@@ -68,8 +68,8 @@
      <properties>
       <property name="agility" type="float" value="1"/>
       <property name="damage" type="float" value="1"/>
-      <property name="life" type="float" value="20"/>
-      <property name="lifeMax" type="float" value="20"/>
+      <property name="life" type="float" value="15"/>
+      <property name="lifeMax" type="float" value="15"/>
       <property name="mana" type="float" value="15"/>
       <property name="manaMax" type="float" value="15"/>
      </properties>

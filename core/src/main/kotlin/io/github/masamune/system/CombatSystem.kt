@@ -1,6 +1,8 @@
 package io.github.masamune.system
 
 import com.github.quillraven.fleks.IntervalSystem
+import com.github.quillraven.fleks.World.Companion.inject
+import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.state.CombatState
 import io.github.masamune.combat.state.CombatStateCheckVictoryDefeat
 import io.github.masamune.combat.state.CombatStateDefeat
@@ -18,7 +20,9 @@ import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import ktx.log.logger
 
-class CombatSystem : IntervalSystem(), EventListener {
+class CombatSystem(
+    private val actionExecutorService: ActionExecutorService = inject(),
+) : IntervalSystem(), EventListener {
     private val states = listOf(
         CombatStateIdle,
         CombatStatePrepareRound(world),
@@ -59,11 +63,13 @@ class CombatSystem : IntervalSystem(), EventListener {
             is CombatPlayerActionEvent -> changeState<CombatStatePrepareRound>()
             is CombatTurnBeginEvent -> changeState<CombatStatePerformAction>()
             is CombatPlayerDefeatEvent -> {
+                actionExecutorService.clearAction()
                 globalState = CombatStateIdle
                 changeState<CombatStateDefeat>()
             }
 
             is CombatPlayerVictoryEvent -> {
+                actionExecutorService.clearAction()
                 globalState = CombatStateIdle
                 changeState<CombatStateVictory>()
             }
