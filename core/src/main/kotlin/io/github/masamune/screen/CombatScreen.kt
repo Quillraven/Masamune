@@ -24,6 +24,7 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
+import io.github.masamune.component.Combat.Companion.andEquipment
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Facing
@@ -50,6 +51,7 @@ import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
 import io.github.masamune.system.SelectorSystem
 import io.github.masamune.system.ShakeSystem
+import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.TiledObjectType
@@ -184,10 +186,12 @@ class CombatScreen(
         val nameCmp = with(gameScreenWorld) { gameScreenPlayer[Name] }
         val playerCmp = with(gameScreenWorld) { gameScreenPlayer[Player] }
         val statsCmp = with(gameScreenWorld) { gameScreenPlayer[Stats] }
-        val equipmentStats: List<Stats> = with(gameScreenWorld) {
-            gameScreenPlayer[Equipment].items.map { item ->
-                item[Stats]
-            }
+        val equipmentStats: List<Stats>
+        val equipmentActionTypes: List<ActionType>
+        with(gameScreenWorld) {
+            val playerEquipment = gameScreenPlayer[Equipment].items
+            equipmentStats = playerEquipment.map { it[Stats] }
+            equipmentActionTypes = playerEquipment.map { it[Item].actionType }
         }
         val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
         val xpCmp = with(gameScreenWorld) { gameScreenPlayer[Experience] }
@@ -217,7 +221,7 @@ class CombatScreen(
             it += graphicCmp
             it += Transform(vec3(gameViewport.worldWidth * 0.5f + 1f, 1f, 0f), graphicCmp.regionSize)
             it += Combat(
-                availableActionTypes = combatCmp.availableActionTypes.toMutableList(),
+                availableActionTypes = combatCmp.availableActionTypes andEquipment equipmentActionTypes,
                 attackSnd = SoundAsset.SWORD_SWIPE,
                 attackSFX = "slash1",
             )

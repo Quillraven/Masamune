@@ -32,5 +32,14 @@ data class Combat(
         action = DefaultAction
     }
 
-    companion object : ComponentType<Combat>()
+    companion object : ComponentType<Combat>() {
+        infix fun List<ActionType>.andEquipment(equipmentActionTypes: List<ActionType>): List<ActionType> {
+            val result = mutableListOf<ActionType>()
+            // get unique actions that are not part of the equipment
+            this.filterTo(result) { it !in equipmentActionTypes }
+            // combine the previous actions with the one of the equipment
+            equipmentActionTypes.filterTo(result) { it != ActionType.UNDEFINED }
+            return result
+        }
+    }
 }

@@ -18,7 +18,7 @@ class StatsTest {
     }
 
     @Test
-    fun `test with equipment (agility)`() {
+    fun `test andEquipment (agility)`() {
         val equipment = listOf(
             Stats(agility = 5f).apply { percModifier.agility = 1f },
             Stats(agility = 5f).apply { percModifier.agility = 1f },
