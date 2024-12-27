@@ -157,7 +157,7 @@ class ActionExecutorService(
      */
     fun attack(target: Entity, delay: Float = 1f) = with(world) {
         val sourceStats = source[Stats]
-        updateLifeBy(target, -(sourceStats.strength + sourceStats.damage))
+        updateLifeBy(target, -(sourceStats.totalStrength + sourceStats.totalDamage))
         val combat = source[Combat]
         play(combat.attackSnd, delay)
         addSfx(target, combat.attackSFX, duration = delay * 0.5f, scale = 2f)
@@ -187,14 +187,14 @@ class ActionExecutorService(
 
     private fun updateManaBy(target: Entity, amount: Float) = with(world) {
         val targetStats = target[Stats]
-        targetStats.mana = (targetStats.mana + amount).coerceIn(0f, targetStats.manaMax)
+        targetStats.mana = (targetStats.mana + amount).coerceIn(0f, targetStats.totalManaMax)
         if (amount != 0f) {
             eventService.fire(
                 CombatEntityManaUpdateEvent(
                     target,
                     abs(amount),
                     targetStats.mana,
-                    targetStats.manaMax,
+                    targetStats.totalManaMax,
                     state
                 )
             )
@@ -203,12 +203,12 @@ class ActionExecutorService(
 
     private fun updateLifeBy(target: Entity, amount: Float) = with(world) {
         val targetStats = target[Stats]
-        targetStats.life = (targetStats.life + amount).coerceIn(0f, targetStats.lifeMax)
+        targetStats.life = (targetStats.life + amount).coerceIn(0f, targetStats.totalLifeMax)
 
         if (amount < 0f) {
-            eventService.fire(CombatEntityTakeDamageEvent(target, -amount, targetStats.life, targetStats.lifeMax))
+            eventService.fire(CombatEntityTakeDamageEvent(target, -amount, targetStats.life, targetStats.totalLifeMax))
         } else if (amount > 0f) {
-            eventService.fire(CombatEntityHealEvent(target, amount, targetStats.life, targetStats.lifeMax))
+            eventService.fire(CombatEntityHealEvent(target, amount, targetStats.life, targetStats.totalLifeMax))
         }
 
         if (targetStats.life <= 0f) {

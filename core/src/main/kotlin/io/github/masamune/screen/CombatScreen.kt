@@ -24,6 +24,7 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
+import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
@@ -183,6 +184,11 @@ class CombatScreen(
         val nameCmp = with(gameScreenWorld) { gameScreenPlayer[Name] }
         val playerCmp = with(gameScreenWorld) { gameScreenPlayer[Player] }
         val statsCmp = with(gameScreenWorld) { gameScreenPlayer[Stats] }
+        val equipmentStats: List<Stats> = with(gameScreenWorld) {
+            gameScreenPlayer[Equipment].items.map { item ->
+                item[Stats]
+            }
+        }
         val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
         val xpCmp = with(gameScreenWorld) { gameScreenPlayer[Experience] }
         // clone OTHER items; they are the only ones that can be used during combat
@@ -200,7 +206,8 @@ class CombatScreen(
             it += nameCmp
             it += playerCmp
             it += xpCmp
-            it += Stats.of(statsCmp)
+            // combat stats = normal stats + equipment stats
+            it += Stats.of(statsCmp) andEquipment equipmentStats
             it += Facing(FacingDirection.UP)
             val animationCmp = Animation.ofAnimation(aniCmp)
             animationCmp.changeTo = AnimationType.WALK

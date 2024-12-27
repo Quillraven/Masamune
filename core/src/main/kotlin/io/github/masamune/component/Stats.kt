@@ -22,6 +22,7 @@ class Stats(
     physicalEvade: Float = 0f,
     resistance: Float = 0f,
     strength: Float = 0f,
+    val percModifier: TiledStats = TiledStats(),
 ) : Component<Stats>, TiledStats(
     agility = agility,
     arcaneStrike = arcaneStrike,
@@ -39,7 +40,72 @@ class Stats(
     resistance = resistance,
     strength = strength,
 ) {
+
+    // there is no total mana/life by design because such bonuses must be one manaMax/lifeMax
+    val totalAgility: Float
+        get() = agility * (1f + percModifier.agility)
+    val totalArcaneStrike: Float
+        get() = arcaneStrike * (1f + percModifier.arcaneStrike)
+    val totalArmor: Float
+        get() = armor * (1f + percModifier.armor)
+    val totalConstitution: Float
+        get() = constitution * (1f + percModifier.constitution)
+    val totalCriticalStrike: Float
+        get() = criticalStrike * (1f + percModifier.criticalStrike)
+    val totalDamage: Float
+        get() = damage * (1f + percModifier.damage)
+    val totalIntelligence: Float
+        get() = intelligence * (1f + percModifier.intelligence)
+    val totalLifeMax: Float
+        get() = lifeMax * (1f + percModifier.lifeMax)
+    val totalMagicalEvade: Float
+        get() = magicalEvade * (1f + percModifier.magicalEvade)
+    val totalManaMax: Float
+        get() = manaMax * (1f + percModifier.manaMax)
+    val totalPhysicalEvade: Float
+        get() = physicalEvade * (1f + percModifier.physicalEvade)
+    val totalResistance: Float
+        get() = resistance * (1f + percModifier.resistance)
+    val totalStrength: Float
+        get() = strength * (1f + percModifier.strength)
+
     override fun type() = Stats
+
+    // there is no mana/life by design because such bonuses must be one manaMax/lifeMax
+    infix fun andEquipment(equipmentStats: List<Stats>): Stats {
+        equipmentStats.forEach { equipment ->
+            // flat bonus
+            this.agility += equipment.agility
+            this.arcaneStrike += equipment.arcaneStrike
+            this.armor += equipment.armor
+            this.constitution += equipment.constitution
+            this.criticalStrike += equipment.criticalStrike
+            this.damage += equipment.damage
+            this.intelligence += equipment.intelligence
+            this.lifeMax += equipment.lifeMax
+            this.magicalEvade += equipment.magicalEvade
+            this.manaMax += equipment.manaMax
+            this.physicalEvade += equipment.physicalEvade
+            this.resistance += equipment.resistance
+            this.strength += equipment.strength
+
+            // percentage bonus
+            this.percModifier.agility += equipment.percModifier.agility
+            this.percModifier.arcaneStrike += equipment.percModifier.arcaneStrike
+            this.percModifier.armor += equipment.percModifier.armor
+            this.percModifier.constitution += equipment.percModifier.constitution
+            this.percModifier.criticalStrike += equipment.percModifier.criticalStrike
+            this.percModifier.damage += equipment.percModifier.damage
+            this.percModifier.intelligence += equipment.percModifier.intelligence
+            this.percModifier.lifeMax += equipment.percModifier.lifeMax
+            this.percModifier.magicalEvade += equipment.percModifier.magicalEvade
+            this.percModifier.manaMax += equipment.percModifier.manaMax
+            this.percModifier.physicalEvade += equipment.percModifier.physicalEvade
+            this.percModifier.resistance += equipment.percModifier.resistance
+            this.percModifier.strength += equipment.percModifier.strength
+        }
+        return this
+    }
 
     companion object : ComponentType<Stats>() {
         fun of(tiledStats: TiledStats): Stats = Stats(

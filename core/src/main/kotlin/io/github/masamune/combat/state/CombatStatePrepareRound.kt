@@ -22,7 +22,7 @@ class CombatStatePrepareRound(
 
     // sort entities by their agility -> higher agility goes first
     private val comparator = compareEntity(world) { e1, e2 ->
-        (e2[Stats].agility - e1[Stats].agility).toInt()
+        (e2[Stats].totalAgility - e1[Stats].totalAgility).toInt()
     }
     private var turn = 0
 
