@@ -126,7 +126,10 @@ class ActionExecutorService(
 
         when (state) {
             ActionState.START -> {
-                updateManaBy(source, -action.manaCost.toFloat())
+                if (itemOwner == Entity.NONE) {
+                    // action is not a use item action -> reduce mana cost of source entity
+                    updateManaBy(source, -action.manaCost.toFloat())
+                }
                 action.run { this@ActionExecutorService.onStart() }
                 changeState(ActionState.UPDATE)
             }
