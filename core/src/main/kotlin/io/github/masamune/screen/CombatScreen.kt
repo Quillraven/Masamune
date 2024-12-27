@@ -44,6 +44,7 @@ import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CombatSystem
 import io.github.masamune.system.DissolveSystem
 import io.github.masamune.system.MoveBySystem
+import io.github.masamune.system.RemoveSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
 import io.github.masamune.system.SelectorSystem
@@ -107,6 +108,7 @@ class CombatScreen(
                 add(audioService)
                 add(actionExecutorService)
                 add(AtlasAsset.CHARS_AND_PROPS.name, assetService[AtlasAsset.CHARS_AND_PROPS])
+                add(AtlasAsset.SFX.name, assetService[AtlasAsset.SFX])
             }
 
             systems {
@@ -119,13 +121,14 @@ class CombatScreen(
                 add(SelectorSystem())
                 add(ScreenBgdRenderSystem())
                 add(RenderSystem())
+                add(RemoveSystem())
             }
         }
     }
 
     override fun show() {
         // set action executor entity world
-        actionExecutorService.world = world
+        actionExecutorService.setWorld(world)
 
         // set controller
         inputProcessor.clear()
@@ -208,7 +211,8 @@ class CombatScreen(
             it += Transform(vec3(gameViewport.worldWidth * 0.5f + 1f, 1f, 0f), graphicCmp.regionSize)
             it += Combat(
                 availableActionTypes = combatCmp.availableActionTypes.toMutableList(),
-                attackSnd = SoundAsset.SWORD_SWIPE
+                attackSnd = SoundAsset.SWORD_SWIPE,
+                attackSFX = "slash1",
             )
             it += Inventory(clonedItems)
         }
