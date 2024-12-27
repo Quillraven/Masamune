@@ -25,6 +25,10 @@ Imagine an epic story here. Will be updated later.
     <img src="https://github.com/user-attachments/assets/7a2eceb5-9542-4b50-8f1a-8823c0438cfb" width="500">
     <img src="https://github.com/user-attachments/assets/c8553500-47d4-4b89-a535-6b720c19039a" width="500">
 </p>
+<p float="left">
+    <img src="https://github.com/user-attachments/assets/2af86b28-4783-4d0a-a95e-93101c96e079" width="500">
+    <img src="https://github.com/user-attachments/assets/4fdfbfea-f67a-436d-ae9f-0d1e015d7950" width="500">
+</p>
 
 ### Credits
 
