@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.EntityBag
+import io.github.masamune.combat.ActionState
 import io.github.masamune.dialog.Dialog
 import io.github.masamune.tiledmap.MapTransitionType
 import io.github.masamune.ui.model.MenuType
@@ -69,4 +70,10 @@ data object CombatPlayerVictoryEvent : Event
 data class CombatEntityDeadEvent(val entity: Entity) : Event
 data class CombatEntityTakeDamageEvent(val entity: Entity, val amount: Float, val life: Float, val maxLife: Float) : Event
 data class CombatEntityHealEvent(val entity: Entity, val amount: Float, val life: Float, val maxLife: Float) : Event
-data class CombatEntityManaUpdateEvent(val entity: Entity, val amount: Float, val mana: Float, val maxMana: Float) : Event
+data class CombatEntityManaUpdateEvent(
+    val entity: Entity,
+    val amount: Float,
+    val mana: Float,
+    val maxMana: Float,
+    val state: ActionState,
+) : Event
