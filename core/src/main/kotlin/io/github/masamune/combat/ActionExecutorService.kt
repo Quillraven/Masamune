@@ -1,31 +1,39 @@
 package io.github.masamune.combat
 
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.EntityBag
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
+import io.github.masamune.asset.AtlasAsset
+import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.DefaultAction
+import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
+import io.github.masamune.component.Graphic
 import io.github.masamune.component.Item
 import io.github.masamune.component.MoveBy
 import io.github.masamune.component.Player
+import io.github.masamune.component.Remove
 import io.github.masamune.component.Stats
+import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.EventService
+import io.github.masamune.tiledmap.AnimationType
 import ktx.log.logger
 import ktx.math.vec2
 import kotlin.math.abs
 import kotlin.math.max
 
-private enum class ActionState {
+enum class ActionState {
     START, UPDATE, FINISH, END;
 }
 
@@ -40,7 +48,8 @@ class ActionExecutorService(
         private set
     private var action: Action = DefaultAction
     private var itemOwner: Entity = Entity.NONE
-    lateinit var world: World
+    private lateinit var world: World
+    private lateinit var sfxAtlas: CachingAtlas
 
     val isFinished: Boolean
         get() = action == DefaultAction || (state == ActionState.END && delaySec <= 0f)
@@ -62,6 +71,11 @@ class ActionExecutorService(
 
     val Entity.itemAction: Action
         get() = with(world) { this@itemAction[Item].action }
+
+    fun setWorld(world: World) {
+        this.world = world
+        this.sfxAtlas = world.inject(AtlasAsset.SFX.name)
+    }
 
     fun perform(source: Entity, action: Action, targets: EntityBag, moveEntity: Boolean = true) {
         log.debug { "Performing action ${action::class.simpleName}: source=$source, targets(${targets.size})=$targets" }
@@ -141,8 +155,28 @@ class ActionExecutorService(
     fun attack(target: Entity, delay: Float = 1f) = with(world) {
         val sourceStats = source[Stats]
         updateLifeBy(target, -(sourceStats.strength + sourceStats.damage))
-        play(source[Combat].attackSnd, delay)
+        val combat = source[Combat]
+        play(combat.attackSnd, delay)
+        addSfx(target, combat.attackFx, duration = delay * 0.5f, scale = 2f)
     }
+
+    fun addSfx(to: Entity, sfxAtlasKey: String, duration: Float, scale: Float = 1f) = with(world) {
+        val (toPos, toSize, toScale) = to[Transform]
+        world.entity {
+            it += Transform(toPos.cpy().apply { z = 3f }, toSize.cpy(), toScale * scale)
+            val animation = Animation.ofAtlas(sfxAtlas, sfxAtlasKey, AnimationType.IDLE)
+            animation.speed = 1f / (duration / animation.gdxAnimation.animationDuration)
+            animation.playMode = PlayMode.NORMAL
+            it += animation
+            it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
+            it += Remove(duration)
+        }
+    }
+
+    fun addSfx(to: EntityBag, sfxAtlasKey: String, duration: Float, scale: Float = 1f) {
+        to.forEach { addSfx(it, sfxAtlasKey, duration, scale) }
+    }
+
 
     fun wait(seconds: Float) {
         delaySec += seconds
@@ -152,7 +186,15 @@ class ActionExecutorService(
         val targetStats = target[Stats]
         targetStats.mana = (targetStats.mana + amount).coerceIn(0f, targetStats.manaMax)
         if (amount != 0f) {
-            eventService.fire(CombatEntityManaUpdateEvent(target, abs(amount), targetStats.mana, targetStats.manaMax))
+            eventService.fire(
+                CombatEntityManaUpdateEvent(
+                    target,
+                    abs(amount),
+                    targetStats.mana,
+                    targetStats.manaMax,
+                    state
+                )
+            )
         }
     }
 
