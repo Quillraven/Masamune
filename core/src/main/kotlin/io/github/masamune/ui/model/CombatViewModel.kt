@@ -81,7 +81,7 @@ class CombatViewModel(
     var playerMagic: List<MagicModel> by propertyNotify(emptyList())
     var playerItems: List<ItemCombatModel> by propertyNotify(emptyList())
     var combatTurn: Int by propertyNotify(-1)
-    var combatDamage: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
+    var combatDamage: Triple<Vector2, Int, Boolean> by propertyNotify(Triple(Vector2.Zero, 0, false))
     var combatHeal: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatMana: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatMiss: Vector2 by propertyNotify(Vector2.Zero)
@@ -139,7 +139,7 @@ class CombatViewModel(
                 val (position, size) = event.entity[Transform]
                 val uiPos = vec2(position.x + MathUtils.random(size.x * 0.1f, size.x * 0.3f), position.y)
                     .toUiPosition(gameViewport, uiViewport)
-                combatDamage = uiPos to event.amount.toInt()
+                combatDamage = Triple(uiPos, event.amount.toInt(), event.critical)
             }
 
             is CombatEntityHealEvent -> {

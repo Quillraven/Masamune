@@ -209,8 +209,17 @@ class CombatView(
         }
 
         // damage/heal/mana indicators
-        model.onPropertyChange(CombatViewModel::combatDamage) { (position, amount) ->
-            combatTxt(amount, "{JUMP=1.5;5;1;1}", skin.getColor("red"), position, 2.5f)
+        model.onPropertyChange(CombatViewModel::combatDamage) { (position, amount, critical) ->
+            val effect: String
+            val color: Color
+            if (critical) {
+                effect = "{RAINBOW=1;5;1;1}{JUMP=2;5;1;1}"
+                color = skin.getColor("white")
+            } else {
+                effect = "{JUMP=1.5;5;1;1}"
+                color = skin.getColor("red")
+            }
+            combatTxt(amount, effect, color, position, 2.5f)
         }
         model.onPropertyChange(CombatViewModel::combatHeal) { (position, amount) ->
             combatTxt(amount, "{JUMP=0.5;5;1;1}", skin.getColor("green"), position, 2f)

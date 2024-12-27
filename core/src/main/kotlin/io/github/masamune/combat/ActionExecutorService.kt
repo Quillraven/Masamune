@@ -186,7 +186,8 @@ class ActionExecutorService(
 
         // critical strike?
         val critChance = sourceStats.totalCriticalStrike
-        if (critChance > 0f && MathUtils.random() <= critChance) {
+        val isCritical = critChance > 0f && MathUtils.random() <= critChance
+        if (isCritical) {
             damage *= 2f
         }
 
@@ -198,7 +199,7 @@ class ActionExecutorService(
         // apply damage
         val minDamage = ceil(damage * 0.9f)
         val maxDamage = floor(damage * 1.1f)
-        updateLifeBy(target, -(MathUtils.random(minDamage, maxDamage)))
+        updateLifeBy(target, -(MathUtils.random(minDamage, maxDamage)), isCritical)
 
         // play sound and add SFX
         val combat = source[Combat]
@@ -239,12 +240,20 @@ class ActionExecutorService(
         }
     }
 
-    private fun updateLifeBy(target: Entity, amount: Float) = with(world) {
+    private fun updateLifeBy(target: Entity, amount: Float, critical: Boolean) = with(world) {
         val targetStats = target[Stats]
         targetStats.life = (targetStats.life + amount).coerceIn(0f, targetStats.totalLifeMax)
 
         if (amount < 0f) {
-            eventService.fire(CombatEntityTakeDamageEvent(target, -amount, targetStats.life, targetStats.totalLifeMax))
+            eventService.fire(
+                CombatEntityTakeDamageEvent(
+                    target,
+                    -amount,
+                    targetStats.life,
+                    targetStats.totalLifeMax,
+                    critical
+                )
+            )
         } else if (amount > 0f) {
             eventService.fire(CombatEntityHealEvent(target, amount, targetStats.life, targetStats.totalLifeMax))
         }
@@ -295,7 +304,8 @@ class ActionExecutorService(
 
         // arcane strike?
         val critChance = sourceStats.totalArcaneStrike
-        if (critChance > 0f && MathUtils.random() <= critChance) {
+        val isCritical = critChance > 0f && MathUtils.random() <= critChance
+        if (isCritical) {
             damage *= 2f
         }
 
@@ -307,7 +317,7 @@ class ActionExecutorService(
         // apply damage
         val minDamage = ceil(damage * 0.9f)
         val maxDamage = floor(damage * 1.1f)
-        updateLifeBy(realTarget, -(MathUtils.random(minDamage, maxDamage)))
+        updateLifeBy(realTarget, -(MathUtils.random(minDamage, maxDamage)), isCritical)
 
         // add SFX
         addSfx(realTarget, sfxAtlasKey, sfxDuration, sfxScale)
@@ -346,7 +356,7 @@ class ActionExecutorService(
         }
 
         if (life > 0f) {
-            updateLifeBy(realTarget, life)
+            updateLifeBy(realTarget, life, false)
         }
         if (mana > 0f) {
             updateManaBy(realTarget, mana)
