@@ -22,6 +22,13 @@ import io.mockk.mockkObject
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 
+/**
+ * This test simulates a real combat like it is in the real game.
+ * It loads assets similar to the LoadingScreen, loads the GameScreen and triggers
+ * the combat start event.
+ * Combat entities are taken from the combatTest.tmx map and its embedded tileset.
+ */
+
 fun main() {
     // we misuse the VILLAGE constant for this test to avoid adding the test maps to our
     // TiledMapAsset enum. By mocking the VILLAGE's path value we can transition to an arbitrary map.
