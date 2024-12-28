@@ -134,7 +134,7 @@
     <properties>
      <property name="agility" type="float" value="5"/>
      <property name="damage" type="float" value="3"/>
-     <property name="life" type="float" value="5"/>
+     <property name="life" type="float" value="20"/>
      <property name="lifeMax" type="float" value="20"/>
     </properties>
    </property>
@@ -165,7 +165,7 @@
      <property name="damage" type="float" value="4"/>
      <property name="life" type="float" value="27"/>
      <property name="lifeMax" type="float" value="27"/>
-     <property name="resistance" type="float" value="0.25"/>
+     <property name="resistance" type="float" value="20"/>
     </properties>
    </property>
    <property name="xp" type="int" value="14"/>
@@ -192,6 +192,7 @@
    <property name="stats" type="class" propertytype="Stats">
     <properties>
      <property name="agility" type="float" value="3"/>
+     <property name="armor" type="float" value="10"/>
      <property name="damage" type="float" value="6"/>
      <property name="life" type="float" value="17"/>
      <property name="lifeMax" type="float" value="17"/>
