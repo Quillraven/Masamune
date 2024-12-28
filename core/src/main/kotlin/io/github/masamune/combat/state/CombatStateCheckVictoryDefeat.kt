@@ -3,10 +3,10 @@ package io.github.masamune.combat.state
 import com.github.quillraven.fleks.World
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
-import io.github.masamune.component.isEntityDead
 import io.github.masamune.event.CombatPlayerDefeatEvent
 import io.github.masamune.event.CombatPlayerVictoryEvent
 import io.github.masamune.event.EventService
+import io.github.masamune.isEntityDead
 import ktx.log.logger
 
 // global state

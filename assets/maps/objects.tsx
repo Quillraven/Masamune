@@ -16,12 +16,13 @@
      <property name="arcaneStrike" type="float" value="0.1"/>
      <property name="constitution" type="float" value="5"/>
      <property name="criticalStrike" type="float" value="0.2"/>
+     <property name="damage" type="float" value="0"/>
      <property name="intelligence" type="float" value="8"/>
      <property name="life" type="float" value="60"/>
      <property name="lifeMax" type="float" value="60"/>
      <property name="mana" type="float" value="20"/>
      <property name="manaMax" type="float" value="20"/>
-     <property name="strength" type="float" value="10"/>
+     <property name="strength" type="float" value="14"/>
     </properties>
    </property>
   </properties>
@@ -133,7 +134,7 @@
     <properties>
      <property name="agility" type="float" value="5"/>
      <property name="damage" type="float" value="3"/>
-     <property name="life" type="float" value="20"/>
+     <property name="life" type="float" value="5"/>
      <property name="lifeMax" type="float" value="20"/>
     </properties>
    </property>

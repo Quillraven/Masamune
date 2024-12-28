@@ -9,6 +9,7 @@ import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
 import io.github.masamune.component.Selector
+import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemType
@@ -68,4 +69,12 @@ fun World.removeItem(item: Entity, from: Entity) {
     val items = from[Inventory].items
     items -= item
     item.remove()
+}
+
+fun World.isEntityDead(entity: Entity): Boolean = with(this) {
+    return entity[Stats].life <= 0f
+}
+
+fun World.isEntityAlive(entity: Entity): Boolean = with(this) {
+    return entity[Stats].life > 0f
 }

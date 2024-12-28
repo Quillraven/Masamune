@@ -23,13 +23,14 @@ import io.github.masamune.component.Player
 import io.github.masamune.component.Remove
 import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
-import io.github.masamune.component.isEntityDead
 import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.CombatMissEvent
 import io.github.masamune.event.EventService
+import io.github.masamune.isEntityAlive
+import io.github.masamune.isEntityDead
 import io.github.masamune.tiledmap.AnimationType
 import ktx.log.logger
 import ktx.math.vec2
@@ -182,7 +183,7 @@ class ActionExecutorService(
 
         // add strength to physical damage
         val sourceStats = source[Stats]
-        var damage = sourceStats.totalStrength + sourceStats.totalDamage
+        var damage = (sourceStats.totalStrength * DAM_PER_STR) + sourceStats.totalDamage
 
         // critical strike?
         val critChance = sourceStats.totalCriticalStrike
@@ -268,9 +269,9 @@ class ActionExecutorService(
         if (isEntityDead(target)) {
             // target is dead -> replace with a different target
             if (target hasNo Player) {
-                return@with allEnemies.firstOrNull { it !in allTargets } ?: Entity.NONE
+                return@with allEnemies.firstOrNull { it !in allTargets && isEntityAlive(it) } ?: Entity.NONE
             }
-            return@with allPlayers.firstOrNull { it !in allTargets } ?: Entity.NONE
+            return@with allPlayers.firstOrNull { it !in allTargets && isEntityAlive(it) } ?: Entity.NONE
         }
         return target
     }
@@ -300,7 +301,7 @@ class ActionExecutorService(
 
         // add intelligence to magic damage
         val sourceStats = source[Stats]
-        var damage = amount + sourceStats.totalIntelligence
+        var damage = amount + (sourceStats.totalIntelligence * DAM_PER_INT)
 
         // arcane strike?
         val critChance = sourceStats.totalArcaneStrike
@@ -403,6 +404,8 @@ class ActionExecutorService(
     companion object {
         private val log = logger<ActionExecutorService>()
         private const val PERFORM_OFFSET = 0.75f // how many units will a unit move up/down when performing its action
+        private const val DAM_PER_STR = 1 / 2f
+        private const val DAM_PER_INT = 1 / 4f
     }
 }
 
