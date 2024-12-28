@@ -8,7 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import com.github.quillraven.fleks.configureWorld
+import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Name
@@ -25,6 +27,14 @@ import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.assets.toClasspathFile
 import ktx.scene2d.actors
+
+/**
+ * Test for [StatsViewModel] and [statsView] including equipment bonus.
+ * - Strength should be 20 (10 default + 10 equipment)
+ * - Arcane Strike should be -5% (-25% default + 20% equipment)
+ * - Life should be 150 (100 default + 50 bonus)
+ * - Mana should be 80 (30 default + 50 bonus)
+ */
 
 fun main() = gdxTest("UI Stats Test; 1-4 change HP,MP,XP values", UiStatsTest())
 
@@ -44,6 +54,15 @@ private class UiStatsTest : KtxApplicationAdapter {
             statsView(viewModel, skin)
         }
         eventService += stage
+
+        // create equipment
+        val equipment = mutableEntityBagOf(
+            world.entity { it += Stats(strength = 10f) },
+            world.entity { it += Stats(arcaneStrike = 0.2f) },
+            world.entity { it += Stats(lifeMax = 50f, manaMax = 50f) },
+        )
+
+        // create player
         world.entity {
             it += Player()
             it += Inventory(talons = 100)
@@ -60,6 +79,7 @@ private class UiStatsTest : KtxApplicationAdapter {
                 physicalEvade = 1f,
                 magicalEvade = 1.25f,
             )
+            it += Equipment(items = equipment)
         }
 
         eventService.fire(MenuBeginEvent(MenuType.STATS))

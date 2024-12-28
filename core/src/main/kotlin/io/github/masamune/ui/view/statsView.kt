@@ -8,8 +8,10 @@ import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.StatsViewModel
 import io.github.masamune.ui.model.UIStats
 import io.github.masamune.ui.widget.MenuItemLabel
+import io.github.masamune.ui.widget.MenuItemStatsLabel
 import io.github.masamune.ui.widget.frameImage
 import io.github.masamune.ui.widget.menuItemLabel
+import io.github.masamune.ui.widget.menuItemStatsLabel
 import ktx.actors.txt
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
@@ -33,19 +35,19 @@ class StatsView(
     private val xpMenuItemLabel: MenuItemLabel
     private val xpProgressBar: ProgressBar
 
-    private val strengthMenuItemLabel: MenuItemLabel
-    private val agilityMenuItemLabel: MenuItemLabel
-    private val constitutionMenuItemLabel: MenuItemLabel
-    private val intelligenceMenuItemLabel: MenuItemLabel
+    private val strengthMenuItemLabel: MenuItemStatsLabel
+    private val agilityMenuItemLabel: MenuItemStatsLabel
+    private val constitutionMenuItemLabel: MenuItemStatsLabel
+    private val intelligenceMenuItemLabel: MenuItemStatsLabel
 
-    private val attackMenuItemLabel: MenuItemLabel
-    private val armorMenuItemLabel: MenuItemLabel
-    private val resistanceMenuItemLabel: MenuItemLabel
+    private val attackMenuItemLabel: MenuItemStatsLabel
+    private val armorMenuItemLabel: MenuItemStatsLabel
+    private val resistanceMenuItemLabel: MenuItemStatsLabel
 
-    private val physicalEvadeMenuItemLabel: MenuItemLabel
-    private val magicalEvadeMenuItemLabel: MenuItemLabel
-    private val criticalStrikeMenuItemLabel: MenuItemLabel
-    private val arcaneStrikeMenuItemLabel: MenuItemLabel
+    private val physicalEvadeMenuItemLabel: MenuItemStatsLabel
+    private val magicalEvadeMenuItemLabel: MenuItemStatsLabel
+    private val criticalStrikeMenuItemLabel: MenuItemStatsLabel
+    private val arcaneStrikeMenuItemLabel: MenuItemStatsLabel
 
     private val lifeMenuItemLabel: MenuItemLabel
     private val lifeProgressBar: ProgressBar
@@ -115,51 +117,51 @@ class StatsView(
 
             // Attributes
             this@StatsView.strengthMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_STRENGTH), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_STRENGTH), "") { cell ->
                     cell.row()
                 }
             this@StatsView.agilityMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_AGILITY), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_AGILITY), "") { cell ->
                     cell.row()
                 }
             this@StatsView.constitutionMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_CONSTITUTION), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_CONSTITUTION), "") { cell ->
                     cell.row()
                 }
             this@StatsView.intelligenceMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_INTELLIGENCE), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_INTELLIGENCE), "") { cell ->
                     cell.padBottom(CATEGORY_BOT_PADDING).row()
                 }
 
             // Attack, Armor, Resistance
             this@StatsView.attackMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_ATTACK), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_ATTACK), "") { cell ->
                     cell.row()
                 }
             this@StatsView.armorMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_ARMOR), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_ARMOR), "") { cell ->
                     cell.row()
                 }
             this@StatsView.resistanceMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_RESISTANCE), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_RESISTANCE), "") { cell ->
                     cell.padBottom(CATEGORY_BOT_PADDING).row()
                 }
 
             // Percentage stats (phys. + magical evasion, phys. + magical critical strike)
             this@StatsView.physicalEvadeMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_PHYSICAL_EVADE), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_PHYSICAL_EVADE), "") { cell ->
                     cell.row()
                 }
             this@StatsView.magicalEvadeMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_MAGICAL_EVADE), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_MAGICAL_EVADE), "") { cell ->
                     cell.row()
                 }
             this@StatsView.criticalStrikeMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_CRITICAL_STRIKE), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_CRITICAL_STRIKE), "") { cell ->
                     cell.row()
                 }
             this@StatsView.arcaneStrikeMenuItemLabel =
-                menuItemLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_ARCANE_STRIKE), "") { cell ->
+                menuItemStatsLabel(skin, this@StatsView.i18nTxt(I18NKey.STATS_ARCANE_STRIKE), "") { cell ->
                     cell.row()
                 }
 
@@ -189,19 +191,19 @@ class StatsView(
             xpProgressBar.value = xpPercentage.coerceIn(0f, 1f)
 
             // stats
-            strengthMenuItemLabel.value(stats[UIStats.STRENGTH] ?: missingValue)
-            agilityMenuItemLabel.value(stats[UIStats.AGILITY] ?: missingValue)
-            constitutionMenuItemLabel.value(stats[UIStats.CONSTITUTION] ?: missingValue)
-            intelligenceMenuItemLabel.value(stats[UIStats.INTELLIGENCE] ?: missingValue)
+            strengthMenuItemLabel.valueAndDiff(stats[UIStats.STRENGTH] ?: missingValue, viewModel.equipmentBonus(UIStats.STRENGTH))
+            agilityMenuItemLabel.valueAndDiff(stats[UIStats.AGILITY] ?: missingValue, viewModel.equipmentBonus(UIStats.AGILITY))
+            constitutionMenuItemLabel.valueAndDiff(stats[UIStats.CONSTITUTION] ?: missingValue, viewModel.equipmentBonus(UIStats.CONSTITUTION))
+            intelligenceMenuItemLabel.valueAndDiff(stats[UIStats.INTELLIGENCE] ?: missingValue, viewModel.equipmentBonus(UIStats.INTELLIGENCE))
 
-            attackMenuItemLabel.value(stats[UIStats.DAMAGE] ?: missingValue)
-            armorMenuItemLabel.value(stats[UIStats.ARMOR] ?: missingValue)
-            resistanceMenuItemLabel.value(stats[UIStats.RESISTANCE] ?: missingValue)
+            attackMenuItemLabel.valueAndDiff(stats[UIStats.DAMAGE] ?: missingValue, viewModel.equipmentBonus(UIStats.DAMAGE))
+            armorMenuItemLabel.valueAndDiff(stats[UIStats.ARMOR] ?: missingValue, viewModel.equipmentBonus(UIStats.ARMOR))
+            resistanceMenuItemLabel.valueAndDiff(stats[UIStats.RESISTANCE] ?: missingValue, viewModel.equipmentBonus(UIStats.RESISTANCE))
 
-            physicalEvadeMenuItemLabel.value(stats[UIStats.PHYSICAL_EVADE] ?: missingValue)
-            magicalEvadeMenuItemLabel.value(stats[UIStats.MAGICAL_EVADE] ?: missingValue)
-            criticalStrikeMenuItemLabel.value(stats[UIStats.CRITICAL_STRIKE] ?: missingValue)
-            arcaneStrikeMenuItemLabel.value(stats[UIStats.ARCANE_STRIKE] ?: missingValue)
+            physicalEvadeMenuItemLabel.valueAndDiff(stats[UIStats.PHYSICAL_EVADE] ?: missingValue, viewModel.equipmentBonus(UIStats.PHYSICAL_EVADE))
+            magicalEvadeMenuItemLabel.valueAndDiff(stats[UIStats.MAGICAL_EVADE] ?: missingValue, viewModel.equipmentBonus(UIStats.MAGICAL_EVADE))
+            criticalStrikeMenuItemLabel.valueAndDiff(stats[UIStats.CRITICAL_STRIKE] ?: missingValue, viewModel.equipmentBonus(UIStats.CRITICAL_STRIKE))
+            arcaneStrikeMenuItemLabel.valueAndDiff(stats[UIStats.ARCANE_STRIKE] ?: missingValue, viewModel.equipmentBonus(UIStats.ARCANE_STRIKE))
 
             // life
             val lifeValue = stats[UIStats.LIFE] ?: missingValue

@@ -38,8 +38,8 @@ class ShopStatsLabel(
         }
     }
 
-    fun valueTxt(initValue: String) {
-        valueLabel.txt = initValue
+    fun valueTxt(value: String) {
+        valueLabel.txt = value
     }
 
     fun diffTxt(value: Int) {

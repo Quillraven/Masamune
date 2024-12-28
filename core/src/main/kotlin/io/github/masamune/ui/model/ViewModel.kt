@@ -36,7 +36,7 @@ abstract class ViewModel(
         actionsMap[property]?.forEach { action -> action(value) }
     }
 
-    fun uiMapOf(vararg components: Component<*>): Map<UIStats, String> {
+    fun uiMapOf(vararg components: Component<*>): MutableMap<UIStats, String> {
         val result = mutableMapOf<UIStats, String>()
 
         components.forEach { component ->
