@@ -28,9 +28,14 @@ class CombatStatePerformAction(
         turnEnd = false
         actionStack.clear()
         combatEntities.forEach { entity ->
+            if (world.isEntityDead(entity)) {
+                return@forEach
+            }
+
             val (_, action, targets) = entity[Combat]
             actionStack += Triple(entity, action, targets)
         }
+        log.debug { "Performing ${actionStack.size} actions" }
         performNext()
     }
 
@@ -39,11 +44,19 @@ class CombatStatePerformAction(
             return
         }
 
-        val (nextEntity, nextAction, nextTargets) = actionStack.first()
-        if (world.isEntityDead(nextEntity)) {
-            // entity died already -> remove its action from the stack and do nothing
+        var (nextEntity, nextAction, nextTargets) = actionStack.first()
+        while (world.isEntityDead(nextEntity)) {
+            // entity died already -> remove its action from the stack and find
+            // next executable action
             actionStack.removeFirst()
-            return
+            if (actionStack.isEmpty()) {
+                return
+            }
+
+            val topAction = actionStack.first()
+            nextEntity = topAction.first
+            nextAction = topAction.second
+            nextTargets = topAction.third
         }
         actionExecutorService.perform(nextEntity, nextAction, nextTargets)
     }

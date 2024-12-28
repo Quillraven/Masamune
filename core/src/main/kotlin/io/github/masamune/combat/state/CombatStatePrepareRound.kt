@@ -8,6 +8,7 @@ import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
 import io.github.masamune.event.CombatTurnBeginEvent
 import io.github.masamune.event.EventService
+import io.github.masamune.isEntityDead
 import ktx.log.logger
 
 // state is entered, when player decided the actions for next round
@@ -29,6 +30,10 @@ class CombatStatePrepareRound(
     override fun onEnter() {
         // TODO pick enemy action based on their AI
         enemyEntities.forEach { enemy ->
+            if (world.isEntityDead(enemy)) {
+                return@forEach
+            }
+
             enemy[Combat].run {
                 action = AttackSingleAction()
                 targets.clear()
