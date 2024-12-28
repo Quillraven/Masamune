@@ -45,6 +45,7 @@ import io.github.masamune.removeItem
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CombatSystem
 import io.github.masamune.system.DissolveSystem
+import io.github.masamune.system.GrayscaleSystem
 import io.github.masamune.system.MoveBySystem
 import io.github.masamune.system.RemoveSystem
 import io.github.masamune.system.RenderSystem
@@ -122,6 +123,8 @@ class CombatScreen(
                 add(ScaleSystem())
                 add(ShakeSystem())
                 add(SelectorSystem())
+                // grayscale system must be before any other render system
+                add(GrayscaleSystem())
                 add(ScreenBgdRenderSystem())
                 add(RenderSystem())
                 add(RemoveSystem())

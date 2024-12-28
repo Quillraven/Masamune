@@ -48,7 +48,8 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
     private var blurPixelSizeIdx = -1
 
     // grayscale shader
-    val grayscaleShader by lazy { loadShader("default.vert", "grayscale.frag") }
+    private val grayscaleShader by lazy { loadShader("default.vert", "grayscale.frag") }
+    private var grayscaleWeightIdx = -1
 
     // dissolve shader
     private val dissolveShader by lazy { loadShader("default.vert", "dissolve.frag") }
@@ -68,7 +69,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
         blurDirectionIdx = blurShader.getUniformLocation("u_direction")
         blurPixelSizeIdx = blurShader.getUniformLocation("u_pixelSize")
 
-        grayscaleShader
+        grayscaleWeightIdx = grayscaleShader.getUniformLocation("u_weight")
 
         dissolveIdx = dissolveShader.getUniformLocation("u_dissolve")
         dissolveUvOffsetIdx = dissolveShader.getUniformLocation("u_uvOffset")
@@ -107,6 +108,17 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
 
             // run render block
             block()
+        }
+    }
+
+    /**
+     * Applies a **grayscale** shader to the [batch] with a given [weight].
+     * A [weight] of 1 means 100% grayscale effect, while a [weight] of 0 means 0% grayscale effect.
+     */
+    fun applyGrayscaleShader(batch: Batch, weight: Float) {
+        batch.shader = grayscaleShader
+        grayscaleShader.use {
+            it.setUniformf(grayscaleWeightIdx, weight)
         }
     }
 
