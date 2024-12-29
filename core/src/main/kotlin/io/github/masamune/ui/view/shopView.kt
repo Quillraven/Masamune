@@ -54,6 +54,7 @@ class ShopView(
     private val itemInfoTable: ItemInfoTable
     private val popupTable: PopupTable
 
+    private val talonsPostfix = "[#FFFFFF77]${i18nTxt(I18NKey.STATS_TALONS).first()}[]"
     private var focus = ShopViewFocus.OPTIONS
     private var activeItems: List<ItemModel> = emptyList()
 
@@ -104,7 +105,7 @@ class ShopView(
                 innerTblCell.growX().row()
             }
 
-            this@ShopView.itemTable = itemTable(skin) { itCell ->
+            this@ShopView.itemTable = itemTable(this@ShopView.talonsPostfix, skin) { itCell ->
                 isVisible = false
                 itCell.grow()
             }
@@ -136,7 +137,7 @@ class ShopView(
         }
 
         model.onPropertyChange(ShopViewModel::playerTalons) { value ->
-            talonLabel.setText(" ${talonLabel.userObject}: $value$TALONS_POSTFIX ")
+            talonLabel.setText(" ${talonLabel.userObject}: $value$talonsPostfix ")
         }
 
         model.onPropertyChange(ShopViewModel::options) { optionNames ->
@@ -145,7 +146,7 @@ class ShopView(
         }
 
         model.onPropertyChange(ShopViewModel::totalCost) { value ->
-            totalLabel.setText(" ${totalLabel.userObject}: ${value}$TALONS_POSTFIX ")
+            totalLabel.setText(" ${totalLabel.userObject}: ${value}$talonsPostfix ")
         }
 
         model.onPropertyChange(ShopViewModel::shopName) {
@@ -352,10 +353,6 @@ class ShopView(
         focus = ShopViewFocus.ITEMS
         popupTable.remove()
         itemTable.resumeSelectAnimation()
-    }
-
-    companion object {
-        const val TALONS_POSTFIX = "[#FFFFFF77]K[]" // postfix at the end of an item cost
     }
 }
 

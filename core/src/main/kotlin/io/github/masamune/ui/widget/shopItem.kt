@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Scaling
-import io.github.masamune.ui.view.ShopView
 import ktx.actors.alpha
 import ktx.actors.plusAssign
 import ktx.actors.then
@@ -26,6 +25,7 @@ import ktx.scene2d.label
 class ShopItemWidget(
     title: String,
     cost: Int,
+    talonsPostfix: String,
     skin: Skin,
 ) : Table(skin), KTable, SelectableWidget {
 
@@ -42,7 +42,7 @@ class ShopItemWidget(
         label(title, defaultStyle, skin) {
             it.left()
         }
-        label("${cost}${ShopView.TALONS_POSTFIX}", defaultStyle, skin) {
+        label("${cost}$talonsPostfix", defaultStyle, skin) {
             it.right().padRight(30f).expandX()
         }
         amountLabel = label("0x", defaultStyle, skin) {
@@ -75,6 +75,7 @@ class ShopItemWidget(
 fun <S> KWidget<S>.shopItem(
     title: String,
     cost: Int,
+    talonsPostfix: String,
     skin: Skin,
     init: (@Scene2dDsl ShopItemWidget).(S) -> Unit = {},
-): ShopItemWidget = actor(ShopItemWidget(title, cost, skin), init)
+): ShopItemWidget = actor(ShopItemWidget(title, cost, talonsPostfix, skin), init)
