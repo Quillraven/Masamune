@@ -6,6 +6,7 @@ import com.github.quillraven.fleks.collection.MutableEntityBag
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.DefaultAction
+import io.github.masamune.combat.buff.Buff
 import io.github.masamune.tiledmap.ActionType
 
 data class Combat(
@@ -14,6 +15,7 @@ data class Combat(
     val targets: MutableEntityBag = MutableEntityBag(4),
     val attackSnd: SoundAsset = SoundAsset.ATTACK_SWIPE,
     val attackSFX: String = "hit1",
+    val buffs: MutableList<Buff> = mutableListOf(),
 ) : Component<Combat> {
 
     val attackAction: Action by lazy { availableActionTypes.single { it == ActionType.ATTACK_SINGLE }() }
