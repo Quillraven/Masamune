@@ -16,7 +16,8 @@ import io.github.masamune.combat.ActionQueueEntry.Companion.DEFAULT_QUEUE_ACTION
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.combat.buff.Buff
-import io.github.masamune.combat.buff.BuffOnAttackDamage
+import io.github.masamune.combat.buff.OnAttackDamageBuff
+import io.github.masamune.combat.buff.OnDamageTakenBuff
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Graphic
@@ -246,11 +247,11 @@ class ActionExecutorService(
         val minDamage = ceil(damage * 0.9f)
         val maxDamage = floor(damage * 1.1f)
         damage = MathUtils.random(minDamage, maxDamage)
-        source.applyBuffs<BuffOnAttackDamage> { damage = preAttackDamage(source, target, damage) }
-        target.applyBuffs<BuffOnAttackDamage> { damage = preAttackDamage(source, target, damage) }
+        source.applyBuffs<OnAttackDamageBuff> { damage = preAttackDamage(source, target, damage) }
+        target.applyBuffs<OnDamageTakenBuff> { damage = preDamageTaken(source, target, damage) }
         updateLifeBy(realTarget, -damage, isCritical)
-        target.applyBuffs<BuffOnAttackDamage> { damage = preAttackDamage(source, target, damage) }
-        source.applyBuffs<BuffOnAttackDamage> { damage = preAttackDamage(source, target, damage) }
+        target.applyBuffs<OnDamageTakenBuff> { postDamageTaken(source, target, damage) }
+        source.applyBuffs<OnAttackDamageBuff> { postAttackDamage(source, target, damage) }
 
         // play sound and add SFX
         val combat = source[Combat]
@@ -259,7 +260,11 @@ class ActionExecutorService(
     }
 
     private inline fun <reified T : Buff> Entity.applyBuffs(block: T.() -> Unit) = with(world) {
-        this@applyBuffs[Combat].buffs.filterIsInstance<T>().forEach(block)
+        this@applyBuffs[Combat].buffs
+            .filterIsInstance<T>()
+            .forEach { buff ->
+                buff.block()
+            }
     }
 
     fun addSfx(to: Entity, sfxAtlasKey: String, duration: Float, scale: Float = 1f) = with(world) {
@@ -313,7 +318,7 @@ class ActionExecutorService(
             eventService.fire(CombatEntityHealEvent(target, amount, targetStats.life, targetStats.totalLifeMax))
         }
 
-        if (targetStats.life <= 0f) {
+        if (isEntityDead(target)) {
             log.debug { "$target is dead" }
             eventService.fire(CombatEntityDeadEvent(target))
         }

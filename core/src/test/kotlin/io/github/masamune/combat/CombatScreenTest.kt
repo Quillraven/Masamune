@@ -8,7 +8,8 @@ import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import io.github.masamune.Masamune
 import io.github.masamune.asset.TiledMapAsset
-import io.github.masamune.combat.buff.NullifyBuff
+import io.github.masamune.combat.buff.NullifyAttackBuff
+import io.github.masamune.combat.buff.ReflectAttackBuff
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Enemy
 import io.github.masamune.component.Equipment
@@ -116,9 +117,15 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             val combatWorld = masamune.getScreen<CombatScreen>().world
             combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
-                combatWorld.inject<ActionExecutorService>().addBuff(NullifyBuff(enemy, 1))
+                combatWorld.inject<ActionExecutorService>().addBuff(NullifyAttackBuff(enemy, 1))
             }
-        }
+        } else
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+                val combatWorld = masamune.getScreen<CombatScreen>().world
+                combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
+                    combatWorld.inject<ActionExecutorService>().addBuff(ReflectAttackBuff(enemy, 1, 0.5f))
+                }
+            }
     }
 
     override fun dispose() {
