@@ -52,8 +52,8 @@ i:d:/ui:0:1
 i:b:/ui/messages_de.properties:4861:1
 i:b:/ui/fipps_16.fnt:8935:1
 i:b:/ui/PIXEARG_.fnt:10450:1
-i:b:/ui/skin.atlas:2779:1
-i:b:/ui/skin.png:35221:1
+i:b:/ui/skin.atlas:2784:1
+i:b:/ui/skin.png:36813:1
 i:b:/ui/messages.properties:4408:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 i:b:/ui/skin.json:4342:1

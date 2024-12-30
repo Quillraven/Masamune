@@ -29,7 +29,7 @@ button_normal
   index: -1
 button_pressed
   rotate: false
-  xy: 4, 527
+  xy: 106, 629
   size: 16, 8
   split: 3, 3, 4, 2
   pad: 2, 2, 3, 1
@@ -92,21 +92,21 @@ hero
   index: -1
 icon_items
   rotate: false
-  xy: 106, 626
+  xy: 518, 765
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
   index: -1
 icon_magic
   rotate: false
-  xy: 130, 652
-  size: 9, 9
-  orig: 9, 9
+  xy: 4, 522
+  size: 38, 37
+  orig: 38, 37
   offset: 0, 0
   index: -1
 icon_sword
   rotate: false
-  xy: 28, 543
+  xy: 130, 645
   size: 7, 16
   orig: 7, 16
   offset: 0, 0
@@ -129,7 +129,7 @@ nine_path_bg
   index: -1
 nine_path_bg_2
   rotate: false
-  xy: 934, 926
+  xy: 4, 498
   size: 16, 16
   split: 3, 3, 3, 3
   orig: 16, 16
@@ -144,7 +144,7 @@ pixel_arial_24_border
   index: -1
 slider_progress
   rotate: false
-  xy: 4, 543
+  xy: 106, 645
   size: 16, 16
   split: 4, 4, 4, 4
   pad: 0, 0, 0, 0
@@ -153,7 +153,7 @@ slider_progress
   index: -1
 slider_progress_blue
   rotate: false
-  xy: 518, 784
+  xy: 564, 830
   size: 16, 16
   split: 4, 5, 4, 4
   pad: 0, 0, 0, 0
@@ -162,7 +162,7 @@ slider_progress_blue
   index: -1
 slider_progress_green
   rotate: false
-  xy: 106, 645
+  xy: 518, 784
   size: 16, 16
   split: 4, 4, 4, 4
   pad: 0, 0, 0, 0
@@ -171,7 +171,7 @@ slider_progress_green
   index: -1
 slider_progress_yellow
   rotate: false
-  xy: 564, 830
+  xy: 934, 926
   size: 16, 16
   split: 4, 6, 4, 4
   pad: 0, 0, 0, 0
