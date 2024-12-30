@@ -21,6 +21,7 @@ class NullifyBuff(override val owner: Entity, private var numTurns: Int) : BuffO
     ): Float {
         if (owner == target) {
             --numTurns
+            addSfx(owner, "shield-yellow", 0.5f, 1.5f)
             if (numTurns <= 0) {
                 removeBuff()
             }

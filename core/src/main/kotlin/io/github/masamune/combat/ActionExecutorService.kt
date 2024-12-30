@@ -7,11 +7,12 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.Family
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.EntityBag
-import com.github.quillraven.fleks.collection.mutableEntityBagOf
+import com.github.quillraven.fleks.collection.MutableEntityBag
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.ActionQueueEntry.Companion.DEFAULT_QUEUE_ACTION
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.combat.buff.Buff
@@ -30,6 +31,8 @@ import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.CombatMissEvent
+import io.github.masamune.event.CombatNextTurnEvent
+import io.github.masamune.event.CombatTurnEndEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.isEntityAlive
 import io.github.masamune.isEntityDead
@@ -45,43 +48,56 @@ enum class ActionState {
     START, UPDATE, FINISH, END;
 }
 
+data class ActionQueueEntry(val entity: Entity, val action: Action, val targets: EntityBag) {
+    companion object {
+        val DEFAULT_QUEUE_ACTION = ActionQueueEntry(Entity.NONE, DefaultAction, MutableEntityBag(0))
+    }
+}
+
+
 class ActionExecutorService(
     val audioService: AudioService,
     val eventService: EventService,
 ) {
+    private val actionStack = ArrayDeque<ActionQueueEntry>()
     private var state: ActionState = ActionState.START
     private var delaySec = 0f
-    private val targets = mutableEntityBagOf()
-    var source: Entity = Entity.NONE
+    var currentQueueEntry: ActionQueueEntry = DEFAULT_QUEUE_ACTION
         private set
-    private var action: Action = DefaultAction
     private var itemOwner: Entity = Entity.NONE
+    private var endTurnPerformed = false
 
-    @PublishedApi
-    internal lateinit var world: World
+    lateinit var world: World
+        private set
     private lateinit var sfxAtlas: CachingAtlas
     private lateinit var allEnemies: Family
     private lateinit var allPlayers: Family
 
-    val isFinished: Boolean
-        get() = action == DefaultAction || (state == ActionState.END && delaySec <= 0f)
+    private val isFinished: Boolean
+        get() = currentQueueEntry.action == DefaultAction || (state == ActionState.END && delaySec <= 0f)
 
-    val singleTarget: Entity
-        get() = targets.first()
+    inline val source: Entity
+        get() = currentQueueEntry.entity
 
-    val allTargets: EntityBag
-        get() = targets
+    inline val action: Action
+        get() = currentQueueEntry.action
 
-    val numTargets: Int
-        get() = targets.size
+    inline val singleTarget: Entity
+        get() = currentQueueEntry.targets.first()
 
-    val deltaTime: Float
+    inline val allTargets: EntityBag
+        get() = currentQueueEntry.targets
+
+    inline val numTargets: Int
+        get() = currentQueueEntry.targets.size
+
+    inline val deltaTime: Float
         get() = world.deltaTime
 
-    val Entity.stats: Stats
+    inline val Entity.stats: Stats
         get() = with(world) { this@stats[Stats] }
 
-    val Entity.itemAction: Action
+    inline val Entity.itemAction: Action
         get() = with(world) { this@itemAction[Item].action }
 
     infix fun withWorld(world: World) {
@@ -91,25 +107,19 @@ class ActionExecutorService(
         this.allPlayers = world.family { all(Player, Combat) }
     }
 
-    fun perform(source: Entity, action: Action, targets: EntityBag, moveEntity: Boolean = true) {
+    fun queueAction(entity: Entity, action: Action, targets: EntityBag) {
+        actionStack += ActionQueueEntry(entity, action, targets)
+    }
+
+    private fun perform(queueEntry: ActionQueueEntry, moveEntity: Boolean = true) {
+        val (source, action, targets) = queueEntry
         log.debug { "Performing action ${action::class.simpleName}: source=$source, targets(${targets.size})=$targets" }
 
         this.state = ActionState.START
         this.delaySec = 0f
-        this.source = source
-        this.action = action
-        this.targets.clear()
-        this.targets += targets
+        this.currentQueueEntry = queueEntry
         if (moveEntity) {
-            moveEntityBy(source, PERFORM_OFFSET, 0.5f)
-        }
-    }
-
-    fun moveEntityBy(entity: Entity, amount: Float, duration: Float) = with(world) {
-        wait(duration + 0.25f)
-        entity.configure {
-            val direction = if (entity has Player) 1 else -1
-            it += MoveBy(vec2(0f, amount * direction), duration, Interpolation.fastSlow)
+            moveEntityBy(queueEntry.entity, PERFORM_OFFSET, 0.5f)
         }
     }
 
@@ -121,7 +131,15 @@ class ActionExecutorService(
             // The real item removal happens at the end of the combat in the CombatScreen.
             --item[Item].amount
         }
-        perform(item, action, targets, false)
+        perform(ActionQueueEntry(item, action, targets), false)
+    }
+
+    private fun moveEntityBy(entity: Entity, amount: Float, duration: Float) = with(world) {
+        wait(duration + 0.25f)
+        entity.configure {
+            val direction = if (entity has Player) 1 else -1
+            it += MoveBy(vec2(0f, amount * direction), duration, Interpolation.fastSlow)
+        }
     }
 
     private fun changeState(newState: ActionState) {
@@ -135,6 +153,23 @@ class ActionExecutorService(
     fun update() {
         if (delaySec > 0f) {
             delaySec = max(0f, delaySec - deltaTime)
+            return
+        }
+
+        if (actionStack.isEmpty()) {
+            if (!endTurnPerformed) {
+                // all actions of turn performed -> fire turn end event which might add some actions on the stack again
+                log.debug { "Combat turn end" }
+                endTurnPerformed = true
+                eventService.fire(CombatTurnEndEvent)
+            } else {
+                log.debug { "Combat trigger next turn" }
+                with(world) {
+                    val player = allPlayers.single { it has Player }
+                    val aliveEnemies = allEnemies.filter { it hasNo Player && isEntityAlive(it) }
+                    eventService.fire(CombatNextTurnEvent(player, aliveEnemies))
+                }
+            }
             return
         }
 
@@ -163,6 +198,12 @@ class ActionExecutorService(
             }
 
             ActionState.END -> Unit
+        }
+
+        if (isFinished) {
+            actionStack.removeFirst()
+            clearAction()
+            performNext()
         }
     }
 
@@ -407,7 +448,7 @@ class ActionExecutorService(
             moveEntityBy(source, -PERFORM_OFFSET, 0.3f)
             source[Combat].clearAction()
         }
-        action = DefaultAction
+        currentQueueEntry = DEFAULT_QUEUE_ACTION
     }
 
     inline fun <reified T : Buff> addBuff(buff: T) = with(world) {
@@ -418,6 +459,30 @@ class ActionExecutorService(
 
     fun Buff.removeBuff() = with(world) {
         owner[Combat].buffs -= this@removeBuff
+    }
+
+    fun performFirst() {
+        log.debug { "Starting first action of stack of size ${actionStack.size}" }
+        perform(actionStack.first())
+        endTurnPerformed = false
+    }
+
+    private fun performNext() {
+        if (actionStack.isEmpty()) {
+            return
+        }
+
+        var nextQueueEntry = actionStack.first()
+        while (world.isEntityDead(nextQueueEntry.entity)) {
+            // entity died already -> remove its action from the stack and find
+            // next executable action
+            actionStack.removeFirst()
+            if (actionStack.isEmpty()) {
+                return
+            }
+            nextQueueEntry = actionStack.first()
+        }
+        perform(nextQueueEntry)
     }
 
     override fun toString(): String {
