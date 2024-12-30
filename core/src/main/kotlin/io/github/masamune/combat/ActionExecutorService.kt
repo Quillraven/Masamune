@@ -14,6 +14,8 @@ import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.DefaultAction
+import io.github.masamune.combat.buff.Buff
+import io.github.masamune.combat.buff.BuffOnAttackDamage
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Graphic
@@ -54,7 +56,9 @@ class ActionExecutorService(
         private set
     private var action: Action = DefaultAction
     private var itemOwner: Entity = Entity.NONE
-    private lateinit var world: World
+
+    @PublishedApi
+    internal lateinit var world: World
     private lateinit var sfxAtlas: CachingAtlas
     private lateinit var allEnemies: Family
     private lateinit var allPlayers: Family
@@ -80,7 +84,7 @@ class ActionExecutorService(
     val Entity.itemAction: Action
         get() = with(world) { this@itemAction[Item].action }
 
-    fun setWorld(world: World) {
+    infix fun withWorld(world: World) {
         this.world = world
         this.sfxAtlas = world.inject(AtlasAsset.SFX.name)
         this.allEnemies = world.family { none(Player).all(Combat) }
@@ -173,10 +177,10 @@ class ActionExecutorService(
         }
 
         // will target evade?
-        val targetStats = target.stats
+        val targetStats = realTarget[Stats]
         val evadeChance = targetStats.totalPhysicalEvade
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
-            eventService.fire(CombatMissEvent(target))
+            eventService.fire(CombatMissEvent(realTarget))
             play(SoundAsset.ATTACK_MISS, delay)
             return@with
         }
@@ -200,12 +204,21 @@ class ActionExecutorService(
         // apply damage
         val minDamage = ceil(damage * 0.9f)
         val maxDamage = floor(damage * 1.1f)
-        updateLifeBy(target, -(MathUtils.random(minDamage, maxDamage)), isCritical)
+        damage = MathUtils.random(minDamage, maxDamage)
+        source.applyBuffs<BuffOnAttackDamage> { damage = preAttackDamage(source, target, damage) }
+        target.applyBuffs<BuffOnAttackDamage> { damage = preAttackDamage(source, target, damage) }
+        updateLifeBy(realTarget, -damage, isCritical)
+        target.applyBuffs<BuffOnAttackDamage> { damage = preAttackDamage(source, target, damage) }
+        source.applyBuffs<BuffOnAttackDamage> { damage = preAttackDamage(source, target, damage) }
 
         // play sound and add SFX
         val combat = source[Combat]
         play(combat.attackSnd, delay)
-        addSfx(target, combat.attackSFX, duration = delay * 0.5f, scale = 2f)
+        addSfx(realTarget, combat.attackSFX, duration = delay * 0.5f, scale = 2f)
+    }
+
+    private inline fun <reified T : Buff> Entity.applyBuffs(block: T.() -> Unit) = with(world) {
+        this@applyBuffs[Combat].buffs.filterIsInstance<T>().forEach(block)
     }
 
     fun addSfx(to: Entity, sfxAtlasKey: String, duration: Float, scale: Float = 1f) = with(world) {
@@ -395,6 +408,16 @@ class ActionExecutorService(
             source[Combat].clearAction()
         }
         action = DefaultAction
+    }
+
+    inline fun <reified T : Buff> addBuff(buff: T) = with(world) {
+        val ownerBuffs = buff.owner[Combat].buffs
+        ownerBuffs.removeIf { it is T }
+        ownerBuffs += buff
+    }
+
+    fun Buff.removeBuff() = with(world) {
+        owner[Combat].buffs -= this@removeBuff
     }
 
     override fun toString(): String {

@@ -1,11 +1,15 @@
 package io.github.masamune.combat
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import io.github.masamune.Masamune
 import io.github.masamune.asset.TiledMapAsset
+import io.github.masamune.combat.buff.NullifyBuff
+import io.github.masamune.component.Combat
 import io.github.masamune.component.Enemy
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Inventory
@@ -27,6 +31,9 @@ import ktx.app.KtxScreen
  * It loads assets similar to the LoadingScreen, loads the GameScreen and triggers
  * the combat start event.
  * Combat entities are taken from the combatTest.tmx map and its embedded tileset.
+ *
+ * Special tests:
+ * - Press '1' to add an attack nullify buff for one turn to all enemies
  */
 
 fun main() {
@@ -105,6 +112,13 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
 
     override fun render() {
         masamune.render()
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+            val combatWorld = masamune.getScreen<CombatScreen>().world
+            combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
+                combatWorld.inject<ActionExecutorService>().addBuff(NullifyBuff(enemy, 1))
+            }
+        }
     }
 
     override fun dispose() {

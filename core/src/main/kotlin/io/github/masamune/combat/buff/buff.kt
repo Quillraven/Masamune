@@ -8,8 +8,8 @@ sealed interface Buff {
 }
 
 sealed interface BuffOnAttackDamage : Buff {
-    fun ActionExecutorService.preAttackDamage(source: Entity, target: Entity, damage: Float): Float
-    fun ActionExecutorService.postAttackDamage(source: Entity, target: Entity, damage: Float)
+    fun ActionExecutorService.preAttackDamage(source: Entity, target: Entity, damage: Float): Float = damage
+    fun ActionExecutorService.postAttackDamage(source: Entity, target: Entity, damage: Float) = Unit
 }
 
 class NullifyBuff(override val owner: Entity, private var numTurns: Int) : BuffOnAttackDamage {
@@ -22,17 +22,10 @@ class NullifyBuff(override val owner: Entity, private var numTurns: Int) : BuffO
         if (owner == target) {
             --numTurns
             if (numTurns <= 0) {
-                removeBuff(target, this@NullifyBuff)
+                removeBuff()
             }
             return 0f
         }
         return damage
     }
-
-    override fun ActionExecutorService.postAttackDamage(
-        source: Entity,
-        target: Entity,
-        damage: Float,
-    ) = Unit
-
 }

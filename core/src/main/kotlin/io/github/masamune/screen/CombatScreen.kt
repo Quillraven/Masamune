@@ -89,7 +89,7 @@ class CombatScreen(
     private val keyboardController = KeyboardController(eventService, initialState = ControllerStateUI::class)
 
     // ecs world
-    private val world = combatWorld()
+    val world = combatWorld()
     private val enemyEntities = world.family { none(Player).all(Combat) }
 
     // things to remember to restart combat
@@ -134,7 +134,7 @@ class CombatScreen(
 
     override fun show() {
         // set action executor entity world
-        actionExecutorService.setWorld(world)
+        actionExecutorService withWorld world
 
         // set controller
         inputProcessor.clear()

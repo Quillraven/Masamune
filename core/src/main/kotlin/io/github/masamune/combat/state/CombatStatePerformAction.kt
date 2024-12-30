@@ -69,7 +69,8 @@ class CombatStatePerformAction(
             append(if (entity has Player) "Player" else "Enemy")
             append("): ")
             val stats = entity[Stats]
-            append("life=${stats.life}, mana=${stats.mana}, agi=${stats.agility}")
+            val buffs = entity[Combat].buffs.joinToString { "${it::class.simpleName}" }
+            append("life=${stats.life}, mana=${stats.mana}, agi=${stats.agility}, buffs=$buffs")
             appendLine()
         }
     }
