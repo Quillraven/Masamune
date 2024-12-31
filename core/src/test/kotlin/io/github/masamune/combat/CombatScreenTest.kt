@@ -9,7 +9,9 @@ import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import io.github.masamune.Masamune
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.combat.buff.NullifyAttackBuff
+import io.github.masamune.combat.buff.NullifyMagicBuff
 import io.github.masamune.combat.buff.ReflectAttackBuff
+import io.github.masamune.combat.buff.ReflectMagicBuff
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Enemy
 import io.github.masamune.component.Equipment
@@ -114,18 +116,55 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
     override fun render() {
         masamune.render()
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-            val combatWorld = masamune.getScreen<CombatScreen>().world
-            combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
-                combatWorld.inject<ActionExecutorService>().addBuff(NullifyAttackBuff(enemy, 1))
+        when {
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> {
+                val combatWorld = masamune.getScreen<CombatScreen>().world
+                combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
+                    combatWorld.inject<ActionExecutorService>().addBuff(NullifyAttackBuff(enemy, 1))
+                }
             }
-        } else
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> {
                 val combatWorld = masamune.getScreen<CombatScreen>().world
                 combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
                     combatWorld.inject<ActionExecutorService>().addBuff(ReflectAttackBuff(enemy, 1, 0.5f))
                 }
             }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> {
+                val combatWorld = masamune.getScreen<CombatScreen>().world
+                combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
+                    combatWorld.inject<ActionExecutorService>().addBuff(ReflectAttackBuff(enemy, 1, 0.5f))
+                }
+                combatWorld.family { all(Combat, Player) }.forEach { player ->
+                    combatWorld.inject<ActionExecutorService>().addBuff(ReflectAttackBuff(player, 1, 0.25f))
+                }
+            }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_4) -> {
+                val combatWorld = masamune.getScreen<CombatScreen>().world
+                combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
+                    combatWorld.inject<ActionExecutorService>().addBuff(NullifyMagicBuff(enemy, 1))
+                }
+            }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_5) -> {
+                val combatWorld = masamune.getScreen<CombatScreen>().world
+                combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
+                    combatWorld.inject<ActionExecutorService>().addBuff(ReflectMagicBuff(enemy, 1, 0.5f))
+                }
+            }
+
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_6) -> {
+                val combatWorld = masamune.getScreen<CombatScreen>().world
+                combatWorld.family { all(Combat).none(Player) }.forEach { enemy ->
+                    combatWorld.inject<ActionExecutorService>().addBuff(ReflectMagicBuff(enemy, 2, 0.5f))
+                }
+                combatWorld.family { all(Combat, Player) }.forEach { player ->
+                    combatWorld.inject<ActionExecutorService>().addBuff(ReflectMagicBuff(player, 2, 0.25f))
+                }
+            }
+        }
     }
 
     override fun dispose() {

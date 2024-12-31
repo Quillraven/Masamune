@@ -63,13 +63,13 @@ class CombatSystem(
             is CombatPlayerActionEvent -> changeState<CombatStatePrepareRound>()
             is CombatTurnBeginEvent -> changeState<CombatStatePerformAction>()
             is CombatPlayerDefeatEvent -> {
-                actionExecutorService.clearAction()
+                actionExecutorService.clear()
                 globalState = CombatStateIdle
                 changeState<CombatStateDefeat>()
             }
 
             is CombatPlayerVictoryEvent -> {
-                actionExecutorService.clearAction()
+                actionExecutorService.clear()
                 globalState = CombatStateIdle
                 changeState<CombatStateVictory>()
             }

@@ -6,7 +6,7 @@ import io.github.masamune.tiledmap.ActionType
 
 class FireboltAction : Action(ActionType.FIREBOLT, ActionTargetType.MULTI, manaCost = 3) {
     override fun ActionExecutorService.onUpdate(): Boolean {
-        dealMagicDamage(8f / numTargets, allTargets, "fire1", 1f, 2f, SoundAsset.EXPLOSION1, 1f)
+        dealMagicDamage(source, 8f / numTargets, allTargets, "fire1", 1f, 2f, SoundAsset.EXPLOSION1, 1f)
         return true
     }
 }

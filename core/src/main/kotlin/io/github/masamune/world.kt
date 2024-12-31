@@ -72,9 +72,9 @@ fun World.removeItem(item: Entity, from: Entity) {
 }
 
 fun World.isEntityDead(entity: Entity): Boolean = with(this) {
-    return entity[Stats].life <= 0f
+    return entity[Stats].life < 1f
 }
 
 fun World.isEntityAlive(entity: Entity): Boolean = with(this) {
-    return entity[Stats].life > 0f
+    return entity[Stats].life >= 1f
 }

@@ -1,6 +1,5 @@
 package io.github.masamune.combat
 
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.github.quillraven.fleks.Entity
@@ -17,33 +16,34 @@ import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.combat.buff.Buff
 import io.github.masamune.combat.buff.OnAttackDamageBuff
-import io.github.masamune.combat.buff.OnDamageTakenBuff
-import io.github.masamune.component.Animation
+import io.github.masamune.combat.buff.OnAttackDamageTakenBuff
+import io.github.masamune.combat.buff.OnMagicDamageBuff
+import io.github.masamune.combat.buff.OnMagicDamageTakenBuff
+import io.github.masamune.combat.effect.DamageEffect
+import io.github.masamune.combat.effect.DefaultEffect
+import io.github.masamune.combat.effect.DelayEffect
+import io.github.masamune.combat.effect.Effect
+import io.github.masamune.combat.effect.EffectStack
+import io.github.masamune.combat.effect.HealEffect
+import io.github.masamune.combat.effect.SfxEffect
+import io.github.masamune.combat.effect.SoundEffect
 import io.github.masamune.component.Combat
-import io.github.masamune.component.Graphic
 import io.github.masamune.component.Item
 import io.github.masamune.component.MoveBy
 import io.github.masamune.component.Player
-import io.github.masamune.component.Remove
 import io.github.masamune.component.Stats
-import io.github.masamune.component.Transform
-import io.github.masamune.event.CombatEntityDeadEvent
-import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
-import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.CombatMissEvent
 import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatTurnEndEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.isEntityAlive
 import io.github.masamune.isEntityDead
-import io.github.masamune.tiledmap.AnimationType
 import ktx.log.logger
 import ktx.math.vec2
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
-import kotlin.math.max
 
 enum class ActionState {
     START, UPDATE, FINISH, END;
@@ -62,20 +62,22 @@ class ActionExecutorService(
 ) {
     private val actionStack = ArrayDeque<ActionQueueEntry>()
     private var state: ActionState = ActionState.START
-    private var delaySec = 0f
     var currentQueueEntry: ActionQueueEntry = DEFAULT_QUEUE_ACTION
         private set
-    private var itemOwner: Entity = Entity.NONE
+    var itemOwner: Entity = Entity.NONE
+        private set
     private var endTurnPerformed = false
+    private var moveTimer = 0f
 
     lateinit var world: World
         private set
     private lateinit var sfxAtlas: CachingAtlas
     private lateinit var allEnemies: Family
     private lateinit var allPlayers: Family
+    private lateinit var effectStack: EffectStack
 
-    private val isFinished: Boolean
-        get() = currentQueueEntry.action == DefaultAction || (state == ActionState.END && delaySec <= 0f)
+    val hasEffects: Boolean
+        get() = effectStack.isNotEmpty
 
     inline val source: Entity
         get() = currentQueueEntry.entity
@@ -106,6 +108,7 @@ class ActionExecutorService(
         this.sfxAtlas = world.inject(AtlasAsset.SFX.name)
         this.allEnemies = world.family { none(Player).all(Combat) }
         this.allPlayers = world.family { all(Player, Combat) }
+        this.effectStack = EffectStack(world)
     }
 
     fun queueAction(entity: Entity, action: Action, targets: EntityBag) {
@@ -117,7 +120,6 @@ class ActionExecutorService(
         log.debug { "Performing action ${action::class.simpleName}: source=$source, targets(${targets.size})=$targets" }
 
         this.state = ActionState.START
-        this.delaySec = 0f
         this.currentQueueEntry = queueEntry
         if (moveEntity) {
             moveEntityBy(queueEntry.entity, PERFORM_OFFSET, 0.5f)
@@ -136,7 +138,7 @@ class ActionExecutorService(
     }
 
     private fun moveEntityBy(entity: Entity, amount: Float, duration: Float) = with(world) {
-        wait(duration + 0.25f)
+        moveTimer = duration + 0.25f
         entity.configure {
             val direction = if (entity has Player) 1 else -1
             it += MoveBy(vec2(0f, amount * direction), duration, Interpolation.fastSlow)
@@ -152,8 +154,8 @@ class ActionExecutorService(
     }
 
     fun update() {
-        if (delaySec > 0f) {
-            delaySec = max(0f, delaySec - deltaTime)
+        if (moveTimer > 0f) {
+            moveTimer = (moveTimer - deltaTime).coerceAtLeast(0f)
             return
         }
 
@@ -178,7 +180,22 @@ class ActionExecutorService(
             ActionState.START -> {
                 if (itemOwner == Entity.NONE) {
                     // action is not a use item action -> reduce mana cost of source entity
-                    updateManaBy(source, -action.manaCost.toFloat())
+                    val amount = -action.manaCost.toFloat()
+                    with(world) {
+                        val targetStats = source[Stats]
+                        targetStats.mana = (targetStats.mana + amount).coerceIn(0f, targetStats.totalManaMax)
+                        if (amount != 0f) {
+                            eventService.fire(
+                                CombatEntityManaUpdateEvent(
+                                    source,
+                                    abs(amount),
+                                    targetStats.mana,
+                                    targetStats.totalManaMax,
+                                    state
+                                )
+                            )
+                        }
+                    }
                 }
                 action.run { this@ActionExecutorService.onStart() }
                 changeState(ActionState.UPDATE)
@@ -190,21 +207,26 @@ class ActionExecutorService(
                         changeState(ActionState.FINISH)
                     }
                 }
-
             }
 
             ActionState.FINISH -> {
                 action.run { this@ActionExecutorService.onFinish() }
                 changeState(ActionState.END)
+                effectStack.startNext()
             }
 
-            ActionState.END -> Unit
-        }
+            ActionState.END -> {
+                // action is finished -> execute effect stack
+                if (!effectStack.update()) {
+                    // there are still effects on the stack -> wait for them to be finished
+                    return
+                }
 
-        if (isFinished) {
-            actionStack.removeFirst()
-            clearAction()
-            performNext()
+                // all effects got executed -> perform next action
+                actionStack.removeFirst()
+                clearAction()
+                performNext()
+            }
         }
     }
 
@@ -223,7 +245,10 @@ class ActionExecutorService(
         val evadeChance = targetStats.totalPhysicalEvade
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
             eventService.fire(CombatMissEvent(realTarget))
-            play(SoundAsset.ATTACK_MISS, delay)
+            effectStack.addLast(SoundEffect(source, realTarget, SoundAsset.ATTACK_MISS))
+            if (delay > 0f) {
+                effectStack.addLast(DelayEffect(source, realTarget, delay))
+            }
             return@with
         }
 
@@ -247,81 +272,41 @@ class ActionExecutorService(
         val minDamage = ceil(damage * 0.9f)
         val maxDamage = floor(damage * 1.1f)
         damage = MathUtils.random(minDamage, maxDamage)
-        source.applyBuffs<OnAttackDamageBuff> { damage = preAttackDamage(source, target, damage) }
-        target.applyBuffs<OnDamageTakenBuff> { damage = preDamageTaken(source, target, damage) }
-        updateLifeBy(realTarget, -damage, isCritical)
-        target.applyBuffs<OnDamageTakenBuff> { postDamageTaken(source, target, damage) }
-        source.applyBuffs<OnAttackDamageBuff> { postAttackDamage(source, target, damage) }
 
-        // play sound and add SFX
+        // pre attack buffs
+        source.applyBuffs<OnAttackDamageBuff> { damage = preAttackDamage(source, realTarget, damage) }
+        realTarget.applyBuffs<OnAttackDamageTakenBuff> { damage = preAttackDamageTaken(source, realTarget, damage) }
+
+        // add attack effects on effect stack (sound then sfx then damage)
         val combat = source[Combat]
-        play(combat.attackSnd, delay)
-        addSfx(realTarget, combat.attackSFX, duration = delay * 0.5f, scale = 2f)
+        effectStack.addLast(SoundEffect(source, realTarget, combat.attackSnd))
+        effectStack.addLast(SfxEffect(source, realTarget, sfxAtlas, combat.attackSFX, delay * 0.5f, 2f))
+        effectStack.addLast(DamageEffect(source, realTarget, damage, isCritical))
+        if (delay > 0f) {
+            effectStack.addLast(DelayEffect(source, realTarget, delay))
+        }
+
+        // post attack buffs
+        realTarget.applyBuffs<OnAttackDamageTakenBuff> { postAttackDamageTaken(source, realTarget, damage) }
+        source.applyBuffs<OnAttackDamageBuff> { postAttackDamage(source, realTarget, damage) }
     }
 
     private inline fun <reified T : Buff> Entity.applyBuffs(block: T.() -> Unit) = with(world) {
         this@applyBuffs[Combat].buffs
             .filterIsInstance<T>()
-            .forEach { buff ->
-                buff.block()
-            }
+            .forEach { it.block() }
     }
 
-    fun addSfx(to: Entity, sfxAtlasKey: String, duration: Float, scale: Float = 1f) = with(world) {
-        val (toPos, toSize, toScale) = to[Transform]
-        world.entity {
-            it += Transform(toPos.cpy().apply { z = 3f }, toSize.cpy(), toScale * scale)
-            val animation = Animation.ofAtlas(sfxAtlas, sfxAtlasKey, AnimationType.IDLE)
-            animation.speed = 1f / (duration / animation.gdxAnimation.animationDuration)
-            animation.playMode = PlayMode.NORMAL
-            it += animation
-            it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
-            it += Remove(duration)
-        }
+    fun addSfx(to: Entity, sfxAtlasKey: String, duration: Float, scale: Float = 1f) {
+        effectStack.addLast(SfxEffect(to, to, sfxAtlas, sfxAtlasKey, duration, scale))
     }
 
-    private fun wait(seconds: Float) {
-        delaySec += seconds
+    fun play(asset: SoundAsset) {
+        effectStack.addLast(SoundEffect(source, Entity.NONE, asset))
     }
 
-    private fun updateManaBy(target: Entity, amount: Float) = with(world) {
-        val targetStats = target[Stats]
-        targetStats.mana = (targetStats.mana + amount).coerceIn(0f, targetStats.totalManaMax)
-        if (amount != 0f) {
-            eventService.fire(
-                CombatEntityManaUpdateEvent(
-                    target,
-                    abs(amount),
-                    targetStats.mana,
-                    targetStats.totalManaMax,
-                    state
-                )
-            )
-        }
-    }
-
-    private fun updateLifeBy(target: Entity, amount: Float, critical: Boolean) = with(world) {
-        val targetStats = target[Stats]
-        targetStats.life = (targetStats.life + amount).coerceIn(0f, targetStats.totalLifeMax)
-
-        if (amount < 0f) {
-            eventService.fire(
-                CombatEntityTakeDamageEvent(
-                    target,
-                    -amount,
-                    targetStats.life,
-                    targetStats.totalLifeMax,
-                    critical
-                )
-            )
-        } else if (amount > 0f) {
-            eventService.fire(CombatEntityHealEvent(target, amount, targetStats.life, targetStats.totalLifeMax))
-        }
-
-        if (isEntityDead(target)) {
-            log.debug { "$target is dead" }
-            eventService.fire(CombatEntityDeadEvent(target))
-        }
+    fun wait(seconds: Float) {
+        effectStack.addLast(DelayEffect(source, Entity.NONE, seconds))
     }
 
     private fun verifyTarget(target: Entity): Entity = with(world) {
@@ -336,6 +321,7 @@ class ActionExecutorService(
     }
 
     fun dealMagicDamage(
+        source: Entity,
         amount: Float,
         target: Entity,
         sfxAtlasKey: String,
@@ -343,11 +329,11 @@ class ActionExecutorService(
         sfxScale: Float,
         soundAsset: SoundAsset,
         delay: Float,
-    ) = with(world) {
+    ): Effect = with(world) {
         val realTarget = verifyTarget(target)
         if (realTarget == Entity.NONE) {
             // target is already dead and no other target is available -> do nothing
-            return@with
+            return DefaultEffect
         }
 
         // will target evade?
@@ -355,7 +341,7 @@ class ActionExecutorService(
         val evadeChance = targetStats.totalMagicalEvade
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
             eventService.fire(CombatMissEvent(realTarget))
-            return@with
+            return DefaultEffect
         }
 
         // add intelligence to magic damage
@@ -366,27 +352,40 @@ class ActionExecutorService(
         val critChance = sourceStats.totalArcaneStrike
         val isCritical = critChance > 0f && MathUtils.random() <= critChance
         if (isCritical) {
-            damage *= 2f
+            damage *= 1.5f
         }
 
         // reduce damage by resistance
         val resistance = targetStats.totalResistance
-        val reduction = 100f / (100f + resistance)
+        val reduction = 75f / (75f + resistance)
         damage *= reduction
 
         // apply damage
         val minDamage = ceil(damage * 0.9f)
         val maxDamage = floor(damage * 1.1f)
-        updateLifeBy(realTarget, -(MathUtils.random(minDamage, maxDamage)), isCritical)
+        damage = MathUtils.random(minDamage, maxDamage)
 
-        // add SFX
-        addSfx(realTarget, sfxAtlasKey, sfxDuration, sfxScale)
+        // pre magic buffs
+        source.applyBuffs<OnMagicDamageBuff> { damage = preMagicDamage(source, realTarget, damage) }
+        realTarget.applyBuffs<OnMagicDamageTakenBuff> { damage = preMagicDamageTaken(source, realTarget, damage) }
 
-        // add sound
-        play(soundAsset, delay)
+        // add effects on effect stack (sfx, sound, damage, ...)
+        effectStack.addLast(SoundEffect(source, realTarget, soundAsset))
+        effectStack.addLast(SfxEffect(source, realTarget, sfxAtlas, sfxAtlasKey, sfxDuration, sfxScale))
+        val damageEffect = DamageEffect(source, realTarget, damage, isCritical)
+        effectStack.addLast(damageEffect)
+        if (delay > 0f) {
+            effectStack.addLast(DelayEffect(source, realTarget, delay))
+        }
+
+        // post magic buffs
+        realTarget.applyBuffs<OnMagicDamageTakenBuff> { postMagicDamageTaken(source, realTarget, damage) }
+        source.applyBuffs<OnMagicDamageBuff> { postMagicDamage(source, realTarget, damage) }
+        return damageEffect
     }
 
     fun dealMagicDamage(
+        source: Entity,
         amount: Float,
         targets: EntityBag,
         sfxAtlasKey: String,
@@ -395,8 +394,19 @@ class ActionExecutorService(
         soundAsset: SoundAsset,
         delay: Float,
     ) {
-        targets.forEach { dealMagicDamage(amount, it, sfxAtlasKey, sfxDuration, sfxScale, soundAsset, 0f) }
-        wait(delay)
+        val damageEffects = mutableListOf<Effect>()
+        targets.forEach {
+            damageEffects += dealMagicDamage(source, amount, it, sfxAtlasKey, sfxDuration, sfxScale, soundAsset, 0f)
+        }
+        if (damageEffects.last() == effectStack.last) {
+            // no post magic damage effects triggered -> add delay just once
+            effectStack.addLast(DelayEffect(source, Entity.NONE, delay))
+        } else {
+            // post magic damage effects -> add delay after each damage effect to process post reaction one by one
+            damageEffects.forEach { damageEffect ->
+                effectStack.addAfter(damageEffect, DelayEffect(source, Entity.NONE, delay))
+            }
+        }
     }
 
     fun heal(
@@ -415,35 +425,33 @@ class ActionExecutorService(
             return
         }
 
-        if (life > 0f) {
-            updateLifeBy(realTarget, life, false)
+        // add effects on effect stack (sfx, sound, damage, ...)
+        effectStack.addLast(SoundEffect(source, realTarget, soundAsset))
+        effectStack.addLast(SfxEffect(source, realTarget, sfxAtlas, sfxAtlasKey, sfxDuration, sfxScale))
+        effectStack.addLast(HealEffect(source, realTarget, life, mana))
+        if (delay > 0f) {
+            effectStack.addLast(DelayEffect(source, realTarget, delay))
         }
-        if (mana > 0f) {
-            updateManaBy(realTarget, mana)
-        }
-
-        // add SFX
-        addSfx(realTarget, sfxAtlasKey, sfxDuration, sfxScale)
-
-        // add sound
-        play(soundAsset, delay)
-    }
-
-    fun endAction() {
-        state = ActionState.END
     }
 
     fun hasMana(entity: Entity, amount: Int): Boolean = with(world) {
         entity[Stats].mana >= amount
     }
 
-    fun play(soundAsset: SoundAsset, delay: Float = 0.5f) {
-        audioService.play(soundAsset, pitch = MathUtils.random(0.7f, 1.3f))
-        wait(delay)
-    }
-
-    fun clearAction() = with(world) {
+    private fun clearAction() = with(world) {
         log.debug { "Cleaning up ${this@ActionExecutorService}" }
+
+        // notify buffs
+        allEnemies.forEach { entity ->
+            if (isEntityAlive(entity)) {
+                entity[Combat].buffs.forEach { it.onActionEnd() }
+            }
+        }
+        allPlayers.forEach { entity ->
+            if (isEntityAlive(entity)) {
+                entity[Combat].buffs.forEach { it.onActionEnd() }
+            }
+        }
 
         if (itemOwner != Entity.NONE) {
             moveEntityBy(itemOwner, -PERFORM_OFFSET, 0.3f)
@@ -453,6 +461,12 @@ class ActionExecutorService(
             moveEntityBy(source, -PERFORM_OFFSET, 0.3f)
             source[Combat].clearAction()
         }
+        currentQueueEntry = DEFAULT_QUEUE_ACTION
+    }
+
+    fun clear() {
+        actionStack.clear()
+        effectStack.clear()
         currentQueueEntry = DEFAULT_QUEUE_ACTION
     }
 
@@ -491,7 +505,7 @@ class ActionExecutorService(
     }
 
     override fun toString(): String {
-        return "ActionExecutorService(action=${action::class.simpleName}, source=${source.id}, state=$state, delay=$delaySec)"
+        return "ActionExecutorService(action=${action::class.simpleName}, source=${source.id}, state=$state)"
     }
 
     companion object {
