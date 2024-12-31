@@ -55,7 +55,6 @@ data class ActionQueueEntry(val entity: Entity, val action: Action, val targets:
     }
 }
 
-
 class ActionExecutorService(
     val audioService: AudioService,
     val eventService: EventService,

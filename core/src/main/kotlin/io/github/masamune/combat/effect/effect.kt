@@ -3,7 +3,6 @@ package io.github.masamune.combat.effect
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.combat.ActionState
-import io.github.masamune.combat.effect.DefaultEffect.target
 import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
@@ -91,7 +90,7 @@ data class EffectStack(
                 if (effect.amountLife > 0f) {
                     eventService.fire(
                         CombatEntityHealEvent(
-                            target,
+                            effect.target,
                             effect.amountLife,
                             effect.targetLife,
                             effect.targetLifeMax
@@ -101,7 +100,7 @@ data class EffectStack(
                 if (effect.amountMana > 0f) {
                     eventService.fire(
                         CombatEntityManaUpdateEvent(
-                            target,
+                            effect.target,
                             effect.amountMana,
                             effect.targetMana,
                             effect.targetManaMax,
