@@ -55,6 +55,7 @@ class CombatSystem(
     override fun onEvent(event: Event) {
         when (event) {
             is CombatStartEvent -> {
+                states.filterIsInstance<CombatStatePrepareRound>().single().turn = 0
                 globalState = CombatStateCheckVictoryDefeat(world)
                 changeState<CombatStateIdle>()
             }

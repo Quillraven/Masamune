@@ -10,6 +10,7 @@ enum class ActionType(private val actionFactory: () -> Action) {
     HEAL(::HealAction),
     ITEM_MANA_RESTORE(::ItemManaRestoreAction),
     SCROLL_INFERNO(::ScrollInfernoAction),
+    TRANSFORM(::TransformAction),
     UNDEFINED({ DefaultAction }),
     USE_ITEM(::UseItemAction),
     ;

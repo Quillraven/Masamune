@@ -2,6 +2,7 @@ package io.github.masamune.combat.state
 
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.compareEntity
+import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.action.AttackSingleAction
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
@@ -16,6 +17,7 @@ import ktx.log.logger
 class CombatStatePrepareRound(
     private val world: World,
     private val eventService: EventService = world.inject(),
+    private val actionExecutorService: ActionExecutorService = world.inject(),
 ) : CombatState {
     private val combatEntities = world.family { all(Combat) }
     private val enemyEntities = world.family { none(Player).all(Combat) }
@@ -25,9 +27,16 @@ class CombatStatePrepareRound(
     private val comparator = compareEntity(world) { e1, e2 ->
         (e2[Stats].totalAgility - e1[Stats].totalAgility).toInt()
     }
-    private var turn = 0
+    var turn = 0
 
     override fun onEnter() {
+        if (turn == 0) {
+            // execute passive actions with onCombatStart function
+            actionExecutorService.performPassiveActions(combatEntities.entities) { action ->
+                action.run { actionExecutorService.onCombatStart() }
+            }
+        }
+
         // TODO pick enemy action based on their AI
         enemyEntities.forEach { enemy ->
             if (world.isEntityDead(enemy)) {

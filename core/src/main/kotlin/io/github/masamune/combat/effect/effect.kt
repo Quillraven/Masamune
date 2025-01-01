@@ -2,7 +2,9 @@ package io.github.masamune.combat.effect
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.ActionState
+import io.github.masamune.combat.buff.OnDeathBuff
 import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
@@ -27,6 +29,7 @@ data class EffectStack(
     private val world: World,
     private val stack: ArrayDeque<Effect> = ArrayDeque(),
     private val eventService: EventService = world.inject(),
+    private val actionExecutorService: ActionExecutorService = world.inject(),
 ) {
     private var currentEffect: Effect = DefaultEffect
 
@@ -53,9 +56,14 @@ data class EffectStack(
 
     fun addLast(effect: Effect) = stack.addLast(effect)
 
-    fun addAfter(effect: Effect, add: DelayEffect) {
+    fun addAfter(effect: Effect, add: Effect) {
         val idx = stack.indexOf(effect)
         stack.add(idx + 1, add)
+    }
+
+    private fun Entity.hasNoTransformEffect(): Boolean {
+        return stack.filterIsInstance<TransformEffect>()
+            .none { it.source == this || it.target == this }
     }
 
     fun update(): Boolean {
@@ -66,11 +74,14 @@ data class EffectStack(
 
         val effect = currentEffect
         // effect currently in progress
-        if (effect.run { world.onUpdate() }) {
-            // effect finished
+        if (!effect.run { world.onUpdate() }) {
+            return currentEffect === DefaultEffect
+        }
 
-            // 1) fire special events if necessary
-            if (effect is DamageEffect && effect.damage > 0f) {
+        // effect finished
+        // 1) fire special events if necessary
+        when {
+            effect is DamageEffect && effect.damage > 0f -> {
                 eventService.fire(
                     CombatEntityTakeDamageEvent(
                         effect.target,
@@ -84,9 +95,24 @@ data class EffectStack(
                 if (world.isEntityDead(effect.target)) {
                     // entity is dead -> remove any of its effects from the stack
                     stack.removeIf { it.target == effect.target || it.source == effect.target }
-                    eventService.fire(CombatEntityDeadEvent(effect.target))
+
+                    // run any preDeath buffs
+                    actionExecutorService.run {
+                        effect.target.applyBuffs<OnDeathBuff> {
+                            val deathEffects = onDeath(effect.source, effect.target)
+                            for (i in deathEffects.lastIndex downTo 0) {
+                                addAfter(currentEffect, deathEffects[i])
+                            }
+                        }
+                    }
+
+                    if (effect.target.hasNoTransformEffect()) {
+                        eventService.fire(CombatEntityDeadEvent(effect.target))
+                    }
                 }
-            } else if (effect is HealEffect) {
+            }
+
+            effect is HealEffect -> {
                 if (effect.amountLife > 0f) {
                     eventService.fire(
                         CombatEntityHealEvent(
@@ -109,10 +135,10 @@ data class EffectStack(
                     )
                 }
             }
-
-            // 2) get next effect
-            startNext()
         }
+
+        // 2) get next effect
+        startNext()
 
         return currentEffect === DefaultEffect
     }

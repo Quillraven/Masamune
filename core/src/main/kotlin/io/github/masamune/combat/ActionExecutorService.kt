@@ -2,6 +2,7 @@ package io.github.masamune.combat
 
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector3
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.Family
 import com.github.quillraven.fleks.World
@@ -32,6 +33,7 @@ import io.github.masamune.component.Item
 import io.github.masamune.component.MoveBy
 import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
+import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatMissEvent
 import io.github.masamune.event.CombatNextTurnEvent
@@ -61,8 +63,9 @@ class ActionExecutorService(
 ) {
     private val actionStack = ArrayDeque<ActionQueueEntry>()
     private var state: ActionState = ActionState.START
-    var currentQueueEntry: ActionQueueEntry = DEFAULT_QUEUE_ACTION
-        private set
+
+    @PublishedApi
+    internal var currentQueueEntry: ActionQueueEntry = DEFAULT_QUEUE_ACTION
     var itemOwner: Entity = Entity.NONE
         private set
     private var endTurnPerformed = false
@@ -98,6 +101,9 @@ class ActionExecutorService(
 
     inline val Entity.stats: Stats
         get() = with(world) { this@stats[Stats] }
+
+    inline val Entity.position: Vector3
+        get() = with(world) { this@position[Transform].position }
 
     inline val Entity.itemAction: Action
         get() = with(world) { this@itemAction[Item].action }
@@ -290,7 +296,7 @@ class ActionExecutorService(
         source.applyBuffs<OnAttackDamageBuff> { postAttackDamage(source, realTarget, damage) }
     }
 
-    private inline fun <reified T : Buff> Entity.applyBuffs(block: T.() -> Unit) = with(world) {
+    inline fun <reified T : Buff> Entity.applyBuffs(block: T.() -> Unit) = with(world) {
         this@applyBuffs[Combat].buffs
             .filterIsInstance<T>()
             .forEach { it.block() }
@@ -501,6 +507,18 @@ class ActionExecutorService(
             nextQueueEntry = actionStack.first()
         }
         perform(nextQueueEntry)
+    }
+
+    inline fun performPassiveActions(entities: EntityBag, crossinline action: (Action) -> Unit) = with(world) {
+        val tmpQueueEntry = currentQueueEntry
+        val emptyBag = MutableEntityBag(0)
+        entities.forEach { entity ->
+            entity[Combat].passiveActions.forEach { passiveAction ->
+                currentQueueEntry = ActionQueueEntry(entity, passiveAction, emptyBag)
+                action(passiveAction)
+            }
+        }
+        currentQueueEntry = tmpQueueEntry
     }
 
     override fun toString(): String {

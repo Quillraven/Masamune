@@ -23,7 +23,8 @@
                 "HEAL",
                 "SCROLL_INFERNO",
                 "ITEM_MANA_RESTORE",
-                "USE_ITEM"
+                "USE_ITEM",
+                "TRANSFORM"
             ],
             "valuesAsFlags": true
         },

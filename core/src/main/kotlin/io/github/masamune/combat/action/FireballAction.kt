@@ -10,6 +10,10 @@ class FireballAction : Action(ActionType.FIREBALL, ActionTargetType.ALL, manaCos
     override fun ActionExecutorService.onUpdate(): Boolean {
         amount--
         dealMagicDamage(source, 10f, allTargets, "fire2", 1f, 2f, SoundAsset.EXPLOSION1, 1f)
-        return amount <= 0
+        if (amount <= 0) {
+            amount = 2
+            return true
+        }
+        return false
     }
 }

@@ -72,7 +72,7 @@ val TiledMapTile.action: String
     get() = this.property<String>("action", "")
 
 val TiledMapTile.category: String
-    get() = this.property<String>("category", "WEAPON")
+    get() = this.property<String>("category", "OTHER")
 
 val TiledMapTile.cost: Int
     get() = this.property<Int>("cost", 0)

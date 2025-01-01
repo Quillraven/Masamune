@@ -45,6 +45,7 @@ import io.github.masamune.removeItem
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CombatSystem
 import io.github.masamune.system.DissolveSystem
+import io.github.masamune.system.FadeSystem
 import io.github.masamune.system.GrayscaleSystem
 import io.github.masamune.system.MoveBySystem
 import io.github.masamune.system.RemoveSystem
@@ -113,6 +114,7 @@ class CombatScreen(
                 add(actionExecutorService)
                 add(AtlasAsset.CHARS_AND_PROPS.name, assetService[AtlasAsset.CHARS_AND_PROPS])
                 add(AtlasAsset.SFX.name, assetService[AtlasAsset.SFX])
+                add(tiledService)
             }
 
             systems {
@@ -126,6 +128,7 @@ class CombatScreen(
                 // grayscale system must be before any other render system
                 add(GrayscaleSystem())
                 add(ScreenBgdRenderSystem())
+                add(FadeSystem())
                 add(RenderSystem())
                 add(RemoveSystem())
             }

@@ -68,8 +68,8 @@
      <properties>
       <property name="agility" type="float" value="1"/>
       <property name="damage" type="float" value="1"/>
-      <property name="life" type="float" value="15"/>
-      <property name="lifeMax" type="float" value="15"/>
+      <property name="life" type="float" value="50"/>
+      <property name="lifeMax" type="float" value="50"/>
       <property name="mana" type="float" value="15"/>
       <property name="manaMax" type="float" value="15"/>
      </properties>
@@ -83,7 +83,7 @@
     <property name="animationType" propertytype="AnimationType" value="WALK"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
     <property name="atlasRegionKey" value="mushroom"/>
-    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
+    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,TRANSFORM"/>
     <property name="enemy" type="bool" value="true"/>
     <property name="level" type="int" value="2"/>
     <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
@@ -93,8 +93,8 @@
       <property name="armor" type="float" value="0"/>
       <property name="criticalStrike" type="float" value="0"/>
       <property name="damage" type="float" value="2"/>
-      <property name="life" type="float" value="30"/>
-      <property name="lifeMax" type="float" value="30"/>
+      <property name="life" type="float" value="50"/>
+      <property name="lifeMax" type="float" value="50"/>
       <property name="magicalEvade" type="float" value="0"/>
       <property name="physicalEvade" type="float" value="0"/>
       <property name="resistance" type="float" value="0"/>
@@ -112,7 +112,7 @@
     <property name="itemType" propertytype="ItemType" value="ELDER_SWORD"/>
     <property name="stats" type="class" propertytype="Stats">
      <properties>
-      <property name="damage" type="float" value="5"/>
+      <property name="damage" type="float" value="50"/>
      </properties>
     </property>
    </properties>
