@@ -70,6 +70,7 @@ class ActionExecutorService(
         private set
     private var endTurnPerformed = false
     private var moveTimer = 0f
+    private var ignoreDamageCalls = false
 
     lateinit var world: World
         private set
@@ -334,10 +335,17 @@ class ActionExecutorService(
         sfxScale: Float,
         soundAsset: SoundAsset,
         delay: Float,
+        withBuffs: Boolean = true,
     ): Effect = with(world) {
+        if (ignoreDamageCalls) {
+            return DefaultEffect
+        }
+        ignoreDamageCalls = !withBuffs
+
         val realTarget = verifyTarget(target)
         if (realTarget == Entity.NONE) {
             // target is already dead and no other target is available -> do nothing
+            ignoreDamageCalls = false
             return DefaultEffect
         }
 
@@ -346,6 +354,7 @@ class ActionExecutorService(
         val evadeChance = targetStats.totalMagicalEvade
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
             eventService.fire(CombatMissEvent(realTarget))
+            ignoreDamageCalls = false
             return DefaultEffect
         }
 
@@ -386,6 +395,7 @@ class ActionExecutorService(
         // post magic buffs
         realTarget.applyBuffs<OnMagicDamageTakenBuff> { postMagicDamageTaken(source, realTarget, damage) }
         source.applyBuffs<OnMagicDamageBuff> { postMagicDamage(source, realTarget, damage) }
+        ignoreDamageCalls = false
         return damageEffect
     }
 
@@ -408,9 +418,11 @@ class ActionExecutorService(
             effectStack.addLast(DelayEffect(source, Entity.NONE, delay))
         } else {
             // post magic damage effects -> add delay after each damage effect to process post reaction one by one
-            damageEffects.forEach { damageEffect ->
-                effectStack.addAfter(damageEffect, DelayEffect(source, Entity.NONE, delay))
-            }
+            damageEffects
+                .filterIsInstance<DamageEffect>()
+                .forEach { damageEffect ->
+                    effectStack.addAfter(damageEffect, DelayEffect(source, Entity.NONE, delay))
+                }
         }
     }
 
@@ -445,18 +457,6 @@ class ActionExecutorService(
 
     private fun clearAction() = with(world) {
         log.debug { "Cleaning up ${this@ActionExecutorService}" }
-
-        // notify buffs
-        allEnemies.forEach { entity ->
-            if (isEntityAlive(entity)) {
-                entity[Combat].buffs.forEach { it.onActionEnd() }
-            }
-        }
-        allPlayers.forEach { entity ->
-            if (isEntityAlive(entity)) {
-                entity[Combat].buffs.forEach { it.onActionEnd() }
-            }
-        }
 
         if (itemOwner != Entity.NONE) {
             moveEntityBy(itemOwner, -PERFORM_OFFSET, 0.3f)

@@ -6,8 +6,6 @@ import io.github.masamune.combat.effect.Effect
 
 sealed interface Buff {
     val owner: Entity
-
-    fun onActionEnd() = Unit
 }
 
 sealed interface OnAttackDamageBuff : Buff {
