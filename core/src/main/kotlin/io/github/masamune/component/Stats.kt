@@ -2,6 +2,7 @@ package io.github.masamune.component
 
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
+import io.github.masamune.combat.ActionExecutorService.Companion.LIFE_PER_CONST
 import io.github.masamune.tiledmap.TiledStats
 
 class Stats(
@@ -55,7 +56,7 @@ class Stats(
     val totalIntelligence: Float
         get() = intelligence * (1f + percModifier.intelligence)
     val totalLifeMax: Float
-        get() = lifeMax * (1f + percModifier.lifeMax)
+        get() = (lifeMax * (1f + percModifier.lifeMax)) + (totalConstitution * LIFE_PER_CONST)
     val totalMagicalEvade: Float
         get() = magicalEvade * (1f + percModifier.magicalEvade)
     val totalManaMax: Float

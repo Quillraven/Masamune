@@ -32,7 +32,7 @@ import ktx.scene2d.actors
  * Test for [StatsViewModel] and [statsView] including equipment bonus.
  * - Strength should be 20 (10 default + 10 equipment)
  * - Arcane Strike should be -5% (-25% default + 20% equipment)
- * - Life should be 150 (100 default + 50 bonus)
+ * - Life should be 250 (100 default + 50 bonus + 100 from equipment constitution)
  * - Mana should be 80 (30 default + 50 bonus)
  */
 
@@ -60,6 +60,7 @@ private class UiStatsTest : KtxApplicationAdapter {
             world.entity { it += Stats(strength = 10f) },
             world.entity { it += Stats(arcaneStrike = 0.2f) },
             world.entity { it += Stats(lifeMax = 50f, manaMax = 50f) },
+            world.entity { it += Stats(constitution = 10f) },
         )
 
         // create player

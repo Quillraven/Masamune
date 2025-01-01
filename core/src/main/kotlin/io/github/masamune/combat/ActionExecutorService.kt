@@ -530,6 +530,7 @@ class ActionExecutorService(
         private const val PERFORM_OFFSET = 0.75f // how many units will a unit move up/down when performing its action
         private const val DAM_PER_STR = 1 / 2f
         private const val DAM_PER_INT = 1 / 4f
+        const val LIFE_PER_CONST = 10f
     }
 }
 

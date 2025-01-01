@@ -93,8 +93,8 @@ class CombatViewModel(
                 val player = event.player
                 // get player stats (life, mana, ...)
                 val playerStats = player[Stats]
-                playerLife = playerStats.life to playerStats.lifeMax
-                playerMana = playerStats.mana to playerStats.manaMax
+                playerLife = playerStats.life to playerStats.totalLifeMax
+                playerMana = playerStats.mana to playerStats.totalManaMax
                 playerName = player[Name].name
 
                 // get player magic

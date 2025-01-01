@@ -13,6 +13,7 @@
      <properties>
       <property name="agility" type="float" value="3"/>
       <property name="arcaneStrike" type="float" value="0"/>
+      <property name="constitution" type="float" value="10"/>
       <property name="criticalStrike" type="float" value="0"/>
       <property name="damage" type="float" value="1"/>
       <property name="life" type="float" value="100"/>

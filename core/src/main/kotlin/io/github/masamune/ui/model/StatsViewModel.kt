@@ -3,6 +3,7 @@ package io.github.masamune.ui.model
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.World
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.ActionExecutorService.Companion.LIFE_PER_CONST
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Inventory
@@ -70,8 +71,8 @@ class StatsViewModel(
                 playerName = player[Name].name
                 val statsCmp = player[Stats]
                 val defaultStats = uiMapOf(statsCmp, player[Experience], player[Inventory])
-                defaultStats[UIStats.LIFE_MAX] = "${(statsCmp.lifeMax + equipmentBonus(UIStats.LIFE_MAX)).toInt()}"
-                defaultStats[UIStats.MANA_MAX] = "${(statsCmp.manaMax + equipmentBonus(UIStats.MANA_MAX)).toInt()}"
+                defaultStats[UIStats.LIFE_MAX] = "${(statsCmp.totalLifeMax + equipmentBonus(UIStats.LIFE_MAX) + equipmentBonus(UIStats.CONSTITUTION) * LIFE_PER_CONST).toInt()}"
+                defaultStats[UIStats.MANA_MAX] = "${(statsCmp.totalManaMax + equipmentBonus(UIStats.MANA_MAX)).toInt()}"
                 playerStats = defaultStats
             }
         }
