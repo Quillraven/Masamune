@@ -100,6 +100,7 @@ class CombatScreen(
     lateinit var gameScreenEnemy: Entity
         private set
     private lateinit var combatPlayer: Entity
+    private var combatMusic: MusicAsset? = null
 
     private fun combatWorld(): World {
         return configureWorld {
@@ -151,6 +152,11 @@ class CombatScreen(
 
         // special screen background entity to render GameScreen as blurred background
         spawnScreenBgdEntity()
+    }
+
+    fun playCombatMusic(musicAsset: MusicAsset) {
+        combatMusic = musicAsset
+        audioService.play(musicAsset)
     }
 
     private fun spawnScreenBgdEntity() {
@@ -317,7 +323,9 @@ class CombatScreen(
         spawnScreenBgdEntity()
         spawnEnemies(gameScreenEnemy, enemiesMap)
         spawnPlayer(gameScreenWorld, gameScreenPlayer)
-        audioService.play(MusicAsset.COMBAT1, keepPrevious = true)
+        combatMusic?.let { musicAsset ->
+            audioService.play(musicAsset, keepPrevious = true)
+        }
     }
 
     private fun registerEventListeners() {
