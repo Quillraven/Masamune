@@ -185,10 +185,21 @@ class CombatView(
             playerInfoTable.setPosition(position.x - infoW, 5f)
             playerInfoTable.toFront()
             val actionW = actionTable.width
+
+            // actionTable resizing depends on if it is currently shown or hidden to the user.
+            // Also, we need to clear its actions in case it is in the middle of the transition
+            // from shown <-> hidden.
+            val actionTableY = if (actionTable.userObject == "show") {
+                playerInfoTable.height + 10f
+            } else {
+                playerInfoTable.height - actionTable.height * 0.7f
+            }
+            actionTable.clearActions()
             actionTable.setPosition(
                 position.x - infoW * 0.5f - actionW * 0.5f,
-                playerInfoTable.height - actionTable.height * 0.7f
+                actionTableY
             )
+
             magicTable.setPosition(
                 position.x - infoW * 0.5f - magicTable.width * 0.5f,
                 playerInfoTable.height + 20f + actionTable.height
@@ -205,6 +216,7 @@ class CombatView(
             actionTable.actions.clear()
             actionTable += Actions.moveBy(0f, actionTable.height * 0.7f + 10f, 1f, Interpolation.bounceIn)
             actionTable.buttonGroup.uncheckAll()
+            actionTable.userObject = "show"
             uiAction = UiAction.UNDEFINED
         }
 
@@ -397,6 +409,7 @@ class CombatView(
                     // hide action table again
                     actionTable.actions.clear()
                     actionTable += Actions.moveBy(0f, -actionTable.height * 0.7f - 10f, 1f, Interpolation.bounceOut)
+                    actionTable.userObject = null
                 }
             }
 
