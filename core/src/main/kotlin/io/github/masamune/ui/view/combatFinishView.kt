@@ -129,6 +129,7 @@ class CombatFinishView(
     }
 
     override fun onSelectPressed() {
+        viewModel.playSndMenuAccept()
         if (optionTable.children.size == 1) {
             // victory summary -> end combat
             isVisible = false
@@ -147,10 +148,12 @@ class CombatFinishView(
 
     override fun onDownPressed() {
         optionTable.nextOption()
+        viewModel.playSndMenuClick()
     }
 
     override fun onUpPressed() {
         optionTable.prevOption()
+        viewModel.playSndMenuClick()
     }
 }
 
