@@ -36,6 +36,14 @@ class Masamune(
         setScreen<LoadingScreen>()
     }
 
+    override fun <Type : KtxScreen> setScreen(type: Class<Type>) {
+        currentScreen.hide()
+        currentScreen = getScreen(type)
+        currentScreen.show()
+        currentScreen.resize(Gdx.graphics.width, Gdx.graphics.height)
+        event.fire(GameResizeEvent(Gdx.graphics.width, Gdx.graphics.height))
+    }
+
     override fun resize(width: Int, height: Int) {
         // 1) resize shader service because of blur/tmp FrameBuffer that might be used by other screen logic.
         //    CombatScreen uses it to render GameScreen as blurred background.
