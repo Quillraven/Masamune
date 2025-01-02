@@ -88,7 +88,9 @@ class CombatView(
                     this.setAnimateInterpolation(Interpolation.pow4Out)
                     it.padRight(15f)
                 }
-                this@CombatView.playerLifeLabel = label("", defaultStyle, skin)
+                this@CombatView.playerLifeLabel = label("", defaultStyle, skin) {
+                    it.minWidth(130f)
+                }
 
                 tblCell.growX().row()
             }
@@ -100,7 +102,9 @@ class CombatView(
                     this.setAnimateInterpolation(Interpolation.pow4Out)
                     it.padRight(15f)
                 }
-                this@CombatView.playerManaLabel = label("", defaultStyle, skin)
+                this@CombatView.playerManaLabel = label("", defaultStyle, skin) {
+                    it.minWidth(130f)
+                }
 
                 tblCell.growX().row()
             }
