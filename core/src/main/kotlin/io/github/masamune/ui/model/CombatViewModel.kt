@@ -87,15 +87,21 @@ class CombatViewModel(
     var combatMiss: Vector2 by propertyNotify(Vector2.Zero)
     var combatDone: Boolean by propertyNotify(false)
 
+    // special flag to set life/mana bar values instantly in the view instead of using an animation
+    var combatStart = false
+        private set
+
     override fun onEvent(event: Event): Unit = with(world) {
         when (event) {
             is CombatStartEvent -> {
                 val player = event.player
                 // get player stats (life, mana, ...)
+                combatStart = true
                 val playerStats = player[Stats]
                 playerLife = playerStats.life to playerStats.totalLifeMax
                 playerMana = playerStats.mana to playerStats.totalManaMax
                 playerName = player[Name].name
+                combatStart = false
 
                 // get player magic
                 updatePlayerMagic(player)

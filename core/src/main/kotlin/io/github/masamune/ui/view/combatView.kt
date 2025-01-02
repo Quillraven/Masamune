@@ -151,11 +151,17 @@ class CombatView(
         model.onPropertyChange(CombatViewModel::playerLife) { (current, max) ->
             playerLifeLabel.txt = "${current.coerceAtLeast(0f).toInt()}/${max.toInt()}"
             lifeProgressBar.value = (current / max).coerceIn(0f, 1f)
+            if (viewModel.combatStart) {
+                lifeProgressBar.updateVisualValue()
+            }
             playerInfoTable.pack()
         }
         model.onPropertyChange(CombatViewModel::playerMana) { (current, max) ->
             playerManaLabel.txt = "${current.coerceAtLeast(0f).toInt()}/${max.toInt()}"
             manaProgressBar.value = (current / max).coerceIn(0f, 1f)
+            if (viewModel.combatStart) {
+                manaProgressBar.updateVisualValue()
+            }
             playerInfoTable.pack()
         }
         model.onPropertyChange(CombatViewModel::playerMagic) { magicList ->
