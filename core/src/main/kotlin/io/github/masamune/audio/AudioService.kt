@@ -48,11 +48,11 @@ class AudioService(
         // play new music
         log.debug { "Playing new music $musicAsset" }
         with(assetService[musicAsset]) {
+            play()
             isLooping = loop
             volume = musicVolume
-            play()
             // remember music asset and music instance for unloading/stopping later on
-            lastMusic = Pair(this, musicAsset)
+            lastMusic = this to musicAsset
         }
     }
 
