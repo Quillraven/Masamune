@@ -3,7 +3,6 @@ package io.github.masamune.event
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.github.quillraven.fleks.World
 import io.github.masamune.ui.view.View
-import ktx.log.logger
 
 interface EventListener {
     fun onEvent(event: Event)
@@ -64,13 +63,9 @@ class EventService {
 
         while (eventQueue.isNotEmpty()) {
             val eventToFire = eventQueue.first()
-            log.debug { "Firing event $eventToFire" }
             listeners.forEach { it.onEvent(eventToFire) }
             eventQueue.removeFirst()
         }
     }
 
-    companion object {
-        private val log = logger<EventService>()
-    }
 }
