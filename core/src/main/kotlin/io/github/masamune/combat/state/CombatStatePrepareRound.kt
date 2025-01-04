@@ -3,7 +3,7 @@ package io.github.masamune.combat.state
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.compareEntity
 import io.github.masamune.combat.ActionExecutorService
-import io.github.masamune.combat.action.AttackSingleAction
+import io.github.masamune.component.AI
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
@@ -21,7 +21,6 @@ class CombatStatePrepareRound(
 ) : CombatState {
     private val combatEntities = world.family { all(Combat) }
     private val enemyEntities = world.family { none(Player).all(Combat) }
-    private val playerEntities = world.family { all(Player, Combat) }
 
     // sort entities by their agility -> higher agility goes first
     private val comparator = compareEntity(world) { e1, e2 ->
@@ -37,24 +36,36 @@ class CombatStatePrepareRound(
             }
         }
 
-        // TODO pick enemy action based on their AI
         enemyEntities.forEach { enemy ->
             if (world.isEntityDead(enemy)) {
                 return@forEach
             }
 
-            enemy[Combat].run {
-                action = AttackSingleAction()
-                targets.clear()
-                targets += playerEntities.first()
-            }
+            enemy[AI].behaviorTree.step()
         }
 
         // sort entities by their agility
         combatEntities.sort(comparator)
 
-        log.debug { "Combat turn $turn with ${combatEntities.numEntities} entities" }
+        log.debug { debugRound() }
         eventService.fire(CombatTurnBeginEvent(turn++))
+    }
+
+
+    private fun debugRound() = buildString {
+        append("Combat turn $turn with ${combatEntities.numEntities} entities")
+        appendLine()
+        combatEntities.forEach { entity ->
+            append("Entity ${entity.id} (")
+            append(if (entity has Player) "Player" else "Enemy")
+            append("): ")
+            val stats = entity[Stats]
+            val action = entity[Combat].action
+            val targets = entity[Combat].targets
+            val buffs = entity[Combat].buffs.joinToString { "${it::class.simpleName}" }
+            append("life=${stats.life}, mana=${stats.mana}, agi=${stats.agility}, action=$action, targets=$targets, buffs=$buffs")
+            appendLine()
+        }
     }
 
     companion object {

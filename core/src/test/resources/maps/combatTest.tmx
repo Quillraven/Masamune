@@ -113,7 +113,7 @@
     <property name="itemType" propertytype="ItemType" value="ELDER_SWORD"/>
     <property name="stats" type="class" propertytype="Stats">
      <properties>
-      <property name="damage" type="float" value="50"/>
+      <property name="damage" type="float" value="5"/>
      </properties>
     </property>
    </properties>

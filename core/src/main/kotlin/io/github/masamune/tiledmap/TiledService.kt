@@ -18,9 +18,11 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.ai.AnimationStateIdle
 import io.github.masamune.ai.FleksStateMachine
+import io.github.masamune.ai.defaultBehavior
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
+import io.github.masamune.component.AI
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Dialog
@@ -463,6 +465,7 @@ class TiledService(
                 configureGraphic(it, tile)
                 configureCombat(it, tile)
                 it += Experience(tile.level, tile.xp)
+                it += AI(defaultBehavior(world, it))
             }
         }
 

@@ -2,6 +2,7 @@ package io.github.masamune.combat.state
 
 import com.github.quillraven.fleks.World
 import io.github.masamune.combat.ActionExecutorService
+import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
@@ -16,7 +17,6 @@ class CombatStatePerformAction(
     private var turnEnd = false
 
     override fun onEnter() {
-        log.debug { debugCombatEntities() }
         turnEnd = false
         combatEntities.forEach { entity ->
             if (world.isEntityDead(entity)) {
@@ -24,6 +24,11 @@ class CombatStatePerformAction(
             }
 
             val (_, action, targets) = entity[Combat]
+            if (action == DefaultAction) {
+                // this can happen for enemies if they are e.g. stunned and cannot
+                // execute any action -> do nothing
+                return@forEach
+            }
             actionExecutorService.queueAction(entity, action, targets)
 
         }

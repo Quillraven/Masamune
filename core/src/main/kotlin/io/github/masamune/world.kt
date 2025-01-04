@@ -4,6 +4,8 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.CachingAtlas
+import io.github.masamune.combat.ActionExecutorService
+import io.github.masamune.combat.action.Action
 import io.github.masamune.component.Animation
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
@@ -77,4 +79,9 @@ fun World.isEntityDead(entity: Entity): Boolean = with(this) {
 
 fun World.isEntityAlive(entity: Entity): Boolean = with(this) {
     return entity[Stats].life >= 1f
+}
+
+fun World.canPerformAction(entity: Entity, action: Action): Boolean {
+    val actionExecutorService = inject<ActionExecutorService>()
+    return action.run { actionExecutorService.canPerform(entity) }
 }
