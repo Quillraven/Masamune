@@ -25,8 +25,8 @@ i:b:/graphics/chars_and_props.atlas:5686:1
 i:b:/graphics/sfx.png:153755:1
 i:b:/graphics/chars_and_props.png:29768:1
 i:d:/maps:0:1
-i:b:/maps/village.tmx:3359:1
-i:b:/maps/tileset.tsx:9032:1
+i:b:/maps/village.tmx:3387:1
+i:b:/maps/tileset.tsx:19407:1
 i:b:/maps/objects.tsx:13576:1
 i:d:/maps/objects:0:1
 i:b:/maps/objects/boots.png:468:1
@@ -45,7 +45,7 @@ i:b:/maps/objects/smith.png:533:1
 i:b:/maps/objects/elder_sword.png:198:1
 i:b:/maps/objects/tree_green.png:1380:1
 i:b:/maps/objects/elder.png:481:1
-i:b:/maps/path_to_forest.tmx:3834:1
+i:b:/maps/path_to_forest.tmx:3838:1
 i:b:/maps/tileset-orig.png:195892:1
 i:b:/maps/tileset.png:473544:1
 i:d:/ui:0:1

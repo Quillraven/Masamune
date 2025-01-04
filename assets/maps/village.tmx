@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="15">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="15">
  <editorsettings>
   <export target="village..tmx" format="tmx"/>
  </editorsettings>
@@ -15,17 +15,17 @@
  </layer>
  <layer id="2" name="decoration" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJzV1EsOwVAYhuG/Wkx6MXDfDRbAABOrwQIYuLMblylB4roDm/B2IE2Eo0nPxJc8o/7n6+l1boos8C0njp1xwVUx98qNmbtiLmeJ5FFA0frdp0orxH78PCKe558T9h6FzSkZ0JF/eTb+Ps+arllnrhr2ZNgiMZh28Dyi9JboKaNiR9+bnzY9HXSR9kQyyKLqiNScz2vGvPcTTDFTfAN1ehpookdX/61vyzl3drj/4JG1A3qGGGHvihxwdIMZj5mUo/c/qMoaGyyx0tAXN0QSMGHhCdFoJ6w=
+   eJxjYKAuuM3MwHCHGbe8OAsDgwQQSwKxFAtldkXjsQcZvKbQnqEMiA0jYsF1dgSmBhgqcQNy5w0q+Zma4BaV3QSLD0rMdeRhYHACYmce6ripEWhOExA3o5nnz8vAEMBLmdkh/AwMoUAcBsT9QLMmoJl3HmjnBSL9cQWodwrQnKlAPA2IL/ExMFwG4it8CDX8QDUCvNQtBwcCMDMyMLAAMQAG6hlw
   </data>
  </layer>
  <layer id="3" name="decoration2" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYKAvmM7MwDADiGcC8Sxmys27DjTjBhDfBOJbVDBPnIWBQQKIJYFYioVy80bBKBgF1AHC/NQ1L5jK5oGAEAEz0cs/QuVhEAHz0Ms/SstD9PKPUHkIABWBE/E=
+   eJxjYKAvmM6MYM9ixq1uoIA4CwODBBBLArEUy0C7ZhSMglEAA8L81DUvmMrmgYAQATPRyz9C5WEQDdyID6CXf4TKQwBeAgYC
   </data>
  </layer>
  <layer id="4" name="decoration3" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJztzLcRgDAQBdHfgERAhqmKDNMYgsZkemF7uIsY7cxLV/pHOUgFFS3Yf1OUZixYo/238zhw4nL43TwSHrwOv8yjoKI5/Hq9nr1x8P1tzr8PiQQMvw==
+   eJxjYBgFQxHM4mNgmA3Ec4B4Lh/l5t0CmnEbiO8A8V0qmDcKRsEooBwI81PXvGAqmwcAebcG0Q==
   </data>
  </layer>
  <objectgroup id="6" name="object">
@@ -35,11 +35,6 @@
   <object id="5" name="Smith" gid="4102" x="16" y="288" width="16" height="16"/>
   <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
   <object id="13" gid="4107" x="122" y="132" width="48" height="48"/>
-  <object id="14" gid="4103" x="205" y="176" width="16" height="16">
-   <properties>
-    <property name="enemies" value="BUTTERFLY=2;LARVA=1"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
   <object id="7" name="villageExit" x="32" y="-12" width="80" height="44">
@@ -58,7 +53,12 @@
  </objectgroup>
  <layer id="5" name="foreground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApIBwAGQAAB
+   eJybzczAMAeIcYHrQLkbQHwTiG/hUUcKmAE0ZyaVzEJ33x1eBoa7vJSbK8XHwCANxDJALMtHuXlRQDOigTgGiGOpYN4oGAXUAow8DAxMQMzMM9AuIQxE+BkYRIFYjB+/uunMiHJmFhXKGmqWg+jlHyXlIbq70PlHgWqOAfFhID5CmbPBgJWRgYGNEcEHALamIEs=
+  </data>
+ </layer>
+ <layer id="9" name="foreground2" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBge4BYvA8Nt3oF2xSgYBaNgFIwcAADnFQHQ
   </data>
  </layer>
 </map>
