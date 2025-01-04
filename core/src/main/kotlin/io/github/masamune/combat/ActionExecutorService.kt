@@ -333,7 +333,7 @@ class ActionExecutorService(
         sfxAtlasKey: String,
         sfxDuration: Float,
         sfxScale: Float,
-        soundAsset: SoundAsset,
+        soundAsset: SoundAsset?,
         delay: Float,
         withBuffs: Boolean = true,
     ): Effect = with(world) {
@@ -384,7 +384,7 @@ class ActionExecutorService(
         realTarget.applyBuffs<OnMagicDamageTakenBuff> { damage = preMagicDamageTaken(source, realTarget, damage) }
 
         // add effects on effect stack (sfx, sound, damage, ...)
-        effectStack.addLast(SoundEffect(source, realTarget, soundAsset))
+        soundAsset?.let { effectStack.addLast(SoundEffect(source, realTarget, it)) }
         effectStack.addLast(SfxEffect(source, realTarget, sfxAtlas, sfxAtlasKey, sfxDuration, sfxScale))
         val damageEffect = DamageEffect(source, realTarget, damage, isCritical)
         effectStack.addLast(damageEffect)
@@ -411,17 +411,21 @@ class ActionExecutorService(
     ) {
         val damageEffects = mutableListOf<Effect>()
         targets.forEach {
-            damageEffects += dealMagicDamage(source, amount, it, sfxAtlasKey, sfxDuration, sfxScale, soundAsset, 0f)
+            damageEffects += dealMagicDamage(source, amount, it, sfxAtlasKey, sfxDuration, sfxScale, null, 0f)
         }
-        if (damageEffects.last() == effectStack.last) {
-            // no post magic damage effects triggered -> add delay just once
-            effectStack.addLast(DelayEffect(source, Entity.NONE, delay))
+        val lastDamageEffect = damageEffects.last()
+        if (lastDamageEffect == effectStack.last) {
+            // no post magic damage effects triggered -> add delay/audio just once
+            effectStack.addLast(SoundEffect(source, lastDamageEffect.target, soundAsset))
+            effectStack.addLast(DelayEffect(source, lastDamageEffect.target, delay))
         } else {
-            // post magic damage effects -> add delay after each damage effect to process post reaction one by one
+            // post magic damage effects -> add delay/audio after each damage effect to process post reaction one by one
             damageEffects
                 .filterIsInstance<DamageEffect>()
                 .forEach { damageEffect ->
-                    effectStack.addAfter(damageEffect, DelayEffect(source, Entity.NONE, delay))
+                    // make add delay call BEFORE sound to get correct order (damage, audio, delay)
+                    effectStack.addAfter(damageEffect, DelayEffect(source, damageEffect.target, delay))
+                    effectStack.addAfter(damageEffect, SoundEffect(source, damageEffect.target, soundAsset))
                 }
         }
     }
