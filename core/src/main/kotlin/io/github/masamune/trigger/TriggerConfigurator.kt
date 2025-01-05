@@ -3,6 +3,7 @@ package io.github.masamune.trigger
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.component.QuestLog
+import io.github.masamune.hasQuest
 import io.github.masamune.quest.FlowerGirlQuest
 import io.github.masamune.quest.MainQuest
 import io.github.masamune.tiledmap.ItemType
@@ -44,20 +45,18 @@ class TriggerConfigurator {
 
 
     private fun World.elderTrigger(name: String, triggeringEntity: Entity): TriggerScript {
-        val mainQuest = triggeringEntity[QuestLog].getOrNull<MainQuest>()
-
-        return when (mainQuest) {
-            null -> {
+        return when {
+            hasQuest<MainQuest>(triggeringEntity) -> {
                 trigger(name, this, triggeringEntity) {
-                    actionDialog("elder_00")
-                    actionAddItem(triggeringEntity, ItemType.ELDER_SWORD)
-                    actionAddQuest(triggeringEntity, MainQuest())
+                    actionDialog("elder_10")
                 }
             }
 
             else -> {
                 trigger(name, this, triggeringEntity) {
-                    actionDialog("elder_10")
+                    actionDialog("elder_00")
+                    actionAddItem(triggeringEntity, ItemType.ELDER_SWORD)
+                    actionAddQuest(triggeringEntity, MainQuest())
                 }
             }
         }
@@ -92,19 +91,19 @@ class TriggerConfigurator {
         }
 
     private fun World.flowerGirlTrigger(name: String, triggeringEntity: Entity): TriggerScript {
-        val flowerGirlQuest = triggeringEntity[QuestLog].getOrNull<FlowerGirlQuest>()
-
-        return when (flowerGirlQuest) {
-            null -> trigger(name, this, triggeringEntity) {
-                actionDialog("flower_girl_00") { selectedOptionIdx ->
-                    if (selectedOptionIdx == 0) {
-                        actionAddQuest(triggeringEntity, FlowerGirlQuest())
-                    }
-                }
+        return when {
+            hasQuest<FlowerGirlQuest>(triggeringEntity) -> trigger(name, this, triggeringEntity) {
+                actionDialog("flower_girl_10")
+                actionHeal(triggeringEntity, healLife = true, healMana = true)
             }
 
             else -> trigger(name, this, triggeringEntity) {
-                actionDialog("flower_girl_10")
+                actionDialog("flower_girl_00") { selectedOptionIdx ->
+                    if (selectedOptionIdx == 0) {
+                        actionAddQuest(triggeringEntity, FlowerGirlQuest())
+                        actionHeal(triggeringEntity, healLife = true, healMana = true)
+                    }
+                }
             }
         }
     }

@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.MutableEntityBag
+import io.github.masamune.asset.SoundAsset
+import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Inventory
@@ -11,12 +13,14 @@ import io.github.masamune.component.Move
 import io.github.masamune.component.MoveTo
 import io.github.masamune.component.Name
 import io.github.masamune.component.QuestLog
+import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.quest.Quest
+import io.github.masamune.spawnSfx
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.ui.model.I18NKey
@@ -153,4 +157,31 @@ class TriggerActionShop(
     }
 
     override fun World.onUpdate(): Boolean = true
+}
+
+class TriggerActionHeal(
+    private val entity: Entity,
+    private val healLife: Boolean,
+    private val healMana: Boolean,
+    private val audioService: AudioService,
+) : TriggerAction {
+
+    override fun World.onUpdate(): Boolean {
+        val stats = entity[Stats]
+        val sfxKey = when {
+            healLife && healMana -> "restore_purple"
+            healLife -> "restore_green"
+            else -> "restore_blue"
+        }
+        if (healLife) {
+            stats.life = stats.totalLifeMax
+        }
+        if (healMana) {
+            stats.mana = stats.totalManaMax
+        }
+        spawnSfx(entity, sfxKey, 1f, 2f)
+        audioService.play(SoundAsset.HEAL1)
+        return true
+    }
+
 }

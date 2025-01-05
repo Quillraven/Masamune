@@ -11,6 +11,7 @@ import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.PhysicContactHandler
 import io.github.masamune.asset.AssetService
+import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.SkinAsset
@@ -93,6 +94,8 @@ class GameScreen(
             add<MapTransitionService>(mapTransitionService)
             add(assetService)
             add(masamune)
+            add(audioService)
+            add(AtlasAsset.SFX.name, assetService[AtlasAsset.SFX])
         }
 
         systems {

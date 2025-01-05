@@ -2,6 +2,7 @@ package io.github.masamune.trigger
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.audio.AudioService
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.quest.Quest
@@ -48,6 +49,11 @@ class TriggerCfg(
     fun actionShop(playerEntity: Entity, shopEntity: Entity, shopName: I18NKey, items: List<ItemType>) {
         val tiledService = world.inject<TiledService>()
         actions += TriggerActionShop(playerEntity, shopEntity, shopName, items, tiledService)
+    }
+
+    fun actionHeal(entity: Entity, healLife: Boolean, healMana: Boolean) {
+        val audioService = world.inject<AudioService>()
+        actions += TriggerActionHeal(entity, healLife, healMana, audioService)
     }
 
 }

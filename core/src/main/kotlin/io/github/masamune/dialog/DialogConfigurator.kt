@@ -85,6 +85,9 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             option(dialogOptionExit, ActionExit)
         }
         page(bundle.format("dialog.flower_girl_00.page3", playerName), "flower_girl", flowerGirlTitle) {
+            option(dialogOptionOk, ActionNext)
+        }
+        page(bundle.format("dialog.flower_girl_00.page4", playerName), "flower_girl", flowerGirlTitle) {
             option(dialogOptionOk, ActionExit)
         }
     }

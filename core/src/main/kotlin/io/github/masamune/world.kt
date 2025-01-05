@@ -10,9 +10,12 @@ import io.github.masamune.component.Animation
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.QuestLog
+import io.github.masamune.component.Remove
 import io.github.masamune.component.Selector
 import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
+import io.github.masamune.quest.Quest
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemType
 import ktx.app.gdxError
@@ -84,4 +87,23 @@ fun World.isEntityAlive(entity: Entity): Boolean = with(this) {
 fun World.canPerformAction(entity: Entity, action: Action): Boolean {
     val actionExecutorService = inject<ActionExecutorService>()
     return action.run { actionExecutorService.canPerform(entity) }
+}
+
+inline fun <reified T : Quest> World.hasQuest(entity: Entity): Boolean {
+    return entity[QuestLog].getOrNull<T>() != null
+}
+
+fun World.spawnSfx(target: Entity, sfxAtlasKey: String, duration: Float, scale: Float = 1f) {
+    val (toPos, toSize, toScale) = target[Transform]
+    val sfxAtlas = inject<CachingAtlas>(AtlasAsset.SFX.name)
+
+    entity {
+        it += Transform(toPos.cpy().apply { z = 3f }, toSize.cpy(), toScale * scale)
+        val animation = Animation.ofAtlas(sfxAtlas, sfxAtlasKey, AnimationType.IDLE)
+        animation.speed = 1f / (duration / animation.gdxAnimation.animationDuration)
+        animation.playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
+        it += animation
+        it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
+        it += Remove(duration)
+    }
 }

@@ -8,8 +8,6 @@ import com.github.quillraven.fleks.Family
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.EntityBag
 import com.github.quillraven.fleks.collection.MutableEntityBag
-import io.github.masamune.asset.AtlasAsset
-import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionQueueEntry.Companion.DEFAULT_QUEUE_ACTION
@@ -74,7 +72,6 @@ class ActionExecutorService(
 
     lateinit var world: World
         private set
-    private lateinit var sfxAtlas: CachingAtlas
     private lateinit var allEnemies: Family
     private lateinit var allPlayers: Family
     private lateinit var effectStack: EffectStack
@@ -111,7 +108,6 @@ class ActionExecutorService(
 
     infix fun withWorld(world: World) {
         this.world = world
-        this.sfxAtlas = world.inject(AtlasAsset.SFX.name)
         this.allEnemies = world.family { none(Player).all(Combat) }
         this.allPlayers = world.family { all(Player, Combat) }
         this.effectStack = EffectStack(world)
@@ -136,7 +132,7 @@ class ActionExecutorService(
         this.itemOwner = itemOwner
         with(world) {
             // Just reduce amount instead of calling world.removeItem because
-            // removeItem will remove the item entity already, but we still need it to get its stats, etc..
+            // removeItem will remove the item entity already, but we still need it to get its stats, etc.
             // The real item removal happens at the end of the combat in the CombatScreen.
             --item[Item].amount
         }
@@ -286,7 +282,7 @@ class ActionExecutorService(
         // add attack effects on effect stack (sound then sfx then damage)
         val combat = source[Combat]
         effectStack.addLast(SoundEffect(source, realTarget, combat.attackSnd))
-        effectStack.addLast(SfxEffect(source, realTarget, sfxAtlas, combat.attackSFX, delay * 0.5f, 2f))
+        effectStack.addLast(SfxEffect(source, realTarget, combat.attackSFX, delay * 0.5f, 2f))
         effectStack.addLast(DamageEffect(source, realTarget, damage, isCritical))
         if (delay > 0f) {
             effectStack.addLast(DelayEffect(source, realTarget, delay))
@@ -304,7 +300,7 @@ class ActionExecutorService(
     }
 
     fun addSfx(to: Entity, sfxAtlasKey: String, duration: Float, scale: Float = 1f) {
-        effectStack.addLast(SfxEffect(to, to, sfxAtlas, sfxAtlasKey, duration, scale))
+        effectStack.addLast(SfxEffect(to, to, sfxAtlasKey, duration, scale))
     }
 
     fun play(asset: SoundAsset) {
@@ -385,7 +381,7 @@ class ActionExecutorService(
 
         // add effects on effect stack (sfx, sound, damage, ...)
         soundAsset?.let { effectStack.addLast(SoundEffect(source, realTarget, it)) }
-        effectStack.addLast(SfxEffect(source, realTarget, sfxAtlas, sfxAtlasKey, sfxDuration, sfxScale))
+        effectStack.addLast(SfxEffect(source, realTarget, sfxAtlasKey, sfxDuration, sfxScale))
         val damageEffect = DamageEffect(source, realTarget, damage, isCritical)
         effectStack.addLast(damageEffect)
         if (delay > 0f) {
@@ -448,7 +444,7 @@ class ActionExecutorService(
 
         // add effects on effect stack (sfx, sound, damage, ...)
         effectStack.addLast(SoundEffect(source, realTarget, soundAsset))
-        effectStack.addLast(SfxEffect(source, realTarget, sfxAtlas, sfxAtlasKey, sfxDuration, sfxScale))
+        effectStack.addLast(SfxEffect(source, realTarget, sfxAtlasKey, sfxDuration, sfxScale))
         effectStack.addLast(HealEffect(source, realTarget, life, mana))
         if (delay > 0f) {
             effectStack.addLast(DelayEffect(source, realTarget, delay))
