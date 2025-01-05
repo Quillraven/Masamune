@@ -20,9 +20,9 @@ i:b:/shader/dissolve.frag:966:1
 i:b:/shader/grayscale.frag:484:1
 i:b:/shader/blur.frag:1189:1
 i:d:/graphics:0:1
-i:b:/graphics/sfx.atlas:4257:1
+i:b:/graphics/sfx.atlas:4894:1
 i:b:/graphics/chars_and_props.atlas:5686:1
-i:b:/graphics/sfx.png:153755:1
+i:b:/graphics/sfx.png:185949:1
 i:b:/graphics/chars_and_props.png:29768:1
 i:d:/maps:0:1
 i:b:/maps/village.tmx:3387:1
@@ -49,12 +49,12 @@ i:b:/maps/path_to_forest.tmx:3838:1
 i:b:/maps/tileset-orig.png:195892:1
 i:b:/maps/tileset.png:473544:1
 i:d:/ui:0:1
-i:b:/ui/messages_de.properties:4861:1
+i:b:/ui/messages_de.properties:5058:1
 i:b:/ui/fipps_16.fnt:8935:1
 i:b:/ui/PIXEARG_.fnt:10450:1
 i:b:/ui/skin.atlas:2784:1
 i:b:/ui/skin.png:36813:1
-i:b:/ui/messages.properties:4408:1
+i:b:/ui/messages.properties:4567:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 i:b:/ui/skin.json:4342:1
 i:b:/ui/pixel_arial_24_border.fnt:7774:1
