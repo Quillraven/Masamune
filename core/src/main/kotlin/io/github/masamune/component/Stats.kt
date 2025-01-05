@@ -40,6 +40,14 @@ class Stats(
     strength = strength,
 ) {
 
+    init {
+        if (life == lifeMax) {
+            // Total life might be different due to constitution and other bonuses.
+            // If life should be the same as lifeMax then set life to its correct value (=total life including bonus).
+            this.life = totalLifeMax
+        }
+    }
+
     // there is no total mana/life by design because such bonuses must be one manaMax/lifeMax
     val totalAgility: Float
         get() = agility * (1f + percModifier.agility)
