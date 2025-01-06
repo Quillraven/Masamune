@@ -44,6 +44,14 @@ private enum class UiCombatState {
     SELECT_ACTION, SELECT_TARGET, SELECT_MAGIC, SELECT_ITEM, VICTORY_DEFEAT
 }
 
+/**
+ * CombatView is a group of standalone widgets that get positioned according to the player position
+ * in the game world. It contains following widgets:
+ * - player info table (name, life + mana of player entity)
+ * - action table to choose which action to perform (attack, magic, item)
+ * - magic table to choose the magic to perform
+ * - item table to choose the item to use
+ */
 @Scene2dDsl
 class CombatView(
     model: CombatViewModel,
