@@ -20,7 +20,7 @@ arrow
   index: -1
 button_normal
   rotate: false
-  xy: 614, 866
+  xy: 106, 629
   size: 16, 8
   split: 3, 3, 3, 3
   pad: 2, 2, 2, 2
@@ -29,7 +29,7 @@ button_normal
   index: -1
 button_pressed
   rotate: false
-  xy: 106, 629
+  xy: 130, 653
   size: 16, 8
   split: 3, 3, 4, 2
   pad: 2, 2, 3, 1
@@ -83,6 +83,15 @@ flower_girl
   orig: 38, 38
   offset: 0, 0
   index: -1
+frame_1
+  rotate: false
+  xy: 614, 858
+  size: 16, 16
+  split: 5, 5, 5, 6
+  pad: 5, 5, 5, 5
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 hero
   rotate: false
   xy: 888, 904
@@ -92,7 +101,7 @@ hero
   index: -1
 icon_items
   rotate: false
-  xy: 518, 765
+  xy: 542, 789
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
@@ -106,7 +115,7 @@ icon_magic
   index: -1
 icon_sword
   rotate: false
-  xy: 130, 645
+  xy: 518, 760
   size: 7, 16
   orig: 7, 16
   offset: 0, 0

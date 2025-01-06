@@ -17,6 +17,8 @@ sealed interface Event
 data class PlayerMoveEvent(val direction: Vector2) : Event
 data object GameExitEvent : Event
 data class GameResizeEvent(val width: Int, val height: Int) : Event
+data class PlayerQuestItemBegin(val player: Entity, val item: Entity) : Event
+data object PlayerQuestItemEnd : Event
 
 // PLAYER INTERACT EVENTS
 data class PlayerInteractBeginContactEvent(val player: Entity, val other: Entity) : Event
@@ -56,7 +58,6 @@ data class MapTransitionBeginEvent(
     val mapOffset: Vector2,
     val newPlayerPos: Vector2, // position in new map (=toTiledMap)
 ) : Event
-
 data object MapTransitionEndEvent : Event
 
 // COMBAT EVENTS

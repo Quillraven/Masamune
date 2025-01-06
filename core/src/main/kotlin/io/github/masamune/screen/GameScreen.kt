@@ -39,10 +39,12 @@ import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.model.GameMenuViewModel
+import io.github.masamune.ui.model.QuestItemViewModel
 import io.github.masamune.ui.model.ShopViewModel
 import io.github.masamune.ui.model.StatsViewModel
 import io.github.masamune.ui.view.dialogView
 import io.github.masamune.ui.view.gameMenuView
+import io.github.masamune.ui.view.questItemView
 import io.github.masamune.ui.view.shopView
 import io.github.masamune.ui.view.statsView
 import ktx.app.KtxScreen
@@ -132,6 +134,7 @@ class GameScreen(
             gameMenuView(GameMenuViewModel(bundle, audioService, eventService), skin) { isVisible = false }
             statsView(StatsViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
             shopView(ShopViewModel(bundle, audioService, world, tiledService), skin) { isVisible = false }
+            questItemView(QuestItemViewModel(bundle, audioService, world, gameViewport, uiViewport), skin) { isVisible = false }
         }
 
         // register all event listeners
@@ -168,6 +171,7 @@ class GameScreen(
         uiViewport.apply()
         stage.act(delta)
         stage.draw()
+        batch.setColor(1f, 1f, 1f, 1f)
 
         mapTransitionService.update(world, delta)
     }

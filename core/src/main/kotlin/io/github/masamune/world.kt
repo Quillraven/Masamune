@@ -5,11 +5,14 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.combat.ActionExecutorService
+import io.github.masamune.combat.ActionExecutorService.Companion.LIFE_PER_CONST
 import io.github.masamune.combat.action.Action
 import io.github.masamune.component.Animation
+import io.github.masamune.component.Equipment
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.Player
 import io.github.masamune.component.QuestLog
 import io.github.masamune.component.Remove
 import io.github.masamune.component.Selector
@@ -38,20 +41,68 @@ fun World.selectorEntity(target: Entity, confirmed: Boolean) = this.entity {
     it += Selector(target, confirmed)
 }
 
-fun World.addItem(itemEntity: Entity, to: Entity) {
+fun World.addItem(
+    itemEntity: Entity,
+    to: Entity,
+    equipItem: Boolean = true,
+) {
     val itemCmp = itemEntity[Item]
     val items = to[Inventory].items
     val existingItem = items.firstOrNull { it[Item].type == itemCmp.type }
-    if (existingItem == null) {
-        // item not yet in inventory -> add it
-        log.debug { "Adding new item of type ${itemCmp.type} to inventory" }
-        items += itemEntity
+    if (existingItem != null) {
+        // item already in inventory -> increase amount
+        log.debug { "Increasing amount of item ${itemCmp.type} by ${itemCmp.amount}" }
+        existingItem[Item].amount += itemCmp.amount
         return
     }
 
-    // item already in inventory -> increase amount
-    log.debug { "Increasing amount of item ${itemCmp.type} by ${itemCmp.amount}" }
-    existingItem[Item].amount += itemCmp.amount
+    // if item is an equipment and 'to' entity is a player then equip the item instead of
+    // adding it to the inventory, if no item of that type is equipped yet
+    if (equipItem && itemCmp.category.isEquipment && to has Player) {
+        val equipmentItems = to[Equipment].items
+        if (equipmentItems.none { it[Item].category == itemCmp.category }) {
+            equipItem(itemEntity, to)
+            return
+        }
+    }
+
+    // item not yet in inventory -> add it
+    log.debug { "Adding new item of type ${itemCmp.type} to inventory" }
+    items += itemEntity
+}
+
+fun World.equipItem(itemEntity: Entity, to: Entity) {
+    val itemCmp = itemEntity[Item]
+    val equipmentItems = to[Equipment].items
+    log.debug { "Equipping item ${itemCmp.type}" }
+
+    // remove currently equipped item, if there is any
+    equipmentItems.singleOrNull { it[Item].category == itemCmp.category }?.let { existingItem ->
+        equipmentItems -= existingItem
+        // move item to inventory
+        addItem(existingItem, to, equipItem = false)
+    }
+
+    // equip item
+    equipmentItems += itemEntity
+
+    // adjust life/mana if necessary
+    val itemStats = itemEntity[Stats]
+    if (itemStats.lifeMax != 0f || itemStats.constitution != 0f) {
+        // adjust life in case of lifeMax or constitution bonus. Life percentage should remain the same.
+        val playerStats = to[Stats]
+        val lifePerc = playerStats.life / playerStats.totalLifeMax
+        val newLifeMax = playerStats.totalLifeMax + itemStats.lifeMax + (itemStats.constitution * LIFE_PER_CONST)
+        playerStats.life = newLifeMax * lifePerc
+    }
+
+    if (itemStats.manaMax != 0f) {
+        // adjust mana in case of manaMax bonus. Mana percentage should remain the same.
+        val playerStats = to[Stats]
+        val manaPerc = playerStats.mana / playerStats.totalManaMax
+        val newManaMax = playerStats.totalManaMax + itemStats.manaMax
+        playerStats.mana = newManaMax * manaPerc
+    }
 }
 
 fun World.removeItem(type: ItemType, amount: Int, from: Entity) {

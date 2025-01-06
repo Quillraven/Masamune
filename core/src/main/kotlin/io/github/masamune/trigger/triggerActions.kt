@@ -4,8 +4,10 @@ import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.MutableEntityBag
+import io.github.masamune.addItem
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.component.Animation
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Inventory
@@ -18,9 +20,13 @@ import io.github.masamune.component.Transform
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.EventService
+import io.github.masamune.event.PlayerQuestItemBegin
+import io.github.masamune.event.PlayerQuestItemEnd
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.quest.Quest
+import io.github.masamune.scheduledTask
 import io.github.masamune.spawnSfx
+import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.ui.model.I18NKey
@@ -74,12 +80,28 @@ class TriggerActionDialog(
 class TriggerActionAddItem(
     private val entity: Entity,
     private val itemType: ItemType,
-    private val tiledService: TiledService
+    private val eventService: EventService,
+    private val tiledService: TiledService,
+    private val audioService: AudioService,
 ) : TriggerAction {
-    override fun World.onUpdate(): Boolean {
+    private var duration = 4.5f
+
+    override fun World.onStart() {
         val item: Entity = tiledService.loadItem(this, itemType)
-        entity[Inventory].items += item
-        return true
+        eventService.fire(PlayerQuestItemBegin(entity, item))
+        addItem(item, entity)
+        entity[Animation].changeTo = AnimationType.ITEM
+        scheduledTask(0.5f) { audioService.play(SoundAsset.QUEST_ITEM) }
+    }
+
+    override fun World.onUpdate(): Boolean {
+        duration -= deltaTime
+        if (duration <= 0f) {
+            eventService.fire(PlayerQuestItemEnd)
+            entity[Animation].changeTo = AnimationType.IDLE
+            return true
+        }
+        return false
     }
 }
 
