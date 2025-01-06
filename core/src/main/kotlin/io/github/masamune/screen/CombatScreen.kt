@@ -357,6 +357,7 @@ class CombatScreen(
             uiViewport.apply()
             stage.act(delta)
             stage.draw()
+            batch.setColor(1f, 1f, 1f, 1f)
         }
     }
 
