@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.World
+import com.badlogic.gdx.utils.Timer
 import io.github.masamune.event.GameResizeEvent
 import io.github.masamune.screen.LoadingScreen
 import io.github.masamune.screen.TransitionType
@@ -15,6 +16,10 @@ import ktx.app.clearScreen
 import ktx.log.logger
 
 typealias PhysicWorld = World
+
+fun scheduledTask(delay: Float, action: () -> Unit): Timer.Task = Timer.schedule(object : Timer.Task() {
+    override fun run() = action()
+}, delay)
 
 class Masamune(
     private val serviceLocator: ServiceLocator = LazyServiceLocator(
