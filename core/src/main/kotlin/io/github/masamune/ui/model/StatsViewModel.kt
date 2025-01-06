@@ -42,7 +42,7 @@ class StatsViewModel(
             with(world) {
                 val player = playerEntities.first()
 
-                // calculate equipment bonus before setting player stats because CombatView reacts to playerStats change
+                // calculate equipment bonus before setting player stats because StatsView reacts to playerStats change
                 val playerEquipment = player[Equipment]
                 equipmentBonus = UIStats.entries.associateWith { uiStat ->
                     playerEquipment.items
