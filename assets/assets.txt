@@ -5,6 +5,7 @@ i:b:/sound/explosion1.wav:50062:1
 i:b:/sound/sword_swipe.wav:117714:1
 i:b:/sound/attack_miss.wav:117714:1
 i:b:/sound/attack_swipe.wav:117714:1
+i:b:/sound/quest_item.wav:276834:1
 i:b:/sound/menu_accept.wav:109000:1
 i:b:/sound/menu_click.wav:33612:1
 i:d:/music:0:1
@@ -27,7 +28,7 @@ i:b:/graphics/chars_and_props.png:29768:1
 i:d:/maps:0:1
 i:b:/maps/village.tmx:3387:1
 i:b:/maps/tileset.tsx:19407:1
-i:b:/maps/objects.tsx:13576:1
+i:b:/maps/objects.tsx:13820:1
 i:d:/maps/objects:0:1
 i:b:/maps/objects/boots.png:468:1
 i:b:/maps/objects/studded_leather.png:423:1
@@ -52,8 +53,8 @@ i:d:/ui:0:1
 i:b:/ui/messages_de.properties:5058:1
 i:b:/ui/fipps_16.fnt:8935:1
 i:b:/ui/PIXEARG_.fnt:10450:1
-i:b:/ui/skin.atlas:2784:1
-i:b:/ui/skin.png:36813:1
+i:b:/ui/skin.atlas:2918:1
+i:b:/ui/skin.png:36998:1
 i:b:/ui/messages.properties:4567:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 i:b:/ui/skin.json:4342:1

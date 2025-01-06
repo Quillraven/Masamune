@@ -214,11 +214,15 @@
   <properties>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="items/elder_sword"/>
+   <property name="category" propertytype="ItemCategory" value="WEAPON"/>
    <property name="itemType" propertytype="ItemType" value="ELDER_SWORD"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
+     <property name="constitution" type="float" value="5"/>
      <property name="damage" type="float" value="3"/>
      <property name="intelligence" type="float" value="1"/>
+     <property name="lifeMax" type="float" value="0"/>
+     <property name="manaMax" type="float" value="0"/>
      <property name="physicalDamage" type="float" value="3"/>
     </properties>
    </property>
