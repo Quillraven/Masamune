@@ -6,6 +6,7 @@ import com.github.xpenatan.gdx.backends.teavm.config.TeaBuilder
 import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSupplier
 import com.github.xpenatan.gdx.backends.teavm.gen.SkipClass
 import com.rafaskoberg.gdx.typinglabel.TypingGlyph
+import com.rafaskoberg.gdx.typinglabel.effects.EaseEffect
 import com.rafaskoberg.gdx.typinglabel.effects.FadeEffect
 import com.rafaskoberg.gdx.typinglabel.effects.JumpEffect
 import com.rafaskoberg.gdx.typinglabel.effects.RainbowEffect
@@ -40,6 +41,7 @@ object TeaVMBuilder {
         TeaReflectionSupplier.addReflectionClass(FadeEffect::class.java)
         TeaReflectionSupplier.addReflectionClass(JumpEffect::class.java)
         TeaReflectionSupplier.addReflectionClass(RainbowEffect::class.java)
+        TeaReflectionSupplier.addReflectionClass(EaseEffect::class.java)
 
         val tool = TeaBuilder.config(teaBuildConfiguration)
         tool.mainClass = "io.github.masamune.teavm.TeaVMLauncher"
