@@ -1,6 +1,8 @@
 package io.github.masamune.ui.model
 
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.I18NBundle
+import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
@@ -123,6 +125,13 @@ abstract class ViewModel(
 
     fun playSndMenuAbort() {
         audioService.play(SoundAsset.MENU_ABORT)
+    }
+
+    fun Vector2.toUiPosition(from: Viewport, to: Viewport): Vector2 {
+        from.project(this)
+        to.unproject(this)
+        this.y = to.worldHeight - this.y
+        return this
     }
 
     companion object {

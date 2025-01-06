@@ -393,14 +393,6 @@ class CombatViewModel(
 
     companion object {
         private val log = logger<CombatViewModel>()
-
-        private fun Vector2.toUiPosition(from: Viewport, to: Viewport): Vector2 {
-            from.project(this)
-            to.unproject(this)
-            this.y = to.worldHeight - this.y
-            return this
-        }
-
     }
 
 }
