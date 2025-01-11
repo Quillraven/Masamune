@@ -8,7 +8,7 @@ import ktx.scene2d.actor
 import ktx.scene2d.scene2d
 
 @Scene2dDsl
-class ItemTable(
+class ItemShopTable(
     private val talonsPostfix: String,
     skin: Skin,
 ) : SelectionTable<ShopItemWidget>(
@@ -22,7 +22,7 @@ class ItemTable(
 
     fun item(title: String, cost: Int) {
         val shopItem = scene2d.shopItem(title, cost, talonsPostfix, skin) {
-            select(this@ItemTable.numEntries == 0)
+            select(this@ItemShopTable.numEntries == 0)
         }
         addEntry(shopItem)
     }
@@ -36,8 +36,8 @@ class ItemTable(
 }
 
 @Scene2dDsl
-fun <S> KWidget<S>.itemTable(
+fun <S> KWidget<S>.itemShopTable(
     talonsPostfix: String,
     skin: Skin,
-    init: (@Scene2dDsl ItemTable).(S) -> Unit = {},
-): ItemTable = actor(ItemTable(talonsPostfix, skin), init)
+    init: (@Scene2dDsl ItemShopTable).(S) -> Unit = {},
+): ItemShopTable = actor(ItemShopTable(talonsPostfix, skin), init)

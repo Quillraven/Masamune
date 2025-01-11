@@ -78,40 +78,42 @@ class Stats(
 
     override fun type() = Stats
 
-    // there is no mana/life by design because such bonuses must be one manaMax/lifeMax
-    infix fun andEquipment(equipmentStats: List<Stats>): Stats {
-        equipmentStats.forEach { equipment ->
-            // flat bonus
-            this.agility += equipment.agility
-            this.arcaneStrike += equipment.arcaneStrike
-            this.armor += equipment.armor
-            this.constitution += equipment.constitution
-            this.criticalStrike += equipment.criticalStrike
-            this.damage += equipment.damage
-            this.intelligence += equipment.intelligence
-            this.lifeMax += equipment.lifeMax
-            this.magicalEvade += equipment.magicalEvade
-            this.manaMax += equipment.manaMax
-            this.physicalEvade += equipment.physicalEvade
-            this.resistance += equipment.resistance
-            this.strength += equipment.strength
-
-            // percentage bonus
-            this.percModifier.agility += equipment.percModifier.agility
-            this.percModifier.arcaneStrike += equipment.percModifier.arcaneStrike
-            this.percModifier.armor += equipment.percModifier.armor
-            this.percModifier.constitution += equipment.percModifier.constitution
-            this.percModifier.criticalStrike += equipment.percModifier.criticalStrike
-            this.percModifier.damage += equipment.percModifier.damage
-            this.percModifier.intelligence += equipment.percModifier.intelligence
-            this.percModifier.lifeMax += equipment.percModifier.lifeMax
-            this.percModifier.magicalEvade += equipment.percModifier.magicalEvade
-            this.percModifier.manaMax += equipment.percModifier.manaMax
-            this.percModifier.physicalEvade += equipment.percModifier.physicalEvade
-            this.percModifier.resistance += equipment.percModifier.resistance
-            this.percModifier.strength += equipment.percModifier.strength
-        }
+    fun withBonus(bonus: Stats): Stats {
+        this += bonus
         return this
+    }
+
+    operator fun plusAssign(other: Stats) {
+        // there is no mana/life by design because such bonuses must be on manaMax/lifeMax
+        // flat bonus
+        this.agility += other.agility
+        this.arcaneStrike += other.arcaneStrike
+        this.armor += other.armor
+        this.constitution += other.constitution
+        this.criticalStrike += other.criticalStrike
+        this.damage += other.damage
+        this.intelligence += other.intelligence
+        this.lifeMax += other.lifeMax
+        this.magicalEvade += other.magicalEvade
+        this.manaMax += other.manaMax
+        this.physicalEvade += other.physicalEvade
+        this.resistance += other.resistance
+        this.strength += other.strength
+
+        // percentage bonus
+        this.percModifier.agility += other.percModifier.agility
+        this.percModifier.arcaneStrike += other.percModifier.arcaneStrike
+        this.percModifier.armor += other.percModifier.armor
+        this.percModifier.constitution += other.percModifier.constitution
+        this.percModifier.criticalStrike += other.percModifier.criticalStrike
+        this.percModifier.damage += other.percModifier.damage
+        this.percModifier.intelligence += other.percModifier.intelligence
+        this.percModifier.lifeMax += other.percModifier.lifeMax
+        this.percModifier.magicalEvade += other.percModifier.magicalEvade
+        this.percModifier.manaMax += other.percModifier.manaMax
+        this.percModifier.physicalEvade += other.percModifier.physicalEvade
+        this.percModifier.resistance += other.percModifier.resistance
+        this.percModifier.strength += other.percModifier.strength
     }
 
     companion object : ComponentType<Stats>() {

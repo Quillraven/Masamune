@@ -28,7 +28,7 @@ class GameMenuView(
         registerOnPropertyChanges()
     }
 
-    private fun registerOnPropertyChanges() {
+    override fun registerOnPropertyChanges() {
         viewModel.onPropertyChange(GameMenuViewModel::options) { options ->
             if (options.isEmpty()) {
                 isVisible = false

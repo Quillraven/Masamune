@@ -7,6 +7,7 @@ enum class ItemType {
     HELMET,
     RING,
     SCROLL_INFERNO,
+    SMALL_HEALTH_POTION,
     SMALL_MANA_POTION,
     STUDDED_LEATHER,
     UNDEFINED;

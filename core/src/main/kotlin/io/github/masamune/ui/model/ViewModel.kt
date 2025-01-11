@@ -1,6 +1,8 @@
 package io.github.masamune.ui.model
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.Component
@@ -8,8 +10,13 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.ActionExecutorService.Companion.LIFE_PER_CONST
+import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
+import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
+import io.github.masamune.component.Item
+import io.github.masamune.component.Name
 import io.github.masamune.component.Stats
 import io.github.masamune.event.EventListener
 import ktx.app.gdxError
@@ -78,6 +85,17 @@ abstract class ViewModel(
         return result
     }
 
+    fun MutableMap<UIStats, String>.andEquipmentBonus(bonus: Map<UIStats, Int>): MutableMap<UIStats, String> {
+        val bonusLife = bonus[UIStats.LIFE_MAX] ?: 0
+        val bonusConstitution = bonus[UIStats.CONSTITUTION] ?: 0
+        val bonusMana = bonus[UIStats.MANA_MAX] ?: 0
+        val baseLife = this[UIStats.LIFE_MAX]?.toInt() ?: 0
+        val baseMana = this[UIStats.MANA_MAX]?.toInt() ?: 0
+        this[UIStats.LIFE_MAX] = "${(baseLife + bonusLife + bonusConstitution * LIFE_PER_CONST).toInt()}"
+        this[UIStats.MANA_MAX] = "${baseMana + bonusMana}"
+        return this
+    }
+
     fun i18nTxt(key: I18NKey): String = bundle[key]
 
     // function to get game object descriptions like for items.
@@ -132,6 +150,91 @@ abstract class ViewModel(
         to.unproject(this)
         this.y = to.worldHeight - this.y
         return this
+    }
+
+    fun Equipment.toUiStatsMap(world: World): Map<UIStats, Int> = with(world) {
+        return UIStats.entries.associateWith { uiStat ->
+            this@toUiStatsMap.items
+                .map { it[Stats] }
+                .sumOf {
+                    when (uiStat) {
+                        UIStats.AGILITY -> it.agility.toInt()
+                        UIStats.ARCANE_STRIKE -> (it.arcaneStrike * 100).toInt()
+                        UIStats.ARMOR -> it.armor.toInt()
+                        UIStats.CONSTITUTION -> it.constitution.toInt()
+                        UIStats.CRITICAL_STRIKE -> (it.criticalStrike * 100).toInt()
+                        UIStats.DAMAGE -> it.damage.toInt()
+                        UIStats.INTELLIGENCE -> it.intelligence.toInt()
+                        UIStats.LIFE_MAX -> it.lifeMax.toInt()
+                        UIStats.MAGICAL_EVADE -> (it.magicalEvade * 100).toInt()
+                        UIStats.MANA_MAX -> it.manaMax.toInt()
+                        UIStats.PHYSICAL_EVADE -> (it.physicalEvade * 100).toInt()
+                        UIStats.RESISTANCE -> it.resistance.toInt()
+                        UIStats.STRENGTH -> it.strength.toInt()
+                        else -> 0
+                    }
+                }
+        }
+    }
+
+    fun Entity.toItemModel(world: World): ItemModel = with(world) {
+        val itemEntity = this@toItemModel
+        // and transform items into UI ItemModel objects
+        val (type, cost, category, descriptionKey, _, amount) = itemEntity[Item]
+        val itemName = itemEntity[Name].name
+        val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
+        val itemStats = itemEntity.getOrNull(Stats) ?: io.github.masamune.tiledmap.TiledStats.NULL_STATS
+
+        val i18nName = bundle["item.$itemName.name"]
+        val i18nDescription = description(descriptionKey, itemEntity, world)
+        return ItemModel(
+            type = type,
+            stats = itemStats,
+            name = i18nName,
+            cost = cost,
+            description = i18nDescription,
+            category = category,
+            image = TextureRegionDrawable(region),
+            amount = amount,
+        )
+    }
+
+    fun Entity.calcEquipmentDiff(selectedItem: ItemModel, world: World): Map<UIStats, Int> {
+        if (!selectedItem.category.isEquipment) {
+            return emptyMap()
+        }
+
+        with(world) {
+            val (items) = this@calcEquipmentDiff[Equipment]
+            val itemToCompare = items.firstOrNull { it[Item].category == selectedItem.category }
+            val selectedStats = selectedItem.stats
+
+            if (itemToCompare == null) {
+                // player has no item of given type selected
+                // -> diff is the stats of the selected item
+                return mapOf(
+                    UIStats.STRENGTH to selectedStats.strength.toInt(),
+                    UIStats.AGILITY to selectedStats.agility.toInt(),
+                    UIStats.CONSTITUTION to selectedStats.constitution.toInt(),
+                    UIStats.INTELLIGENCE to selectedStats.intelligence.toInt(),
+                    UIStats.DAMAGE to selectedStats.damage.toInt(),
+                    UIStats.ARMOR to selectedStats.armor.toInt(),
+                    UIStats.RESISTANCE to selectedStats.resistance.toInt(),
+                )
+            }
+
+            // compare selected item with currently equipped item
+            val equipStats = itemToCompare[Stats]
+            return mapOf(
+                UIStats.STRENGTH to (equipStats.strength - selectedStats.strength).toInt(),
+                UIStats.AGILITY to (equipStats.agility - selectedStats.agility).toInt(),
+                UIStats.CONSTITUTION to (equipStats.constitution - selectedStats.constitution).toInt(),
+                UIStats.INTELLIGENCE to (equipStats.intelligence - selectedStats.intelligence).toInt(),
+                UIStats.DAMAGE to (equipStats.damage - selectedStats.damage).toInt(),
+                UIStats.ARMOR to (equipStats.armor - selectedStats.armor).toInt(),
+                UIStats.RESISTANCE to (equipStats.resistance - selectedStats.resistance).toInt(),
+            )
+        }
     }
 
     companion object {

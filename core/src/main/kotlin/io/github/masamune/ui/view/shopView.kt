@@ -10,12 +10,12 @@ import io.github.masamune.ui.model.ShopOption
 import io.github.masamune.ui.model.ShopViewModel
 import io.github.masamune.ui.model.UIStats
 import io.github.masamune.ui.widget.ItemInfoTable
-import io.github.masamune.ui.widget.ItemTable
+import io.github.masamune.ui.widget.ItemShopTable
 import io.github.masamune.ui.widget.OptionTable
 import io.github.masamune.ui.widget.PopupTable
 import io.github.masamune.ui.widget.ShopStatsTable
 import io.github.masamune.ui.widget.itemInfoTable
-import io.github.masamune.ui.widget.itemTable
+import io.github.masamune.ui.widget.itemShopTable
 import io.github.masamune.ui.widget.optionTable
 import io.github.masamune.ui.widget.popupTable
 import io.github.masamune.ui.widget.shopStatsTable
@@ -49,7 +49,7 @@ class ShopView(
     private val totalLabel: Label
 
     private val shopStatsTable: ShopStatsTable
-    private val itemTable: ItemTable
+    private val itemShopTable: ItemShopTable
     private val optionTable: OptionTable
     private val itemInfoTable: ItemInfoTable
     private val popupTable: PopupTable
@@ -105,7 +105,7 @@ class ShopView(
                 innerTblCell.growX().row()
             }
 
-            this@ShopView.itemTable = itemTable(this@ShopView.talonsPostfix, skin) { itCell ->
+            this@ShopView.itemShopTable = itemShopTable(this@ShopView.talonsPostfix, skin) { itCell ->
                 isVisible = false
                 itCell.grow()
             }
@@ -120,11 +120,11 @@ class ShopView(
         // confirm buy popup
         popupTable = scene2d.popupTable("", emptyList(), skin)
 
-        registerOnPropertyChanges(model)
+        registerOnPropertyChanges()
     }
 
-    private fun registerOnPropertyChanges(model: ShopViewModel) {
-        model.onPropertyChange(ShopViewModel::playerStats) { stats ->
+    override fun registerOnPropertyChanges() {
+        viewModel.onPropertyChange(ShopViewModel::playerStats) { stats ->
             val missingValue = "0"
 
             shopStatsTable.statsValue(UIStats.STRENGTH, stats[UIStats.STRENGTH] ?: missingValue)
@@ -136,20 +136,20 @@ class ShopView(
             shopStatsTable.statsValue(UIStats.RESISTANCE, stats[UIStats.RESISTANCE] ?: missingValue)
         }
 
-        model.onPropertyChange(ShopViewModel::playerTalons) { value ->
+        viewModel.onPropertyChange(ShopViewModel::playerTalons) { value ->
             talonLabel.setText(" ${talonLabel.userObject}: $value$talonsPostfix ")
         }
 
-        model.onPropertyChange(ShopViewModel::options) { optionNames ->
+        viewModel.onPropertyChange(ShopViewModel::options) { optionNames ->
             optionTable.clearOptions()
             optionNames.forEach { optionTable.option(it.second, it.first) }
         }
 
-        model.onPropertyChange(ShopViewModel::totalCost) { value ->
+        viewModel.onPropertyChange(ShopViewModel::totalCost) { value ->
             totalLabel.setText(" ${totalLabel.userObject}: ${value}$talonsPostfix ")
         }
 
-        model.onPropertyChange(ShopViewModel::shopName) {
+        viewModel.onPropertyChange(ShopViewModel::shopName) {
             shopStatsTable.shopName(it)
             isVisible = true
             focus = ShopViewFocus.OPTIONS
@@ -161,7 +161,7 @@ class ShopView(
             return
         }
 
-        val selectedItem = activeItems[itemTable.selectedEntryIdx]
+        val selectedItem = activeItems[itemShopTable.selectedEntryIdx]
         itemInfoTable.item(selectedItem.name, selectedItem.description, selectedItem.image)
 
         val diff: Map<UIStats, Int> = viewModel.calcDiff(selectedItem)
@@ -180,7 +180,7 @@ class ShopView(
             }
 
             ShopViewFocus.ITEMS -> {
-                if (itemTable.prevEntry()) {
+                if (itemShopTable.prevEntry()) {
                     viewModel.playSndMenuClick()
                     updateActiveItem()
                 }
@@ -203,7 +203,7 @@ class ShopView(
             }
 
             ShopViewFocus.ITEMS -> {
-                if (itemTable.nextEntry()) {
+                if (itemShopTable.nextEntry()) {
                     viewModel.playSndMenuClick()
                     updateActiveItem()
                 }
@@ -218,21 +218,21 @@ class ShopView(
     }
 
     override fun onRightPressed() {
-        if (focus != ShopViewFocus.ITEMS || itemTable.hasNoEntries()) {
+        if (focus != ShopViewFocus.ITEMS || itemShopTable.hasNoEntries()) {
             return
         }
 
-        val amount = viewModel.incItemAmount(itemTable.selectedEntryIdx)
-        itemTable.amount(amount)
+        val amount = viewModel.incItemAmount(itemShopTable.selectedEntryIdx)
+        itemShopTable.amount(amount)
     }
 
     override fun onLeftPressed() {
-        if (focus != ShopViewFocus.ITEMS || itemTable.hasNoEntries()) {
+        if (focus != ShopViewFocus.ITEMS || itemShopTable.hasNoEntries()) {
             return
         }
 
-        val amount = viewModel.decItemAmount(itemTable.selectedEntryIdx)
-        itemTable.amount(amount)
+        val amount = viewModel.decItemAmount(itemShopTable.selectedEntryIdx)
+        itemShopTable.amount(amount)
     }
 
     private fun selectOption() {
@@ -256,11 +256,11 @@ class ShopView(
 
     private fun updateActiveItems() {
         optionTable.stopSelectAnimation()
-        itemTable.isVisible = true
+        itemShopTable.isVisible = true
         itemInfoTable.isVisible = activeItems.isNotEmpty()
-        itemTable.clearEntries()
+        itemShopTable.clearEntries()
         itemInfoTable.clearItem()
-        activeItems.forEach { itemTable.item(itemName(it.name), it.cost) }
+        activeItems.forEach { itemShopTable.item(itemName(it.name), it.cost) }
         updateActiveItem()
     }
 
@@ -279,7 +279,7 @@ class ShopView(
 
         viewModel.playSndMenuAccept()
         focus = ShopViewFocus.CONFIRM
-        itemTable.stopSelectAnimation()
+        itemShopTable.stopSelectAnimation()
 
         if (viewModel.sellMode) {
             popupTable.update(
@@ -311,7 +311,7 @@ class ShopView(
                     // item buy/sell confirmed
                     viewModel.playSndMenuAccept()
                     viewModel.buyOrSellItems()
-                    itemTable.clearAmounts()
+                    itemShopTable.clearAmounts()
                     if (viewModel.sellMode) {
                         activeItems = viewModel.itemsToSell()
                         updateActiveItems()
@@ -334,8 +334,8 @@ class ShopView(
 
             ShopViewFocus.ITEMS -> {
                 focus = ShopViewFocus.OPTIONS
-                itemTable.clearEntries()
-                itemTable.isVisible = false
+                itemShopTable.clearEntries()
+                itemShopTable.isVisible = false
                 itemInfoTable.isVisible = false
                 optionTable.resumeSelectAnimation()
                 viewModel.playSndMenuAbort()
@@ -352,7 +352,7 @@ class ShopView(
     private fun closeConfirmPopup() {
         focus = ShopViewFocus.ITEMS
         popupTable.remove()
-        itemTable.resumeSelectAnimation()
+        itemShopTable.resumeSelectAnimation()
     }
 }
 

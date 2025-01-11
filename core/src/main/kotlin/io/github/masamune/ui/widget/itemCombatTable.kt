@@ -8,12 +8,12 @@ import ktx.scene2d.actor
 import ktx.scene2d.scene2d
 
 @Scene2dDsl
-class ItemCombatTable(skin: Skin) : SelectionTable<ItemEntryWidget>(
+class ItemCombatTable(skin: Skin) : SelectionTable<CombatItemWidget>(
     skin,
     entriesPerRow = 2,
 ), KGroup {
     fun item(title: String, targetDescriptor: String, amount: Int) {
-        val itemEntry = scene2d.itemEntry(title, targetDescriptor, amount, skin) {
+        val itemEntry = scene2d.combatItem(title, targetDescriptor, amount, skin) {
             select(this@ItemCombatTable.numEntries == 0)
         }
         addEntry(itemEntry)

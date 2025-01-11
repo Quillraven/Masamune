@@ -65,7 +65,7 @@ class CombatFinishView(
         registerOnPropertyChanges()
     }
 
-    private fun registerOnPropertyChanges() {
+    override fun registerOnPropertyChanges() {
         viewModel.onPropertyChange(CombatFinishViewModel::xpToGain) { xp ->
             xpLabel.txt = buildString {
                 append(i18nTxt(I18NKey.COMBAT_TOTAL_XP))

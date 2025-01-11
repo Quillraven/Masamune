@@ -198,12 +198,12 @@ class CombatScreen(
         val nameCmp = with(gameScreenWorld) { gameScreenPlayer[Name] }
         val playerCmp = with(gameScreenWorld) { gameScreenPlayer[Player] }
         val statsCmp = with(gameScreenWorld) { gameScreenPlayer[Stats] }
-        val equipmentStats: List<Stats>
+        val equipmentStats: Stats
         val equipmentActionTypes: List<ActionType>
         with(gameScreenWorld) {
-            val playerEquipment = gameScreenPlayer[Equipment].items
-            equipmentStats = playerEquipment.map { it[Stats] }
-            equipmentActionTypes = playerEquipment.map { it[Item].actionType }
+            val playerEquipment = gameScreenPlayer[Equipment]
+            equipmentStats = playerEquipment.run { this@with.toStats() }
+            equipmentActionTypes = playerEquipment.run { this@with.toActionTypes() }
         }
         val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
         val xpCmp = with(gameScreenWorld) { gameScreenPlayer[Experience] }
@@ -223,7 +223,7 @@ class CombatScreen(
             it += playerCmp
             it += xpCmp
             // combat stats = normal stats + equipment stats
-            it += Stats.of(statsCmp) andEquipment equipmentStats
+            it += (Stats.of(statsCmp).withBonus(equipmentStats))
             it += Facing(FacingDirection.UP)
             val animationCmp = Animation.ofAnimation(aniCmp)
             animationCmp.changeTo = AnimationType.WALK

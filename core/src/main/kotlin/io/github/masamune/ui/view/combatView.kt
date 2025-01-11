@@ -147,12 +147,12 @@ class CombatView(
 
         itemTable = itemCombatTable(skin) { this.isVisible = false }
 
-        registerOnPropertyChanges(model)
+        registerOnPropertyChanges()
     }
 
-    private fun registerOnPropertyChanges(model: CombatViewModel) {
+    override fun registerOnPropertyChanges() {
         // player related property events
-        model.onPropertyChange(CombatViewModel::playerName) {
+        viewModel.onPropertyChange(CombatViewModel::playerName) {
             playerNameLabel.txt = it
             playerInfoTable.pack()
 
@@ -160,7 +160,7 @@ class CombatView(
             uiAction = UiAction.UNDEFINED
             uiState = UiCombatState.SELECT_ACTION
         }
-        model.onPropertyChange(CombatViewModel::playerLife) { (current, max) ->
+        viewModel.onPropertyChange(CombatViewModel::playerLife) { (current, max) ->
             playerLifeLabel.txt = "${current.coerceAtLeast(0f).toInt()}/${max.toInt()}"
             lifeProgressBar.value = (current / max).coerceIn(0f, 1f)
             if (viewModel.combatStart) {
@@ -168,7 +168,7 @@ class CombatView(
             }
             playerInfoTable.pack()
         }
-        model.onPropertyChange(CombatViewModel::playerMana) { (current, max) ->
+        viewModel.onPropertyChange(CombatViewModel::playerMana) { (current, max) ->
             playerManaLabel.txt = "${current.coerceAtLeast(0f).toInt()}/${max.toInt()}"
             manaProgressBar.value = (current / max).coerceIn(0f, 1f)
             if (viewModel.combatStart) {
@@ -176,7 +176,7 @@ class CombatView(
             }
             playerInfoTable.pack()
         }
-        model.onPropertyChange(CombatViewModel::playerMagic) { magicList ->
+        viewModel.onPropertyChange(CombatViewModel::playerMagic) { magicList ->
             magicModels = magicList
             magicTable.clearEntries()
             magicList.forEach { (_, name, targetDescriptor, mana, canPerform) ->
@@ -186,7 +186,7 @@ class CombatView(
             magicTable.height = 300f
             magicTable.width = max(magicTable.width, 400f)
         }
-        model.onPropertyChange(CombatViewModel::playerItems) { itemList ->
+        viewModel.onPropertyChange(CombatViewModel::playerItems) { itemList ->
             itemModels = itemList
             itemTable.clearEntries()
             itemList.forEach { (_, name, targetDescriptor, amount) ->
@@ -198,7 +198,7 @@ class CombatView(
         }
 
         // ui position update
-        model.onPropertyChange(CombatViewModel::playerPosition) { position ->
+        viewModel.onPropertyChange(CombatViewModel::playerPosition) { position ->
             val infoW = playerInfoTable.width
             playerInfoTable.setPosition(position.x - infoW, 5f)
             playerInfoTable.toFront()
@@ -229,7 +229,7 @@ class CombatView(
         }
 
         // action table fade in effect
-        model.onPropertyChange(CombatViewModel::combatTurn) {
+        viewModel.onPropertyChange(CombatViewModel::combatTurn) {
             playerInfoTable.height + 10f
             actionTable.actions.clear()
             actionTable += Actions.moveBy(0f, actionTable.height * 0.7f + 10f, 1f, Interpolation.bounceIn)
@@ -239,7 +239,7 @@ class CombatView(
         }
 
         // damage/heal/mana indicators
-        model.onPropertyChange(CombatViewModel::combatDamage) { (position, amount, critical) ->
+        viewModel.onPropertyChange(CombatViewModel::combatDamage) { (position, amount, critical) ->
             val effect: String
             val color: Color
             if (critical) {
@@ -251,18 +251,18 @@ class CombatView(
             }
             combatTxt(amount, effect, color, position, 2.5f)
         }
-        model.onPropertyChange(CombatViewModel::combatHeal) { (position, amount) ->
+        viewModel.onPropertyChange(CombatViewModel::combatHeal) { (position, amount) ->
             combatTxt(amount, "{JUMP=0.5;5;1;1}", skin.getColor("green"), position, 2f)
         }
-        model.onPropertyChange(CombatViewModel::combatMana) { (position, amount) ->
+        viewModel.onPropertyChange(CombatViewModel::combatMana) { (position, amount) ->
             combatTxt(amount, "{JUMP=0.5;5;1;1}", skin.getColor("blue"), position, 2f)
         }
-        model.onPropertyChange(CombatViewModel::combatMiss) { position ->
+        viewModel.onPropertyChange(CombatViewModel::combatMiss) { position ->
             combatTxt(i18nTxt(I18NKey.COMBAT_MISS), "{JUMP=0.5;5;1;1}", skin.getColor("white"), position, 2.5f)
         }
 
         // victory / defeat
-        model.onPropertyChange(CombatViewModel::combatDone) { isDone ->
+        viewModel.onPropertyChange(CombatViewModel::combatDone) { isDone ->
             if (isDone) {
                 uiState = UiCombatState.VICTORY_DEFEAT
             }

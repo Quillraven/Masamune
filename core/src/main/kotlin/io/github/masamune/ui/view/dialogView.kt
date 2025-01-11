@@ -110,11 +110,11 @@ class DialogView(
             }
         }
 
-        registerOnPropertyChanges(model)
+        registerOnPropertyChanges()
     }
 
-    private fun registerOnPropertyChanges(model: DialogViewModel) {
-        model.onPropertyChange(DialogViewModel::content) { dialogContent ->
+    override fun registerOnPropertyChanges() {
+        viewModel.onPropertyChange(DialogViewModel::content) { dialogContent ->
             if (dialogContent == DialogUiContent.EMPTY_CONTENT) {
                 isVisible = false
                 return@onPropertyChange

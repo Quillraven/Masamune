@@ -93,11 +93,13 @@ class TiledService(
         }
     }
 
-    fun setMap(tiledMap: TiledMap, world: World) {
+    fun setMap(tiledMap: TiledMap, world: World, withBoundaries: Boolean = true) {
         currentMap?.let { unloadMap(it, world) }
         currentMap = tiledMap
 
-        staticCollisionBodies += tiledMap.spawnBoundaryBody(world)
+        if (withBoundaries) {
+            staticCollisionBodies += tiledMap.spawnBoundaryBody(world)
+        }
         loadGroundCollision(tiledMap, world)
         loadObjects(tiledMap, world)
         tiledMap[ObjectLayer.TRIGGER]?.objects?.forEach { loadTrigger(it, world) }
@@ -422,7 +424,7 @@ class TiledService(
 
     private fun TiledMap?.objectsTileSet(): TiledMapTileSet {
         return this?.tileSets?.singleOrNull { it.name.contains("objects", true) }
-            ?: gdxError("Objects TileSet is not available")
+            ?: gdxError("Objects TileSet is not available for map $this")
     }
 
     fun loadItem(world: World, itemType: ItemType, amount: Int = 1): Entity {

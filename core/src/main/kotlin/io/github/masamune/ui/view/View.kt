@@ -43,6 +43,8 @@ abstract class View<T : ViewModel>(
             else -> Unit
         }
     }
+
+    abstract fun registerOnPropertyChanges()
 }
 
 fun Map<UIStats, String>.of(stat: UIStats): String = this[stat] ?: "???"

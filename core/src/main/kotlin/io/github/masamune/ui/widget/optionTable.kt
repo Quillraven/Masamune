@@ -10,13 +10,17 @@ import ktx.scene2d.defaultStyle
 import ktx.scene2d.scene2d
 
 @Scene2dDsl
-class OptionTable(skin: Skin) : Table(skin) {
+class OptionTable(
+    skin: Skin,
+    options: List<String>,
+) : Table(skin) {
 
     var selectedOption: Int = 0
         private set
 
     init {
         align(Align.left)
+        options.forEach { option(it) }
     }
 
     fun clearOptions() {
@@ -74,5 +78,6 @@ class OptionTable(skin: Skin) : Table(skin) {
 @Scene2dDsl
 fun <S> KWidget<S>.optionTable(
     skin: Skin,
+    options: List<String> = emptyList(),
     init: (@Scene2dDsl OptionTable).(S) -> Unit = {},
-): OptionTable = actor(OptionTable(skin), init)
+): OptionTable = actor(OptionTable(skin, options), init)

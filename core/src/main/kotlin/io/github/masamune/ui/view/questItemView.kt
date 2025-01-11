@@ -47,11 +47,11 @@ class QuestItemView(
             pack()
         }
 
-        registerOnPropertyChanges(model)
+        registerOnPropertyChanges()
     }
 
-    private fun registerOnPropertyChanges(model: QuestItemViewModel) {
-        model.onPropertyChange(QuestItemViewModel::itemPosition) { position ->
+    override fun registerOnPropertyChanges() {
+        viewModel.onPropertyChange(QuestItemViewModel::itemPosition) { position ->
             debug = true
             if (position.isZero) {
                 label.txt = ""
@@ -60,9 +60,9 @@ class QuestItemView(
                 return@onPropertyChange
             }
 
-            label.txt = "{EASE=6;6;1}{RAINBOW}${model.itemName}"
+            label.txt = "{EASE=6;6;1}{RAINBOW}${viewModel.itemName}"
             label.restart()
-            itemImage.drawable = model.itemDrawable
+            itemImage.drawable = viewModel.itemDrawable
             itemInfoTable.pack()
             itemInfoTable.setPosition(position.x, position.y)
 

@@ -5,11 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.forever
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Scaling
 import ktx.actors.plusAssign
 import ktx.actors.then
+import ktx.actors.txt
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
@@ -19,14 +21,14 @@ import ktx.scene2d.image
 import ktx.scene2d.label
 
 @Scene2dDsl
-class ItemEntryWidget(
+class InventoryItemWidget(
     title: String,
-    targetDescriptor: String,
     amount: Int,
     skin: Skin,
 ) : Table(skin), KTable, SelectableWidget {
 
     private val image: Image
+    private val amountLabel: Label
 
     init {
         image = image(skin.getDrawable("arrow")) { cell ->
@@ -35,8 +37,11 @@ class ItemEntryWidget(
             cell.padRight(5f).padLeft(5f)
         }
 
-        label("$title [#${skin.getColor("red")}]${targetDescriptor.first()}[] ${amount}x", defaultStyle, skin) {
+        label(title, defaultStyle, skin) {
             it.left().expandX()
+        }
+        amountLabel = label("${amount}x", defaultStyle, skin) {
+            it.right().padRight(5f).minWidth(20f)
         }
     }
 
@@ -44,13 +49,16 @@ class ItemEntryWidget(
         image.isVisible = value
     }
 
+    fun amount(value: Int) {
+        amountLabel.txt = "${value}x"
+    }
+
 }
 
 @Scene2dDsl
-fun <S> KWidget<S>.itemEntry(
+fun <S> KWidget<S>.inventoryItem(
     title: String,
-    targetDescriptor: String,
     amount: Int,
     skin: Skin,
-    init: (@Scene2dDsl ItemEntryWidget).(S) -> Unit = {},
-): ItemEntryWidget = actor(ItemEntryWidget(title, targetDescriptor, amount, skin), init)
+    init: (@Scene2dDsl InventoryItemWidget).(S) -> Unit = {},
+): InventoryItemWidget = actor(InventoryItemWidget(title, amount, skin), init)

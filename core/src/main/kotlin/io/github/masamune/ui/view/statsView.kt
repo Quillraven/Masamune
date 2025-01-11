@@ -168,15 +168,15 @@ class StatsView(
             rightTableCell.grow().pad(EDGE_PADDING, 0f, EDGE_PADDING, EDGE_PADDING)
         }
 
-        registerOnPropertyChanges(viewModel)
+        registerOnPropertyChanges()
     }
 
-    private fun registerOnPropertyChanges(model: StatsViewModel) {
-        model.onPropertyChange(StatsViewModel::playerName) { name ->
+    override fun registerOnPropertyChanges() {
+        viewModel.onPropertyChange(StatsViewModel::playerName) { name ->
             isVisible = name.isNotBlank()
             nameLabel.txt = name
         }
-        model.onPropertyChange(StatsViewModel::playerStats) { stats ->
+        viewModel.onPropertyChange(StatsViewModel::playerStats) { stats ->
             val missingValue = "0"
 
             // money

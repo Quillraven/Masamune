@@ -1,14 +1,10 @@
 package io.github.masamune.ui.model
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.addItem
 import io.github.masamune.audio.AudioService
-import io.github.masamune.component.Equipment
-import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
 import io.github.masamune.component.Name
@@ -20,7 +16,6 @@ import io.github.masamune.event.ShopEndEvent
 import io.github.masamune.removeItem
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.TiledService
-import io.github.masamune.tiledmap.TiledStats
 import ktx.log.logger
 
 class ShopViewModel(
@@ -68,7 +63,7 @@ class ShopViewModel(
             shopItems = shopEntity[Inventory].items.groupBy(
                 // group by item category
                 { itemEntity -> itemEntity[Item].category }
-            ) { it.toItemModel() }
+            ) { it.toItemModel(world) }
 
             // get shop options like weapons, sell, etc. (this will update the ShopView)
             val optWeaponOption = if (shopItems.hasWeapon()) weaponOption else null
@@ -87,28 +82,6 @@ class ShopViewModel(
             // reset total cost
             totalCost = 0
         }
-    }
-
-    private fun Entity.toItemModel(): ItemModel = with(world) {
-        val itemEntity = this@toItemModel
-        // and transform items into UI ItemModel objects
-        val (type, cost, category, descriptionKey, _, amount) = itemEntity[Item]
-        val itemName = itemEntity[Name].name
-        val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
-        val itemStats = itemEntity.getOrNull(Stats) ?: TiledStats.NULL_STATS
-
-        val i18nName = bundle["item.$itemName.name"]
-        val i18nDescription = description(descriptionKey, itemEntity, world)
-        return ItemModel(
-            type = type,
-            stats = itemStats,
-            name = i18nName,
-            cost = cost,
-            description = i18nDescription,
-            category = category,
-            image = TextureRegionDrawable(region),
-            amount = amount,
-        )
     }
 
     private fun Map<ItemCategory, List<ItemModel>>.hasWeapon(): Boolean {
@@ -170,7 +143,7 @@ class ShopViewModel(
     }
 
     fun itemsToSell(): List<ItemModel> = with(world) {
-        activeItems = playerEntity[Inventory].items.map { it.toItemModel() }
+        activeItems = playerEntity[Inventory].items.map { it.toItemModel(world) }
         activeItems.forEach { it.selected = 0 }
         totalCost = 0
         sellMode = true
@@ -223,44 +196,6 @@ class ShopViewModel(
         buyItems()
     }
 
-    fun calcDiff(selectedItem: ItemModel): Map<UIStats, Int> {
-        if (!selectedItem.category.isEquipment) {
-            return emptyMap()
-        }
-
-        with(world) {
-            val (items) = playerEntity[Equipment]
-            val itemToCompare = items.firstOrNull { it[Item].category == selectedItem.category }
-            val selectedStats = selectedItem.stats
-
-            if (itemToCompare == null) {
-                // player has no item of given type selected
-                // -> diff is the stats of the selected item
-                return mapOf(
-                    UIStats.STRENGTH to selectedStats.strength.toInt(),
-                    UIStats.AGILITY to selectedStats.agility.toInt(),
-                    UIStats.CONSTITUTION to selectedStats.constitution.toInt(),
-                    UIStats.INTELLIGENCE to selectedStats.intelligence.toInt(),
-                    UIStats.DAMAGE to selectedStats.damage.toInt(),
-                    UIStats.ARMOR to selectedStats.armor.toInt(),
-                    UIStats.RESISTANCE to selectedStats.resistance.toInt(),
-                )
-            }
-
-            // compare selected item with currently equipped item
-            val equipStats = itemToCompare[Stats]
-            return mapOf(
-                UIStats.STRENGTH to (equipStats.strength - selectedStats.strength).toInt(),
-                UIStats.AGILITY to (equipStats.agility - selectedStats.agility).toInt(),
-                UIStats.CONSTITUTION to (equipStats.constitution - selectedStats.constitution).toInt(),
-                UIStats.INTELLIGENCE to (equipStats.intelligence - selectedStats.intelligence).toInt(),
-                UIStats.DAMAGE to (equipStats.damage - selectedStats.damage).toInt(),
-                UIStats.ARMOR to (equipStats.armor - selectedStats.armor).toInt(),
-                UIStats.RESISTANCE to (equipStats.resistance - selectedStats.resistance).toInt(),
-            )
-        }
-    }
-
     fun quit() {
         eventService.fire(ShopEndEvent)
         // cleanup item entities of the shop to free the entities properly
@@ -269,6 +204,10 @@ class ShopViewModel(
             items.forEach { it.remove() }
             items.clear()
         }
+    }
+
+    fun calcDiff(selectedItem: ItemModel): Map<UIStats, Int> {
+        return playerEntity.calcEquipmentDiff(selectedItem, world)
     }
 
     companion object {

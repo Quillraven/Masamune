@@ -19,13 +19,10 @@ class StatsTest {
 
     @Test
     fun `test andEquipment (agility)`() {
-        val equipment = listOf(
-            Stats(agility = 5f).apply { percModifier.agility = 1f },
-            Stats(agility = 5f).apply { percModifier.agility = 1f },
-        )
+        val equipment = Stats(10f).apply { percModifier.agility = 2f }
         val stats = Stats(agility = 10f)
 
-        stats andEquipment equipment
+        stats += equipment
         stats.totalAgility shouldBeExactly 60f
     }
 

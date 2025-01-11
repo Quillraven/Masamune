@@ -202,7 +202,8 @@
                 "HELMET",
                 "RING",
                 "SMALL_MANA_POTION",
-                "SCROLL_INFERNO"
+                "SCROLL_INFERNO",
+                "SMALL_HEALTH_POTION"
             ],
             "valuesAsFlags": false
         },
