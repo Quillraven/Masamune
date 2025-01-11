@@ -89,7 +89,8 @@ abstract class ViewModel(
         val bonusLife = bonus[UIStats.LIFE_MAX] ?: 0
         val bonusConstitution = bonus[UIStats.CONSTITUTION] ?: 0
         val bonusMana = bonus[UIStats.MANA_MAX] ?: 0
-        val baseLife = this[UIStats.LIFE_MAX]?.toInt() ?: 0
+        val baseConstitution = this[UIStats.CONSTITUTION]?.toInt() ?: 0
+        val baseLife = (this[UIStats.LIFE_MAX]?.toInt() ?: 0) + baseConstitution * LIFE_PER_CONST
         val baseMana = this[UIStats.MANA_MAX]?.toInt() ?: 0
         this[UIStats.LIFE_MAX] = "${(baseLife + bonusLife + bonusConstitution * LIFE_PER_CONST).toInt()}"
         this[UIStats.MANA_MAX] = "${baseMana + bonusMana}"
