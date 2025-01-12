@@ -110,12 +110,12 @@ class ShopView(
                 itCell.grow()
             }
 
-            tblCell.pad(10f, 10f, 10f, 20f).grow()
+            tblCell.pad(10f, 10f, 10f, 20f).grow().minWidth(450f)
         }
         // bottom right -> item info
         itemInfoTable = itemInfoTable(skin) { tblCell ->
             isVisible = false
-            tblCell.pad(10f, 0f, 10f, 10f).growX().top()
+            tblCell.pad(10f, 0f, 10f, 10f).growX().top().minWidth(370f)
         }
         // confirm buy popup
         popupTable = scene2d.popupTable("", emptyList(), skin)
@@ -260,16 +260,8 @@ class ShopView(
         itemInfoTable.isVisible = activeItems.isNotEmpty()
         itemShopTable.clearEntries()
         itemInfoTable.clearItem()
-        activeItems.forEach { itemShopTable.item(itemName(it.name), it.cost) }
+        activeItems.forEach { itemShopTable.item(it.name, it.cost) }
         updateActiveItem()
-    }
-
-    // shorten item names by a maximum length
-    private fun itemName(name: String): String {
-        if (name.length > 14) {
-            return "${name.substring(0, 14)}."
-        }
-        return name
     }
 
     private fun onBuyItems() {

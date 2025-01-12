@@ -40,7 +40,9 @@ class ShopItemWidget(
         }
 
         label(title, defaultStyle, skin) {
-            it.left()
+            this.setEllipsis(true)
+            this.setEllipsis("..")
+            it.left().minWidth(0f).growX()
         }
         label("${cost}$talonsPostfix", defaultStyle, skin) {
             it.right().padRight(30f).expandX()
