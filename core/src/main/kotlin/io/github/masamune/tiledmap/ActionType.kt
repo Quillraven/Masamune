@@ -8,6 +8,7 @@ enum class ActionType(private val actionFactory: () -> Action) {
     FIREBALL(::FireballAction),
     FIREBOLT(::FireboltAction),
     HEAL(::HealAction),
+    ITEM_HEALTH_RESTORE(::ItemHealthRestoreAction),
     ITEM_MANA_RESTORE(::ItemManaRestoreAction),
     SCROLL_INFERNO(::ScrollInfernoAction),
     TRANSFORM(::TransformAction),

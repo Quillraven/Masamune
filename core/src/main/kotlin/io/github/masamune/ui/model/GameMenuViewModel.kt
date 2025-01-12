@@ -20,11 +20,6 @@ class GameMenuViewModel(
     fun triggerOption(optionIdx: Int) {
         playSndMenuAccept()
         when (optionIdx) {
-            // quit
-            options.lastIndex -> {
-                eventService.fire(GameExitEvent)
-                Gdx.app.exit()
-            }
             // stats
             0 -> {
                 // do not fire option event to avoid overlapping sound effect of two OptionTrigger events
@@ -35,6 +30,16 @@ class GameMenuViewModel(
             1 -> {
                 triggerClose(fireOptionEvent = false)
                 eventService.fire(MenuBeginEvent(MenuType.INVENTORY))
+            }
+            // back to game
+            options.lastIndex - 1 -> {
+                options = emptyList()
+                eventService.fire(MenuEndEvent)
+            }
+            // quit
+            options.lastIndex -> {
+                eventService.fire(GameExitEvent)
+                Gdx.app.exit()
             }
         }
     }
@@ -55,6 +60,7 @@ class GameMenuViewModel(
                 bundle["menu.option.inventory"],
                 bundle["menu.option.quests"],
                 bundle["menu.option.save"],
+                bundle["menu.option.back"],
                 bundle["menu.option.quit"],
             )
         }

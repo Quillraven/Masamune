@@ -107,6 +107,7 @@
   </tile>
   <tile id="10" type="ItemObject">
    <properties>
+    <property name="action" propertytype="ActionType" value="ITEM_HEALTH_RESTORE"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
     <property name="atlasRegionKey" value="items/small_health_potion"/>
     <property name="itemType" propertytype="ItemType" value="SMALL_HEALTH_POTION"/>

@@ -43,6 +43,7 @@ enum class I18NKey(val key: String) {
     ITEM_ELDER_SWORD_NAME("item.elder_sword.name"),
     ITEM_HELMET_DESCRIPTION("item.helmet.description"),
     ITEM_HELMET_NAME("item.helmet.name"),
+    ITEM_INFO_CONSUMABLE("item.info.consumable"),
     ITEM_RING_DESCRIPTION("item.ring.description"),
     ITEM_RING_NAME("item.ring.name"),
     ITEM_SCROLL_INFERNO_DESCRIPTION("item.scroll_inferno.description"),

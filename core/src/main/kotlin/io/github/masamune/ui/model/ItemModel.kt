@@ -13,10 +13,11 @@ data class ItemModel(
     val description: String,
     val category: ItemCategory,
     val image: Drawable?,
+    var consumable: Boolean,
     var selected: Int = 0, // amount to buy/sell
     var amount: Int = 0, // current player amount
 )
 
 fun emptyItemModel(category: ItemCategory, text: String): ItemModel {
-    return ItemModel(ItemType.UNDEFINED, TiledStats(), text, 0, "", category, null)
+    return ItemModel(ItemType.UNDEFINED, TiledStats(), text, 0, "", category, null, false)
 }

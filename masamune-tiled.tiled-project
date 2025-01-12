@@ -24,7 +24,8 @@
                 "SCROLL_INFERNO",
                 "ITEM_MANA_RESTORE",
                 "USE_ITEM",
-                "TRANSFORM"
+                "TRANSFORM",
+                "ITEM_HEALTH_RESTORE"
             ],
             "valuesAsFlags": true
         },

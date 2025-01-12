@@ -4,6 +4,8 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.CachingAtlas
+import io.github.masamune.asset.SoundAsset
+import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.ActionExecutorService.Companion.LIFE_PER_CONST
 import io.github.masamune.combat.action.Action
@@ -116,6 +118,22 @@ fun World.removeEquipment(category: ItemCategory, from: Entity) {
         // move item to inventory
         addItem(existingItem, from, equipItem = false)
     }
+}
+
+// gets called in inventory view when a consumable item is consumed
+fun World.consumeItem(item: Entity, consumer: Entity) {
+    val itemCmp = item[Item]
+    val itemStats = item[Stats]
+    val consumerStats = consumer[Stats]
+
+    consumerStats += itemStats
+    if (itemStats.life > 0f || itemStats.mana > 0f) {
+        consumerStats.life = (consumerStats.life + itemStats.life).coerceAtMost(consumerStats.totalLifeMax)
+        consumerStats.mana = (consumerStats.mana + itemStats.mana).coerceAtMost(consumerStats.totalManaMax)
+        inject<AudioService>().play(SoundAsset.HEAL1)
+    }
+
+    removeItem(itemCmp.type, 1, consumer, removeEntity = true)
 }
 
 fun World.removeItem(type: ItemType, amount: Int, from: Entity, removeEntity: Boolean = true): Boolean {

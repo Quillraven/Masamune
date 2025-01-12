@@ -10,6 +10,7 @@ import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
+import io.github.masamune.consumeItem
 import io.github.masamune.equipItem
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
@@ -57,7 +58,7 @@ class InventoryViewModel(
             val equipmentCmp = player[Equipment]
             updatePlayerEquipment(equipmentCmp)
             val itemPartition = player[Inventory].items.partition { it[Item].category.isEquipment }
-            inventoryItems = itemPartition.second.map { it.toItemModel(world) }
+            inventoryItems = itemPartition.second.map { it.toItemModel(world, withConsumeInfo = true) }
             val playerEquipmentItems = itemPartition.first.map { it.toItemModel(world) }
             equipmentItems = emptyItems + playerEquipmentItems
 
@@ -105,19 +106,33 @@ class InventoryViewModel(
         return playerEntities.first().calcEquipmentDiff(itemModel, world)
     }
 
-    fun equip(category: ItemCategory, itemIdx: Int) = with(world) {
+    fun consume(itemModel: ItemModel) = with(world) {
         val playerEntity = playerEntities.first()
-        val selectedItemModel = equipmentItems.filter { it.category == category }[itemIdx]
+        if (!itemModel.consumable) {
+            return@with
+        }
+
         val inventoryCmp = playerEntity[Inventory]
-        if (selectedItemModel.type == ItemType.UNDEFINED) {
+        val itemEntity = inventoryCmp.items.single { it[Item].type == itemModel.type }
+        world.consumeItem(itemEntity, playerEntity)
+        updatePlayerStats(playerEntity[Stats], playerEntity[Equipment])
+        inventoryItems = inventoryCmp.items
+            .filter { !it[Item].category.isEquipment }
+            .map { it.toItemModel(world, withConsumeInfo = true) }
+    }
+
+    fun equip(itemModel: ItemModel) = with(world) {
+        val playerEntity = playerEntities.first()
+        val inventoryCmp = playerEntity[Inventory]
+        if (itemModel.type == ItemType.UNDEFINED) {
             // special unequip item
-            world.removeEquipment(selectedItemModel.category, playerEntity)
+            world.removeEquipment(itemModel.category, playerEntity)
         } else {
             // equip item (move from inventory to equipment component)
-            val itemEntity = inventoryCmp.items.single { it[Item].type == selectedItemModel.type }
+            val itemEntity = inventoryCmp.items.single { it[Item].type == itemModel.type }
             world.equipItem(itemEntity, playerEntity)
             // do NOT remove the item entity because it still exists. It just got moved to the equipment component items
-            world.removeItem(selectedItemModel.type, 1, playerEntity, removeEntity = false)
+            world.removeItem(itemModel.type, 1, playerEntity, removeEntity = false)
         }
 
         // update equipment ItemModel

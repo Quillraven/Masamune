@@ -64,10 +64,14 @@ private class UiInventoryTest : KtxApplicationAdapter {
     private val eventService by lazy { EventService() }
     private val assetService by lazy { AssetService(ClasspathFileHandleResolver()) }
     private val tiledService by lazy { TiledService(assetService, eventService) }
-    private val world = configureWorld {}
     private val bundle by lazy { I18NBundle.createBundle("ui/messages".toClasspathFile(), Charsets.ISO_8859_1.name()) }
-    private val viewModel by lazy { InventoryViewModel(bundle, audioService, world, eventService) }
     private val audioService by lazy { AudioService(assetService) }
+    private val world = configureWorld {
+        injectables {
+            add(audioService)
+        }
+    }
+    private val viewModel by lazy { InventoryViewModel(bundle, audioService, world, eventService) }
 
     private fun createItem(world: World, type: ItemType, amount: Int = 2): Entity {
         return tiledService.loadItem(world, type, amount)
@@ -115,9 +119,9 @@ private class UiInventoryTest : KtxApplicationAdapter {
                 damage = 0f,
                 armor = 0f,
                 resistance = 0f,
-                life = 10f,
+                life = 1f,
                 lifeMax = 10f,
-                mana = 15f,
+                mana = 1f,
                 manaMax = 15f,
             )
         }

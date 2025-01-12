@@ -255,9 +255,11 @@ class InventoryView(
                 }
             }
 
-            InventoryUiState.ITEMS -> {}
+            InventoryUiState.ITEMS -> {
+                viewModel.consume(inventoryItems[itemTable.selectedEntryIdx])
+            }
             InventoryUiState.EQUIPMENT -> {
-                viewModel.equip(activeCategory, itemTable.selectedEntryIdx)
+                viewModel.equip(activeEquipmentItems[itemTable.selectedEntryIdx])
                 viewModel.playSndMenuAccept()
             }
 
