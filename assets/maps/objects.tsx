@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="14" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="15" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="MapObject">
   <properties>
@@ -302,5 +302,21 @@
    </property>
   </properties>
   <image source="objects/scroll_inferno.png" width="16" height="16"/>
+ </tile>
+ <tile id="15" type="ItemObject">
+  <properties>
+   <property name="action" propertytype="ActionType" value="ITEM_HEALTH_RESTORE"/>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="atlasRegionKey" value="items/small_health_potion"/>
+   <property name="category" propertytype="ItemCategory" value="OTHER"/>
+   <property name="cost" type="int" value="10"/>
+   <property name="itemType" propertytype="ItemType" value="SMALL_HEALTH_POTION"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="life" type="float" value="30"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/small_health_potion.png" width="9" height="11"/>
  </tile>
 </tileset>
