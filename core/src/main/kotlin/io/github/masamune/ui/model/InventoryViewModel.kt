@@ -14,8 +14,10 @@ import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.MenuEndEvent
+import io.github.masamune.removeEquipment
 import io.github.masamune.removeItem
 import io.github.masamune.tiledmap.ItemCategory
+import io.github.masamune.tiledmap.ItemType
 
 class InventoryViewModel(
     bundle: I18NBundle,
@@ -26,6 +28,13 @@ class InventoryViewModel(
 
     private val playerEntities = world.family { all(Player) }
     private lateinit var equipmentBonus: Map<UIStats, Int>
+    private val emptyItems = listOf(
+        emptyItemModel(ItemCategory.WEAPON, "<< ${i18nTxt(I18NKey.MENU_OPTION_CLEAR_ITEM)} >>"),
+        emptyItemModel(ItemCategory.ARMOR, "<< ${i18nTxt(I18NKey.MENU_OPTION_CLEAR_ITEM)} >>"),
+        emptyItemModel(ItemCategory.HELMET, "<< ${i18nTxt(I18NKey.MENU_OPTION_CLEAR_ITEM)} >>"),
+        emptyItemModel(ItemCategory.BOOTS, "<< ${i18nTxt(I18NKey.MENU_OPTION_CLEAR_ITEM)} >>"),
+        emptyItemModel(ItemCategory.ACCESSORY, "<< ${i18nTxt(I18NKey.MENU_OPTION_CLEAR_ITEM)} >>"),
+    )
 
     // view properties
     var playerName by propertyNotify("")
@@ -48,7 +57,8 @@ class InventoryViewModel(
             updatePlayerEquipment(equipmentCmp)
             val itemPartition = player[Inventory].items.partition { it[Item].category.isEquipment }
             inventoryItems = itemPartition.second.map { it.toItemModel(world) }
-            equipmentItems = itemPartition.first.map { it.toItemModel(world) }
+            val playerEquipmentItems = itemPartition.first.map { it.toItemModel(world) }
+            equipmentItems = emptyItems + playerEquipmentItems
 
             val statsCmp = player[Stats]
             val defaultStats = uiMapOf(statsCmp).andEquipmentBonus(equipmentBonus)
@@ -77,17 +87,21 @@ class InventoryViewModel(
 
     fun equip(category: ItemCategory, itemIdx: Int) = with(world) {
         val playerEntity = playerEntities.first()
-        val selectedItemType = equipmentItems.filter { it.category == category }[itemIdx]
-        val itemEntity = playerEntity[Inventory].items.single { it[Item].type == selectedItemType.type }
-
-        // equip item (move from inventory to equipment component)
-        world.equipItem(itemEntity, playerEntity)
-        // do NOT remove the item entity because it still exists. It just got moved to the equipment component items
-        world.removeItem(selectedItemType.type, 1, playerEntity, removeEntity = false)
+        val selectedItemModel = equipmentItems.filter { it.category == category }[itemIdx]
+        if (selectedItemModel.type == ItemType.UNDEFINED) {
+            // special unequip item
+            world.removeEquipment(selectedItemModel.category, playerEntity)
+        } else {
+            // equip item (move from inventory to equipment component)
+            val itemEntity = playerEntity[Inventory].items.single { it[Item].type == selectedItemModel.type }
+            world.equipItem(itemEntity, playerEntity)
+            // do NOT remove the item entity because it still exists. It just got moved to the equipment component items
+            world.removeItem(selectedItemModel.type, 1, playerEntity, removeEntity = false)
+        }
 
         // update equipment ItemModel
         updatePlayerEquipment(playerEntity[Equipment])
-        equipmentItems = playerEntity[Inventory].items
+        equipmentItems = emptyItems + playerEntity[Inventory].items
             .filter { it[Item].category.isEquipment }
             .map { it.toItemModel(world) }
     }

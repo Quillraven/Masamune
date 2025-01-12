@@ -3,6 +3,7 @@ package io.github.masamune.ui.view
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Align
 import io.github.masamune.tiledmap.ItemCategory
+import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.InventoryViewModel
 import io.github.masamune.ui.model.ItemModel
@@ -41,6 +42,10 @@ class InventoryView(
     private var equipmentItems: List<ItemModel> = emptyList()
     private var inventoryItems: List<ItemModel> = emptyList()
     private var activeCategory: ItemCategory = ItemCategory.OTHER
+
+    private val activeEquipmentItems: List<ItemModel>
+        // type UNDEFINED = special unequip item
+        get() = equipmentItems.filter { it.category == activeCategory }
 
     init {
         background = skin.getDrawable("dialog_frame")
@@ -125,6 +130,7 @@ class InventoryView(
         }
         viewModel.onPropertyChange(InventoryViewModel::playerEquipment) {
             playerEquipment = it
+            equipmentStatsTable.clearEquipment()
             playerEquipment.forEach { (category, item) ->
                 equipmentStatsTable.equipmentName(category, item.name)
             }
@@ -132,14 +138,14 @@ class InventoryView(
         viewModel.onPropertyChange(InventoryViewModel::equipmentItems) { newItems ->
             equipmentItems = newItems
             if (state == InventoryUiState.EQUIPMENT) {
-                val activeEquipmentItems = equipmentItems.filter { it.category == activeCategory }
-                updateItemTableAndInfo(activeEquipmentItems, itemTable.selectedEntryIdx)
+                val items = activeEquipmentItems
+                updateItemTableAndInfo(items, itemTable.selectedEntryIdx)
                 equipmentStatsTable.clearDiff()
-                if (itemTable.hasNoEntries()) {
+                if (itemTable.numEntries == 1) {
                     return@onPropertyChange
                 }
 
-                val item = activeEquipmentItems[itemTable.selectedEntryIdx]
+                val item = items[itemTable.selectedEntryIdx]
                 val diff: Map<UIStats, Int> = viewModel.calcDiff(item)
                 diff.forEach { (uiStat, diffValue) ->
                     equipmentStatsTable.diffValue(uiStat, diffValue)
@@ -217,15 +223,21 @@ class InventoryView(
 
     private fun updateEquipment() {
         viewModel.playSndMenuClick()
-        if (itemTable.hasNoEntries()) {
+        equipmentStatsTable.clearDiff()
+        if (itemTable.numEntries == 1) {
             return
         }
 
-        val item = equipmentItems.filter { it.category == activeCategory }[itemTable.selectedEntryIdx]
-        itemInfoTable.item(item.name, item.description, item.image)
+        val item = activeEquipmentItems[itemTable.selectedEntryIdx]
+        if (item.type == ItemType.UNDEFINED) {
+            // special clear equipment item -> don't show it in info table and don't calculate diff
+            itemInfoTable.isVisible = false
+            return
+        }
 
+        itemInfoTable.isVisible = true
+        itemInfoTable.item(item.name, item.description, item.image)
         val diff: Map<UIStats, Int> = viewModel.calcDiff(item)
-        equipmentStatsTable.clearDiff()
         diff.forEach { (uiStat, diffValue) ->
             equipmentStatsTable.diffValue(uiStat, diffValue)
         }
@@ -292,7 +304,7 @@ class InventoryView(
 
         // update item table and item info table
         activeCategory = category
-        updateItemTableAndInfo(equipmentItems.filter { it.category == activeCategory })
+        updateItemTableAndInfo(activeEquipmentItems)
 
         // update diff
         updateEquipment()
@@ -316,6 +328,12 @@ class InventoryView(
         // update item info table
         if (itemTable.hasEntries()) {
             val item = items[itemTable.selectedEntryIdx]
+            if (item.type == ItemType.UNDEFINED) {
+                // ignore special clear equipment item
+                itemInfoTable.isVisible = false
+                return
+            }
+
             itemInfoTable.isVisible = true
             itemInfoTable.clearItem()
             itemInfoTable.item(item.name, item.description, item.image)

@@ -20,6 +20,7 @@ import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
 import io.github.masamune.quest.Quest
 import io.github.masamune.tiledmap.AnimationType
+import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.ItemType
 import ktx.app.gdxError
 import ktx.log.Logger
@@ -102,6 +103,18 @@ fun World.equipItem(itemEntity: Entity, to: Entity) {
         val manaPerc = playerStats.mana / playerStats.totalManaMax
         val newManaMax = playerStats.totalManaMax + itemStats.manaMax
         playerStats.mana = newManaMax * manaPerc
+    }
+}
+
+fun World.removeEquipment(category: ItemCategory, from: Entity) {
+    val equipmentItems = from[Equipment].items
+    log.debug { "Removing equipment $category from $from" }
+
+    // remove currently equipped item, if there is any
+    equipmentItems.singleOrNull { it[Item].category == category }?.let { existingItem ->
+        equipmentItems -= existingItem
+        // move item to inventory
+        addItem(existingItem, from, equipItem = false)
     }
 }
 

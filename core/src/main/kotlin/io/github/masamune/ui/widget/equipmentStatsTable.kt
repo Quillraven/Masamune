@@ -129,6 +129,10 @@ class EquipmentStatsTable(
         equipmentTable.selectedEntry.resumeSelectAnimation()
     }
 
+    fun clearEquipment() {
+        equipmentTable.forEach { it.item("") }
+    }
+
     companion object {
         private fun KTableWidget.statsRow(skin: Skin, name: String): ShopStatsLabel {
             label(name, defaultStyle, skin) {

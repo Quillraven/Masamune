@@ -51,7 +51,7 @@ class EquipmentItemWidget(
             this.color = skin.getColor("dark_grey")
             this.setEllipsis(true)
             this.setEllipsis("..")
-            it.padLeft(10f).align(Align.left).minWidth(0f).growX().row()
+            it.padLeft(30f).align(Align.left).minWidth(0f).growX().row()
         }
     }
 
