@@ -3,13 +3,11 @@ package io.github.masamune.ui.model
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.World
 import io.github.masamune.audio.AudioService
-import io.github.masamune.combat.ActionExecutorService.Companion.LIFE_PER_CONST
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
-import io.github.masamune.component.Stats
 import io.github.masamune.consumeItem
 import io.github.masamune.equipItem
 import io.github.masamune.event.Event
@@ -62,29 +60,8 @@ class InventoryViewModel(
             val playerEquipmentItems = itemPartition.first.map { it.toItemModel(world) }
             equipmentItems = emptyItems + playerEquipmentItems
 
-            updatePlayerStats(player[Stats], equipmentCmp)
+            playerStats = playerStatsWithEquipment(player, world)
         }
-    }
-
-    private fun updatePlayerStats(statsCmp: Stats, equipmentCmp: Equipment) {
-        val equipStats = equipmentCmp.run { world.toStats() }
-        val finalStats = Stats.of(statsCmp).apply {
-            strength += equipStats.strength
-            agility += equipStats.agility
-            intelligence += equipStats.intelligence
-            damage += equipStats.damage
-            armor += equipStats.armor
-            resistance += equipStats.resistance
-
-            val baseLife = lifeMax + constitution * LIFE_PER_CONST
-            lifeMax = baseLife + equipStats.lifeMax + equipStats.constitution * LIFE_PER_CONST
-            manaMax += equipStats.manaMax
-
-            // update constituion AFTER life max was calculated to not include equipment bonus twice
-            constitution += equipStats.constitution
-        }
-        val defaultStats = uiMapOf(finalStats)
-        playerStats = defaultStats
     }
 
     private fun updatePlayerEquipment(equipmentCmp: Equipment) {
@@ -115,7 +92,7 @@ class InventoryViewModel(
         val inventoryCmp = playerEntity[Inventory]
         val itemEntity = inventoryCmp.items.single { it[Item].type == itemModel.type }
         world.consumeItem(itemEntity, playerEntity)
-        updatePlayerStats(playerEntity[Stats], playerEntity[Equipment])
+        playerStats = playerStatsWithEquipment(playerEntity, world)
         inventoryItems = inventoryCmp.items
             .filter { !it[Item].category.isEquipment }
             .map { it.toItemModel(world, withConsumeInfo = true) }
@@ -138,7 +115,7 @@ class InventoryViewModel(
         // update equipment ItemModel
         val equipmentCmp = playerEntity[Equipment]
         updatePlayerEquipment(equipmentCmp)
-        updatePlayerStats(playerEntity[Stats], equipmentCmp)
+        playerStats = playerStatsWithEquipment(playerEntity, world)
         equipmentItems = emptyItems + inventoryCmp.items
             .filter { it[Item].category.isEquipment }
             .map { it.toItemModel(world) }

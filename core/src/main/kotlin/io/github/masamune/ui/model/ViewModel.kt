@@ -262,6 +262,26 @@ abstract class ViewModel(
         }
     }
 
+    fun playerStatsWithEquipment(player: Entity, world: World): Map<UIStats, String> = with(world) {
+        val equipStats = player[Equipment].run { world.toStats() }
+        val finalStats = Stats.of(player[Stats]).apply {
+            strength += equipStats.strength
+            agility += equipStats.agility
+            intelligence += equipStats.intelligence
+            damage += equipStats.damage
+            armor += equipStats.armor
+            resistance += equipStats.resistance
+
+            val baseLife = lifeMax + constitution * LIFE_PER_CONST
+            lifeMax = baseLife + equipStats.lifeMax + equipStats.constitution * LIFE_PER_CONST
+            manaMax += equipStats.manaMax
+
+            // update constituion AFTER life max was calculated to not include equipment bonus twice
+            constitution += equipStats.constitution
+        }
+        return uiMapOf(finalStats)
+    }
+
     companion object {
         // format example: %STAT.MANA%
         private val DESCR_TOKEN_REGEX = "%([A-Z]+)\\.([A-Z]+)%".toRegex()

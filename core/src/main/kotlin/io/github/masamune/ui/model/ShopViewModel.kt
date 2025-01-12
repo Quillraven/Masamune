@@ -8,7 +8,6 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
 import io.github.masamune.component.Name
-import io.github.masamune.component.Stats
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.ShopBeginEvent
@@ -54,7 +53,7 @@ class ShopViewModel(
         with(event.world) {
             // get player stats (this will update the ShopView)
             playerEntity = event.player
-            playerStats = uiMapOf(playerEntity[Stats])
+            playerStats = playerStatsWithEquipment(playerEntity, world)
             playerTalons = playerEntity[Inventory].talons
 
             // get shop items
@@ -163,7 +162,7 @@ class ShopViewModel(
             log.debug { "Adding item of type: ${itemToBuy.type}" }
             val itemToAdd = tiledService.loadItem(world, itemToBuy.type)
             itemToAdd[Item].amount = itemToBuy.selected
-            world.addItem(itemToAdd, playerEntity)
+            world.addItem(itemToAdd, playerEntity, false)
         }
         log.debug { "New inventory:\n${inventoryCmp.items.map { it[Item] }.joinToString("\n")}" }
 

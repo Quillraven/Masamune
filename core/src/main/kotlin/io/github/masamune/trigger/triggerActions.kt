@@ -89,7 +89,7 @@ class TriggerActionAddItem(
     override fun World.onStart() {
         val item: Entity = tiledService.loadItem(this, itemType)
         eventService.fire(PlayerQuestItemBegin(entity, item))
-        addItem(item, entity)
+        addItem(item, entity, true)
         entity[Animation].changeTo = AnimationType.ITEM
         scheduledTask(0.5f) { audioService.play(SoundAsset.QUEST_ITEM) }
     }

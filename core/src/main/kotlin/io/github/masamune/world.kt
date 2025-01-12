@@ -47,7 +47,7 @@ fun World.selectorEntity(target: Entity, confirmed: Boolean) = this.entity {
 fun World.addItem(
     itemEntity: Entity,
     to: Entity,
-    equipItem: Boolean = true,
+    equipItem: Boolean,
 ) {
     val itemCmp = itemEntity[Item]
     val items = to[Inventory].items

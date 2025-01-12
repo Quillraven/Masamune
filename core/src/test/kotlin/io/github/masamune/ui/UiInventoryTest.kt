@@ -45,6 +45,7 @@ import ktx.scene2d.actors
  * Test for [InventoryView].
  * It loads a player with at least two items of each item category (=equipment test), and also
  * a consumable that can be used in the inventory view, and a consumable that can only be used in combat.
+ * When selecting the "Quit" option then the UI gets invisible and the test must be restarted.
  */
 
 fun main() {
