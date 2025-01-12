@@ -3,6 +3,7 @@ package io.github.masamune.ui.model
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.World
 import io.github.masamune.audio.AudioService
+import io.github.masamune.combat.ActionExecutorService.Companion.LIFE_PER_CONST
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
@@ -60,10 +61,29 @@ class InventoryViewModel(
             val playerEquipmentItems = itemPartition.first.map { it.toItemModel(world) }
             equipmentItems = emptyItems + playerEquipmentItems
 
-            val statsCmp = player[Stats]
-            val defaultStats = uiMapOf(statsCmp).andEquipmentBonus(equipmentBonus)
-            playerStats = defaultStats
+            updatePlayerStats(player[Stats], equipmentCmp)
         }
+    }
+
+    private fun updatePlayerStats(statsCmp: Stats, equipmentCmp: Equipment) {
+        val equipStats = equipmentCmp.run { world.toStats() }
+        val finalStats = Stats.of(statsCmp).apply {
+            strength += equipStats.strength
+            agility += equipStats.agility
+            intelligence += equipStats.intelligence
+            damage += equipStats.damage
+            armor += equipStats.armor
+            resistance += equipStats.resistance
+
+            val baseLife = lifeMax + constitution * LIFE_PER_CONST
+            lifeMax = baseLife + equipStats.lifeMax + equipStats.constitution * LIFE_PER_CONST
+            manaMax += equipStats.manaMax
+
+            // update constituion AFTER life max was calculated to not include equipment bonus twice
+            constitution += equipStats.constitution
+        }
+        val defaultStats = uiMapOf(finalStats).andEquipmentBonus(equipmentBonus)
+        playerStats = defaultStats
     }
 
     private fun updatePlayerEquipment(equipmentCmp: Equipment) {
@@ -88,20 +108,23 @@ class InventoryViewModel(
     fun equip(category: ItemCategory, itemIdx: Int) = with(world) {
         val playerEntity = playerEntities.first()
         val selectedItemModel = equipmentItems.filter { it.category == category }[itemIdx]
+        val inventoryCmp = playerEntity[Inventory]
         if (selectedItemModel.type == ItemType.UNDEFINED) {
             // special unequip item
             world.removeEquipment(selectedItemModel.category, playerEntity)
         } else {
             // equip item (move from inventory to equipment component)
-            val itemEntity = playerEntity[Inventory].items.single { it[Item].type == selectedItemModel.type }
+            val itemEntity = inventoryCmp.items.single { it[Item].type == selectedItemModel.type }
             world.equipItem(itemEntity, playerEntity)
             // do NOT remove the item entity because it still exists. It just got moved to the equipment component items
             world.removeItem(selectedItemModel.type, 1, playerEntity, removeEntity = false)
         }
 
         // update equipment ItemModel
-        updatePlayerEquipment(playerEntity[Equipment])
-        equipmentItems = emptyItems + playerEntity[Inventory].items
+        val equipmentCmp = playerEntity[Equipment]
+        updatePlayerEquipment(equipmentCmp)
+        updatePlayerStats(playerEntity[Stats], equipmentCmp)
+        equipmentItems = emptyItems + inventoryCmp.items
             .filter { it[Item].category.isEquipment }
             .map { it.toItemModel(world) }
     }

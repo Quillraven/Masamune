@@ -19,6 +19,7 @@ import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Stats
 import io.github.masamune.event.EventListener
+import io.github.masamune.tiledmap.ItemType
 import ktx.app.gdxError
 import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
@@ -224,8 +225,21 @@ abstract class ViewModel(
                 )
             }
 
-            // compare selected item with currently equipped item
             val equipStats = itemToCompare[Stats]
+            if (selectedItem.type == ItemType.UNDEFINED) {
+                // special unequip item -> return currently equipped item stats
+                return mapOf(
+                    UIStats.STRENGTH to -equipStats.strength.toInt(),
+                    UIStats.AGILITY to -equipStats.agility.toInt(),
+                    UIStats.CONSTITUTION to -equipStats.constitution.toInt(),
+                    UIStats.INTELLIGENCE to -equipStats.intelligence.toInt(),
+                    UIStats.DAMAGE to -equipStats.damage.toInt(),
+                    UIStats.ARMOR to -equipStats.armor.toInt(),
+                    UIStats.RESISTANCE to -equipStats.resistance.toInt(),
+                )
+            }
+
+            // compare selected item with currently equipped item
             return mapOf(
                 UIStats.STRENGTH to (equipStats.strength - selectedStats.strength).toInt(),
                 UIStats.AGILITY to (equipStats.agility - selectedStats.agility).toInt(),

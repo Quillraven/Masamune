@@ -118,6 +118,7 @@ class InventoryView(
         viewModel.onPropertyChange(InventoryViewModel::playerName) { name ->
             equipmentStatsTable.playerName(name)
             isVisible = name.isNotBlank()
+            optionTable.firstOption()
         }
         viewModel.onPropertyChange(InventoryViewModel::playerStats) { stats ->
             equipmentStatsTable.statsValue(UIStats.STRENGTH, stats[UIStats.STRENGTH] ?: "0")
@@ -224,18 +225,9 @@ class InventoryView(
     private fun updateEquipment() {
         viewModel.playSndMenuClick()
         equipmentStatsTable.clearDiff()
-        if (itemTable.numEntries == 1) {
-            return
-        }
-
         val item = activeEquipmentItems[itemTable.selectedEntryIdx]
-        if (item.type == ItemType.UNDEFINED) {
-            // special clear equipment item -> don't show it in info table and don't calculate diff
-            itemInfoTable.isVisible = false
-            return
-        }
-
-        itemInfoTable.isVisible = true
+        // special clear equipment item -> don't show it in info table and don't calculate diff
+        itemInfoTable.isVisible = item.type != ItemType.UNDEFINED
         itemInfoTable.item(item.name, item.description, item.image)
         val diff: Map<UIStats, Int> = viewModel.calcDiff(item)
         diff.forEach { (uiStat, diffValue) ->
