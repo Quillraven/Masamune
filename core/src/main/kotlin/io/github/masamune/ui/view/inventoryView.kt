@@ -52,6 +52,8 @@ class InventoryView(
         setFillParent(true)
 
         val uiStatsLabels = mapOf(
+            UIStats.LIFE to i18nTxt(I18NKey.STATS_LIFE),
+            UIStats.MANA to i18nTxt(I18NKey.STATS_MANA),
             UIStats.STRENGTH to i18nTxt(I18NKey.STATS_STRENGTH),
             UIStats.AGILITY to i18nTxt(I18NKey.STATS_AGILITY),
             UIStats.CONSTITUTION to i18nTxt(I18NKey.STATS_CONSTITUTION),
@@ -121,13 +123,21 @@ class InventoryView(
             optionTable.firstOption()
         }
         viewModel.onPropertyChange(InventoryViewModel::playerStats) { stats ->
-            equipmentStatsTable.statsValue(UIStats.STRENGTH, stats[UIStats.STRENGTH] ?: "0")
-            equipmentStatsTable.statsValue(UIStats.AGILITY, stats[UIStats.AGILITY] ?: "0")
-            equipmentStatsTable.statsValue(UIStats.CONSTITUTION, stats[UIStats.CONSTITUTION] ?: "0")
-            equipmentStatsTable.statsValue(UIStats.INTELLIGENCE, stats[UIStats.INTELLIGENCE] ?: "0")
-            equipmentStatsTable.statsValue(UIStats.DAMAGE, stats[UIStats.DAMAGE] ?: "0")
-            equipmentStatsTable.statsValue(UIStats.ARMOR, stats[UIStats.ARMOR] ?: "0")
-            equipmentStatsTable.statsValue(UIStats.RESISTANCE, stats[UIStats.RESISTANCE] ?: "0")
+            val life = stats.zeroIfMissing(UIStats.LIFE)
+            val lifeMax = stats.zeroIfMissing(UIStats.LIFE_MAX)
+            equipmentStatsTable.statsValue(UIStats.LIFE, "$life / $lifeMax")
+
+            val mana = stats.zeroIfMissing(UIStats.MANA)
+            val manaMax = stats.zeroIfMissing(UIStats.MANA_MAX)
+            equipmentStatsTable.statsValue(UIStats.MANA, "$mana / $manaMax")
+
+            equipmentStatsTable.statsValue(UIStats.STRENGTH, stats.zeroIfMissing(UIStats.STRENGTH))
+            equipmentStatsTable.statsValue(UIStats.AGILITY, stats.zeroIfMissing(UIStats.AGILITY))
+            equipmentStatsTable.statsValue(UIStats.CONSTITUTION, stats.zeroIfMissing(UIStats.CONSTITUTION))
+            equipmentStatsTable.statsValue(UIStats.INTELLIGENCE, stats.zeroIfMissing(UIStats.INTELLIGENCE))
+            equipmentStatsTable.statsValue(UIStats.DAMAGE, stats.zeroIfMissing(UIStats.DAMAGE))
+            equipmentStatsTable.statsValue(UIStats.ARMOR, stats.zeroIfMissing(UIStats.ARMOR))
+            equipmentStatsTable.statsValue(UIStats.RESISTANCE, stats.zeroIfMissing(UIStats.RESISTANCE))
         }
         viewModel.onPropertyChange(InventoryViewModel::playerEquipment) {
             playerEquipment = it
@@ -308,7 +318,11 @@ class InventoryView(
         // update item table
         itemTable.clearEntries()
         items.forEach { item ->
-            itemTable.item(item.name, item.amount)
+            val invItem = itemTable.item(item.name, item.amount)
+            if (item.type == ItemType.UNDEFINED) {
+                // don't show amount for special unequip item
+                invItem.hideAmount()
+            }
         }
         if (idx == -1) {
             itemTable.selectFirstEntry()
@@ -357,6 +371,7 @@ class InventoryView(
             viewModel.playSndMenuAbort()
             optionTable.resumeSelectAnimation()
             equipmentStatsTable.clearDiff()
+            equipmentStatsTable.title("")
             equipmentStatsTable.showEquipment(false)
         }
     }

@@ -15,11 +15,12 @@ class ItemInventoryTable(
     entriesPerRow = 1,
 ), KGroup {
 
-    fun item(title: String, amount: Int) {
-        val shopItem = scene2d.inventoryItem(title, amount, skin) {
+    fun item(title: String, amount: Int): InventoryItemWidget {
+        val invItem = scene2d.inventoryItem(title, amount, skin) {
             select(this@ItemInventoryTable.numEntries == 0)
         }
-        addEntry(shopItem)
+        addEntry(invItem)
+        return invItem
     }
 
 }

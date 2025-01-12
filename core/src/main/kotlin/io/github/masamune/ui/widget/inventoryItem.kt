@@ -53,6 +53,10 @@ class InventoryItemWidget(
         amountLabel.txt = "${value}x"
     }
 
+    fun hideAmount() {
+        amountLabel.txt = ""
+    }
+
 }
 
 @Scene2dDsl

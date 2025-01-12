@@ -48,3 +48,5 @@ abstract class View<T : ViewModel>(
 }
 
 fun Map<UIStats, String>.of(stat: UIStats): String = this[stat] ?: "???"
+
+fun Map<UIStats, String>.zeroIfMissing(stat: UIStats): String = this[stat] ?: "0"

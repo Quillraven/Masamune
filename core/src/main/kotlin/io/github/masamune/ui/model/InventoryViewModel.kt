@@ -82,7 +82,7 @@ class InventoryViewModel(
             // update constituion AFTER life max was calculated to not include equipment bonus twice
             constitution += equipStats.constitution
         }
-        val defaultStats = uiMapOf(finalStats).andEquipmentBonus(equipmentBonus)
+        val defaultStats = uiMapOf(finalStats)
         playerStats = defaultStats
     }
 

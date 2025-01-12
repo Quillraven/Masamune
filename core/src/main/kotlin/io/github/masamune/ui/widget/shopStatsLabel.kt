@@ -1,5 +1,6 @@
 package io.github.masamune.ui.widget
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -21,6 +22,7 @@ import ktx.scene2d.label
 class ShopStatsLabel(
     skin: Skin,
     initValue: String,
+    valueColor: Color,
 ) : KTable, Table(skin) {
 
     private val valueLabel: Label
@@ -28,7 +30,7 @@ class ShopStatsLabel(
 
     init {
         valueLabel = label(initValue, "dialog_content", skin) { cell ->
-            this.color = skin.getColor("dark_grey")
+            this.color = valueColor
             this.setAlignment(Align.left)
             cell.growX()
         }
@@ -62,5 +64,6 @@ class ShopStatsLabel(
 fun <S> KWidget<S>.shopStatsLabel(
     skin: Skin,
     initValue: String,
+    valueColor: Color = skin.getColor("dark_grey"),
     init: (@Scene2dDsl ShopStatsLabel).(S) -> Unit = {},
-): ShopStatsLabel = actor(ShopStatsLabel(skin, initValue), init)
+): ShopStatsLabel = actor(ShopStatsLabel(skin, initValue, valueColor), init)

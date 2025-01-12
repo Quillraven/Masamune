@@ -115,6 +115,10 @@ private class UiInventoryTest : KtxApplicationAdapter {
                 damage = 0f,
                 armor = 0f,
                 resistance = 0f,
+                life = 10f,
+                lifeMax = 10f,
+                mana = 15f,
+                manaMax = 15f,
             )
         }
 

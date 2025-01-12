@@ -1,11 +1,13 @@
 package io.github.masamune.ui.widget
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.ui.model.UIStats
+import io.github.masamune.ui.view.zeroIfMissing
 import ktx.actors.txt
 import ktx.app.gdxError
 import ktx.scene2d.KTable
@@ -53,14 +55,19 @@ class EquipmentStatsTable(
 
             // stats table
             table(skin) { cell ->
+                val normalColor = skin.getColor("dark_grey")
+                val greenColor = skin.getColor("green")
+                val blueColor = skin.getColor("blue")
                 this@EquipmentStatsTable.statsLabels = mapOf(
-                    UIStats.STRENGTH to statsRow(skin, statsNames[UIStats.STRENGTH] ?: ""),
-                    UIStats.AGILITY to statsRow(skin, statsNames[UIStats.AGILITY] ?: ""),
-                    UIStats.CONSTITUTION to statsRow(skin, statsNames[UIStats.CONSTITUTION] ?: ""),
-                    UIStats.INTELLIGENCE to statsRow(skin, statsNames[UIStats.INTELLIGENCE] ?: ""),
-                    UIStats.DAMAGE to statsRow(skin, statsNames[UIStats.DAMAGE] ?: ""),
-                    UIStats.ARMOR to statsRow(skin, statsNames[UIStats.ARMOR] ?: ""),
-                    UIStats.RESISTANCE to statsRow(skin, statsNames[UIStats.RESISTANCE] ?: ""),
+                    UIStats.LIFE to statsRow(skin, statsNames.zeroIfMissing(UIStats.LIFE), greenColor),
+                    UIStats.MANA to statsRow(skin, statsNames.zeroIfMissing(UIStats.MANA), blueColor),
+                    UIStats.STRENGTH to statsRow(skin, statsNames.zeroIfMissing(UIStats.STRENGTH), normalColor),
+                    UIStats.AGILITY to statsRow(skin, statsNames.zeroIfMissing(UIStats.AGILITY), normalColor),
+                    UIStats.CONSTITUTION to statsRow(skin, statsNames.zeroIfMissing(UIStats.CONSTITUTION), normalColor),
+                    UIStats.INTELLIGENCE to statsRow(skin, statsNames.zeroIfMissing(UIStats.INTELLIGENCE), normalColor),
+                    UIStats.DAMAGE to statsRow(skin, statsNames.zeroIfMissing(UIStats.DAMAGE), normalColor),
+                    UIStats.ARMOR to statsRow(skin, statsNames.zeroIfMissing(UIStats.ARMOR), normalColor),
+                    UIStats.RESISTANCE to statsRow(skin, statsNames.zeroIfMissing(UIStats.RESISTANCE), normalColor),
                 )
 
                 cell.align(Align.topLeft).padLeft(10f).row()
@@ -134,13 +141,13 @@ class EquipmentStatsTable(
     }
 
     companion object {
-        private fun KTableWidget.statsRow(skin: Skin, name: String): ShopStatsLabel {
+        private fun KTableWidget.statsRow(skin: Skin, name: String, color: Color): ShopStatsLabel {
             label(name, defaultStyle, skin) {
-                color = skin.getColor("dark_grey")
+                this.color = skin.getColor("dark_grey")
                 setAlignment(Align.right)
                 it.fillX()
             }
-            return shopStatsLabel(skin, "") {
+            return shopStatsLabel(skin, "", color) {
                 it.padLeft(25f).align(Align.left).row()
             }
         }
