@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import ktx.app.gdxError
 import ktx.scene2d.KGroup
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
@@ -12,7 +13,7 @@ interface SelectableWidget {
     fun select(value: Boolean)
 }
 
-abstract class SelectionTable<T>(
+abstract class ScrollableSelectionTable<T>(
     val skin: Skin,
     val entriesPerRow: Int,
     private val firstEntryPredicate: ((T) -> Boolean)? = null,
@@ -119,6 +120,20 @@ abstract class SelectionTable<T>(
         selectedEntryIdx = realIdx
         this[selectedEntryIdx].select(true)
         return true
+    }
+
+    fun singleEntry(predicate: (T) -> Boolean): T {
+        if (hasNoEntries()) {
+            gdxError("There are no entries in $this")
+        }
+
+        for (i in 0 until contentTable.children.size) {
+            if (predicate(this[i])) {
+                return this[i]
+            }
+        }
+
+        gdxError("There is no entry for the given predicate in $this")
     }
 
     fun selectFirstEntry() {

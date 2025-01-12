@@ -25,59 +25,58 @@ class EquipmentStatsTable(
 ) : KTable, Table(skin) {
 
     private val statsLabels: Map<UIStats, ShopStatsLabel>
-    private val equipmentTable: Table
-    private val equipmentLabels: Map<ItemCategory, Label>
+    private val equipmentTable: EquipmentTable
     private val titleLabel: Label
     private val playerNameLabel: Label
 
     init {
         align(Align.topLeft)
 
-        // header: title + character faces + names
-        titleLabel = label(title, "dialog_image_caption", skin) {
-            setAlignment(Align.center)
-            it.padLeft(10f).padRight(10f).padTop(10f).align(Align.topLeft)
-        }
-        table(skin) { cell ->
-            frameImage(skin, "dialog_face_frame", "hero") {
-                it.expandX().right()
+        table(skin) {
+            // header: title + character faces + names
+            this@EquipmentStatsTable.titleLabel = label(title, "dialog_image_caption", skin) {
+                setAlignment(Align.center)
+                it.padLeft(10f).padTop(10f).align(Align.topLeft).row()
             }
-            this@EquipmentStatsTable.playerNameLabel = label("", defaultStyle, skin) {
-                this.color = skin.getColor("dark_grey")
-                it.padLeft(15f).fillX().padRight(25f)
+
+            // characters and name
+            table(skin) { cell ->
+                frameImage(skin, "dialog_face_frame", "hero") {
+                    it.left().fillX()
+                }
+                this@EquipmentStatsTable.playerNameLabel = label("", defaultStyle, skin) {
+                    this.color = skin.getColor("dark_grey")
+                    it.padLeft(15f).fillX().padRight(25f).left()
+                }
+                cell.padLeft(15f).padBottom(15f).top().left().row()
             }
-            cell.padLeft(15f).padBottom(15f).top().right().growX().row()
+
+            // stats table
+            table(skin) { cell ->
+                this@EquipmentStatsTable.statsLabels = mapOf(
+                    UIStats.STRENGTH to statsRow(skin, statsNames[UIStats.STRENGTH] ?: ""),
+                    UIStats.AGILITY to statsRow(skin, statsNames[UIStats.AGILITY] ?: ""),
+                    UIStats.CONSTITUTION to statsRow(skin, statsNames[UIStats.CONSTITUTION] ?: ""),
+                    UIStats.INTELLIGENCE to statsRow(skin, statsNames[UIStats.INTELLIGENCE] ?: ""),
+                    UIStats.DAMAGE to statsRow(skin, statsNames[UIStats.DAMAGE] ?: ""),
+                    UIStats.ARMOR to statsRow(skin, statsNames[UIStats.ARMOR] ?: ""),
+                    UIStats.RESISTANCE to statsRow(skin, statsNames[UIStats.RESISTANCE] ?: ""),
+                )
+
+                cell.align(Align.topLeft).padLeft(10f).row()
+            }
         }
 
         // optional equipment table
-        equipmentTable = table(skin) { cell ->
-            this.align(Align.top)
-
-            this@EquipmentStatsTable.equipmentLabels = mapOf(
-                ItemCategory.WEAPON to equipmentRow(skin, equipmentNames[ItemCategory.WEAPON] ?: ""),
-                ItemCategory.ARMOR to equipmentRow(skin, equipmentNames[ItemCategory.ARMOR] ?: ""),
-                ItemCategory.HELMET to equipmentRow(skin, equipmentNames[ItemCategory.HELMET] ?: ""),
-                ItemCategory.BOOTS to equipmentRow(skin, equipmentNames[ItemCategory.BOOTS] ?: ""),
-                ItemCategory.ACCESSORY to equipmentRow(skin, equipmentNames[ItemCategory.ACCESSORY] ?: ""),
-            )
+        equipmentTable = equipmentTable(skin) { cell ->
+            item(ItemCategory.WEAPON, equipmentNames[ItemCategory.WEAPON] ?: "")
+            item(ItemCategory.ARMOR, equipmentNames[ItemCategory.ARMOR] ?: "")
+            item(ItemCategory.HELMET, equipmentNames[ItemCategory.HELMET] ?: "")
+            item(ItemCategory.BOOTS, equipmentNames[ItemCategory.BOOTS] ?: "")
+            item(ItemCategory.ACCESSORY, equipmentNames[ItemCategory.ACCESSORY] ?: "")
 
             this.isVisible = false
-            cell.align(Align.topLeft).padLeft(10f)
-        }
-
-        // stats table
-        table(skin) { cell ->
-            this@EquipmentStatsTable.statsLabels = mapOf(
-                UIStats.STRENGTH to statsRow(skin, statsNames[UIStats.STRENGTH] ?: ""),
-                UIStats.AGILITY to statsRow(skin, statsNames[UIStats.AGILITY] ?: ""),
-                UIStats.CONSTITUTION to statsRow(skin, statsNames[UIStats.CONSTITUTION] ?: ""),
-                UIStats.INTELLIGENCE to statsRow(skin, statsNames[UIStats.INTELLIGENCE] ?: ""),
-                UIStats.DAMAGE to statsRow(skin, statsNames[UIStats.DAMAGE] ?: ""),
-                UIStats.ARMOR to statsRow(skin, statsNames[UIStats.ARMOR] ?: ""),
-                UIStats.RESISTANCE to statsRow(skin, statsNames[UIStats.RESISTANCE] ?: ""),
-            )
-
-            cell.align(Align.topRight)
+            cell.align(Align.bottomLeft).padBottom(20f).growX()
         }
     }
 
@@ -96,13 +95,7 @@ class EquipmentStatsTable(
     }
 
     fun equipmentName(category: ItemCategory, name: String) {
-        val shortenedName = if (name.length > 14) {
-            "${name.substring(0, 14)}."
-        } else {
-            name
-        }
-        val equipmentLabel = equipmentLabels[category] ?: gdxError("No EquipmentLabel for $category")
-        equipmentLabel.txt = shortenedName
+        equipmentTable.itemName(category, name)
     }
 
     fun title(value: String) {
@@ -117,6 +110,25 @@ class EquipmentStatsTable(
         equipmentTable.isVisible = show
     }
 
+    fun selectEquipment(category: ItemCategory) {
+        equipmentTable.unselectAll()
+        equipmentTable.selectEntry { it.category == category }
+    }
+
+    fun prevEquipment(): Boolean = equipmentTable.prevEntry()
+
+    fun nextEquipment(): Boolean = equipmentTable.nextEntry()
+
+    fun selectedCategory(): ItemCategory = equipmentTable.selectedEntry.category
+
+    fun stopEquipmentSelectAnimation() {
+        equipmentTable.selectedEntry.stopSelectAnimation()
+    }
+
+    fun resumeEquipmentSelectAnimation() {
+        equipmentTable.selectedEntry.resumeSelectAnimation()
+    }
+
     companion object {
         private fun KTableWidget.statsRow(skin: Skin, name: String): ShopStatsLabel {
             label(name, defaultStyle, skin) {
@@ -126,17 +138,6 @@ class EquipmentStatsTable(
             }
             return shopStatsLabel(skin, "") {
                 it.padLeft(25f).align(Align.left).row()
-            }
-        }
-
-        private fun KTableWidget.equipmentRow(skin: Skin, name: String): Label {
-            label(name.substring(0, 3).uppercase(), defaultStyle, skin) {
-                this.color = skin.getColor("dark_grey")
-                it.align(Align.left)
-            }
-            return label("", defaultStyle, skin) {
-                this.color = skin.getColor("dark_grey")
-                it.padLeft(10f).align(Align.left).row()
             }
         }
     }

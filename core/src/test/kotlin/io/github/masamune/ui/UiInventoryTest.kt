@@ -96,10 +96,10 @@ private class UiInventoryTest : KtxApplicationAdapter {
             it += Player()
             it += Inventory(
                 items = mutableEntityBagOf(
-//                    createItem(world, ItemType.ELDER_SWORD),
-//                    createItem(world, ItemType.STUDDED_LEATHER),
-//                    createItem(world, ItemType.HELMET, 1),
-//                    createItem(world, ItemType.BOOTS),
+                    createItem(world, ItemType.ELDER_SWORD),
+                    createItem(world, ItemType.STUDDED_LEATHER),
+                    createItem(world, ItemType.HELMET, 1),
+                    createItem(world, ItemType.BOOTS),
                     createItem(world, ItemType.RING, 1),
                     createItem(world, ItemType.SMALL_MANA_POTION),
                     createItem(world, ItemType.SMALL_HEALTH_POTION),

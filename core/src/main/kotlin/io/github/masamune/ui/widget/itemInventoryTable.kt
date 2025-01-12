@@ -10,7 +10,7 @@ import ktx.scene2d.scene2d
 @Scene2dDsl
 class ItemInventoryTable(
     skin: Skin,
-) : SelectionTable<InventoryItemWidget>(
+) : ScrollableSelectionTable<InventoryItemWidget>(
     skin,
     entriesPerRow = 1,
 ), KGroup {

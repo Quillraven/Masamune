@@ -8,7 +8,7 @@ import ktx.scene2d.actor
 import ktx.scene2d.scene2d
 
 @Scene2dDsl
-class MagicTable(skin: Skin) : SelectionTable<MagicEntryWidget>(
+class MagicTable(skin: Skin) : ScrollableSelectionTable<MagicEntryWidget>(
     skin,
     entriesPerRow = 2,
     firstEntryPredicate = { it.canPerform },

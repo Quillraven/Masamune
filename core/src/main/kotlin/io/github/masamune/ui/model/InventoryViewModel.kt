@@ -75,9 +75,9 @@ class InventoryViewModel(
         return playerEntities.first().calcEquipmentDiff(itemModel, world)
     }
 
-    fun equip(itemIdx: Int) = with(world) {
+    fun equip(category: ItemCategory, itemIdx: Int) = with(world) {
         val playerEntity = playerEntities.first()
-        val selectedItemType = equipmentItems[itemIdx]
+        val selectedItemType = equipmentItems.filter { it.category == category }[itemIdx]
         val itemEntity = playerEntity[Inventory].items.single { it[Item].type == selectedItemType.type }
 
         // equip item (move from inventory to equipment component)

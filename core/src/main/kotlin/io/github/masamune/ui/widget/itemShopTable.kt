@@ -11,7 +11,7 @@ import ktx.scene2d.scene2d
 class ItemShopTable(
     private val talonsPostfix: String,
     skin: Skin,
-) : SelectionTable<ShopItemWidget>(
+) : ScrollableSelectionTable<ShopItemWidget>(
     skin,
     entriesPerRow = 1,
 ), KGroup {

@@ -8,7 +8,7 @@ import ktx.scene2d.actor
 import ktx.scene2d.scene2d
 
 @Scene2dDsl
-class ItemCombatTable(skin: Skin) : SelectionTable<CombatItemWidget>(
+class ItemCombatTable(skin: Skin) : ScrollableSelectionTable<CombatItemWidget>(
     skin,
     entriesPerRow = 2,
 ), KGroup {

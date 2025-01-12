@@ -22,7 +22,7 @@ import ktx.scene2d.actor
 import ktx.scene2d.table
 
 private enum class InventoryUiState {
-    SELECT_OPTION, ITEMS, EQUIPMENT
+    SELECT_OPTION, ITEMS, SELECT_EQUIPMENT, EQUIPMENT
 }
 
 @Scene2dDsl
@@ -40,6 +40,7 @@ class InventoryView(
     private var playerEquipment: Map<ItemCategory, ItemModel> = emptyMap()
     private var equipmentItems: List<ItemModel> = emptyList()
     private var inventoryItems: List<ItemModel> = emptyList()
+    private var activeCategory: ItemCategory = ItemCategory.OTHER
 
     init {
         background = skin.getDrawable("dialog_frame")
@@ -69,35 +70,40 @@ class InventoryView(
 
         // top left -> title, equipment and stats
         equipmentStatsTable = equipmentStatsTable(skin, "", uiEquipmentLabels, uiStatsLabels) {
-            it.growX().align(Align.topLeft).padBottom(70f)
+            it.growX().align(Align.topLeft)
         }
 
         // top right -> inventory options
         table(skin) { tblCell ->
             background = skin.getDrawable("dialog_frame")
-            align(Align.topRight)
 
             this@InventoryView.optionTable = optionTable(skin, options)
 
-            tblCell.top().right().padRight(10f).row()
+            tblCell.top().fillX().width(250f).row()
         }
 
-        // bottom left -> scrollable items + talons
-        table(skin) { tblCell ->
-            background = skin.getDrawable("dialog_frame")
+        table(skin) { outerTblCell ->
+            this.align(Align.topLeft)
 
-            this@InventoryView.itemTable = itemInventoryTable(skin) {
-                isVisible = false
-                it.grow()
+            // bottom left -> scrollable items + talons
+            table(skin) { tblCell ->
+                background = skin.getDrawable("dialog_frame")
+
+                this@InventoryView.itemTable = itemInventoryTable(skin) {
+                    isVisible = false
+                    it.grow()
+                }
+
+                tblCell.growY().left().top().minWidth(450f)
             }
 
-            tblCell.pad(10f, 10f, 10f, 0f).growY().left().minWidth(450f)
-        }
+            // bottom right -> item info
+            this@InventoryView.itemInfoTable = itemInfoTable(skin) { tblCell ->
+                isVisible = false
+                tblCell.expandX().top().right().width(370f)
+            }
 
-        // bottom right -> item info
-        itemInfoTable = itemInfoTable(skin) { tblCell ->
-            isVisible = false
-            tblCell.fillX().top().width(355f).pad(10f, 0f, 0f, 10f)
+            outerTblCell.colspan(2).pad(20f, 10f, 10f, 10f).grow().top().left()
         }
 
         registerOnPropertyChanges()
@@ -123,17 +129,18 @@ class InventoryView(
                 equipmentStatsTable.equipmentName(category, item.name)
             }
         }
-        viewModel.onPropertyChange(InventoryViewModel::equipmentItems) {
-            equipmentItems = it
+        viewModel.onPropertyChange(InventoryViewModel::equipmentItems) { newItems ->
+            equipmentItems = newItems
             if (state == InventoryUiState.EQUIPMENT) {
-                updateItemTableAndInfo(equipmentItems, itemTable.selectedEntryIdx)
+                val activeEquipmentItems = equipmentItems.filter { it.category == activeCategory }
+                updateItemTableAndInfo(activeEquipmentItems, itemTable.selectedEntryIdx)
+                equipmentStatsTable.clearDiff()
                 if (itemTable.hasNoEntries()) {
                     return@onPropertyChange
                 }
 
-                val item = equipmentItems[itemTable.selectedEntryIdx]
+                val item = activeEquipmentItems[itemTable.selectedEntryIdx]
                 val diff: Map<UIStats, Int> = viewModel.calcDiff(item)
-                equipmentStatsTable.clearDiff()
                 diff.forEach { (uiStat, diffValue) ->
                     equipmentStatsTable.diffValue(uiStat, diffValue)
                 }
@@ -164,6 +171,12 @@ class InventoryView(
                 }
             }
 
+            InventoryUiState.SELECT_EQUIPMENT -> {
+                if (equipmentStatsTable.prevEquipment()) {
+                    selectEquipment(equipmentStatsTable.selectedCategory())
+                }
+            }
+
             InventoryUiState.EQUIPMENT -> {
                 if (itemTable.prevEntry()) {
                     updateEquipment()
@@ -188,6 +201,12 @@ class InventoryView(
                 }
             }
 
+            InventoryUiState.SELECT_EQUIPMENT -> {
+                if (equipmentStatsTable.nextEquipment()) {
+                    selectEquipment(equipmentStatsTable.selectedCategory())
+                }
+            }
+
             InventoryUiState.EQUIPMENT -> {
                 if (itemTable.nextEntry()) {
                     updateEquipment()
@@ -202,7 +221,7 @@ class InventoryView(
             return
         }
 
-        val item = equipmentItems[itemTable.selectedEntryIdx]
+        val item = equipmentItems.filter { it.category == activeCategory }[itemTable.selectedEntryIdx]
         itemInfoTable.item(item.name, item.description, item.image)
 
         val diff: Map<UIStats, Int> = viewModel.calcDiff(item)
@@ -216,46 +235,69 @@ class InventoryView(
         when (state) {
             InventoryUiState.SELECT_OPTION -> {
                 when (optionTable.selectedOption) {
-                    0 -> {
-                        state = InventoryUiState.ITEMS
-                        optionTable.stopSelectAnimation()
-
-                        equipmentStatsTable.title(i18nTxt(I18NKey.MENU_OPTION_ITEM))
-                        // update item table and item info table
-                        updateItemTableAndInfo(inventoryItems)
-
-                        viewModel.playSndMenuAccept()
-                    }
-
-                    1 -> {
-                        state = InventoryUiState.EQUIPMENT
-                        optionTable.stopSelectAnimation()
-
-                        equipmentStatsTable.title(i18nTxt(I18NKey.MENU_OPTION_EQUIPMENT))
-                        // update equipment info
-                        equipmentStatsTable.showEquipment(true)
-
-                        // update item table and item info table
-                        updateItemTableAndInfo(equipmentItems)
-
-                        // update diff
-                        updateEquipment()
-
-                        viewModel.playSndMenuAccept()
-                    }
-
-                    else -> {
-                        viewModel.quit()
-                    }
+                    0 -> onSelectItems()
+                    1 -> onSelectEquipment()
+                    else -> viewModel.quit()
                 }
             }
 
             InventoryUiState.ITEMS -> {}
             InventoryUiState.EQUIPMENT -> {
-                viewModel.equip(itemTable.selectedEntryIdx)
+                viewModel.equip(activeCategory, itemTable.selectedEntryIdx)
                 viewModel.playSndMenuAccept()
             }
+
+            InventoryUiState.SELECT_EQUIPMENT -> {
+                onSelectEquipment(equipmentStatsTable.selectedCategory())
+            }
         }
+    }
+
+    private fun onSelectItems() {
+        state = InventoryUiState.ITEMS
+        optionTable.stopSelectAnimation()
+
+        equipmentStatsTable.title(i18nTxt(I18NKey.MENU_OPTION_ITEM))
+        // update item table and item info table
+        updateItemTableAndInfo(inventoryItems)
+
+        viewModel.playSndMenuAccept()
+    }
+
+    private fun onSelectEquipment() {
+        state = InventoryUiState.SELECT_EQUIPMENT
+        equipmentStatsTable.title(i18nTxt(I18NKey.MENU_OPTION_EQUIPMENT))
+        // update equipment info
+        equipmentStatsTable.showEquipment(true)
+        equipmentStatsTable.selectEquipment(ItemCategory.WEAPON)
+        selectEquipment(ItemCategory.WEAPON, playSound = false)
+        viewModel.playSndMenuAccept()
+    }
+
+    private fun selectEquipment(category: ItemCategory, playSound: Boolean = true) {
+        val equippedItem = playerEquipment[category]
+        itemInfoTable.isVisible = equippedItem != null
+        if (equippedItem != null) {
+            itemInfoTable.item(equippedItem.name, equippedItem.description, equippedItem.image)
+        }
+        if (playSound) {
+            viewModel.playSndMenuClick()
+        }
+    }
+
+
+    private fun onSelectEquipment(category: ItemCategory) {
+        state = InventoryUiState.EQUIPMENT
+        equipmentStatsTable.stopEquipmentSelectAnimation()
+
+        // update item table and item info table
+        activeCategory = category
+        updateItemTableAndInfo(equipmentItems.filter { it.category == activeCategory })
+
+        // update diff
+        updateEquipment()
+
+        viewModel.playSndMenuAccept()
     }
 
     private fun updateItemTableAndInfo(items: List<ItemModel>, idx: Int = -1) {
@@ -284,7 +326,19 @@ class InventoryView(
     }
 
     override fun onBackPressed() {
-        if (state == InventoryUiState.EQUIPMENT || state == InventoryUiState.ITEMS) {
+        if (state == InventoryUiState.EQUIPMENT) {
+            state = InventoryUiState.SELECT_EQUIPMENT
+            equipmentStatsTable.resumeEquipmentSelectAnimation()
+            itemTable.clearEntries()
+            itemTable.isVisible = false
+            itemInfoTable.isVisible = false
+            selectEquipment(equipmentStatsTable.selectedCategory())
+            viewModel.playSndMenuAbort()
+            equipmentStatsTable.clearDiff()
+            return
+        }
+
+        if (state == InventoryUiState.SELECT_EQUIPMENT || state == InventoryUiState.ITEMS) {
             itemTable.clearEntries()
             itemInfoTable.clearItem()
             itemTable.isVisible = false
