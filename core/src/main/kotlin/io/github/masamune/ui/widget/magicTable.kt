@@ -51,6 +51,8 @@ class MagicTable(skin: Skin) : SelectionTable<MagicEntryWidget>(
 
     override fun hasNoEntries(): Boolean = count { it.canPerform } == 0
 
+    override fun hasEntries(): Boolean = count { it.canPerform } > 0
+
 }
 
 @Scene2dDsl

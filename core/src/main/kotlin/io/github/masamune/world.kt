@@ -105,7 +105,7 @@ fun World.equipItem(itemEntity: Entity, to: Entity) {
     }
 }
 
-fun World.removeItem(type: ItemType, amount: Int, from: Entity) {
+fun World.removeItem(type: ItemType, amount: Int, from: Entity, removeEntity: Boolean = true): Boolean {
     val items = from[Inventory].items
     val existingItem = items.firstOrNull { it[Item].type == type }
     if (existingItem == null) {
@@ -117,8 +117,13 @@ fun World.removeItem(type: ItemType, amount: Int, from: Entity) {
     if (existingItem[Item].amount <= 0) {
         log.debug { "Removing item of type $type from inventory" }
         items -= existingItem
-        existingItem.remove()
+        if (removeEntity) {
+            existingItem.remove()
+        }
+        return true
     }
+
+    return false
 }
 
 fun World.removeItem(item: Entity, from: Entity) {

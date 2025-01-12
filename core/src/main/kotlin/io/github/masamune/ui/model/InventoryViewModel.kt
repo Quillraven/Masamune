@@ -9,10 +9,12 @@ import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Stats
+import io.github.masamune.equipItem
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.MenuEndEvent
+import io.github.masamune.removeItem
 import io.github.masamune.tiledmap.ItemCategory
 
 class InventoryViewModel(
@@ -24,13 +26,13 @@ class InventoryViewModel(
 
     private val playerEntities = world.family { all(Player) }
     private lateinit var equipmentBonus: Map<UIStats, Int>
-    private lateinit var inventoryItems: List<ItemModel>
-    private lateinit var equipmentItems: List<ItemModel>
-    private lateinit var playerEquipment: Map<ItemCategory, ItemModel>
 
     // view properties
     var playerName by propertyNotify("")
     var playerStats: Map<UIStats, String> by propertyNotify(emptyMap())
+    var playerEquipment: Map<ItemCategory, ItemModel> by propertyNotify(emptyMap())
+    var equipmentItems: List<ItemModel> by propertyNotify(emptyList())
+    var inventoryItems: List<ItemModel> by propertyNotify(emptyList())
 
     override fun onEvent(event: Event) {
         if (event !is MenuBeginEvent || event.type != MenuType.INVENTORY) {
@@ -43,11 +45,7 @@ class InventoryViewModel(
 
             // calculate equipment bonus before setting player stats because StatsView reacts to playerStats change
             val equipmentCmp = player[Equipment]
-            equipmentBonus = equipmentCmp.toUiStatsMap(world)
-            playerEquipment = equipmentCmp.items.map {
-                val itemModel = it.toItemModel(world)
-                itemModel.category to itemModel
-            }.toMap()
+            updatePlayerEquipment(equipmentCmp)
             val itemPartition = player[Inventory].items.partition { it[Item].category.isEquipment }
             inventoryItems = itemPartition.second.map { it.toItemModel(world) }
             equipmentItems = itemPartition.first.map { it.toItemModel(world) }
@@ -58,24 +56,40 @@ class InventoryViewModel(
         }
     }
 
+    private fun updatePlayerEquipment(equipmentCmp: Equipment) {
+        playerEquipment = equipmentCmp.items.map {
+            val itemModel = it.toItemModel(world)
+            itemModel.category to itemModel
+        }.toMap()
+        equipmentBonus = equipmentCmp.toUiStatsMap(world)
+    }
+
     fun quit() {
         eventService.fire(MenuEndEvent)
         eventService.fire(MenuBeginEvent(MenuType.GAME))
-        playSndMenuAccept()
+        // setting player name to blank will hide the inventory view again
+        playerName = ""
     }
 
-    fun items(): List<ItemModel> = inventoryItems
+    fun calcDiff(itemModel: ItemModel): Map<UIStats, Int> {
+        return playerEntities.first().calcEquipmentDiff(itemModel, world)
+    }
 
-    fun item(idx: Int): ItemModel = inventoryItems[idx]
+    fun equip(itemIdx: Int) = with(world) {
+        val playerEntity = playerEntities.first()
+        val selectedItemType = equipmentItems[itemIdx]
+        val itemEntity = playerEntity[Inventory].items.single { it[Item].type == selectedItemType.type }
 
-    fun playerEquipment(): Map<ItemCategory, ItemModel> = playerEquipment
+        // equip item (move from inventory to equipment component)
+        world.equipItem(itemEntity, playerEntity)
+        // do NOT remove the item entity because it still exists. It just got moved to the equipment component items
+        world.removeItem(selectedItemType.type, 1, playerEntity, removeEntity = false)
 
-    fun inventoryEquipment(): List<ItemModel> = equipmentItems
-
-    fun inventoryEquipment(idx: Int): ItemModel = equipmentItems[idx]
-
-    fun calcDiff(itemIdx: Int): Map<UIStats, Int> {
-        return playerEntities.first().calcEquipmentDiff(inventoryEquipment(itemIdx), world)
+        // update equipment ItemModel
+        updatePlayerEquipment(playerEntity[Equipment])
+        equipmentItems = playerEntity[Inventory].items
+            .filter { it[Item].category.isEquipment }
+            .map { it.toItemModel(world) }
     }
 
 }

@@ -35,7 +35,11 @@ class InventoryView(
     private val optionTable: OptionTable
     private val itemTable: ItemInventoryTable
     private val itemInfoTable: ItemInfoTable
+
     private var state = InventoryUiState.SELECT_OPTION
+    private var playerEquipment: Map<ItemCategory, ItemModel> = emptyMap()
+    private var equipmentItems: List<ItemModel> = emptyList()
+    private var inventoryItems: List<ItemModel> = emptyList()
 
     init {
         background = skin.getDrawable("dialog_frame")
@@ -57,7 +61,6 @@ class InventoryView(
             ItemCategory.BOOTS to i18nTxt(I18NKey.ITEM_CATEGORY_BOOTS),
             ItemCategory.ACCESSORY to i18nTxt(I18NKey.ITEM_CATEGORY_ACCESSORY),
         )
-        val title = i18nTxt(I18NKey.MENU_OPTION_ITEM)
         val options = listOf(
             i18nTxt(I18NKey.MENU_OPTION_ITEM),
             i18nTxt(I18NKey.MENU_OPTION_EQUIPMENT),
@@ -65,7 +68,7 @@ class InventoryView(
         )
 
         // top left -> title, equipment and stats
-        equipmentStatsTable = equipmentStatsTable(skin, title, uiEquipmentLabels, uiStatsLabels) {
+        equipmentStatsTable = equipmentStatsTable(skin, "", uiEquipmentLabels, uiStatsLabels) {
             it.growX().align(Align.topLeft).padBottom(70f)
         }
 
@@ -94,7 +97,7 @@ class InventoryView(
         // bottom right -> item info
         itemInfoTable = itemInfoTable(skin) { tblCell ->
             isVisible = false
-            tblCell.fillX().top().width(385f).pad(10f, 0f, 0f, 10f)
+            tblCell.fillX().top().width(355f).pad(10f, 0f, 0f, 10f)
         }
 
         registerOnPropertyChanges()
@@ -103,6 +106,7 @@ class InventoryView(
     override fun registerOnPropertyChanges() {
         viewModel.onPropertyChange(InventoryViewModel::playerName) { name ->
             equipmentStatsTable.playerName(name)
+            isVisible = name.isNotBlank()
         }
         viewModel.onPropertyChange(InventoryViewModel::playerStats) { stats ->
             equipmentStatsTable.statsValue(UIStats.STRENGTH, stats[UIStats.STRENGTH] ?: "0")
@@ -113,6 +117,35 @@ class InventoryView(
             equipmentStatsTable.statsValue(UIStats.ARMOR, stats[UIStats.ARMOR] ?: "0")
             equipmentStatsTable.statsValue(UIStats.RESISTANCE, stats[UIStats.RESISTANCE] ?: "0")
         }
+        viewModel.onPropertyChange(InventoryViewModel::playerEquipment) {
+            playerEquipment = it
+            playerEquipment.forEach { (category, item) ->
+                equipmentStatsTable.equipmentName(category, item.name)
+            }
+        }
+        viewModel.onPropertyChange(InventoryViewModel::equipmentItems) {
+            equipmentItems = it
+            if (state == InventoryUiState.EQUIPMENT) {
+                updateItemTableAndInfo(equipmentItems, itemTable.selectedEntryIdx)
+                if (itemTable.hasNoEntries()) {
+                    return@onPropertyChange
+                }
+
+                val item = equipmentItems[itemTable.selectedEntryIdx]
+                val diff: Map<UIStats, Int> = viewModel.calcDiff(item)
+                equipmentStatsTable.clearDiff()
+                diff.forEach { (uiStat, diffValue) ->
+                    equipmentStatsTable.diffValue(uiStat, diffValue)
+                }
+            }
+        }
+        viewModel.onPropertyChange(InventoryViewModel::inventoryItems) {
+            inventoryItems = it
+            if (state == InventoryUiState.ITEMS) {
+                updateItemTableAndInfo(inventoryItems, itemTable.selectedEntryIdx)
+            }
+        }
+
     }
 
     override fun onUpPressed() {
@@ -125,7 +158,7 @@ class InventoryView(
 
             InventoryUiState.ITEMS -> {
                 if (itemTable.prevEntry()) {
-                    val item = viewModel.item(itemTable.selectedEntryIdx)
+                    val item = inventoryItems[itemTable.selectedEntryIdx]
                     itemInfoTable.item(item.name, item.description, item.image)
                     viewModel.playSndMenuClick()
                 }
@@ -149,7 +182,7 @@ class InventoryView(
 
             InventoryUiState.ITEMS -> {
                 if (itemTable.nextEntry()) {
-                    val item = viewModel.item(itemTable.selectedEntryIdx)
+                    val item = inventoryItems[itemTable.selectedEntryIdx]
                     itemInfoTable.item(item.name, item.description, item.image)
                     viewModel.playSndMenuClick()
                 }
@@ -164,11 +197,15 @@ class InventoryView(
     }
 
     private fun updateEquipment() {
-        val item = viewModel.inventoryEquipment(itemTable.selectedEntryIdx)
-        itemInfoTable.item(item.name, item.description, item.image)
         viewModel.playSndMenuClick()
+        if (itemTable.hasNoEntries()) {
+            return
+        }
 
-        val diff: Map<UIStats, Int> = viewModel.calcDiff(itemTable.selectedEntryIdx)
+        val item = equipmentItems[itemTable.selectedEntryIdx]
+        itemInfoTable.item(item.name, item.description, item.image)
+
+        val diff: Map<UIStats, Int> = viewModel.calcDiff(item)
         equipmentStatsTable.clearDiff()
         diff.forEach { (uiStat, diffValue) ->
             equipmentStatsTable.diffValue(uiStat, diffValue)
@@ -183,8 +220,9 @@ class InventoryView(
                         state = InventoryUiState.ITEMS
                         optionTable.stopSelectAnimation()
 
+                        equipmentStatsTable.title(i18nTxt(I18NKey.MENU_OPTION_ITEM))
                         // update item table and item info table
-                        updateItemTableAndInfo(viewModel.items())
+                        updateItemTableAndInfo(inventoryItems)
 
                         viewModel.playSndMenuAccept()
                     }
@@ -193,14 +231,12 @@ class InventoryView(
                         state = InventoryUiState.EQUIPMENT
                         optionTable.stopSelectAnimation()
 
+                        equipmentStatsTable.title(i18nTxt(I18NKey.MENU_OPTION_EQUIPMENT))
                         // update equipment info
-                        viewModel.playerEquipment().forEach { (category, item) ->
-                            equipmentStatsTable.equipmentName(category, item.name)
-                        }
                         equipmentStatsTable.showEquipment(true)
 
                         // update item table and item info table
-                        updateItemTableAndInfo(viewModel.inventoryEquipment())
+                        updateItemTableAndInfo(equipmentItems)
 
                         // update diff
                         updateEquipment()
@@ -215,24 +251,35 @@ class InventoryView(
             }
 
             InventoryUiState.ITEMS -> {}
-            InventoryUiState.EQUIPMENT -> {}
+            InventoryUiState.EQUIPMENT -> {
+                viewModel.equip(itemTable.selectedEntryIdx)
+                viewModel.playSndMenuAccept()
+            }
         }
     }
 
-    private fun updateItemTableAndInfo(items: List<ItemModel>) {
+    private fun updateItemTableAndInfo(items: List<ItemModel>, idx: Int = -1) {
         // update item table
         itemTable.clearEntries()
         items.forEach { item ->
             itemTable.item(item.name, item.amount)
         }
-        itemTable.selectFirstEntry()
+        if (idx == -1) {
+            itemTable.selectFirstEntry()
+        } else {
+            itemTable.selectEntry(idx)
+        }
         itemTable.isVisible = true
 
         // update item info table
-        items.firstOrNull()?.let { firstItem ->
+        if (itemTable.hasEntries()) {
+            val item = items[itemTable.selectedEntryIdx]
             itemInfoTable.isVisible = true
             itemInfoTable.clearItem()
-            itemInfoTable.item(firstItem.name, firstItem.description, firstItem.image)
+            itemInfoTable.item(item.name, item.description, item.image)
+        } else {
+            itemInfoTable.clearItem()
+            itemInfoTable.isVisible = false
         }
     }
 

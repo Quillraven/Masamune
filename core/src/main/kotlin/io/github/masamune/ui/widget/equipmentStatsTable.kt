@@ -39,12 +39,14 @@ class EquipmentStatsTable(
             it.padLeft(10f).padRight(10f).padTop(10f).align(Align.topLeft)
         }
         table(skin) { cell ->
-            frameImage(skin, "dialog_face_frame", "hero")
+            frameImage(skin, "dialog_face_frame", "hero") {
+                it.expandX().right()
+            }
             this@EquipmentStatsTable.playerNameLabel = label("", defaultStyle, skin) {
                 this.color = skin.getColor("dark_grey")
-                it.padLeft(15f)
+                it.padLeft(15f).fillX().padRight(25f)
             }
-            cell.padLeft(50f).padBottom(15f).row()
+            cell.padLeft(15f).padBottom(15f).top().right().growX().row()
         }
 
         // optional equipment table
@@ -60,7 +62,7 @@ class EquipmentStatsTable(
             )
 
             this.isVisible = false
-            cell.align(Align.topRight)
+            cell.align(Align.topLeft).padLeft(10f)
         }
 
         // stats table
@@ -75,7 +77,7 @@ class EquipmentStatsTable(
                 UIStats.RESISTANCE to statsRow(skin, statsNames[UIStats.RESISTANCE] ?: ""),
             )
 
-            cell.padLeft(40f).align(Align.topLeft)
+            cell.align(Align.topRight)
         }
     }
 
@@ -94,8 +96,13 @@ class EquipmentStatsTable(
     }
 
     fun equipmentName(category: ItemCategory, name: String) {
+        val shortenedName = if (name.length > 14) {
+            "${name.substring(0, 14)}."
+        } else {
+            name
+        }
         val equipmentLabel = equipmentLabels[category] ?: gdxError("No EquipmentLabel for $category")
-        equipmentLabel.txt = name
+        equipmentLabel.txt = shortenedName
     }
 
     fun title(value: String) {
@@ -123,13 +130,13 @@ class EquipmentStatsTable(
         }
 
         private fun KTableWidget.equipmentRow(skin: Skin, name: String): Label {
-            label(name, defaultStyle, skin) {
+            label(name.substring(0, 3).uppercase(), defaultStyle, skin) {
                 this.color = skin.getColor("dark_grey")
-                it.align(Align.right)
+                it.align(Align.left)
             }
             return label("", defaultStyle, skin) {
                 this.color = skin.getColor("dark_grey")
-                it.padLeft(40f).align(Align.left).row()
+                it.padLeft(10f).align(Align.left).row()
             }
         }
     }

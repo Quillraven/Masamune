@@ -69,8 +69,8 @@ private class UiInventoryTest : KtxApplicationAdapter {
     private val viewModel by lazy { InventoryViewModel(bundle, audioService, world, eventService) }
     private val audioService by lazy { AudioService(assetService) }
 
-    private fun createItem(world: World, type: ItemType): Entity {
-        return tiledService.loadItem(world, type, 2)
+    private fun createItem(world: World, type: ItemType, amount: Int = 2): Entity {
+        return tiledService.loadItem(world, type, amount)
     }
 
     override fun create() {
@@ -96,11 +96,11 @@ private class UiInventoryTest : KtxApplicationAdapter {
             it += Player()
             it += Inventory(
                 items = mutableEntityBagOf(
-                    createItem(world, ItemType.ELDER_SWORD),
-                    createItem(world, ItemType.STUDDED_LEATHER),
-                    createItem(world, ItemType.HELMET),
-                    createItem(world, ItemType.BOOTS),
-                    createItem(world, ItemType.RING),
+//                    createItem(world, ItemType.ELDER_SWORD),
+//                    createItem(world, ItemType.STUDDED_LEATHER),
+//                    createItem(world, ItemType.HELMET, 1),
+//                    createItem(world, ItemType.BOOTS),
+                    createItem(world, ItemType.RING, 1),
                     createItem(world, ItemType.SMALL_MANA_POTION),
                     createItem(world, ItemType.SMALL_HEALTH_POTION),
                     createItem(world, ItemType.SCROLL_INFERNO),

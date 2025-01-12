@@ -98,7 +98,9 @@ abstract class SelectionTable<T>(
 
     open fun hasNoEntries(): Boolean = !contentTable.hasChildren()
 
-    private fun selectEntry(idx: Int): Boolean {
+    open fun hasEntries(): Boolean = contentTable.hasChildren()
+
+    fun selectEntry(idx: Int): Boolean {
         if (hasNoEntries()) {
             return false
         }

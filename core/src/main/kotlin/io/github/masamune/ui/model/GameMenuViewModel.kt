@@ -31,6 +31,11 @@ class GameMenuViewModel(
                 triggerClose(fireOptionEvent = false)
                 eventService.fire(MenuBeginEvent(MenuType.STATS))
             }
+            // inventory
+            1 -> {
+                triggerClose(fireOptionEvent = false)
+                eventService.fire(MenuBeginEvent(MenuType.INVENTORY))
+            }
         }
     }
 
