@@ -76,7 +76,8 @@ fun World.addItem(
 
 fun World.equipItem(itemEntity: Entity, to: Entity) {
     val itemCmp = itemEntity[Item]
-    val equipmentItems = to[Equipment].items
+    val equipmentCmp = to[Equipment]
+    val equipmentItems = equipmentCmp.items
     log.debug { "Equipping item ${itemCmp.type}" }
 
     // remove currently equipped item, if there is any
@@ -87,6 +88,7 @@ fun World.equipItem(itemEntity: Entity, to: Entity) {
     }
 
     // equip item
+    val equipStats = equipmentCmp.run { toStats() }
     equipmentItems += itemEntity
 
     // adjust life/mana if necessary
@@ -94,27 +96,52 @@ fun World.equipItem(itemEntity: Entity, to: Entity) {
     if (itemStats.lifeMax != 0f || itemStats.constitution != 0f) {
         // adjust life in case of lifeMax or constitution bonus. Life percentage should remain the same.
         val playerStats = to[Stats]
-        val lifePerc = playerStats.life / playerStats.totalLifeMax
-        val newLifeMax = playerStats.totalLifeMax + itemStats.lifeMax + (itemStats.constitution * LIFE_PER_CONST)
+        val lifeMax = (playerStats.totalLifeMax + equipStats.totalLifeMax)
+        val lifePerc = playerStats.life / lifeMax
+        val newLifeMax = lifeMax + itemStats.lifeMax + (itemStats.constitution * LIFE_PER_CONST)
         playerStats.life = newLifeMax * lifePerc
     }
 
     if (itemStats.manaMax != 0f) {
         // adjust mana in case of manaMax bonus. Mana percentage should remain the same.
         val playerStats = to[Stats]
-        val manaPerc = playerStats.mana / playerStats.totalManaMax
-        val newManaMax = playerStats.totalManaMax + itemStats.manaMax
+        val manaMax = (playerStats.totalManaMax + equipStats.totalManaMax)
+        val manaPerc = playerStats.mana / manaMax
+        val newManaMax = manaMax + itemStats.manaMax
         playerStats.mana = newManaMax * manaPerc
     }
 }
 
 fun World.removeEquipment(category: ItemCategory, from: Entity) {
-    val equipmentItems = from[Equipment].items
+    val equipmentCmp = from[Equipment]
+    val equipmentItems = equipmentCmp.items
     log.debug { "Removing equipment $category from $from" }
 
     // remove currently equipped item, if there is any
     equipmentItems.singleOrNull { it[Item].category == category }?.let { existingItem ->
+        val equipStats = equipmentCmp.run { toStats() }
         equipmentItems -= existingItem
+
+        // adjust life/mana if necessary
+        val itemStats = existingItem[Stats]
+        if (itemStats.lifeMax != 0f || itemStats.constitution != 0f) {
+            // adjust life in case of lifeMax or constitution bonus. Life percentage should remain the same.
+            val playerStats = from[Stats]
+            val lifeMax = (playerStats.totalLifeMax + equipStats.totalLifeMax)
+            val lifePerc = playerStats.life / lifeMax
+            val newLifeMax = lifeMax - itemStats.lifeMax - (itemStats.constitution * LIFE_PER_CONST)
+            playerStats.life = newLifeMax * lifePerc
+        }
+
+        if (itemStats.manaMax != 0f) {
+            // adjust mana in case of manaMax bonus. Mana percentage should remain the same.
+            val playerStats = from[Stats]
+            val manaMax = (playerStats.totalManaMax + equipStats.totalManaMax)
+            val manaPerc = playerStats.mana / manaMax
+            val newManaMax = manaMax - itemStats.manaMax
+            playerStats.mana = newManaMax * manaPerc
+        }
+
         // move item to inventory
         addItem(existingItem, from, equipItem = false)
     }

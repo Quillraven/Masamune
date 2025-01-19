@@ -22,6 +22,7 @@ import io.github.masamune.event.EventListener
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.ItemType
 import ktx.app.gdxError
+import kotlin.math.max
 import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -278,6 +279,10 @@ abstract class ViewModel(
 
             // update constituion AFTER life max was calculated to not include equipment bonus twice
             constitution += equipStats.constitution
+
+            // also keep life and mana within its boundaries
+            life = life.coerceIn(1f, max(totalLifeMax, 1f))
+            mana = mana.coerceIn(1f, max(totalManaMax, 1f))
         }
         return uiMapOf(finalStats)
     }
