@@ -256,7 +256,9 @@ class InventoryView(
             }
 
             InventoryUiState.ITEMS -> {
-                viewModel.consume(inventoryItems[itemTable.selectedEntryIdx])
+                if (itemTable.hasEntries()) {
+                    viewModel.consume(inventoryItems[itemTable.selectedEntryIdx])
+                }
             }
             InventoryUiState.EQUIPMENT -> {
                 viewModel.equip(activeEquipmentItems[itemTable.selectedEntryIdx])
