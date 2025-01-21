@@ -35,7 +35,7 @@ import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.ScreenBgd
-import io.github.masamune.component.Stats
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.EventService
@@ -53,7 +53,6 @@ import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
 import io.github.masamune.system.SelectorSystem
 import io.github.masamune.system.ShakeSystem
-import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.TiledObjectType
@@ -197,17 +196,11 @@ class CombatScreen(
         val aniCmp = with(gameScreenWorld) { gameScreenPlayer[Animation] }
         val nameCmp = with(gameScreenWorld) { gameScreenPlayer[Name] }
         val playerCmp = with(gameScreenWorld) { gameScreenPlayer[Player] }
-        val statsCmp = with(gameScreenWorld) { gameScreenPlayer[Stats] }
-        val equipmentStats: Stats
-        val equipmentActionTypes: List<ActionType>
-        with(gameScreenWorld) {
-            val playerEquipment = gameScreenPlayer[Equipment]
-            equipmentStats = playerEquipment.run { this@with.toStats() }
-            equipmentActionTypes = playerEquipment.run { this@with.toActionTypes() }
-        }
+        val statsCmp = with(gameScreenWorld) { gameScreenPlayer[CharacterStats] }
+        val equipmentActionTypes = with(gameScreenWorld) { gameScreenPlayer[Equipment].items.map { it[Item].actionType } }
         val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
         val xpCmp = with(gameScreenWorld) { gameScreenPlayer[Experience] }
-        // clone OTHER items; they are the only ones that can be used during combat
+        // clone OTHER ItemCategory items; they are the only ones that can be used during combat
         val clonedItems = MutableEntityBag()
         with(gameScreenWorld) {
             gameScreenPlayer[Inventory].items
@@ -222,8 +215,7 @@ class CombatScreen(
             it += nameCmp
             it += playerCmp
             it += xpCmp
-            // combat stats = normal stats + equipment stats
-            it += (Stats.of(statsCmp).withBonus(equipmentStats))
+            it += statsCmp.copy()
             it += Facing(FacingDirection.UP)
             val animationCmp = Animation.ofAnimation(aniCmp)
             animationCmp.changeTo = AnimationType.WALK
@@ -245,8 +237,8 @@ class CombatScreen(
 
     fun updatePlayerAfterVictory(xpGained: Int, talonsGained: Int) {
         // update life and mana
-        val combatStats = with(world) { combatPlayer[Stats] }
-        val gameStats = with(gameScreenWorld) { gameScreenPlayer[Stats] }
+        val combatStats = with(world) { combatPlayer[CharacterStats] }
+        val gameStats = with(gameScreenWorld) { gameScreenPlayer[CharacterStats] }
         gameStats.life = combatStats.life
         gameStats.mana = combatStats.mana
 
@@ -262,8 +254,8 @@ class CombatScreen(
 
     fun updatePlayerAfterDefeat() {
         // update life and mana
-        val combatStats = with(world) { combatPlayer[Stats] }
-        val gameStats = with(gameScreenWorld) { gameScreenPlayer[Stats] }
+        val combatStats = with(world) { combatPlayer[CharacterStats] }
+        val gameStats = with(gameScreenWorld) { gameScreenPlayer[CharacterStats] }
         gameStats.life = 1f
         gameStats.mana = combatStats.mana
 

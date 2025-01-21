@@ -6,7 +6,7 @@ import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.component.AI
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
-import io.github.masamune.component.Stats
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.event.CombatTurnBeginEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.isEntityDead
@@ -24,7 +24,7 @@ class CombatStatePrepareRound(
 
     // sort entities by their agility -> higher agility goes first
     private val comparator = compareEntity(world) { e1, e2 ->
-        (e2[Stats].totalAgility - e1[Stats].totalAgility).toInt()
+        (e2[CharacterStats].agility - e1[CharacterStats].agility).toInt()
     }
     var turn = 0
 
@@ -59,7 +59,7 @@ class CombatStatePrepareRound(
             append("Entity ${entity.id} (")
             append(if (entity has Player) "Player" else "Enemy")
             append("): ")
-            val stats = entity[Stats]
+            val stats = entity[CharacterStats]
             val action = entity[Combat].action
             val targets = entity[Combat].targets
             val buffs = entity[Combat].buffs.joinToString { "${it::class.simpleName}" }

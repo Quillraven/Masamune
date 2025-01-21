@@ -8,7 +8,7 @@ import io.github.masamune.component.Experience
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
-import io.github.masamune.component.Stats
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
@@ -46,8 +46,8 @@ class StatsViewModel(
 
                 // trigger combat view updates
                 playerName = player[Name].name
-                val statsCmp = player[Stats]
-                val defaultStats = uiMapOf(statsCmp, player[Experience], player[Inventory]).andEquipmentBonus(equipmentBonus)
+                val statsCmp = player[CharacterStats]
+                val defaultStats = uiMapOf(statsCmp, player[Experience], player[Inventory])
                 playerStats = defaultStats
             }
         }

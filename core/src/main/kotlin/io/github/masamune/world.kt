@@ -7,18 +7,18 @@ import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
-import io.github.masamune.combat.ActionExecutorService.Companion.LIFE_PER_CONST
 import io.github.masamune.combat.action.Action
 import io.github.masamune.component.Animation
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Player
 import io.github.masamune.component.QuestLog
 import io.github.masamune.component.Remove
 import io.github.masamune.component.Selector
-import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
 import io.github.masamune.quest.Quest
 import io.github.masamune.tiledmap.AnimationType
@@ -28,6 +28,7 @@ import ktx.app.gdxError
 import ktx.log.Logger
 import ktx.math.vec2
 import ktx.math.vec3
+import kotlin.math.max
 
 private val log = Logger("World")
 
@@ -71,6 +72,8 @@ fun World.addItem(
 
     // item not yet in inventory -> add it
     log.debug { "Adding new item of type ${itemCmp.type} to inventory" }
+    // in case equipment is removed and added to inventory, it will have an amount of 0 -> increase it to 1
+    itemCmp.amount = max(1, itemCmp.amount)
     items += itemEntity
 }
 
@@ -78,38 +81,15 @@ fun World.equipItem(itemEntity: Entity, to: Entity) {
     val itemCmp = itemEntity[Item]
     val equipmentCmp = to[Equipment]
     val equipmentItems = equipmentCmp.items
+    val toStats = to[CharacterStats]
     log.debug { "Equipping item ${itemCmp.type}" }
 
     // remove currently equipped item, if there is any
-    equipmentItems.singleOrNull { it[Item].category == itemCmp.category }?.let { existingItem ->
-        equipmentItems -= existingItem
-        // move item to inventory
-        addItem(existingItem, to, equipItem = false)
-    }
+    removeEquipment(itemCmp.category, to)
 
-    // equip item
-    val equipStats = equipmentCmp.run { toStats() }
+    // equip item (= add to equipment and modify stats)
     equipmentItems += itemEntity
-
-    // adjust life/mana if necessary
-    val itemStats = itemEntity[Stats]
-    if (itemStats.lifeMax != 0f || itemStats.constitution != 0f) {
-        // adjust life in case of lifeMax or constitution bonus. Life percentage should remain the same.
-        val playerStats = to[Stats]
-        val lifeMax = (playerStats.totalLifeMax + equipStats.totalLifeMax)
-        val lifePerc = playerStats.life / lifeMax
-        val newLifeMax = lifeMax + itemStats.lifeMax + (itemStats.constitution * LIFE_PER_CONST)
-        playerStats.life = newLifeMax * lifePerc
-    }
-
-    if (itemStats.manaMax != 0f) {
-        // adjust mana in case of manaMax bonus. Mana percentage should remain the same.
-        val playerStats = to[Stats]
-        val manaMax = (playerStats.totalManaMax + equipStats.totalManaMax)
-        val manaPerc = playerStats.mana / manaMax
-        val newManaMax = manaMax + itemStats.manaMax
-        playerStats.mana = newManaMax * manaPerc
-    }
+    toStats += itemEntity[ItemStats]
 }
 
 fun World.removeEquipment(category: ItemCategory, from: Entity) {
@@ -117,30 +97,10 @@ fun World.removeEquipment(category: ItemCategory, from: Entity) {
     val equipmentItems = equipmentCmp.items
     log.debug { "Removing equipment $category from $from" }
 
-    // remove currently equipped item, if there is any
+    // remove currently equipped item, if there is any (=remove from equipment and modify stats)
     equipmentItems.singleOrNull { it[Item].category == category }?.let { existingItem ->
-        val equipStats = equipmentCmp.run { toStats() }
         equipmentItems -= existingItem
-
-        // adjust life/mana if necessary
-        val itemStats = existingItem[Stats]
-        if (itemStats.lifeMax != 0f || itemStats.constitution != 0f) {
-            // adjust life in case of lifeMax or constitution bonus. Life percentage should remain the same.
-            val playerStats = from[Stats]
-            val lifeMax = (playerStats.totalLifeMax + equipStats.totalLifeMax)
-            val lifePerc = playerStats.life / lifeMax
-            val newLifeMax = lifeMax - itemStats.lifeMax - (itemStats.constitution * LIFE_PER_CONST)
-            playerStats.life = newLifeMax * lifePerc
-        }
-
-        if (itemStats.manaMax != 0f) {
-            // adjust mana in case of manaMax bonus. Mana percentage should remain the same.
-            val playerStats = from[Stats]
-            val manaMax = (playerStats.totalManaMax + equipStats.totalManaMax)
-            val manaPerc = playerStats.mana / manaMax
-            val newManaMax = manaMax - itemStats.manaMax
-            playerStats.mana = newManaMax * manaPerc
-        }
+        from[CharacterStats] -= existingItem[ItemStats]
 
         // move item to inventory
         addItem(existingItem, from, equipItem = false)
@@ -150,13 +110,11 @@ fun World.removeEquipment(category: ItemCategory, from: Entity) {
 // gets called in inventory view when a consumable item is consumed
 fun World.consumeItem(item: Entity, consumer: Entity) {
     val itemCmp = item[Item]
-    val itemStats = item[Stats]
-    val consumerStats = consumer[Stats]
+    val itemStats = item[ItemStats]
+    val consumerStats = consumer[CharacterStats]
 
     consumerStats += itemStats
     if (itemStats.life > 0f || itemStats.mana > 0f) {
-        consumerStats.life = (consumerStats.life + itemStats.life).coerceAtMost(consumerStats.totalLifeMax)
-        consumerStats.mana = (consumerStats.mana + itemStats.mana).coerceAtMost(consumerStats.totalManaMax)
         inject<AudioService>().play(SoundAsset.HEAL1)
     }
 
@@ -191,11 +149,11 @@ fun World.removeItem(item: Entity, from: Entity) {
 }
 
 fun World.isEntityDead(entity: Entity): Boolean = with(this) {
-    return entity[Stats].life < 1f
+    return entity[CharacterStats].life < 1f
 }
 
 fun World.isEntityAlive(entity: Entity): Boolean = with(this) {
-    return entity[Stats].life >= 1f
+    return entity[CharacterStats].life >= 1f
 }
 
 fun World.canPerformAction(entity: Entity, action: Action): Boolean {

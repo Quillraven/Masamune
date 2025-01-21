@@ -10,15 +10,21 @@ import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import com.github.quillraven.fleks.configureWorld
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Inventory
+import io.github.masamune.component.Item
+import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
-import io.github.masamune.component.Stats
+import io.github.masamune.equipItem
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.gdxTest
+import io.github.masamune.tiledmap.ActionType
+import io.github.masamune.tiledmap.ItemCategory
+import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.ui.model.MenuType
 import io.github.masamune.ui.model.StatsViewModel
 import io.github.masamune.ui.view.statsView
@@ -55,33 +61,43 @@ private class UiStatsTest : KtxApplicationAdapter {
         }
         eventService += stage
 
-        // create equipment
-        val equipment = mutableEntityBagOf(
-            world.entity { it += Stats(strength = 10f) },
-            world.entity { it += Stats(arcaneStrike = 0.2f) },
-            world.entity { it += Stats(lifeMax = 50f, manaMax = 50f) },
-            world.entity { it += Stats(constitution = 10f) },
-        )
-
         // create player
-        world.entity {
+        val player = world.entity {
             it += Player()
             it += Inventory(talons = 100)
             it += Name("Test Hero")
             it += Experience(level = 2)
-            it += Stats(
+            it += CharacterStats(
                 strength = 10f,
-                lifeMax = 100f,
-                life = 100f,
-                manaMax = 30f,
-                mana = 30f,
+                baseLife = 100f,
+                baseMana = 30f,
                 criticalStrike = 0.15f,
                 arcaneStrike = -0.25f,
                 physicalEvade = 1f,
                 magicalEvade = 1.25f,
             )
-            it += Equipment(items = equipment)
+            it += Equipment()
         }
+
+        // create equipment
+        mutableEntityBagOf(
+            world.entity {
+                it += Item(ItemType.HELMET, 0, ItemCategory.HELMET, "", ActionType.UNDEFINED)
+                it += ItemStats(strength = 10f)
+            },
+            world.entity {
+                it += Item(ItemType.BOOTS, 0, ItemCategory.BOOTS, "", ActionType.UNDEFINED)
+                it += ItemStats(arcaneStrike = 0.2f)
+            },
+            world.entity {
+                it += Item(ItemType.STUDDED_LEATHER, 0, ItemCategory.ARMOR, "", ActionType.UNDEFINED)
+                it += ItemStats(life = 50f, mana = 50f)
+            },
+            world.entity {
+                it += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED)
+                it += ItemStats(constitution = 10f)
+            },
+        ).forEach { world.equipItem(it, player) }
 
         eventService.fire(MenuBeginEvent(MenuType.STATS))
     }
@@ -92,7 +108,7 @@ private class UiStatsTest : KtxApplicationAdapter {
 
     private fun updatePlayer(lifePerc: Float, manaPerc: Float, xpPerc: Float) = with(world) {
         val playerEntity = family { all(Player) }.first()
-        val stats = playerEntity[Stats]
+        val stats = playerEntity[CharacterStats]
         stats.life = stats.lifeMax * lifePerc
         stats.mana = stats.manaMax * manaPerc
         val experience = playerEntity[Experience]

@@ -22,7 +22,7 @@ import io.github.masamune.component.Equipment
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
-import io.github.masamune.component.Stats
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.gdxTest
@@ -112,19 +112,19 @@ private class UiInventoryTest : KtxApplicationAdapter {
                 )
             )
             it += Equipment()
-            it += Stats(
+            it += CharacterStats(
                 strength = 10f,
                 agility = 1f,
                 constitution = 2f,
                 intelligence = 5f,
-                damage = 0f,
+                baseDamage = 0f,
                 armor = 0f,
                 resistance = 0f,
-                life = 1f,
-                lifeMax = 10f,
-                mana = 1f,
-                manaMax = 15f,
+                baseLife = 10f,
+                baseMana = 15f,
             )
+            it[CharacterStats].life = 1f
+            it[CharacterStats].mana = 1f
         }
 
         eventService.fire(MenuBeginEvent(MenuType.INVENTORY))

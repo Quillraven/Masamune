@@ -26,11 +26,13 @@ import io.github.masamune.combat.effect.EffectStack
 import io.github.masamune.combat.effect.HealEffect
 import io.github.masamune.combat.effect.SfxEffect
 import io.github.masamune.combat.effect.SoundEffect
+import io.github.masamune.component.CharacterStats
+import io.github.masamune.component.CharacterStats.Companion.MAG_DAM_PER_INT
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Item
+import io.github.masamune.component.ItemStats
 import io.github.masamune.component.MoveBy
 import io.github.masamune.component.Player
-import io.github.masamune.component.Stats
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatMissEvent
@@ -97,8 +99,11 @@ class ActionExecutorService(
     inline val deltaTime: Float
         get() = world.deltaTime
 
-    inline val Entity.stats: Stats
-        get() = with(world) { this@stats[Stats] }
+    inline val Entity.stats: CharacterStats
+        get() = with(world) { this@stats[CharacterStats] }
+
+    inline val Entity.itemStats: ItemStats
+        get() = with(world) { this@itemStats[ItemStats] }
 
     inline val Entity.position: Vector3
         get() = with(world) { this@position[Transform].position }
@@ -184,15 +189,15 @@ class ActionExecutorService(
                     // action is not a use item action -> reduce mana cost of source entity
                     val amount = -action.manaCost.toFloat()
                     with(world) {
-                        val targetStats = source[Stats]
-                        targetStats.mana = (targetStats.mana + amount).coerceIn(0f, targetStats.totalManaMax)
+                        val targetStats = source[CharacterStats]
+                        targetStats.mana = (targetStats.mana + amount).coerceIn(0f, targetStats.manaMax)
                         if (amount != 0f) {
                             eventService.fire(
                                 CombatEntityManaUpdateEvent(
                                     source,
                                     abs(amount),
                                     targetStats.mana,
-                                    targetStats.totalManaMax,
+                                    targetStats.manaMax,
                                     state
                                 )
                             )
@@ -243,8 +248,8 @@ class ActionExecutorService(
         }
 
         // will target evade?
-        val targetStats = realTarget[Stats]
-        val evadeChance = targetStats.totalPhysicalEvade
+        val targetStats = realTarget[CharacterStats]
+        val evadeChance = targetStats.physicalEvade
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
             eventService.fire(CombatMissEvent(realTarget))
             effectStack.addLast(SoundEffect(source, realTarget, SoundAsset.ATTACK_MISS))
@@ -255,18 +260,18 @@ class ActionExecutorService(
         }
 
         // add strength to physical damage
-        val sourceStats = source[Stats]
-        var damage = (sourceStats.totalStrength * DAM_PER_STR) + sourceStats.totalDamage
+        val sourceStats = source[CharacterStats]
+        var damage = sourceStats.damage
 
         // critical strike?
-        val critChance = sourceStats.totalCriticalStrike
+        val critChance = sourceStats.criticalStrike
         val isCritical = critChance > 0f && MathUtils.random() <= critChance
         if (isCritical) {
             damage *= 2f
         }
 
         // reduce damage by armor
-        val armor = targetStats.totalArmor
+        val armor = targetStats.armor
         val reduction = 100f / (100f + armor)
         damage *= reduction
 
@@ -347,7 +352,7 @@ class ActionExecutorService(
 
         // will target evade?
         val targetStats = realTarget.stats
-        val evadeChance = targetStats.totalMagicalEvade
+        val evadeChance = targetStats.magicalEvade
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
             eventService.fire(CombatMissEvent(realTarget))
             ignoreDamageCalls = false
@@ -355,18 +360,18 @@ class ActionExecutorService(
         }
 
         // add intelligence to magic damage
-        val sourceStats = source[Stats]
-        var damage = amount + (sourceStats.totalIntelligence * DAM_PER_INT)
+        val sourceStats = source[CharacterStats]
+        var damage = amount + (sourceStats.intelligence * MAG_DAM_PER_INT)
 
         // arcane strike?
-        val critChance = sourceStats.totalArcaneStrike
+        val critChance = sourceStats.arcaneStrike
         val isCritical = critChance > 0f && MathUtils.random() <= critChance
         if (isCritical) {
             damage *= 1.5f
         }
 
         // reduce damage by resistance
-        val resistance = targetStats.totalResistance
+        val resistance = targetStats.resistance
         val reduction = 75f / (75f + resistance)
         damage *= reduction
 
@@ -452,7 +457,7 @@ class ActionExecutorService(
     }
 
     fun hasMana(entity: Entity, amount: Int): Boolean = with(world) {
-        entity[Stats].mana >= amount
+        entity[CharacterStats].mana >= amount
     }
 
     private fun clearAction() = with(world) {
@@ -528,9 +533,6 @@ class ActionExecutorService(
     companion object {
         private val log = logger<ActionExecutorService>()
         private const val PERFORM_OFFSET = 0.75f // how many units will a unit move up/down when performing its action
-        private const val DAM_PER_STR = 1 / 2f
-        private const val DAM_PER_INT = 1 / 4f
-        const val LIFE_PER_CONST = 10f
     }
 }
 

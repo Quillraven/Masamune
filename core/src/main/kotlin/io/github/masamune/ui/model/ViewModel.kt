@@ -10,19 +10,19 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
-import io.github.masamune.combat.ActionExecutorService.Companion.LIFE_PER_CONST
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Name
-import io.github.masamune.component.Stats
 import io.github.masamune.event.EventListener
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.ItemType
 import ktx.app.gdxError
-import kotlin.math.max
+import kotlin.math.round
 import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -53,20 +53,20 @@ abstract class ViewModel(
 
         components.forEach { component ->
             when (component) {
-                is Stats -> {
+                is CharacterStats -> {
                     result += UIStats.AGILITY to "${component.agility.toInt()}"
-                    result += UIStats.ARCANE_STRIKE to "${(component.arcaneStrike * 100).toInt()}%"
+                    result += UIStats.ARCANE_STRIKE to "${round((component.arcaneStrike * 100)).toInt()}%"
                     result += UIStats.ARMOR to "${component.armor.toInt()}"
                     result += UIStats.CONSTITUTION to "${component.constitution.toInt()}"
-                    result += UIStats.CRITICAL_STRIKE to "${(component.criticalStrike * 100).toInt()}%"
+                    result += UIStats.CRITICAL_STRIKE to "${round((component.criticalStrike * 100)).toInt()}%"
                     result += UIStats.DAMAGE to "${component.damage.toInt()}"
                     result += UIStats.INTELLIGENCE to "${component.intelligence.toInt()}"
                     result += UIStats.LIFE to "${component.life.toInt()}"
                     result += UIStats.LIFE_MAX to "${component.lifeMax.toInt()}"
-                    result += UIStats.MAGICAL_EVADE to "${(component.magicalEvade * 100).toInt()}%"
+                    result += UIStats.MAGICAL_EVADE to "${round((component.magicalEvade * 100)).toInt()}%"
                     result += UIStats.MANA to "${component.mana.toInt()}"
                     result += UIStats.MANA_MAX to "${component.manaMax.toInt()}"
-                    result += UIStats.PHYSICAL_EVADE to "${(component.physicalEvade * 100).toInt()}%"
+                    result += UIStats.PHYSICAL_EVADE to "${round((component.physicalEvade * 100)).toInt()}%"
                     result += UIStats.RESISTANCE to "${component.resistance.toInt()}"
                     result += UIStats.STRENGTH to "${component.strength.toInt()}"
                 }
@@ -88,18 +88,6 @@ abstract class ViewModel(
         return result
     }
 
-    fun MutableMap<UIStats, String>.andEquipmentBonus(bonus: Map<UIStats, Int>): MutableMap<UIStats, String> {
-        val bonusLife = bonus[UIStats.LIFE_MAX] ?: 0
-        val bonusConstitution = bonus[UIStats.CONSTITUTION] ?: 0
-        val bonusMana = bonus[UIStats.MANA_MAX] ?: 0
-        val baseConstitution = this[UIStats.CONSTITUTION]?.toInt() ?: 0
-        val baseLife = (this[UIStats.LIFE_MAX]?.toInt() ?: 0) + baseConstitution * LIFE_PER_CONST
-        val baseMana = this[UIStats.MANA_MAX]?.toInt() ?: 0
-        this[UIStats.LIFE_MAX] = "${(baseLife + bonusLife + bonusConstitution * LIFE_PER_CONST).toInt()}"
-        this[UIStats.MANA_MAX] = "${baseMana + bonusMana}"
-        return this
-    }
-
     fun i18nTxt(key: I18NKey): String = bundle[key]
 
     // function to get game object descriptions like for items.
@@ -116,21 +104,21 @@ abstract class ViewModel(
     }
 
     private fun replaceStatToken(statName: String, entity: Entity, world: World): String = with(world) {
-        val stats = entity[Stats]
+        val stats = entity[ItemStats]
         when (statName) {
             "AGI" -> "${stats.agility.toInt()}"
-            "ARCSTR" -> "${(stats.arcaneStrike * 100).toInt()}%"
+            "ARCSTR" -> "${round((stats.arcaneStrike * 100)).toInt()}%"
             "ARMOR" -> "${stats.armor.toInt()}"
             "CONST" -> "${stats.constitution.toInt()}"
-            "CRISTR" -> "${(stats.criticalStrike * 100).toInt()}%"
+            "CRISTR" -> "${round((stats.criticalStrike * 100)).toInt()}%"
             "DAMAGE" -> "${stats.damage.toInt()}"
             "INT" -> "${stats.intelligence.toInt()}"
             "LIFE" -> "${stats.life.toInt()}"
-            "MAXLIFE" -> "${stats.lifeMax.toInt()}"
-            "MAGEVA" -> "${(stats.magicalEvade * 100).toInt()}%"
+            "MAXLIFE" -> "${stats.life.toInt()}"
+            "MAGEVA" -> "${round((stats.magicalEvade * 100)).toInt()}%"
             "MANA" -> "${stats.mana.toInt()}"
-            "MAXMANA" -> "${stats.manaMax.toInt()}"
-            "PHYEVA" -> "${(stats.physicalEvade * 100).toInt()}%"
+            "MAXMANA" -> "${stats.mana.toInt()}"
+            "PHYEVA" -> "${round((stats.physicalEvade * 100)).toInt()}%"
             "RES" -> "${stats.resistance.toInt()}"
             "STR" -> "${stats.strength.toInt()}"
             else -> gdxError("Unsupported stat: $statName")
@@ -157,22 +145,21 @@ abstract class ViewModel(
     }
 
     fun Equipment.toUiStatsMap(world: World): Map<UIStats, Int> = with(world) {
+        val equipmentStats = this@toUiStatsMap.items.map { it[ItemStats] }
         return UIStats.entries.associateWith { uiStat ->
-            this@toUiStatsMap.items
-                .map { it[Stats] }
-                .sumOf {
+            equipmentStats.sumOf {
                     when (uiStat) {
                         UIStats.AGILITY -> it.agility.toInt()
-                        UIStats.ARCANE_STRIKE -> (it.arcaneStrike * 100).toInt()
+                        UIStats.ARCANE_STRIKE -> round((it.arcaneStrike * 100)).toInt()
                         UIStats.ARMOR -> it.armor.toInt()
                         UIStats.CONSTITUTION -> it.constitution.toInt()
-                        UIStats.CRITICAL_STRIKE -> (it.criticalStrike * 100).toInt()
+                        UIStats.CRITICAL_STRIKE -> round((it.criticalStrike * 100)).toInt()
                         UIStats.DAMAGE -> it.damage.toInt()
                         UIStats.INTELLIGENCE -> it.intelligence.toInt()
-                        UIStats.LIFE_MAX -> it.lifeMax.toInt()
-                        UIStats.MAGICAL_EVADE -> (it.magicalEvade * 100).toInt()
-                        UIStats.MANA_MAX -> it.manaMax.toInt()
-                        UIStats.PHYSICAL_EVADE -> (it.physicalEvade * 100).toInt()
+                        UIStats.LIFE_MAX -> it.life.toInt()
+                        UIStats.MAGICAL_EVADE -> round((it.magicalEvade * 100)).toInt()
+                        UIStats.MANA_MAX -> it.mana.toInt()
+                        UIStats.PHYSICAL_EVADE -> round((it.physicalEvade * 100)).toInt()
                         UIStats.RESISTANCE -> it.resistance.toInt()
                         UIStats.STRENGTH -> it.strength.toInt()
                         else -> 0
@@ -181,13 +168,28 @@ abstract class ViewModel(
         }
     }
 
+    private fun ItemStats.toUiStatsMap(): Map<UIStats, Int> = mapOf(
+        UIStats.AGILITY to this@toUiStatsMap.agility.toInt(),
+        UIStats.ARCANE_STRIKE to round((this@toUiStatsMap.arcaneStrike * 100)).toInt(),
+        UIStats.ARMOR to this@toUiStatsMap.armor.toInt(),
+        UIStats.CONSTITUTION to this@toUiStatsMap.constitution.toInt(),
+        UIStats.CRITICAL_STRIKE to round((this@toUiStatsMap.criticalStrike * 100)).toInt(),
+        UIStats.DAMAGE to this@toUiStatsMap.damage.toInt(),
+        UIStats.INTELLIGENCE to this@toUiStatsMap.intelligence.toInt(),
+        UIStats.LIFE_MAX to this@toUiStatsMap.lifeMax.toInt(),
+        UIStats.MAGICAL_EVADE to round((this@toUiStatsMap.magicalEvade * 100)).toInt(),
+        UIStats.MANA_MAX to this@toUiStatsMap.manaMax.toInt(),
+        UIStats.PHYSICAL_EVADE to round((this@toUiStatsMap.physicalEvade * 100)).toInt(),
+        UIStats.RESISTANCE to this@toUiStatsMap.resistance.toInt(),
+        UIStats.STRENGTH to this@toUiStatsMap.strength.toInt(),
+    )
+
     fun Entity.toItemModel(world: World, withConsumeInfo: Boolean = false): ItemModel = with(world) {
         val itemEntity = this@toItemModel
         // and transform items into UI ItemModel objects
         val (type, cost, category, descriptionKey, actionType, amount, onlyCombat) = itemEntity[Item]
         val itemName = itemEntity[Name].name
         val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
-        val itemStats = itemEntity.getOrNull(Stats) ?: io.github.masamune.tiledmap.TiledStats.NULL_STATS
 
         val i18nName = bundle["item.$itemName.name"]
         val isConsumable = actionType != ActionType.UNDEFINED && !onlyCombat
@@ -201,7 +203,7 @@ abstract class ViewModel(
 
         return ItemModel(
             type = type,
-            stats = itemStats,
+            stats = itemEntity.getOrNull(ItemStats)?.toUiStatsMap() ?: emptyMap(),
             name = i18nName,
             cost = cost,
             description = i18nDescription,
@@ -226,17 +228,17 @@ abstract class ViewModel(
                 // player has no item of given type selected
                 // -> diff is the stats of the selected item
                 return mapOf(
-                    UIStats.STRENGTH to selectedStats.strength.toInt(),
-                    UIStats.AGILITY to selectedStats.agility.toInt(),
-                    UIStats.CONSTITUTION to selectedStats.constitution.toInt(),
-                    UIStats.INTELLIGENCE to selectedStats.intelligence.toInt(),
-                    UIStats.DAMAGE to selectedStats.damage.toInt(),
-                    UIStats.ARMOR to selectedStats.armor.toInt(),
-                    UIStats.RESISTANCE to selectedStats.resistance.toInt(),
+                    UIStats.STRENGTH to selectedStats.getOrDefault(UIStats.STRENGTH, 0),
+                    UIStats.AGILITY to selectedStats.getOrDefault(UIStats.AGILITY, 0),
+                    UIStats.CONSTITUTION to selectedStats.getOrDefault(UIStats.CONSTITUTION, 0),
+                    UIStats.INTELLIGENCE to selectedStats.getOrDefault(UIStats.INTELLIGENCE, 0),
+                    UIStats.DAMAGE to selectedStats.getOrDefault(UIStats.DAMAGE, 0),
+                    UIStats.ARMOR to selectedStats.getOrDefault(UIStats.ARMOR, 0),
+                    UIStats.RESISTANCE to selectedStats.getOrDefault(UIStats.RESISTANCE, 0),
                 )
             }
 
-            val equipStats = itemToCompare[Stats]
+            val equipStats = itemToCompare[ItemStats]
             if (selectedItem.type == ItemType.UNDEFINED) {
                 // special unequip item -> return currently equipped item stats
                 return mapOf(
@@ -252,39 +254,24 @@ abstract class ViewModel(
 
             // compare selected item with currently equipped item
             return mapOf(
-                UIStats.STRENGTH to (equipStats.strength - selectedStats.strength).toInt(),
-                UIStats.AGILITY to (equipStats.agility - selectedStats.agility).toInt(),
-                UIStats.CONSTITUTION to (equipStats.constitution - selectedStats.constitution).toInt(),
-                UIStats.INTELLIGENCE to (equipStats.intelligence - selectedStats.intelligence).toInt(),
-                UIStats.DAMAGE to (equipStats.damage - selectedStats.damage).toInt(),
-                UIStats.ARMOR to (equipStats.armor - selectedStats.armor).toInt(),
-                UIStats.RESISTANCE to (equipStats.resistance - selectedStats.resistance).toInt(),
+                UIStats.STRENGTH to (equipStats.strength - selectedStats.getOrDefault(UIStats.STRENGTH, 0)).toInt(),
+                UIStats.AGILITY to (equipStats.agility - selectedStats.getOrDefault(UIStats.AGILITY, 0)).toInt(),
+                UIStats.CONSTITUTION to (equipStats.constitution - selectedStats.getOrDefault(
+                    UIStats.CONSTITUTION,
+                    0
+                )).toInt(),
+                UIStats.INTELLIGENCE to (equipStats.intelligence - selectedStats.getOrDefault(
+                    UIStats.INTELLIGENCE,
+                    0
+                )).toInt(),
+                UIStats.DAMAGE to (equipStats.damage - selectedStats.getOrDefault(UIStats.DAMAGE, 0)).toInt(),
+                UIStats.ARMOR to (equipStats.armor - selectedStats.getOrDefault(UIStats.ARMOR, 0)).toInt(),
+                UIStats.RESISTANCE to (equipStats.resistance - selectedStats.getOrDefault(
+                    UIStats.RESISTANCE,
+                    0
+                )).toInt(),
             )
         }
-    }
-
-    fun playerStatsWithEquipment(player: Entity, world: World): Map<UIStats, String> = with(world) {
-        val equipStats = player[Equipment].run { world.toStats() }
-        val finalStats = Stats.of(player[Stats]).apply {
-            strength += equipStats.strength
-            agility += equipStats.agility
-            intelligence += equipStats.intelligence
-            damage += equipStats.damage
-            armor += equipStats.armor
-            resistance += equipStats.resistance
-
-            val baseLife = lifeMax + constitution * LIFE_PER_CONST
-            lifeMax = baseLife + equipStats.lifeMax + equipStats.constitution * LIFE_PER_CONST
-            manaMax += equipStats.manaMax
-
-            // update constituion AFTER life max was calculated to not include equipment bonus twice
-            constitution += equipStats.constitution
-
-            // also keep life and mana within its boundaries
-            life = life.coerceIn(1f, max(totalLifeMax, 1f))
-            mana = mana.coerceIn(1f, max(totalManaMax, 1f))
-        }
-        return uiMapOf(finalStats)
     }
 
     companion object {

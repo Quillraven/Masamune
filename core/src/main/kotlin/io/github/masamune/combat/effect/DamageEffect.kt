@@ -2,7 +2,7 @@ package io.github.masamune.combat.effect
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import io.github.masamune.component.Stats
+import io.github.masamune.component.CharacterStats
 
 data class DamageEffect(
     override val source: Entity,
@@ -14,10 +14,10 @@ data class DamageEffect(
     var targetLifeMax: Float = 0f
 
     override fun World.onStart() {
-        val targetStats = target[Stats]
-        targetStats.life = (targetStats.life - damage).coerceIn(0f, targetStats.totalLifeMax)
+        val targetStats = target[CharacterStats]
+        targetStats.life = (targetStats.life - damage).coerceIn(0f, targetStats.lifeMax)
 
         targetLife = targetStats.life
-        targetLifeMax = targetStats.totalLifeMax
+        targetLifeMax = targetStats.lifeMax
     }
 }

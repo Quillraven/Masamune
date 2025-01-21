@@ -26,7 +26,7 @@ import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Selector
-import io.github.masamune.component.Stats
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
@@ -97,9 +97,9 @@ class CombatViewModel(
                 val player = event.player
                 // get player stats (life, mana, ...)
                 combatStart = true
-                val playerStats = player[Stats]
-                playerLife = playerStats.life to playerStats.totalLifeMax
-                playerMana = playerStats.mana to playerStats.totalManaMax
+                val playerStats = player[CharacterStats]
+                playerLife = playerStats.life to playerStats.lifeMax
+                playerMana = playerStats.mana to playerStats.manaMax
                 playerName = player[Name].name
                 combatStart = false
 

@@ -8,7 +8,6 @@ import io.github.masamune.addItem
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Animation
-import io.github.masamune.component.Equipment
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Inventory
@@ -16,7 +15,7 @@ import io.github.masamune.component.Move
 import io.github.masamune.component.MoveTo
 import io.github.masamune.component.Name
 import io.github.masamune.component.QuestLog
-import io.github.masamune.component.Stats
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Transform
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
@@ -190,18 +189,17 @@ class TriggerActionHeal(
 ) : TriggerAction {
 
     override fun World.onUpdate(): Boolean {
-        val stats = entity[Stats]
-        val equipmentStats = entity[Equipment].run { toStats() }
+        val stats = entity[CharacterStats]
         val sfxKey = when {
             healLife && healMana -> "restore_purple"
             healLife -> "restore_green"
             else -> "restore_blue"
         }
         if (healLife) {
-            stats.life = (stats.totalLifeMax + equipmentStats.totalLifeMax)
+            stats.life = stats.lifeMax
         }
         if (healMana) {
-            stats.mana = (stats.totalManaMax + equipmentStats.totalManaMax)
+            stats.mana = stats.manaMax
         }
         spawnSfx(entity, sfxKey, 1f, 2f)
         audioService.play(SoundAsset.HEAL1)

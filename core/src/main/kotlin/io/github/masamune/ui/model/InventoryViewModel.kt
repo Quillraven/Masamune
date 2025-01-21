@@ -8,6 +8,7 @@ import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.consumeItem
 import io.github.masamune.equipItem
 import io.github.masamune.event.Event
@@ -27,7 +28,6 @@ class InventoryViewModel(
 ) : ViewModel(bundle, audioService) {
 
     private val playerEntities = world.family { all(Player) }
-    private lateinit var equipmentBonus: Map<UIStats, Int>
     private val emptyItems = listOf(
         emptyItemModel(ItemCategory.WEAPON, "<< ${i18nTxt(I18NKey.MENU_OPTION_CLEAR_ITEM)} >>"),
         emptyItemModel(ItemCategory.ARMOR, "<< ${i18nTxt(I18NKey.MENU_OPTION_CLEAR_ITEM)} >>"),
@@ -60,7 +60,7 @@ class InventoryViewModel(
             val playerEquipmentItems = itemPartition.first.map { it.toItemModel(world) }
             equipmentItems = emptyItems + playerEquipmentItems
 
-            playerStats = playerStatsWithEquipment(player, world)
+            playerStats = uiMapOf(player[CharacterStats])
         }
     }
 
@@ -69,7 +69,6 @@ class InventoryViewModel(
             val itemModel = it.toItemModel(world)
             itemModel.category to itemModel
         }.toMap()
-        equipmentBonus = equipmentCmp.toUiStatsMap(world)
     }
 
     fun quit() {
@@ -92,7 +91,7 @@ class InventoryViewModel(
         val inventoryCmp = playerEntity[Inventory]
         val itemEntity = inventoryCmp.items.single { it[Item].type == itemModel.type }
         world.consumeItem(itemEntity, playerEntity)
-        playerStats = playerStatsWithEquipment(playerEntity, world)
+        playerStats = uiMapOf(playerEntity[CharacterStats])
         inventoryItems = inventoryCmp.items
             .filter { !it[Item].category.isEquipment }
             .map { it.toItemModel(world, withConsumeInfo = true) }
@@ -115,7 +114,7 @@ class InventoryViewModel(
         // update equipment ItemModel
         val equipmentCmp = playerEntity[Equipment]
         updatePlayerEquipment(equipmentCmp)
-        playerStats = playerStatsWithEquipment(playerEntity, world)
+        playerStats = uiMapOf(playerEntity[CharacterStats])
         equipmentItems = emptyItems + inventoryCmp.items
             .filter { it[Item].category.isEquipment }
             .map { it.toItemModel(world) }

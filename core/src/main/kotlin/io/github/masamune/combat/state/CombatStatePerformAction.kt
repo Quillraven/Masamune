@@ -5,7 +5,7 @@ import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.action.DefaultAction
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
-import io.github.masamune.component.Stats
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.isEntityDead
 import ktx.log.logger
 
@@ -42,7 +42,7 @@ class CombatStatePerformAction(
             append("Entity ${entity.id} (")
             append(if (entity has Player) "Player" else "Enemy")
             append("): ")
-            val stats = entity[Stats]
+            val stats = entity[CharacterStats]
             val buffs = entity[Combat].buffs.joinToString { "${it::class.simpleName}" }
             append("life=${stats.life}, mana=${stats.mana}, agi=${stats.agility}, buffs=$buffs")
             appendLine()

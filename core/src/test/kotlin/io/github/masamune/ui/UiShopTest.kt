@@ -16,13 +16,14 @@ import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
-import io.github.masamune.component.Stats
 import io.github.masamune.event.EventService
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.gdxTest
@@ -49,6 +50,7 @@ import ktx.scene2d.actors
  * Test for [ShopView].
  * It loads a shop with weapon, armor, accessory and other items to buy.
  * It also loads a player with some talons and items to sell.
+ * The "helmet" will not show a stat diff because it is already equipped to the player.
  * When selecting the "Quit" option then the UI gets invisible and the test must be restarted.
  */
 
@@ -71,16 +73,16 @@ private class UiShopTest : KtxApplicationAdapter {
         world.entity {
             it += Player()
             it += Inventory(talons = 500)
-            it += Equipment(items = mutableEntityBagOf(createItem(world, ItemType.HELMET)))
-            it += Stats(
+            it += CharacterStats(
                 strength = 10f,
                 agility = 1f,
                 constitution = 2f,
                 intelligence = 5f,
-                damage = 1000f,
+                baseDamage = 1000f,
                 armor = 5f,
                 resistance = 100f,
             )
+            it += Equipment(items = mutableEntityBagOf(createItem(world, ItemType.HELMET)))
         }
     }
     private val shop by lazy {
@@ -106,32 +108,32 @@ private class UiShopTest : KtxApplicationAdapter {
         it += Graphic(atlas.findRegions("items/${type.name.lowercase()}").first())
         when (type) {
             ItemType.ELDER_SWORD -> {
-                it += Stats(damage = 3f, intelligence = 1f, agility = -2f)
+                it += ItemStats(damage = 3f, intelligence = 1f, agility = -2f)
                 it += Item(type, 50, ItemCategory.WEAPON, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
             }
 
             ItemType.STUDDED_LEATHER -> {
-                it += Stats(armor = 5f)
+                it += ItemStats(armor = 5f)
                 it += Item(type, 150, ItemCategory.ARMOR, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
             }
 
             ItemType.HELMET -> {
-                it += Stats(armor = 2f)
+                it += ItemStats(armor = 2f)
                 it += Item(type, 40, ItemCategory.HELMET, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
             }
 
             ItemType.BOOTS -> {
-                it += Stats(armor = 1f)
+                it += ItemStats(armor = 1f)
                 it += Item(type, 30, ItemCategory.BOOTS, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
             }
 
             ItemType.RING -> {
-                it += Stats(strength = 1f, agility = 1f)
+                it += ItemStats(strength = 1f, agility = 1f)
                 it += Item(type, 100, ItemCategory.ACCESSORY, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
             }
 
             ItemType.SMALL_MANA_POTION -> {
-                it += Stats(mana = 15f)
+                it += ItemStats(mana = 15f)
                 it += Item(type, 10, ItemCategory.OTHER, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
             }
 

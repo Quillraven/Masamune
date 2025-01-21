@@ -4,16 +4,16 @@ import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import com.github.quillraven.fleks.configureWorld
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
-import io.github.masamune.component.Stats
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.ItemType
-import io.github.masamune.tiledmap.TiledStats
 import io.github.masamune.ui.view.zeroIfMissing
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -36,11 +36,11 @@ class InventoryViewModelTest {
         val world = configureWorld { }
         world.entity {
             it += Player()
-            it += Stats(life = 30f, lifeMax = 30f)
+            it += CharacterStats(baseLife = 30f)
             it += Inventory(
                 items = mutableEntityBagOf(
                     world.entity { item ->
-                        item += Stats(strength = 10f, constitution = 5f, lifeMax = 100f)
+                        item += ItemStats(strength = 10f, constitution = 5f, lifeMax = 100f)
                         item += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED)
                         item += Name("")
                     }
@@ -52,7 +52,7 @@ class InventoryViewModelTest {
         val model = InventoryViewModel(mockk(relaxed = true), mockk(), world, mockk())
 
         // test equip
-        model.equip(ItemModel(ItemType.ELDER_SWORD, TiledStats.NULL_STATS, "", 0, "", ItemCategory.WEAPON, null, false))
+        model.equip(ItemModel(ItemType.ELDER_SWORD, emptyMap(), "", 0, "", ItemCategory.WEAPON, null, false))
         model.playerStats.zeroIfMissing(UIStats.STRENGTH) shouldBe "10"
         model.playerStats.zeroIfMissing(UIStats.CONSTITUTION) shouldBe "5"
         model.playerStats.zeroIfMissing(UIStats.LIFE) shouldBe "180"
@@ -71,11 +71,11 @@ class InventoryViewModelTest {
         val world = configureWorld { }
         world.entity {
             it += Player()
-            it += Stats(life = 15f, lifeMax = 30f)
+            it += CharacterStats(baseLife = 30f).apply { life = 15f }
             it += Inventory(
                 items = mutableEntityBagOf(
                     world.entity { item ->
-                        item += Stats(strength = 10f, constitution = 5f, lifeMax = 100f)
+                        item += ItemStats(strength = 10f, constitution = 5f, lifeMax = 100f)
                         item += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED)
                         item += Name("")
                     }
@@ -87,7 +87,7 @@ class InventoryViewModelTest {
         val model = InventoryViewModel(mockk(relaxed = true), mockk(), world, mockk())
 
         // test equip
-        model.equip(ItemModel(ItemType.ELDER_SWORD, TiledStats.NULL_STATS, "", 0, "", ItemCategory.WEAPON, null, false))
+        model.equip(ItemModel(ItemType.ELDER_SWORD, emptyMap(), "", 0, "", ItemCategory.WEAPON, null, false))
         model.playerStats.zeroIfMissing(UIStats.STRENGTH) shouldBe "10"
         model.playerStats.zeroIfMissing(UIStats.CONSTITUTION) shouldBe "5"
         model.playerStats.zeroIfMissing(UIStats.LIFE) shouldBe "90"

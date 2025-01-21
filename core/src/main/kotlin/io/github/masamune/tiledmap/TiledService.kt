@@ -24,6 +24,7 @@ import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.component.AI
 import io.github.masamune.component.Animation
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Dialog
 import io.github.masamune.component.Enemy
@@ -35,6 +36,7 @@ import io.github.masamune.component.Graphic
 import io.github.masamune.component.Interact
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Move
 import io.github.masamune.component.Name
 import io.github.masamune.component.Physic
@@ -42,7 +44,6 @@ import io.github.masamune.component.Player
 import io.github.masamune.component.Portal
 import io.github.masamune.component.QuestLog
 import io.github.masamune.component.State
-import io.github.masamune.component.Stats
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Tiled
 import io.github.masamune.component.Transform
@@ -258,7 +259,7 @@ class TiledService(
 
             if (isPlayerObj) {
                 configurePlayer(world, it)
-                configureStats(it, tile)
+                configureCharacterStats(it, tile)
                 configureCombat(it, tile)
             }
         }
@@ -371,13 +372,52 @@ class TiledService(
         entity += Trigger(tile.triggerName)
     }
 
-    private fun EntityCreateContext.configureStats(entity: Entity, tile: TiledMapTile) {
+    private fun EntityCreateContext.configureItemStats(entity: Entity, tile: TiledMapTile) {
         val tiledStats = tile.stats
         if (tiledStats == null || tiledStats.isAllNull()) {
             return
         }
 
-        entity += Stats.of(tiledStats)
+        entity += ItemStats(
+            agility = tiledStats.agility,
+            arcaneStrike = tiledStats.arcaneStrike,
+            armor = tiledStats.armor,
+            constitution = tiledStats.constitution,
+            criticalStrike = tiledStats.criticalStrike,
+            damage = tiledStats.damage,
+            intelligence = tiledStats.intelligence,
+            life = tiledStats.life,
+            lifeMax = tiledStats.lifeMax,
+            magicalEvade = tiledStats.magicalEvade,
+            mana = tiledStats.mana,
+            manaMax = tiledStats.manaMax,
+            physicalEvade = tiledStats.physicalEvade,
+            resistance = tiledStats.resistance,
+            strength = tiledStats.strength,
+        )
+    }
+
+    private fun EntityCreateContext.configureCharacterStats(entity: Entity, tile: TiledMapTile) {
+        val tiledStats = tile.stats
+        if (tiledStats == null || tiledStats.isAllNull()) {
+            return
+        }
+
+        entity += CharacterStats(
+            agility = tiledStats.agility,
+            arcaneStrike = tiledStats.arcaneStrike,
+            armor = tiledStats.armor,
+            constitution = tiledStats.constitution,
+            criticalStrike = tiledStats.criticalStrike,
+            baseDamage = tiledStats.damage,
+            intelligence = tiledStats.intelligence,
+            baseLife = tiledStats.lifeMax,
+            magicalEvade = tiledStats.magicalEvade,
+            baseMana = tiledStats.manaMax,
+            physicalEvade = tiledStats.physicalEvade,
+            resistance = tiledStats.resistance,
+            strength = tiledStats.strength,
+        )
     }
 
     private fun EntityCreateContext.configureCombat(entity: Entity, tile: TiledMapTile) {
@@ -438,7 +478,7 @@ class TiledService(
                 log.debug { "Loading item $itemType as entity $it" }
 
                 it += Name(tile.itemType.lowercase())
-                configureStats(it, tile)
+                configureItemStats(it, tile)
                 configureGraphic(it, tile)
                 configureItem(it, tile, amount)
             }
@@ -462,7 +502,7 @@ class TiledService(
                 it += graphic
                 it += Transform(vec3(x, y, 0f), graphic.regionSize)
                 it += Name(tile.objType.lowercase())
-                configureStats(it, tile)
+                configureCharacterStats(it, tile)
                 it += Facing(FacingDirection.DOWN)
                 configureGraphic(it, tile)
                 configureCombat(it, tile)
