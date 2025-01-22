@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -372,52 +373,123 @@ class TiledService(
         entity += Trigger(tile.triggerName)
     }
 
-    private fun EntityCreateContext.configureItemStats(entity: Entity, tile: TiledMapTile) {
-        val tiledStats = tile.stats
-        if (tiledStats == null || tiledStats.isAllNull()) {
-            return
+    private fun MapProperties?.toItemStats(): ItemStats? {
+        val props = this ?: return null
+
+        val agility = props.get("agility", 0f, Float::class.java)
+        val arcaneStrike = props.get("arcaneStrike", 0f, Float::class.java)
+        val armor = props.get("armor", 0f, Float::class.java)
+        val constitution = props.get("constitution", 0f, Float::class.java)
+        val criticalStrike = props.get("criticalStrike", 0f, Float::class.java)
+        val damage = props.get("damage", 0f, Float::class.java)
+        val intelligence = props.get("intelligence", 0f, Float::class.java)
+        val life = props.get("life", 0f, Float::class.java)
+        val lifeMax = props.get("lifeMax", 0f, Float::class.java)
+        val magicalEvade = props.get("magicalEvade", 0f, Float::class.java)
+        val mana = props.get("mana", 0f, Float::class.java)
+        val manaMax = props.get("manaMax", 0f, Float::class.java)
+        val physicalEvade = props.get("physicalEvade", 0f, Float::class.java)
+        val resistance = props.get("resistance", 0f, Float::class.java)
+        val strength = props.get("strength", 0f, Float::class.java)
+        if (agility == 0f &&
+            arcaneStrike == 0f &&
+            armor == 0f &&
+            constitution == 0f &&
+            criticalStrike == 0f &&
+            damage == 0f &&
+            intelligence == 0f &&
+            life == 0f &&
+            lifeMax == 0f &&
+            magicalEvade == 0f &&
+            mana == 0f &&
+            manaMax == 0f &&
+            physicalEvade == 0f &&
+            resistance == 0f &&
+            strength == 0f
+        ) {
+            // all stats are null -> no need to add them to the entity
+            return null
         }
 
-        entity += ItemStats(
-            agility = tiledStats.agility,
-            arcaneStrike = tiledStats.arcaneStrike,
-            armor = tiledStats.armor,
-            constitution = tiledStats.constitution,
-            criticalStrike = tiledStats.criticalStrike,
-            damage = tiledStats.damage,
-            intelligence = tiledStats.intelligence,
-            life = tiledStats.life,
-            lifeMax = tiledStats.lifeMax,
-            magicalEvade = tiledStats.magicalEvade,
-            mana = tiledStats.mana,
-            manaMax = tiledStats.manaMax,
-            physicalEvade = tiledStats.physicalEvade,
-            resistance = tiledStats.resistance,
-            strength = tiledStats.strength,
+        return ItemStats(
+            agility = agility,
+            arcaneStrike = arcaneStrike,
+            armor = armor,
+            constitution = constitution,
+            criticalStrike = criticalStrike,
+            damage = damage,
+            intelligence = intelligence,
+            life = life,
+            lifeMax = lifeMax,
+            magicalEvade = magicalEvade,
+            mana = mana,
+            manaMax = manaMax,
+            physicalEvade = physicalEvade,
+            resistance = resistance,
+            strength = strength,
         )
     }
 
-    private fun EntityCreateContext.configureCharacterStats(entity: Entity, tile: TiledMapTile) {
-        val tiledStats = tile.stats
-        if (tiledStats == null || tiledStats.isAllNull()) {
-            return
+    private fun MapProperties?.toCharacterStats(): CharacterStats? {
+        val props = this ?: return null
+
+        val agility = props.get("agility", 0f, Float::class.java)
+        val arcaneStrike = props.get("arcaneStrike", 0f, Float::class.java)
+        val armor = props.get("armor", 0f, Float::class.java)
+        val constitution = props.get("constitution", 0f, Float::class.java)
+        val criticalStrike = props.get("criticalStrike", 0f, Float::class.java)
+        val damage = props.get("damage", 0f, Float::class.java)
+        val intelligence = props.get("intelligence", 0f, Float::class.java)
+        val lifeMax = props.get("lifeMax", 0f, Float::class.java)
+        val magicalEvade = props.get("magicalEvade", 0f, Float::class.java)
+        val manaMax = props.get("manaMax", 0f, Float::class.java)
+        val physicalEvade = props.get("physicalEvade", 0f, Float::class.java)
+        val resistance = props.get("resistance", 0f, Float::class.java)
+        val strength = props.get("strength", 0f, Float::class.java)
+        if (agility == 0f &&
+            arcaneStrike == 0f &&
+            armor == 0f &&
+            constitution == 0f &&
+            criticalStrike == 0f &&
+            damage == 0f &&
+            intelligence == 0f &&
+            lifeMax == 0f &&
+            magicalEvade == 0f &&
+            manaMax == 0f &&
+            physicalEvade == 0f &&
+            resistance == 0f &&
+            strength == 0f
+        ) {
+            // all stats are null -> no need to add them to the entity
+            return null
         }
 
-        entity += CharacterStats(
-            agility = tiledStats.agility,
-            arcaneStrike = tiledStats.arcaneStrike,
-            armor = tiledStats.armor,
-            constitution = tiledStats.constitution,
-            criticalStrike = tiledStats.criticalStrike,
-            baseDamage = tiledStats.damage,
-            intelligence = tiledStats.intelligence,
-            baseLife = tiledStats.lifeMax,
-            magicalEvade = tiledStats.magicalEvade,
-            baseMana = tiledStats.manaMax,
-            physicalEvade = tiledStats.physicalEvade,
-            resistance = tiledStats.resistance,
-            strength = tiledStats.strength,
+        return CharacterStats(
+            agility = agility,
+            arcaneStrike = arcaneStrike,
+            armor = armor,
+            constitution = constitution,
+            criticalStrike = criticalStrike,
+            baseDamage = damage,
+            intelligence = intelligence,
+            baseLife = lifeMax,
+            magicalEvade = magicalEvade,
+            baseMana = manaMax,
+            physicalEvade = physicalEvade,
+            resistance = resistance,
+            strength = strength,
         )
+    }
+
+    private fun EntityCreateContext.configureItemStats(entity: Entity, tile: TiledMapTile) {
+        val itemStats = tile.stats.toItemStats() ?: return
+        entity += itemStats
+    }
+
+    private fun EntityCreateContext.configureCharacterStats(entity: Entity, tile: TiledMapTile) {
+        val charStats = tile.stats.toCharacterStats() ?: return
+
+        entity += charStats
     }
 
     private fun EntityCreateContext.configureCombat(entity: Entity, tile: TiledMapTile) {
@@ -531,5 +603,4 @@ class TiledService(
 
         operator fun TiledMap.get(layer: ObjectLayer): MapLayer? = this.layers[layer.tiledName]
     }
-
 }

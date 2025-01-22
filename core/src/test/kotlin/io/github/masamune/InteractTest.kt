@@ -58,6 +58,7 @@ private class InteractTest : KtxApplicationAdapter {
             add(EventService())
             add(mockk<DialogConfigurator>())
             add(mockk<MapTransitionService>())
+            add(mockk<Masamune>())
         }
 
         systems {

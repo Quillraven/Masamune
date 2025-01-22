@@ -75,8 +75,9 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="mushroom"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
+   <property name="enemy" type="bool" value="true"/>
    <property name="numEnemies" type="int" value="1"/>
-   <property name="objType" propertytype="MapObjectType" value="ENEMY"/>
+   <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
   </properties>
   <image source="objects/mushroom.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">

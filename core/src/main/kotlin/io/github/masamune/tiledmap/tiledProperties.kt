@@ -1,6 +1,7 @@
 package io.github.masamune.tiledmap
 
 import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import ktx.tiled.property
 
@@ -41,8 +42,8 @@ val TiledMapTile.objType: String
 val TiledMapTile.speed: Float
     get() = this.property<Float>("speed", 0f)
 
-val TiledMapTile.stats: TiledStats?
-    get() = this.propertyOrNull<TiledStats>("stats")
+val TiledMapTile.stats: MapProperties?
+    get() = this.propertyOrNull<MapProperties>("stats")
 
 val TiledMapTile.triggerName: String
     get() = this.property<String>("triggerName", "")

@@ -22,6 +22,10 @@
   <object id="4" gid="4" x="32" y="160" width="16" height="16"/>
   <object id="5" gid="2" x="41" y="107" width="16" height="16"/>
   <object id="6" gid="3" x="23" y="104" width="16" height="16"/>
-  <object id="7" gid="9" x="32" y="128" width="16" height="16"/>
+  <object id="7" gid="9" x="32" y="128" width="16" height="16">
+   <properties>
+    <property name="enemies" value="MUSHROOM=1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -88,6 +88,7 @@ private class MapTransitionTest : KtxApplicationAdapter {
             add(tiledService)
             add(mockk<DialogConfigurator>())
             add<MapTransitionService>(mapTransitionService)
+            add(mockk<Masamune>())
         }
 
         systems {

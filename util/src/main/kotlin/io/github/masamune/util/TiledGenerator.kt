@@ -48,7 +48,7 @@ data class TiledProject(
 )
 
 fun main() {
-    val file = File("../masamune-tiled.tiled-project")
+    val file = File("../assets/maps/masamune-tiled.tiled-project")
 
     println("Reading file ${file.name}")
     val jsonStr = file.readText()
@@ -60,13 +60,11 @@ fun main() {
     val tiledProject = json.decodeFromString<TiledProject>(jsonStr)
 
     parseEnums(tiledProject)
-    val tiledClassToMasamuneClass = parseClasses(tiledProject)
-    parseExtensions(tiledProject, tiledClassToMasamuneClass)
+    parseExtensions(tiledProject)
 }
 
 private fun parseExtensions(
     tiledProject: TiledProject,
-    tiledClassToMasamuneClass: List<Pair<String, String>>
 ) {
     println("Generating property extensions")
     val extensionContent = createPropertyExtensionsHeader()
@@ -80,24 +78,9 @@ private fun parseExtensions(
         val properties = tiledProject.propertyTypes
             .first { it.name == tiledClass && it.members.isNotEmpty() }
             .members
-        createPropertyExtensions(extensionContent, properties, gdxClass, tiledClassToMasamuneClass)
+        createPropertyExtensions(extensionContent, properties, gdxClass)
     }
     createPropertyExtensionsFile(extensionContent)
-}
-
-private fun parseClasses(tiledProject: TiledProject): List<Pair<String, String>> {
-    println("Generating classes")
-    // name of tiled classes for which Masamune Kotlin classes should be created (Tiled name to Masamune Kotlin name)
-    val tiledClassToMasamuneClass = listOf(
-        "Stats" to "TiledStats",
-    )
-    tiledClassToMasamuneClass.forEach { (tiledClass, masamuneClass) ->
-        val members = tiledProject.propertyTypes
-            .first { it.name == tiledClass && it.members.isNotEmpty() }
-            .members
-        createClass(masamuneClass, members, tiledClass == "Stats")
-    }
-    return tiledClassToMasamuneClass
 }
 
 private fun parseEnums(tiledProject: TiledProject) {
@@ -184,85 +167,12 @@ private fun StringBuilder.createActionTypeEnum(enumName: String, values: List<St
     appendLine("}")
 }
 
-fun createClass(className: String, members: List<Member>, isOpen: Boolean) {
-    println("Creating class $className with ${members.size} members")
-    val classTargetPackage = "io/github/masamune/tiledmap"
-    val classFile = File("../core/src/main/kotlin/$classTargetPackage/$className.kt")
-    if (classFile.exists()) {
-        classFile.delete()
-    }
-    classFile.createNewFile()
-
-    val content = buildString {
-        val newLine = System.lineSeparator()
-        append("package io.github.masamune.tiledmap").append(newLine).append(newLine)
-        append("// $AUTO_GEN_INFO_TEXT").append(newLine)
-        if (isOpen) {
-            append("open class $className(").append(newLine)
-        } else {
-            append("data class $className(").append(newLine)
-        }
-        append(
-            members.joinToString(
-                separator = ",$newLine    ",
-                prefix = "    ",
-                transform = { member -> "var ${member.name}: ${member.kotlinType} = ${member.kotlinValue}" },
-                postfix = newLine
-            )
-        )
-        append(")")
-
-        if (className == "TiledStats") {
-            append(" {").append(newLine)
-            append("    fun isAllNull(): Boolean {").append(newLine)
-            append("        return ")
-            append(
-                members.joinToString(
-                    separator = "$newLine            && ",
-                    prefix = "",
-                    transform = { member -> "${member.name} == 0f" },
-                    postfix = newLine
-                )
-            )
-            append("    }").append(newLine)
-            append(newLine)
-            append("    override fun toString(): String {").append(newLine)
-            append("        return \"TiledStats(")
-            append("agility=\$agility, ")
-            append("arcaneStrike=\$arcaneStrike, ")
-            append("armor=\$armor, ")
-            append("constitution=\$constitution, ")
-            append("criticalStrike=\$criticalStrike, ")
-            append("damage=\$damage, ")
-            append("intelligence=\$intelligence, ")
-            append("life=\$life, ")
-            append("lifeMax=\$lifeMax, ")
-            append("magicalEvade=\$magicalEvade, ")
-            append("mana=\$mana, ")
-            append("manaMax=\$manaMax, ")
-            append("physicalEvade=\$physicalEvade, ")
-            append("resistance=\$resistance, ")
-            append("strength=\$strength)\"").append(newLine)
-            append("    }").append(newLine)
-            append(newLine)
-            append("    companion object {").append(newLine)
-            append("        val NULL_STATS = TiledStats()").append(newLine)
-            append("    }").append(newLine)
-            append(newLine)
-            append("}").append(newLine)
-        } else {
-            append(newLine)
-        }
-    }
-
-    classFile.writeText(content)
-}
-
 fun createPropertyExtensionsHeader(): StringBuilder {
     return StringBuilder().apply {
         val newLine = System.lineSeparator()
         append("package io.github.masamune.tiledmap").append(newLine).append(newLine)
         append("import com.badlogic.gdx.maps.MapObject").append(newLine)
+        append("import com.badlogic.gdx.maps.MapProperties").append(newLine)
         append("import com.badlogic.gdx.maps.tiled.TiledMapTile").append(newLine)
         append("import ktx.tiled.property").append(newLine).append(newLine)
         append("import ktx.tiled.propertyOrNull").append(newLine).append(newLine)
@@ -287,7 +197,6 @@ fun createPropertyExtensions(
     content: StringBuilder,
     properties: List<Member>,
     gdxClass: String,
-    tiledClassToMasamuneClass: List<Pair<String, String>>
 ) {
     println("Creating property extensions for ${properties.map(Member::name)} and class $gdxClass")
 
@@ -307,9 +216,8 @@ fun createPropertyExtensions(
                 return@forEach
             } else if ("class" == property.type) {
                 // special case for class types
-                val masamuneClass = tiledClassToMasamuneClass.first { it.first == property.kotlinType }.second
-                append("val $gdxClass.${property.name}: $masamuneClass?").append(newLine)
-                append("    get() = this.propertyOrNull<$masamuneClass>(\"${property.name}\")")
+                append("val $gdxClass.${property.name}: MapProperties?").append(newLine)
+                append("    get() = this.propertyOrNull<MapProperties>(\"${property.name}\")")
                 return@forEach
             }
 

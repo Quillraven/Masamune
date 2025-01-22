@@ -9,10 +9,10 @@ import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.I18NBundle
-import io.github.masamune.tiledmap.TiledMapLoader
 import ktx.assets.getAsset
 import ktx.assets.load
 import ktx.log.logger
@@ -104,7 +104,7 @@ enum class SoundAsset {
 class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleResolver()) : Disposable {
 
     private val manager = AssetManager(fileHandleResolver).apply {
-        setLoader(TiledMap::class.java, TiledMapLoader(this.fileHandleResolver))
+        setLoader(TiledMap::class.java, TmxMapLoader(this.fileHandleResolver))
         setLoader(CachingAtlas::class.java, CachingAtlasLoader(this.fileHandleResolver))
     }
 
@@ -124,7 +124,9 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
      * Queues a [TiledMapAsset] for loading.
      */
     fun load(asset: TiledMapAsset) {
-        manager.load<TiledMap>(asset.path)
+        manager.load<TiledMap>(asset.path, TmxMapLoader.Parameters().apply {
+            projectFilePath = "maps/masamune-tiled.tiled-project"
+        })
     }
 
     /**
