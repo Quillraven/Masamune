@@ -70,10 +70,13 @@ private fun parseExtensions(
     val extensionContent = createPropertyExtensionsHeader()
     // name of tiled classes to process
     listOf(
-        "MapObject" to "TiledMapTile",
         "FixtureDefinition" to "MapObject",
         "Portal" to "MapObject",
         "ItemObject" to "TiledMapTile",
+        "EnemyObject" to "TiledMapTile",
+        "NpcObject" to "TiledMapTile",
+        "PlayerObject" to "TiledMapTile",
+        "PropObject" to "TiledMapTile",
     ).forEach { (tiledClass, gdxClass) ->
         val properties = tiledProject.propertyTypes
             .first { it.name == tiledClass && it.members.isNotEmpty() }
@@ -93,6 +96,7 @@ private fun parseEnums(tiledProject: TiledProject) {
         "AnimationType" to "AnimationType",
         "ItemCategory" to "ItemCategory",
         "ActionType" to "ActionType",
+        "ConsumableType" to "ConsumableType",
     )
     supportedEnums.forEach { (tiledEnum, masamuneEnum) ->
         tiledProject.propertyTypes

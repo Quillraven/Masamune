@@ -48,7 +48,7 @@ data class CachingAtlas(
         return regionCache.getOrPut(name) {
             val regions = textureAtlas.findRegions(name)
             if (regions.isEmpty && errorOnMissingRegions) {
-                gdxError("There are no regions with name $name in atlas $type")
+                gdxError("There are no regions with name '$name' in atlas '$type'")
             }
             regions
         }

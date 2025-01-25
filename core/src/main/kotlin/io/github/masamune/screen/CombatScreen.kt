@@ -302,7 +302,7 @@ class CombatScreen(
             repeat(amount) {
                 val spawnX = x + MathUtils.random(-0.5f, 0.5f)
                 val spawnY = y + MathUtils.random(-2f, 1f)
-                val enemy = tiledService.loadEnemy(world, type, spawnX, spawnY)
+                val enemy = tiledService.loadCombatEnemy(world, type, spawnX, spawnY)
                 with(world) { enemy[Animation].speed = 0.4f }
                 x += diffX
             }

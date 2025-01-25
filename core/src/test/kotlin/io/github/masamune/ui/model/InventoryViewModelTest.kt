@@ -12,6 +12,7 @@ import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.tiledmap.ActionType
+import io.github.masamune.tiledmap.ConsumableType
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.ui.view.zeroIfMissing
@@ -41,7 +42,7 @@ class InventoryViewModelTest {
                 items = mutableEntityBagOf(
                     world.entity { item ->
                         item += ItemStats(strength = 10f, constitution = 5f, lifeMax = 100f)
-                        item += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED)
+                        item += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
                         item += Name("")
                     }
                 )
@@ -76,7 +77,7 @@ class InventoryViewModelTest {
                 items = mutableEntityBagOf(
                     world.entity { item ->
                         item += ItemStats(strength = 10f, constitution = 5f, lifeMax = 100f)
-                        item += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED)
+                        item += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
                         item += Name("")
                     }
                 )

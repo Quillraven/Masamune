@@ -78,7 +78,7 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
     }
 
     private fun spawnPlayer(world: World): Entity {
-        val player = masamune.tiled.loadEnemy(world, TiledObjectType.HERO, 0f, 0f)
+        val player = masamune.tiled.loadCombatEnemy(world, TiledObjectType.HERO, 0f, 0f)
         with(world) {
             val items = spawnPlayerItems(world)
             val equipment = spawnPlayerEquipment(world)

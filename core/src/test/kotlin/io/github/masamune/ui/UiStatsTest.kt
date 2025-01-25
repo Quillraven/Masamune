@@ -23,6 +23,7 @@ import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.gdxTest
 import io.github.masamune.tiledmap.ActionType
+import io.github.masamune.tiledmap.ConsumableType
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.ui.model.MenuType
@@ -82,19 +83,19 @@ private class UiStatsTest : KtxApplicationAdapter {
         // create equipment
         mutableEntityBagOf(
             world.entity {
-                it += Item(ItemType.HELMET, 0, ItemCategory.HELMET, "", ActionType.UNDEFINED)
+                it += Item(ItemType.HELMET, 0, ItemCategory.HELMET, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
                 it += ItemStats(strength = 10f)
             },
             world.entity {
-                it += Item(ItemType.BOOTS, 0, ItemCategory.BOOTS, "", ActionType.UNDEFINED)
+                it += Item(ItemType.BOOTS, 0, ItemCategory.BOOTS, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
                 it += ItemStats(arcaneStrike = 0.2f)
             },
             world.entity {
-                it += Item(ItemType.STUDDED_LEATHER, 0, ItemCategory.ARMOR, "", ActionType.UNDEFINED)
+                it += Item(ItemType.STUDDED_LEATHER, 0, ItemCategory.ARMOR, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
                 it += ItemStats(life = 50f, mana = 50f)
             },
             world.entity {
-                it += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED)
+                it += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
                 it += ItemStats(constitution = 10f)
             },
         ).forEach { world.equipItem(it, player) }

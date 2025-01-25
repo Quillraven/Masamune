@@ -2,6 +2,7 @@ package io.github.masamune.tiledmap
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.glutils.FileTextureData
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.MapProperties
@@ -27,7 +28,6 @@ import io.github.masamune.component.AI
 import io.github.masamune.component.Animation
 import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Combat
-import io.github.masamune.component.Dialog
 import io.github.masamune.component.Enemy
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
@@ -236,34 +236,92 @@ class TiledService(
             return playerFamily.first()
         }
 
-        val tile = tiledObj.tile
+        val tile = tiledObj.tile ?: gdxError("Object ${mapObject.id} is not linked to a tile")
         val x = tiledObj.x * UNIT_SCALE
         val y = tiledObj.y * UNIT_SCALE
 
         val objTypeStr = tile.objType
         val objType = TiledObjectType.valueOf(objTypeStr)
-
-        return world.entity {
-            log.debug { "Loading object ${mapObject.id} as entity $it" }
-
-            configureTiled(it, tiledObj, objType)
-            it += Facing(FacingDirection.DOWN)
-            val graphicCmp = configureGraphic(it, tile)
-            it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
-            configureMove(it, tile)
-            configurePhysic(it, tile, world, x, y)
-            configureDialog(it, tile)
-            configureTrigger(it, tile)
-            if (tile.enemy) {
-                configureEnemy(it, tiledObj)
-            }
-
-            if (isPlayerObj) {
-                configurePlayer(world, it)
-                configureCharacterStats(it, tile)
-                configureCombat(it, tile)
-            }
+        val tiledClass: String = tile.property("type", "")
+        return when (tiledClass) {
+            "EnemyObject" -> loadGameEnemy(x, y, objType, tile, tiledObj, world)
+            "NpcObject" -> loadNpc(x, y, objType, tile, tiledObj, world)
+            "PropObject" -> loadPropObject(x, y, objType, tile, tiledObj, world)
+            "PlayerObject" -> loadPlayerObject(x, y, tile, tiledObj, world)
+            else -> gdxError("Unsupported tile class $tiledClass for tile ${tile.id}")
         }
+    }
+
+    private fun loadPlayerObject(
+        x: Float,
+        y: Float,
+        tile: TiledMapTile,
+        tiledObj: TiledMapTileMapObject,
+        world: World
+    ): Entity = world.entity {
+        log.debug { "Loading player ${tiledObj.id} as entity $it" }
+
+        it += Facing(FacingDirection.DOWN)
+        val graphicCmp = configureGraphic(it, tile, AnimationType.IDLE.name)
+        it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
+        configureMove(it, tile)
+        configurePhysic(it, tile, world, x, y, BodyType.DynamicBody.name)
+        configurePlayer(world, it)
+        configureCharacterStats(it, tile)
+        configureCombat(it, tile)
+    }
+
+    private fun loadPropObject(
+        x: Float,
+        y: Float,
+        objType: TiledObjectType,
+        tile: TiledMapTile,
+        tiledObj: TiledMapTileMapObject,
+        world: World
+    ): Entity = world.entity {
+        log.debug { "Loading prop ${tiledObj.id} as entity $it" }
+
+        configureTiled(it, tiledObj, objType)
+        it += Facing(FacingDirection.DOWN)
+        val graphicCmp = configureGraphic(it, tile, AnimationType.UNDEFINED.name)
+        it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
+        configurePhysic(it, tile, world, x, y, BodyType.StaticBody.name)
+    }
+
+    private fun loadNpc(
+        x: Float,
+        y: Float,
+        objType: TiledObjectType,
+        tile: TiledMapTile,
+        tiledObj: TiledMapTileMapObject,
+        world: World,
+    ): Entity = world.entity {
+        log.debug { "Loading NPC ${tiledObj.id} as entity $it" }
+
+        configureTiled(it, tiledObj, objType)
+        it += Facing(FacingDirection.DOWN)
+        val graphicCmp = configureGraphic(it, tile, AnimationType.WALK.name)
+        it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
+        configurePhysic(it, tile, world, x, y, BodyType.DynamicBody.name)
+        configureTrigger(it, tile)
+    }
+
+    private fun loadGameEnemy(
+        x: Float,
+        y: Float,
+        objType: TiledObjectType,
+        tile: TiledMapTile,
+        tiledObj: TiledMapTileMapObject,
+        world: World,
+    ): Entity = world.entity {
+        log.debug { "Loading game enemy ${tiledObj.id} as entity $it" }
+
+        configureTiled(it, tiledObj, objType)
+        it += Facing(FacingDirection.DOWN)
+        val graphicCmp = configureGraphic(it, tile, AnimationType.WALK.name)
+        it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
+        configurePhysic(it, tile, world, x, y, BodyType.KinematicBody.name)
+        configureEnemy(it, tiledObj)
     }
 
     private fun EntityCreateContext.configureEnemy(entity: Entity, tiledObj: TiledMapTileMapObject) {
@@ -293,20 +351,23 @@ class TiledService(
         entity += Tiled(tiledObj.id, objectType)
     }
 
-    private fun EntityCreateContext.configureGraphic(entity: Entity, tile: TiledMapTile): Graphic {
+    private fun EntityCreateContext.configureGraphic(
+        entity: Entity,
+        tile: TiledMapTile,
+        animationTypeStr: String,
+    ): Graphic {
         val atlasStr = tile.atlas
         val atlasAsset = AtlasAsset.entries.firstOrNull { it.name == atlasStr }
             ?: gdxError("There is no atlas of name $atlasStr")
-        val atlasRegionKey = tile.atlasRegionKey
+        val atlasRegionKey = tile.imageName
         if (atlasRegionKey.isBlank()) {
             gdxError("Missing atlasRegionKey for tile ${tile.id}")
         }
         val atlas = assetService[atlasAsset]
-        val animationTypeStr = tile.animationType
         val aniType = AnimationType.entries.firstOrNull { it.name == animationTypeStr }
             ?: gdxError("There is no animation type of name $animationTypeStr")
 
-        // optional animation componentw
+        // optional animation component
         val graphicCmpRegion: TextureRegion = if (aniType != AnimationType.UNDEFINED) {
             // add animation component
             val animationCmp = Animation.ofAtlas(atlas, atlasRegionKey, aniType, FacingDirection.DOWN)
@@ -323,7 +384,7 @@ class TiledService(
         }
 
         // graphic component
-        val color = Color.valueOf(tile.color)
+        val color = Color(1f, 1f, 1f, 1f)
         val graphicCmp = Graphic(graphicCmpRegion, color)
         entity += graphicCmp
         return graphicCmp
@@ -341,13 +402,13 @@ class TiledService(
         tile: TiledMapTile,
         world: World,
         objX: Float,
-        objY: Float
+        objY: Float,
+        bodyTypeStr: String,
     ) {
         if (tile.objects.isEmpty()) {
             // no collision objects -> nothing to do
             return
         }
-        val bodyTypeStr = tile.bodyType
         if (bodyTypeStr == "UNDEFINED") {
             gdxError("Physic object without defined 'bodyType' for tile ${tile.id}")
         }
@@ -355,14 +416,6 @@ class TiledService(
 
         val body = tile.toBody(world, objX, objY, bodyType, data = entity)
         entity += Physic(body)
-    }
-
-    private fun EntityCreateContext.configureDialog(entity: Entity, tile: TiledMapTile) {
-        if (tile.dialogName.isBlank()) {
-            return
-        }
-
-        entity += Dialog(tile.dialogName)
     }
 
     private fun EntityCreateContext.configureTrigger(entity: Entity, tile: TiledMapTile) {
@@ -440,9 +493,9 @@ class TiledService(
         val criticalStrike = props.get("criticalStrike", 0f, Float::class.java)
         val damage = props.get("damage", 0f, Float::class.java)
         val intelligence = props.get("intelligence", 0f, Float::class.java)
-        val lifeMax = props.get("lifeMax", 0f, Float::class.java)
+        val baseLife = props.get("baseLife", 0f, Float::class.java)
         val magicalEvade = props.get("magicalEvade", 0f, Float::class.java)
-        val manaMax = props.get("manaMax", 0f, Float::class.java)
+        val baseMana = props.get("baseMana", 0f, Float::class.java)
         val physicalEvade = props.get("physicalEvade", 0f, Float::class.java)
         val resistance = props.get("resistance", 0f, Float::class.java)
         val strength = props.get("strength", 0f, Float::class.java)
@@ -453,9 +506,9 @@ class TiledService(
             criticalStrike == 0f &&
             damage == 0f &&
             intelligence == 0f &&
-            lifeMax == 0f &&
+            baseLife == 0f &&
             magicalEvade == 0f &&
-            manaMax == 0f &&
+            baseMana == 0f &&
             physicalEvade == 0f &&
             resistance == 0f &&
             strength == 0f
@@ -472,9 +525,9 @@ class TiledService(
             criticalStrike = criticalStrike,
             baseDamage = damage,
             intelligence = intelligence,
-            baseLife = lifeMax,
+            baseLife = baseLife,
             magicalEvade = magicalEvade,
-            baseMana = manaMax,
+            baseMana = baseMana,
             physicalEvade = physicalEvade,
             resistance = resistance,
             strength = strength,
@@ -529,7 +582,7 @@ class TiledService(
             category = ItemCategory.valueOf(tile.category),
             actionType = actionType,
             descriptionKey = "item.${itemType.name.lowercase()}.description",
-            onlyCombat = tile.onlyCombat,
+            consumableType = ConsumableType.valueOf(tile.consumableType),
             amount = amount,
         )
     }
@@ -551,7 +604,7 @@ class TiledService(
 
                 it += Name(tile.itemType.lowercase())
                 configureItemStats(it, tile)
-                configureGraphic(it, tile)
+                configureGraphic(it, tile, AnimationType.UNDEFINED.name)
                 configureItem(it, tile, amount)
             }
         }
@@ -559,7 +612,7 @@ class TiledService(
         gdxError("There is no item with type $itemType")
     }
 
-    fun loadEnemy(world: World, type: TiledObjectType, x: Float, y: Float): Entity {
+    fun loadCombatEnemy(world: World, type: TiledObjectType, x: Float, y: Float): Entity {
         val objectsTileSet = currentMap.objectsTileSet()
         objectsTileSet.iterator().forEach { tile ->
             if (tile.objType != type.name) {
@@ -570,13 +623,12 @@ class TiledService(
                 log.debug { "Loading enemy $type as entity $it" }
 
                 it += Tiled(tile.id, type)
-                val graphic = configureGraphic(it, tile)
+                val graphic = configureGraphic(it, tile, AnimationType.WALK.name)
                 it += graphic
                 it += Transform(vec3(x, y, 0f), graphic.regionSize)
                 it += Name(tile.objType.lowercase())
                 configureCharacterStats(it, tile)
                 it += Facing(FacingDirection.DOWN)
-                configureGraphic(it, tile)
                 configureCombat(it, tile)
                 it += Experience(tile.level, tile.xp)
                 it += AI(defaultBehavior(world, it))
@@ -599,6 +651,16 @@ class TiledService(
             get() = this.property("objectsLoaded", false)
             set(value) {
                 this.properties["objectsLoaded"] = value
+            }
+
+        val TiledMapTile.imageName: String
+            get() {
+                val name = (textureRegion.texture.textureData as FileTextureData).fileHandle.nameWithoutExtension()
+                return if (property("type", "") == "ItemObject") {
+                    "items/$name"
+                } else {
+                    name
+                }
             }
 
         operator fun TiledMap.get(layer: ObjectLayer): MapLayer? = this.layers[layer.tiledName]

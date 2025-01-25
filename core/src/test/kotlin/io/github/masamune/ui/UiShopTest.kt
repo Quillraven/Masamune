@@ -30,6 +30,7 @@ import io.github.masamune.gdxTest
 import io.github.masamune.input.ControllerStateUI
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.tiledmap.ActionType
+import io.github.masamune.tiledmap.ConsumableType
 import io.github.masamune.tiledmap.ItemCategory
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
@@ -109,32 +110,32 @@ private class UiShopTest : KtxApplicationAdapter {
         when (type) {
             ItemType.ELDER_SWORD -> {
                 it += ItemStats(damage = 3f, intelligence = 1f, agility = -2f)
-                it += Item(type, 50, ItemCategory.WEAPON, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
+                it += Item(type, 50, ItemCategory.WEAPON, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
             }
 
             ItemType.STUDDED_LEATHER -> {
                 it += ItemStats(armor = 5f)
-                it += Item(type, 150, ItemCategory.ARMOR, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
+                it += Item(type, 150, ItemCategory.ARMOR, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
             }
 
             ItemType.HELMET -> {
                 it += ItemStats(armor = 2f)
-                it += Item(type, 40, ItemCategory.HELMET, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
+                it += Item(type, 40, ItemCategory.HELMET, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
             }
 
             ItemType.BOOTS -> {
                 it += ItemStats(armor = 1f)
-                it += Item(type, 30, ItemCategory.BOOTS, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
+                it += Item(type, 30, ItemCategory.BOOTS, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
             }
 
             ItemType.RING -> {
                 it += ItemStats(strength = 1f, agility = 1f)
-                it += Item(type, 100, ItemCategory.ACCESSORY, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
+                it += Item(type, 100, ItemCategory.ACCESSORY, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
             }
 
             ItemType.SMALL_MANA_POTION -> {
                 it += ItemStats(mana = 15f)
-                it += Item(type, 10, ItemCategory.OTHER, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED)
+                it += Item(type, 10, ItemCategory.OTHER, "item.${type.name.lowercase()}.description", ActionType.UNDEFINED, ConsumableType.COMBAT_AND_INVENTORY)
             }
 
             else -> gdxError("Unsupported item type: $type")

@@ -19,7 +19,7 @@ data class TransformEffect(
     override val target: Entity = Entity.NONE
 
     override fun World.onStart() {
-        val enemy = inject<TiledService>().loadEnemy(this, toType, spawnX, spawnY)
+        val enemy = inject<TiledService>().loadCombatEnemy(this, toType, spawnX, spawnY)
         enemy[Animation].speed = 0.4f
 
         enemy.configure {
