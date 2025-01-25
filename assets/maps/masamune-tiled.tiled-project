@@ -72,6 +72,157 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
+            "id": 15,
+            "members": [
+                {
+                    "name": "agility",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "arcaneStrike",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "armor",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "baseLife",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "baseMana",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "constitution",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "criticalStrike",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "damage",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "intelligence",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "magicalEvade",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "physicalEvade",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "resistance",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "strength",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "CharStats",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "id": 17,
+            "name": "ConsumableType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "COMBAT_ONLY",
+                "INVENTORY_ONLY",
+                "COMBAT_AND_INVENTORY",
+                "UNDEFINED"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 14,
+            "members": [
+                {
+                    "name": "atlas",
+                    "propertyType": "AtlasAsset",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                },
+                {
+                    "name": "combatActions",
+                    "propertyType": "ActionType",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "level",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "objType",
+                    "propertyType": "MapObjectType",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                },
+                {
+                    "name": "stats",
+                    "propertyType": "CharStats",
+                    "type": "class",
+                    "value": {
+                    }
+                },
+                {
+                    "name": "talons",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "xp",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "EnemyObject",
+            "type": "class",
+            "useAs": [
+                "tile",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 6,
             "members": [
                 {
@@ -142,15 +293,16 @@
                     "value": "UNDEFINED"
                 },
                 {
-                    "name": "atlasRegionKey",
-                    "type": "string",
-                    "value": ""
-                },
-                {
                     "name": "category",
                     "propertyType": "ItemCategory",
                     "type": "string",
                     "value": "OTHER"
+                },
+                {
+                    "name": "consumableType",
+                    "propertyType": "ConsumableType",
+                    "type": "string",
+                    "value": "UNDEFINED"
                 },
                 {
                     "name": "cost",
@@ -162,11 +314,6 @@
                     "propertyType": "ItemType",
                     "type": "string",
                     "value": "UNDEFINED"
-                },
-                {
-                    "name": "onlyCombat",
-                    "type": "bool",
-                    "value": false
                 },
                 {
                     "name": "stats",
@@ -209,96 +356,6 @@
             "valuesAsFlags": false
         },
         {
-            "color": "#ffa0a0a4",
-            "drawFill": true,
-            "id": 2,
-            "members": [
-                {
-                    "name": "animationType",
-                    "propertyType": "AnimationType",
-                    "type": "string",
-                    "value": "UNDEFINED"
-                },
-                {
-                    "name": "atlas",
-                    "propertyType": "AtlasAsset",
-                    "type": "string",
-                    "value": "UNDEFINED"
-                },
-                {
-                    "name": "atlasRegionKey",
-                    "type": "string",
-                    "value": ""
-                },
-                {
-                    "name": "bodyType",
-                    "propertyType": "BodyType",
-                    "type": "string",
-                    "value": "UNDEFINED"
-                },
-                {
-                    "name": "color",
-                    "type": "color",
-                    "value": "#ffffffff"
-                },
-                {
-                    "name": "combatActions",
-                    "propertyType": "ActionType",
-                    "type": "string",
-                    "value": ""
-                },
-                {
-                    "name": "dialogName",
-                    "type": "string",
-                    "value": ""
-                },
-                {
-                    "name": "enemy",
-                    "type": "bool",
-                    "value": false
-                },
-                {
-                    "name": "level",
-                    "type": "int",
-                    "value": 0
-                },
-                {
-                    "name": "objType",
-                    "propertyType": "MapObjectType",
-                    "type": "string",
-                    "value": "UNDEFINED"
-                },
-                {
-                    "name": "speed",
-                    "type": "float",
-                    "value": 0
-                },
-                {
-                    "name": "stats",
-                    "propertyType": "Stats",
-                    "type": "class",
-                    "value": {
-                    }
-                },
-                {
-                    "name": "triggerName",
-                    "type": "string",
-                    "value": ""
-                },
-                {
-                    "name": "xp",
-                    "type": "int",
-                    "value": 0
-                }
-            ],
-            "name": "MapObject",
-            "type": "class",
-            "useAs": [
-                "tile",
-                "project"
-            ]
-        },
-        {
             "id": 1,
             "name": "MapObjectType",
             "storageType": "string",
@@ -320,6 +377,79 @@
             "valuesAsFlags": false
         },
         {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 16,
+            "members": [
+                {
+                    "name": "atlas",
+                    "propertyType": "AtlasAsset",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                },
+                {
+                    "name": "objType",
+                    "propertyType": "MapObjectType",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                },
+                {
+                    "name": "triggerName",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "NpcObject",
+            "type": "class",
+            "useAs": [
+                "tile",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 19,
+            "members": [
+                {
+                    "name": "atlas",
+                    "propertyType": "AtlasAsset",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                },
+                {
+                    "name": "combatActions",
+                    "propertyType": "ActionType",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "objType",
+                    "propertyType": "MapObjectType",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                },
+                {
+                    "name": "speed",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "stats",
+                    "propertyType": "CharStats",
+                    "type": "class",
+                    "value": {
+                    }
+                }
+            ],
+            "name": "PlayerObject",
+            "type": "class",
+            "useAs": [
+                "tile",
+                "project"
+            ]
+        },
+        {
             "color": "#ffffaa00",
             "drawFill": false,
             "id": 7,
@@ -339,6 +469,25 @@
             "type": "class",
             "useAs": [
                 "object",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 18,
+            "members": [
+                {
+                    "name": "atlas",
+                    "propertyType": "AtlasAsset",
+                    "type": "string",
+                    "value": "UNDEFINED"
+                }
+            ],
+            "name": "PropObject",
+            "type": "class",
+            "useAs": [
+                "tile",
                 "project"
             ]
         },

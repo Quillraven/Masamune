@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="15">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="18">
  <editorsettings>
   <export target="village..tmx" format="tmx"/>
  </editorsettings>
@@ -35,6 +35,21 @@
   <object id="5" name="Smith" gid="4102" x="16" y="288" width="16" height="16"/>
   <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
   <object id="13" gid="4107" x="122" y="132" width="48" height="48"/>
+  <object id="15" gid="4103" x="127" y="216" width="16" height="16">
+   <properties>
+    <property name="enemies" value="BUTTERFLY=2"/>
+   </properties>
+  </object>
+  <object id="16" gid="4104" x="127" y="184" width="16" height="16">
+   <properties>
+    <property name="enemies" value="LARVA=1"/>
+   </properties>
+  </object>
+  <object id="17" gid="4105" x="143" y="168" width="16" height="16">
+   <properties>
+    <property name="enemies" value="MUSHROOM=2"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
   <object id="7" name="villageExit" x="32" y="-12" width="80" height="44">
