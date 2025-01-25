@@ -10,7 +10,7 @@ i:b:/ui/messages.properties:4982:1
 i:b:/ui/skin.json:4342:1
 i:d:/maps:0:1
 i:b:/maps/tileset.png:473544:1
-i:b:/maps/village.tmx:3877:1
+i:b:/maps/village.tmx:3387:1
 i:b:/maps/tileset.tsx:19407:1
 i:d:/maps/objects:0:1
 i:b:/maps/objects/merchant.png:494:1
