@@ -1,32 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="5" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
- <tile id="0" type="MapObject">
+ <tile id="0" type="PlayerObject">
   <properties>
-   <property name="animationType" propertytype="AnimationType" value="IDLE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="atlasRegionKey" value="hero"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
   </properties>
   <image source="objects/hero.png" width="16" height="16"/>
  </tile>
- <tile id="1" type="MapObject">
+ <tile id="1" type="PropObject">
   <properties>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="tree_green"/>
-   <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
   </properties>
   <image source="objects/tree_green.png" width="48" height="48"/>
   <objectgroup draworder="index" id="2">
    <object id="1" type="FixtureDefinition" x="14" y="36" width="20" height="12"/>
   </objectgroup>
  </tile>
- <tile id="2" type="MapObject">
+ <tile id="2" type="PlayerObject">
   <properties>
-   <property name="animationType" propertytype="AnimationType" value="IDLE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="hero"/>
-   <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
   </properties>
   <image source="objects/hero.png" width="16" height="16"/>
@@ -46,12 +40,9 @@
    </object>
   </objectgroup>
  </tile>
- <tile id="3" type="MapObject">
+ <tile id="3" type="PlayerObject">
   <properties>
-   <property name="animationType" propertytype="AnimationType" value="IDLE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="hero"/>
-   <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
    <property name="speed" type="float" value="7"/>
   </properties>
@@ -69,13 +60,11 @@
    </object>
   </objectgroup>
  </tile>
- <tile id="4" type="MapObject">
+ <tile id="4" type="EnemyObject">
   <properties>
    <property name="animationType" propertytype="AnimationType" value="IDLE"/>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="atlasRegionKey" value="mushroom"/>
-   <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
-   <property name="enemy" type="bool" value="true"/>
+   <property name="level" type="int" value="1"/>
    <property name="numEnemies" type="int" value="1"/>
    <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
   </properties>

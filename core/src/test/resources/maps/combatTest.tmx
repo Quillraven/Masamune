@@ -2,24 +2,24 @@
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="combatObjects" tilewidth="16" tileheight="16" tilecount="6" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
-  <tile id="0" type="MapObject">
+  <tile id="0" type="PlayerObject">
    <properties>
-    <property name="animationType" propertytype="AnimationType" value="IDLE"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="hero"/>
     <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,USE_ITEM"/>
     <property name="objType" propertytype="MapObjectType" value="HERO"/>
-    <property name="stats" type="class" propertytype="Stats">
+    <property name="stats" type="class" propertytype="CharStats">
      <properties>
-      <property name="agility" type="float" value="3"/>
-      <property name="arcaneStrike" type="float" value="0"/>
+      <property name="agility" type="float" value="5"/>
+      <property name="arcaneStrike" type="float" value="0.25"/>
+      <property name="baseLife" type="float" value="100"/>
+      <property name="baseMana" type="float" value="100"/>
       <property name="constitution" type="float" value="10"/>
-      <property name="criticalStrike" type="float" value="0"/>
-      <property name="damage" type="float" value="1"/>
-      <property name="life" type="float" value="100"/>
-      <property name="lifeMax" type="float" value="100"/>
-      <property name="mana" type="float" value="100"/>
-      <property name="manaMax" type="float" value="100"/>
+      <property name="criticalStrike" type="float" value="0.25"/>
+      <property name="damage" type="float" value="5"/>
+      <property name="intelligence" type="float" value="5"/>
+      <property name="magicalEvade" type="float" value="0.25"/>
+      <property name="physicalEvade" type="float" value="0.25"/>
+      <property name="strength" type="float" value="3"/>
      </properties>
     </property>
    </properties>
@@ -29,8 +29,8 @@
    <properties>
     <property name="action" propertytype="ActionType" value="ITEM_MANA_RESTORE"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/small_mana_potion"/>
     <property name="category" propertytype="ItemCategory" value="OTHER"/>
+    <property name="consumableType" propertytype="ConsumableType" value="COMBAT_AND_INVENTORY"/>
     <property name="itemType" propertytype="ItemType" value="SMALL_MANA_POTION"/>
     <property name="stats" type="class" propertytype="Stats">
      <properties>
@@ -44,10 +44,9 @@
    <properties>
     <property name="action" propertytype="ActionType" value="SCROLL_INFERNO"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/scroll_inferno"/>
     <property name="category" propertytype="ItemCategory" value="OTHER"/>
+    <property name="consumableType" propertytype="ConsumableType" value="COMBAT_ONLY"/>
     <property name="itemType" propertytype="ItemType" value="SCROLL_INFERNO"/>
-    <property name="onlyCombat" type="bool" value="true"/>
     <property name="stats" type="class" propertytype="Stats">
      <properties>
       <property name="damage" type="float" value="50"/>
@@ -56,51 +55,43 @@
    </properties>
    <image source="objects/scroll_inferno.png" width="16" height="16"/>
   </tile>
-  <tile id="3" type="MapObject">
+  <tile id="3" type="EnemyObject">
    <properties>
-    <property name="animationType" propertytype="AnimationType" value="WALK"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="butterfly"/>
     <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT"/>
-    <property name="enemy" type="bool" value="true"/>
     <property name="level" type="int" value="1"/>
     <property name="objType" propertytype="MapObjectType" value="BUTTERFLY"/>
-    <property name="stats" type="class" propertytype="Stats">
+    <property name="stats" type="class" propertytype="CharStats">
      <properties>
       <property name="agility" type="float" value="1"/>
-      <property name="damage" type="float" value="1"/>
-      <property name="life" type="float" value="50"/>
-      <property name="lifeMax" type="float" value="50"/>
-      <property name="mana" type="float" value="15"/>
-      <property name="manaMax" type="float" value="15"/>
+      <property name="baseLife" type="float" value="40"/>
+      <property name="baseMana" type="float" value="20"/>
+      <property name="damage" type="float" value="2"/>
      </properties>
     </property>
+    <property name="talons" type="int" value="50"/>
     <property name="xp" type="int" value="100"/>
    </properties>
    <image source="objects/butterfly.png" width="16" height="16"/>
   </tile>
-  <tile id="4" type="MapObject">
+  <tile id="4" type="EnemyObject">
    <properties>
-    <property name="animationType" propertytype="AnimationType" value="WALK"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="mushroom"/>
     <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,TRANSFORM"/>
-    <property name="enemy" type="bool" value="true"/>
     <property name="level" type="int" value="2"/>
     <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
-    <property name="stats" type="class" propertytype="Stats">
+    <property name="stats" type="class" propertytype="CharStats">
      <properties>
-      <property name="agility" type="float" value="5"/>
-      <property name="armor" type="float" value="0"/>
-      <property name="criticalStrike" type="float" value="0"/>
-      <property name="damage" type="float" value="2"/>
-      <property name="life" type="float" value="50"/>
-      <property name="lifeMax" type="float" value="50"/>
-      <property name="magicalEvade" type="float" value="0"/>
-      <property name="physicalEvade" type="float" value="0"/>
-      <property name="resistance" type="float" value="0"/>
+      <property name="agility" type="float" value="10"/>
+      <property name="armor" type="float" value="5"/>
+      <property name="baseLife" type="float" value="30"/>
+      <property name="baseMana" type="float" value="10"/>
+      <property name="damage" type="float" value="4"/>
+      <property name="resistance" type="float" value="5"/>
      </properties>
     </property>
+    <property name="talons" type="int" value="25"/>
+    <property name="xp" type="int" value="30"/>
    </properties>
    <image source="objects/mushroom.png" width="16" height="16"/>
   </tile>
@@ -108,7 +99,6 @@
    <properties>
     <property name="action" propertytype="ActionType" value="HEAL"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/elder_sword"/>
     <property name="category" propertytype="ItemCategory" value="WEAPON"/>
     <property name="itemType" propertytype="ItemType" value="ELDER_SWORD"/>
     <property name="stats" type="class" propertytype="Stats">

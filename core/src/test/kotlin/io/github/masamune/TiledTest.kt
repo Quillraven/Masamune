@@ -14,15 +14,12 @@ import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.ShaderService
-import io.github.masamune.component.Animation
 import io.github.masamune.component.Graphic
-import io.github.masamune.component.Tiled
 import io.github.masamune.component.Transform
 import io.github.masamune.event.EventService
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.DebugPhysicRenderSystem
 import io.github.masamune.system.RenderSystem
-import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.tiledmap.TiledService
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
@@ -75,12 +72,8 @@ private class TiledTest : KtxApplicationAdapter {
         with(world) {
             assertEquals(2, numEntities)
             asEntityBag().forEach { entity ->
-                assertTrue(entity has Tiled)
                 assertTrue(entity has Transform)
                 assertTrue(entity has Graphic)
-                if (entity[Tiled].objType == TiledObjectType.HERO) {
-                    assertTrue(entity has Animation)
-                }
             }
         }
 
