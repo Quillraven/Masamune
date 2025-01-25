@@ -19,6 +19,7 @@ import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.ActionTargetType
 import io.github.masamune.combat.action.UseItemAction
 import io.github.masamune.component.Animation
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
@@ -26,7 +27,6 @@ import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Selector
-import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
@@ -42,6 +42,7 @@ import io.github.masamune.event.EventService
 import io.github.masamune.event.GameResizeEvent
 import io.github.masamune.selectorEntity
 import io.github.masamune.tiledmap.ActionType
+import io.github.masamune.tiledmap.ConsumableType
 import io.github.masamune.tiledmap.ItemCategory
 import ktx.log.logger
 import ktx.math.vec2
@@ -204,7 +205,10 @@ class CombatViewModel(
         playerItems = player[Inventory].items
             .filter {
                 val itemCmp = it[Item]
-                itemCmp.category == ItemCategory.OTHER && itemCmp.actionType != ActionType.UNDEFINED && itemCmp.amount > 0
+                itemCmp.category == ItemCategory.OTHER
+                    && itemCmp.actionType != ActionType.UNDEFINED
+                    && (itemCmp.consumableType == ConsumableType.COMBAT_AND_INVENTORY || itemCmp.consumableType == ConsumableType.COMBAT_ONLY)
+                    && itemCmp.amount > 0
             }
             .map {
                 val itemCmp = it[Item]

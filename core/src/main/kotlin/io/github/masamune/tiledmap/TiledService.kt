@@ -545,6 +545,10 @@ class TiledService(
         entity += charStats
     }
 
+    private fun EntityCreateContext.configureEnemyInventory(entity: Entity, tile: TiledMapTile) {
+        entity += Inventory(talons = tile.talons)
+    }
+
     private fun EntityCreateContext.configureCombat(entity: Entity, tile: TiledMapTile) {
         val actionTypes = tile.combatActions
         if (actionTypes.isEmpty()) {
@@ -630,6 +634,7 @@ class TiledService(
                 configureCharacterStats(it, tile)
                 it += Facing(FacingDirection.DOWN)
                 configureCombat(it, tile)
+                configureEnemyInventory(it, tile)
                 it += Experience(tile.level, tile.xp)
                 it += AI(defaultBehavior(world, it))
             }

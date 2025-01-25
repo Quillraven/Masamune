@@ -7,6 +7,7 @@ import io.github.masamune.Masamune
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Experience.Companion.calcLevelUps
+import io.github.masamune.component.Inventory
 import io.github.masamune.component.Tiled
 import io.github.masamune.event.CombatPlayerDefeatEvent
 import io.github.masamune.event.CombatPlayerVictoryEvent
@@ -19,6 +20,7 @@ import io.github.masamune.screen.CombatScreen
 import io.github.masamune.screen.DefaultTransitionType
 import io.github.masamune.screen.GameScreen
 import ktx.log.logger
+import kotlin.math.roundToInt
 
 enum class UiCombatFinishState {
     UNDEFINED, VICTORY, DEFEAT
@@ -47,9 +49,9 @@ class CombatFinishViewModel(
                     var totalTalons = 0
                     combatSummary.clear()
                     event.enemies.forEach { enemy ->
-                        val (level, xp) = enemy[Experience]
+                        val (_, xp) = enemy[Experience]
                         totalXp += xp
-                        totalTalons += level * MathUtils.random(5, 9)
+                        totalTalons += (enemy[Inventory].talons * MathUtils.random(0.9f, 1.1f)).roundToInt()
 
                         val type = enemy[Tiled].objType
                         val name = bundle["enemy.${type.name.lowercase()}.name"]
