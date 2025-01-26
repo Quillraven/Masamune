@@ -6,13 +6,17 @@ import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Trigger
+import io.github.masamune.event.Event
+import io.github.masamune.event.EventListener
+import io.github.masamune.event.MapChangeEvent
 import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.trigger.TriggerScript
 import ktx.log.logger
+import ktx.tiled.property
 
 class TriggerSystem(
     private val triggerConfigurator: TriggerConfigurator = inject(),
-) : IteratingSystem(family { all(Trigger, Tag.EXECUTE_TRIGGER) }) {
+) : IteratingSystem(family { all(Trigger, Tag.EXECUTE_TRIGGER) }), EventListener {
 
     private val activeTriggers = mutableListOf<TriggerScript>()
     private var lastTriggerEntity = Entity.NONE
@@ -48,6 +52,19 @@ class TriggerSystem(
         val script = triggerConfigurator[triggerName, world, entity, triggeringEntity]
         activeTriggers += script
         lastTriggerEntity = entity
+    }
+
+    override fun onEvent(event: Event) {
+        if (event !is MapChangeEvent) {
+            return
+        }
+
+        val tiledTriggerName = event.tiledMap.property("trigger", "")
+        if (tiledTriggerName.isNotBlank()) {
+            triggerConfigurator[tiledTriggerName, world]?.let { mapTrigger ->
+                activeTriggers += mapTrigger
+            }
+        }
     }
 
     companion object {

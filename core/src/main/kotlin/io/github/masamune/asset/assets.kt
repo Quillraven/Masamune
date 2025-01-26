@@ -34,7 +34,9 @@ enum class AtlasAsset(folder: String = "graphics") {
  */
 enum class TiledMapAsset {
     VILLAGE,
-    PATH_TO_FOREST;
+    PATH_TO_FOREST,
+    FOREST_ENTRANCE,
+    ;
 
     val path = "maps/${name.lowercase()}.tmx"
 }
@@ -67,6 +69,7 @@ enum class MusicAsset(format: String) {
     COMBAT1("mp3"),
     COMBAT_VICTORY("mp3"),
     COMBAT_DEFEAT("mp3"),
+    FOREST("mp3"),
     ;
 
     val path = "music/${name.lowercase()}.$format"

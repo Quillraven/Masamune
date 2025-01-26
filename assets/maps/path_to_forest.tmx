@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="16" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="20">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="16" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="21">
  <properties>
   <property name="music" value="ROAD"/>
  </properties>
@@ -26,12 +26,12 @@
     <property name="enemies" value="BUTTERFLY=2"/>
    </properties>
   </object>
-  <object id="9" gid="4104" x="128" y="32" width="16" height="16">
+  <object id="9" gid="4104" x="129" y="40" width="16" height="16">
    <properties>
     <property name="enemies" value="LARVA=1"/>
    </properties>
   </object>
-  <object id="10" gid="4105" x="144" y="16" width="16" height="16">
+  <object id="10" gid="4105" x="150" y="30" width="16" height="16">
    <properties>
     <property name="enemies" value="MUSHROOM=2"/>
    </properties>
@@ -48,6 +48,12 @@
  <objectgroup id="7" name="trigger"/>
  <objectgroup color="#ffaa00" id="6" name="portal">
   <object id="11" name="VILLAGE" type="Portal" x="48" y="688" width="48" height="16">
+   <properties>
+    <property name="isSensor" type="bool" value="true"/>
+    <property name="targetPortalId" type="int" value="11"/>
+   </properties>
+  </object>
+  <object id="20" name="FOREST_ENTRANCE" type="Portal" x="102" y="-5" width="53" height="16">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
     <property name="targetPortalId" type="int" value="11"/>

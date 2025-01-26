@@ -2,7 +2,10 @@ package io.github.masamune.trigger
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.component.Player
 import io.github.masamune.component.QuestLog
+import io.github.masamune.getEntityByTiledId
+import io.github.masamune.hasItem
 import io.github.masamune.hasQuest
 import io.github.masamune.quest.FlowerGirlQuest
 import io.github.masamune.quest.MainQuest
@@ -22,7 +25,16 @@ class TriggerConfigurator {
             "merchant" -> world.merchantTrigger(name, triggeringEntity, scriptEntity)
             "smith" -> world.smithTrigger(name, triggeringEntity, scriptEntity)
             "flower_girl" -> world.flowerGirlTrigger(name, triggeringEntity)
+            "terealis_flower" -> world.terealisFlowerTrigger(name, scriptEntity, triggeringEntity)
 
+            else -> gdxError("There is no trigger configured for name $name")
+        }
+    }
+
+    operator fun get(name: String, world: World): TriggerScript? {
+        log.debug { "Creating new trigger $name" }
+        return when (name) {
+            "forest_entrance" -> world.forestEntranceTrigger(name)
             else -> gdxError("There is no trigger configured for name $name")
         }
     }
@@ -42,7 +54,6 @@ class TriggerConfigurator {
             }
         }
     }
-
 
     private fun World.elderTrigger(name: String, triggeringEntity: Entity): TriggerScript {
         return when {
@@ -107,6 +118,31 @@ class TriggerConfigurator {
                 }
             }
         }
+    }
+
+    private fun World.forestEntranceTrigger(name: String): TriggerScript? {
+        val player = this.family { all(Player) }.single()
+        val quest = player[QuestLog].getOrNull<FlowerGirlQuest>()
+        val hasTerealisFlower = hasItem(player, ItemType.TEREALIS_FLOWER)
+
+        return when {
+            quest == null || quest.isCompleted() || hasTerealisFlower -> trigger(name, this, player) {
+                // player doesn't have the flower quest or already has the item or the quest is completed
+                // -> remove the flower quest trigger of the map
+                actionRemove(getEntityByTiledId(32))
+            }
+
+            else -> null
+        }
+    }
+
+    private fun World.terealisFlowerTrigger(
+        name: String,
+        scriptEntity: Entity,
+        triggeringEntity: Entity
+    ): TriggerScript = trigger(name, this, triggeringEntity) {
+        actionRemove(scriptEntity)
+        actionAddItem(triggeringEntity, ItemType.TEREALIS_FLOWER)
     }
 
     companion object {

@@ -19,6 +19,7 @@ import io.github.masamune.component.Player
 import io.github.masamune.component.QuestLog
 import io.github.masamune.component.Remove
 import io.github.masamune.component.Selector
+import io.github.masamune.component.Tiled
 import io.github.masamune.component.Transform
 import io.github.masamune.quest.Quest
 import io.github.masamune.tiledmap.AnimationType
@@ -165,6 +166,10 @@ inline fun <reified T : Quest> World.hasQuest(entity: Entity): Boolean {
     return entity[QuestLog].getOrNull<T>() != null
 }
 
+fun World.hasItem(entity: Entity, itemType: ItemType): Boolean {
+    return entity[Inventory].items.any { item -> item[Item].type == itemType }
+}
+
 fun World.spawnSfx(target: Entity, sfxAtlasKey: String, duration: Float, scale: Float = 1f) {
     val (toPos, toSize, toScale) = target[Transform]
     val sfxAtlas = inject<CachingAtlas>(AtlasAsset.SFX.name)
@@ -178,4 +183,8 @@ fun World.spawnSfx(target: Entity, sfxAtlasKey: String, duration: Float, scale: 
         it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
         it += Remove(duration)
     }
+}
+
+fun World.getEntityByTiledId(tiledId: Int): Entity {
+    return this.family { all(Tiled) }.firstOrNull { it[Tiled].id == tiledId } ?: Entity.NONE
 }

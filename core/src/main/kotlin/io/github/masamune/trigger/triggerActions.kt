@@ -8,6 +8,7 @@ import io.github.masamune.addItem
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Animation
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Inventory
@@ -15,7 +16,6 @@ import io.github.masamune.component.Move
 import io.github.masamune.component.MoveTo
 import io.github.masamune.component.Name
 import io.github.masamune.component.QuestLog
-import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Transform
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
@@ -43,6 +43,11 @@ sealed interface TriggerAction {
 
 data class TriggerActionRemoveEntity(val entity: Entity) : TriggerAction {
     override fun World.onUpdate(): Boolean {
+        if (entity == Entity.NONE || entity !in this) {
+            // entity already removed or not found (e.g. getEntityByTiledId returns Entity.NONE)
+            return true
+        }
+
         entity.remove()
         return true
     }
