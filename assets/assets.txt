@@ -4,9 +4,9 @@ i:b:/ui/skin.png:37750:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 i:b:/ui/fipps_16.fnt:8935:1
 i:b:/ui/PIXEARG_.fnt:10450:1
-i:b:/ui/messages_de.properties:5491:1
+i:b:/ui/messages_de.properties:5914:1
 i:b:/ui/skin.atlas:2914:1
-i:b:/ui/messages.properties:4982:1
+i:b:/ui/messages.properties:5417:1
 i:b:/ui/skin.json:4342:1
 i:d:/maps:0:1
 i:b:/maps/tileset.png:473544:1
@@ -33,7 +33,7 @@ i:b:/maps/objects/small_mana_potion.png:2829:1
 i:b:/maps/tileset-orig.png:195892:1
 i:b:/maps/path_to_forest.tmx:3838:1
 i:b:/maps/objects.tsx:11954:1
-i:b:/maps/masamune-tiled.tiled-project:16093:1
+i:b:/maps/masamune-tiled.tiled-project:16139:1
 i:d:/sound:0:1
 i:b:/sound/heal1.wav:134072:1
 i:b:/sound/menu_abort.wav:73332:1
