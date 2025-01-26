@@ -2,7 +2,6 @@ package io.github.masamune.ui
 
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
@@ -18,11 +17,11 @@ import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
-import io.github.masamune.component.CharacterStats
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.gdxTest
@@ -140,15 +139,6 @@ private class UiInventoryTest : KtxApplicationAdapter {
         uiViewport.apply()
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            stage.clear()
-            stage.actors {
-                inventoryView(InventoryViewModel(bundle, audioService, world, eventService), skin)
-            }
-            eventService += stage
-            eventService.fire(MenuBeginEvent(MenuType.INVENTORY))
-        }
     }
 
     override fun dispose() {

@@ -22,6 +22,9 @@ import ktx.scene2d.image
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
 
+/**
+ * An image and text popup when the player receives a quest item.
+ */
 class QuestItemView(
     model: QuestItemViewModel,
     skin: Skin,

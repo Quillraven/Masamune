@@ -42,6 +42,9 @@ class OptionTable(
 
     fun lastOption(): Boolean = selectOption(children.size - 1)
 
+    /**
+     * Selects the first option of the [OptionTable].
+     */
     fun firstOption(): Boolean = selectOption(0)
 
     private fun selectOption(idx: Int): Boolean {

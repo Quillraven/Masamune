@@ -17,6 +17,7 @@ abstract class ScrollableSelectionTable<T>(
     val skin: Skin,
     val entriesPerRow: Int,
     private val firstEntryPredicate: ((T) -> Boolean)? = null,
+    private val onEntrySelected: ((entryIdx: Int) -> Unit)? = null,
 ) : ScrollPane(null, skin), KGroup where T : Actor, T : SelectableWidget {
 
     private val contentTable: Table
@@ -50,6 +51,9 @@ abstract class ScrollableSelectionTable<T>(
         }
     }
 
+    /**
+     * Removes all entries of the table.
+     */
     fun clearEntries() {
         contentTable.clear()
         selectedEntryIdx = 0
@@ -119,6 +123,7 @@ abstract class ScrollableSelectionTable<T>(
         this[selectedEntryIdx].select(false)
         selectedEntryIdx = realIdx
         this[selectedEntryIdx].select(true)
+        onEntrySelected?.invoke(selectedEntryIdx)
         return true
     }
 
@@ -136,6 +141,9 @@ abstract class ScrollableSelectionTable<T>(
         gdxError("There is no entry for the given predicate in $this")
     }
 
+    /**
+     * Selects the first entry of the table.
+     */
     fun selectFirstEntry() {
         if (hasNoEntries()) {
             return

@@ -31,6 +31,11 @@ class GameMenuViewModel(
                 triggerClose(fireOptionEvent = false)
                 eventService.fire(MenuBeginEvent(MenuType.INVENTORY))
             }
+            // quest log
+            2 -> {
+                triggerClose(fireOptionEvent = false)
+                eventService.fire(MenuBeginEvent(MenuType.QUEST))
+            }
             // back to game
             options.lastIndex - 1 -> {
                 options = emptyList()
