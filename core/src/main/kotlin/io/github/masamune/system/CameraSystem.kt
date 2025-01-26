@@ -149,8 +149,11 @@ class CameraSystem(
             }
 
             is MapTransitionBeginEvent -> {
-                val (fromMap, toMap, time, interpolation, type, offset, playerPos) = event
-                val panTarget = playerPos.cpy().coerceInMap(vec2(toMap.width.toFloat(), toMap.height.toFloat()))
+                val (fromMap, toMap, time, interpolation, type, offset, playerPos, playerSize) = event
+                val panTarget = playerPos
+                    .cpy()
+                    .add(playerSize.x * 0.5f, playerSize.y * 0.5f)
+                    .coerceInMap(vec2(toMap.width.toFloat(), toMap.height.toFloat()))
                 val (panX, panY) = panTarget
 
                 when (type) {

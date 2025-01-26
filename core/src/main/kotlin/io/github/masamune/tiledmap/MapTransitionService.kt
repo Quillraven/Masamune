@@ -166,7 +166,8 @@ class DefaultMapTransitionService(
         mapOffset.set(toCenter.x - fromCenter.x, toCenter.y - fromCenter.y)
         val transitionInterpolation = Interpolation.fade
 
-        val (playerX, playerY) = playerEntity[Transform].position
+        val playerTransformCmp = playerEntity[Transform]
+        val (playerX, playerY) = playerTransformCmp.position
         log.debug { "Transition of type $transitionType and offset $mapOffset triggered from ($playerX, $playerY)" }
         val playerTransitionTargetPos = playerTransitionTargetPos(fromTiledMap, playerY, playerX)
         playerTargetPosition.set(playerRealTargetPos(playerTransitionTargetPos, transitionType, mapOffset, nextMap))
@@ -179,7 +180,8 @@ class DefaultMapTransitionService(
                 transitionInterpolation,
                 transitionType,
                 mapOffset,
-                playerTargetPosition
+                playerTargetPosition,
+                playerTransformCmp.size
             )
         )
 
