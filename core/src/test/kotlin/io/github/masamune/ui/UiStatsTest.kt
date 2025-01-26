@@ -92,7 +92,7 @@ private class UiStatsTest : KtxApplicationAdapter {
             },
             world.entity {
                 it += Item(ItemType.STUDDED_LEATHER, 0, ItemCategory.ARMOR, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
-                it += ItemStats(life = 50f, mana = 50f)
+                it += ItemStats(lifeMax = 50f, manaMax = 50f)
             },
             world.entity {
                 it += Item(ItemType.ELDER_SWORD, 0, ItemCategory.WEAPON, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)

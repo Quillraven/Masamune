@@ -6,8 +6,8 @@
    <properties>
     <property name="action" propertytype="ActionType" value="ITEM_MANA_RESTORE"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/small_mana_potion"/>
     <property name="category" propertytype="ItemCategory" value="OTHER"/>
+    <property name="consumableType" propertytype="ConsumableType" value="COMBAT_AND_INVENTORY"/>
     <property name="itemType" propertytype="ItemType" value="SMALL_MANA_POTION"/>
     <property name="stats" type="class" propertytype="Stats">
      <properties>
@@ -21,10 +21,9 @@
    <properties>
     <property name="action" propertytype="ActionType" value="SCROLL_INFERNO"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/scroll_inferno"/>
     <property name="category" propertytype="ItemCategory" value="OTHER"/>
+    <property name="consumableType" propertytype="ConsumableType" value="COMBAT_ONLY"/>
     <property name="itemType" propertytype="ItemType" value="SCROLL_INFERNO"/>
-    <property name="onlyCombat" type="bool" value="true"/>
     <property name="stats" type="class" propertytype="Stats">
      <properties>
       <property name="damage" type="float" value="50"/>
@@ -37,7 +36,6 @@
    <properties>
     <property name="action" propertytype="ActionType" value="HEAL"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/elder_sword"/>
     <property name="category" propertytype="ItemCategory" value="WEAPON"/>
     <property name="itemType" propertytype="ItemType" value="ELDER_SWORD"/>
     <property name="stats" type="class" propertytype="Stats">
@@ -51,7 +49,6 @@
   <tile id="6" type="ItemObject">
    <properties>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/boots"/>
     <property name="category" propertytype="ItemCategory" value="BOOTS"/>
     <property name="itemType" propertytype="ItemType" value="BOOTS"/>
     <property name="stats" type="class" propertytype="Stats">
@@ -65,7 +62,6 @@
   <tile id="7" type="ItemObject">
    <properties>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/helmet"/>
     <property name="category" propertytype="ItemCategory" value="HELMET"/>
     <property name="itemType" propertytype="ItemType" value="HELMET"/>
     <property name="stats" type="class" propertytype="Stats">
@@ -79,7 +75,6 @@
   <tile id="8" type="ItemObject">
    <properties>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/studded_leather"/>
     <property name="category" propertytype="ItemCategory" value="ARMOR"/>
     <property name="itemType" propertytype="ItemType" value="STUDDED_LEATHER"/>
     <property name="stats" type="class" propertytype="Stats">
@@ -93,7 +88,6 @@
   <tile id="9" type="ItemObject">
    <properties>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/ring"/>
     <property name="category" propertytype="ItemCategory" value="ACCESSORY"/>
     <property name="itemType" propertytype="ItemType" value="RING"/>
     <property name="stats" type="class" propertytype="Stats">
@@ -109,7 +103,7 @@
    <properties>
     <property name="action" propertytype="ActionType" value="ITEM_HEALTH_RESTORE"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="atlasRegionKey" value="items/small_health_potion"/>
+    <property name="consumableType" propertytype="ConsumableType" value="COMBAT_AND_INVENTORY"/>
     <property name="itemType" propertytype="ItemType" value="SMALL_HEALTH_POTION"/>
     <property name="stats" type="class" propertytype="Stats">
      <properties>
