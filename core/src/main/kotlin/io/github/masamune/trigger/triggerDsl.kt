@@ -44,6 +44,11 @@ class TriggerCfg(
         actions += TriggerActionAddQuest(entity, quest, eventService)
     }
 
+    fun actionCompleteQuest(quest: Quest) {
+        val eventService = world.inject<EventService>()
+        actions += TriggerActionCompleteQuest(quest, eventService)
+    }
+
     fun actionMoveBack(entity: Entity, distance: Float, timeInSeconds: Float = 0f, wait: Boolean = true) {
         actions += TriggerActionMoveBack(entity, distance, timeInSeconds, wait)
     }

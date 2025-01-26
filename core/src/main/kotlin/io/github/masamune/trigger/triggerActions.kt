@@ -132,6 +132,22 @@ class TriggerActionAddQuest(
     }
 }
 
+class TriggerActionCompleteQuest(
+    private val quest: Quest,
+    private val eventService: EventService,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        eventService -= quest
+        quest.complete()
+        log.info { "Completed quest $quest" }
+        return true
+    }
+
+    companion object {
+        private val log = logger<TriggerActionAddQuest>()
+    }
+}
+
 class TriggerActionMoveBack(
     private val entity: Entity,
     private val distance: Float,

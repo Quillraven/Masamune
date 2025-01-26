@@ -8,6 +8,8 @@ sealed interface Quest : EventListener {
 
     fun isCompleted(): Boolean
 
+    fun complete()
+
     override fun onEvent(event: Event) = Unit
 }
 
@@ -15,10 +17,18 @@ data class MainQuest(var progress: Int = 0) : Quest {
     override val i18nKey = "quest.main"
 
     override fun isCompleted(): Boolean = progress == 100
+
+    override fun complete() {
+        progress = 100
+    }
 }
 
 data class FlowerGirlQuest(var progress: Int = 0) : Quest {
     override val i18nKey = "quest.flower_girl"
 
     override fun isCompleted(): Boolean = progress == 100
+
+    override fun complete() {
+        progress = 100
+    }
 }

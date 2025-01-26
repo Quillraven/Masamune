@@ -103,8 +103,18 @@ class TriggerConfigurator {
         }
 
     private fun World.flowerGirlTrigger(name: String, triggeringEntity: Entity): TriggerScript {
+        val quest = triggeringEntity[QuestLog].getOrNull<FlowerGirlQuest>()
+        val hasTerealisFlower = hasItem(triggeringEntity, ItemType.TEREALIS_FLOWER)
+
         return when {
-            hasQuest<FlowerGirlQuest>(triggeringEntity) -> trigger(name, this, triggeringEntity) {
+            quest != null && !quest.isCompleted() && hasTerealisFlower -> trigger(name, this, triggeringEntity) {
+                actionDialog("flower_girl_20")
+                actionAddItem(triggeringEntity, ItemType.SMALL_STRENGTH_POTION)
+                actionCompleteQuest(quest)
+                actionHeal(triggeringEntity, healLife = true, healMana = true)
+            }
+
+            quest != null -> trigger(name, this, triggeringEntity) {
                 actionDialog("flower_girl_10")
                 actionHeal(triggeringEntity, healLife = true, healMana = true)
             }

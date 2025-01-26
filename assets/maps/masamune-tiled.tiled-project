@@ -353,7 +353,8 @@
                 "SMALL_MANA_POTION",
                 "SCROLL_INFERNO",
                 "SMALL_HEALTH_POTION",
-                "TEREALIS_FLOWER"
+                "TEREALIS_FLOWER",
+                "SMALL_STRENGTH_POTION"
             ],
             "valuesAsFlags": false
         },

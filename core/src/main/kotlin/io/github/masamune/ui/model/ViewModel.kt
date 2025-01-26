@@ -19,7 +19,6 @@ import io.github.masamune.component.Item
 import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Name
 import io.github.masamune.event.EventListener
-import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.ConsumableType
 import io.github.masamune.tiledmap.ItemType
 import ktx.app.gdxError
@@ -188,13 +187,12 @@ abstract class ViewModel(
     fun Entity.toItemModel(world: World, withConsumeInfo: Boolean = false): ItemModel = with(world) {
         val itemEntity = this@toItemModel
         // and transform items into UI ItemModel objects
-        val (type, cost, category, descriptionKey, actionType, consumableType, amount) = itemEntity[Item]
+        val (type, cost, category, descriptionKey, _, consumableType, amount) = itemEntity[Item]
         val itemName = itemEntity[Name].name
         val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
 
         val i18nName = bundle["item.$itemName.name"]
-        val isConsumable = actionType != ActionType.UNDEFINED
-            && (consumableType == ConsumableType.INVENTORY_ONLY || consumableType == ConsumableType.COMBAT_AND_INVENTORY)
+        val isConsumable = consumableType == ConsumableType.INVENTORY_ONLY || consumableType == ConsumableType.COMBAT_AND_INVENTORY
         val i18nDescription = buildString {
             if (withConsumeInfo && isConsumable) {
                 appendLine("{BLINK=#695454FF;#69545455;2.5;0.6}${i18nTxt(I18NKey.ITEM_INFO_CONSUMABLE)}{ENDBLINK}")
