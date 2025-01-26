@@ -15,7 +15,7 @@
  </layer>
  <layer id="2" name="decoration" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYKAuuM3MwHCHGbe8OAsDgwQQSwKxFAtldkXjsQcZvKbQnqEMiA0jYsF1dgSmBhgqcQNy5w0q+Zma4BaV3QSLD0rMdeRhYHACYmce6ripEWhOExA3o5nnz8vAEMBLmdkh/AwMoUAcBsT9QLMmoJl3HmjnBSL9cQWodwrQnKlAPA2IL/ExMFwG4it8CDX8QDUCvNQtBwcCMDMyMLAAMQAG6hlw
+   eJxjYKAuuM3MwHCHGbe8OAsDgwQQSwKxFAtldkXjsQcZ3GSnzJ6hDIgNI2LBdXYEpgYAxc2NIRI/1HYnNdLlLSq7CeZHSsx15GFgcAJiZx7quKkRaE4TEDejmefPy8AQwEuZ2SH8DAyhQBwGxP1AsyagmXceaOcFIv1xBah3CtCcqUA8DYgv8TEwXAbiK3wINfxANQK81C0HBwIwMzIwsAAxACQtGhI=
   </data>
  </layer>
  <layer id="3" name="decoration2" width="20" height="20">
