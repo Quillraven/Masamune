@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="44" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="33">
+ <properties>
+  <property name="music" value="FOREST"/>
+  <property name="trigger" value="forest_entrance"/>
+ </properties>
+ <tileset firstgid="1" source="tileset.tsx"/>
+ <tileset firstgid="4097" source="objects.tsx"/>
+ <layer id="1" name="ground" width="44" height="28">
+  <data encoding="base64" compression="zlib">
+   eJzVV11OwkAQ7oNdX0DFExr0Ispr0SsQMJFjVJQ32oJHQBM5hjN0J66Tmd3tokZJvrRs2Zmv384fK5Nlq3+Mhn1f/wFO/wlFnmVjwG3e3mvPtP35cXZxxABr6u/5+cTur+21B3gBPgO4nvPzR76mfaZxBvvlsJ9llxZX/f1atF6+/VrsEedCWa8AtcO3Yf624GMOeAC8CXzrAF/c/2oh7RfPx2qpvYukcdWeZ2nA/tb6Mu15TnyaVl/joQR+Exeh/cSrH3h2osdw2cWXL3/GETnDaxbXoAvWAbucK+YM5Qjeb3JZG19MhdA4/mL0UP3mn/wI2hl2hfh+NhcL468hvhj8Ln6x/kgXLSdTYkvSJmSDnsf2316AcwiSn0N7P+9FvA+R3tIZNyacfymQdKc16kXYg5ZmX2vLUP/lKDr29y62OZDvFLi+J/Zfql+1wJd4ggaTYUfbWq1ze+/M4t6x6auRxBXrlxQvaHsEV+S6E2yn6ruA69Ta0+YFEbbfS9q6sbZLsF0pWrmzwty+/9L4bVJPQW353OTGAsaBe3YxtmPQZb4pHJ4Eia87U7qxEDM7SXHIa0b0fAPc7kzb/zaemkB5PFPywgf8HKI/56vNLz6+nfJC0NS9j+05vtrF+4Y087ux+xv/cXsmrCvx4DmBNSg1dlN/I+noA/+f4XI9ZPb1YQCanIIfCQMhFlP/E0jQ4tfH8QzwCGtPgGuI2xvACIBr8KyMfY+fBPjMaAZ6Ni23PZAvXBeW89KuY2y68wHsL1N94+cDqvmUPg==
+  </data>
+ </layer>
+ <layer id="2" name="decoration" width="44" height="28">
+  <data encoding="base64" compression="zlib">
+   eJzlWMsNwjAMDYf+ThwLnYDPFFyADfizC7OwDgtQjkiwBq4gUgkhcRKXBHiSD2mb+NtnK3nCWAfEFHkM+0C6IEVM/77CKmJsHT0/m4Gtc4S9Tdune78Au5fR63MsbPSXCX6/KTbgy9bAH5X+k0W9yTBt05zjA1UMXGvkX6GKWy9jrA8yABlmNPouKWPXlOasOr6pfkOoVc5BJRF/UELWq2zA+fIdR45a7jpcgPkX6vnZPeyl4nxTcL28H9n2RNP+FzLGwDsTAu7Zp/dc13s99dxBibMDhx819Usx72LOLQKPMTUwvuq+keVO3KNb/yI+VbP1dajxpe5PKv+oeokszqr4ynwUbWmyT+eWdw2+wO8adNygm0exszPPhY9ZyWduMPwgrrH3QBiUwoyIteEAcgNH+zhO
+  </data>
+ </layer>
+ <layer id="3" name="decoration 2" width="44" height="28">
+  <data encoding="base64" compression="zlib">
+   eJztzkENADAIBLD7oHL414EHkoVPq6AJv71Kuq4XAAAAAGwMiVEAwg==
+  </data>
+ </layer>
+ <objectgroup id="4" name="object">
+  <object id="8" gid="4103" x="308" y="327" width="16" height="16">
+   <properties>
+    <property name="enemies" value="BUTTERFLY=1"/>
+   </properties>
+  </object>
+  <object id="9" gid="4104" x="258" y="161" width="16" height="16">
+   <properties>
+    <property name="enemies" value="LARVA=2"/>
+   </properties>
+  </object>
+  <object id="10" gid="4105" x="458" y="208" width="16" height="16">
+   <properties>
+    <property name="enemies" value="MUSHROOM=1;BUTTERFLY=1"/>
+   </properties>
+  </object>
+  <object id="12" name="Player" gid="4097" x="312" y="422" width="16" height="16"/>
+  <object id="20" gid="4107" x="368" y="448" width="48" height="48"/>
+  <object id="21" gid="4107" x="240" y="448" width="48" height="48"/>
+  <object id="23" gid="4107" x="131" y="313" width="48" height="48"/>
+  <object id="24" gid="4107" x="511" y="377" width="48" height="48"/>
+  <object id="25" gid="4107" x="238" y="105" width="48" height="48"/>
+  <object id="26" gid="4105" x="343" y="193" width="16" height="16">
+   <properties>
+    <property name="enemies" value="MUSHROOM=3"/>
+   </properties>
+  </object>
+  <object id="27" gid="4104" x="197" y="309" width="16" height="16">
+   <properties>
+    <property name="enemies" value="LARVA=1;BUTTERFLY=1"/>
+   </properties>
+  </object>
+  <object id="28" gid="4103" x="418" y="370" width="16" height="16">
+   <properties>
+    <property name="enemies" value="BUTTERFLY=3"/>
+   </properties>
+  </object>
+  <object id="29" gid="4103" x="97" y="116" width="16" height="16">
+   <properties>
+    <property name="enemies" value="BUTTERFLY=1;MUSHROOM=1;LARVA=1"/>
+   </properties>
+  </object>
+  <object id="30" gid="4104" x="631" y="137" width="16" height="16">
+   <properties>
+    <property name="enemies" value="LARVA=1;MUSHROOM=1"/>
+   </properties>
+  </object>
+  <object id="32" gid="4113" x="70" y="399" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="7" name="trigger"/>
+ <objectgroup color="#ffaa00" id="6" name="portal">
+  <object id="11" name="PATH_TO_FOREST" type="Portal" x="291" y="435" width="59" height="16">
+   <properties>
+    <property name="isSensor" type="bool" value="true"/>
+    <property name="targetPortalId" type="int" value="20"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer id="5" name="foreground" width="44" height="28">
+  <data encoding="base64" compression="zlib">
+   eJzVVlsOwiAQ5KfKn98+r13tAXweSO0JfFzCMUpCCCmw7CJOMjFUly7jdqZKxeHcKHUBr2APtuAa3IBdw/+9iymuzb7X5/hceH7D2X+oPhdL7LFK2If7/j7oicy+pWDPSK3Ya6UO4BE86V9388GQbjf0eAcf4JOp3y322Qmc/Z/mt4ZZTfWgN4xfSoPi8T5I+iUHzLNg8sjOpJph8oiaSZTZo8LOejf3OTCC74wZvcfOeq7cD52bqotb1zFpLPU+5tb1mRrHnJWih1sTWsci5qwUPdya0DoGpWbWXufoW2pm7TVVXwkfDN2jzdB36HxcWeLTOVXfkrlmwOUNpZDrDbHvzpz/hZQfS/Ug4cepqKEHabwAG5viDA==
+  </data>
+ </layer>
+ <layer id="8" name="foreground2" width="44" height="28">
+  <data encoding="base64" compression="zlib">
+   eJztwYEAAAAAw6D5U5/gBlUBAAAAAM8AE0AAAQ==
+  </data>
+ </layer>
+ <layer id="9" name="foreground3" width="44" height="28">
+  <data encoding="base64" compression="zlib">
+   eJztwYEAAAAAw6D5U5/gBlUBAAAAAM8AE0AAAQ==
+  </data>
+ </layer>
+</map>

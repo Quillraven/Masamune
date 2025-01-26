@@ -352,7 +352,9 @@
                 "RING",
                 "SMALL_MANA_POTION",
                 "SCROLL_INFERNO",
-                "SMALL_HEALTH_POTION"
+                "SMALL_HEALTH_POTION",
+                "TEREALIS_FLOWER",
+                "SMALL_STRENGTH_POTION"
             ],
             "valuesAsFlags": false
         },

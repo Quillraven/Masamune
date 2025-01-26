@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="15" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="18" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -274,5 +274,41 @@
    </property>
   </properties>
   <image source="objects/small_health_potion.png" width="9" height="11"/>
+ </tile>
+ <tile id="16" type="NpcObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="objType" propertytype="MapObjectType" value="TRIGGER"/>
+   <property name="triggerName" value="terealis_flower"/>
+  </properties>
+  <image source="objects/terealis_plant.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="0" y="3" width="16" height="13">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="17" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="category" propertytype="ItemCategory" value="QUEST"/>
+   <property name="itemType" propertytype="ItemType" value="TEREALIS_FLOWER"/>
+  </properties>
+  <image source="objects/terealis_plant.png" width="16" height="16"/>
+ </tile>
+ <tile id="18" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="consumableType" propertytype="ConsumableType" value="INVENTORY_ONLY"/>
+   <property name="itemType" propertytype="ItemType" value="SMALL_STRENGTH_POTION"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="strength" type="float" value="3"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/small_strength_potion.png" width="9" height="11"/>
  </tile>
 </tileset>
