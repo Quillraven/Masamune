@@ -24,6 +24,7 @@ import io.github.masamune.event.PlayerQuestItemBegin
 import io.github.masamune.event.PlayerQuestItemEnd
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.quest.Quest
+import io.github.masamune.removeItem
 import io.github.masamune.scheduledTask
 import io.github.masamune.spawnSfx
 import io.github.masamune.tiledmap.AnimationType
@@ -107,6 +108,17 @@ class TriggerActionAddItem(
             return true
         }
         return false
+    }
+}
+
+class TriggerActionRemoveItem(
+    private val entity: Entity,
+    private val itemType: ItemType,
+    private val amount: Int,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        removeItem(itemType, amount, entity, true)
+        return true
     }
 }
 

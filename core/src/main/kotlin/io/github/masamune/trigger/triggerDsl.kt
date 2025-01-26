@@ -39,6 +39,10 @@ class TriggerCfg(
         actions += TriggerActionAddItem(entity, itemType, eventService, tiledService, audioService)
     }
 
+    fun actionRemoveItem(entity: Entity, itemType: ItemType, amount: Int) {
+        actions += TriggerActionRemoveItem(entity, itemType, amount)
+    }
+
     fun actionAddQuest(entity: Entity, quest: Quest) {
         val eventService = world.inject<EventService>()
         actions += TriggerActionAddQuest(entity, quest, eventService)
