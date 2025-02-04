@@ -1,8 +1,8 @@
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.0-red.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-red.svg)](http://kotlinlang.org/)
 [![Fleks](https://img.shields.io/badge/Fleks-2.11-purple.svg)](https://github.com/Quillraven/Fleks)
 
 [![LibGDX](https://img.shields.io/badge/LibGDX-1.13.1-green.svg)](https://libgdx.com/)
-[![LibKTX](https://img.shields.io/badge/LibKTX-1.12.1--rc2-blue.svg)](https://github.com/libktx/ktx)
+[![LibKTX](https://img.shields.io/badge/LibKTX-1.13.1--rc1-blue.svg)](https://github.com/libktx/ktx)
 [![Tiled](https://img.shields.io/badge/Tiled-1.11.0-teal.svg)](https://www.mapeditor.org/)
 
 # Masamune
