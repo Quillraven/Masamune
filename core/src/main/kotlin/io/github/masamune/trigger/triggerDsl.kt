@@ -67,6 +67,9 @@ class TriggerCfg(
         actions += TriggerActionHeal(entity, healLife, healMana, audioService)
     }
 
+    fun actionPauseEntity(entity: Entity, pause: Boolean) {
+        actions += TriggerActionPauseEntity(entity, pause)
+    }
 }
 
 fun trigger(

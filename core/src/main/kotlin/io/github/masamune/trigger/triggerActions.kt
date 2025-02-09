@@ -16,6 +16,7 @@ import io.github.masamune.component.Move
 import io.github.masamune.component.MoveTo
 import io.github.masamune.component.Name
 import io.github.masamune.component.QuestLog
+import io.github.masamune.component.Tag
 import io.github.masamune.component.Transform
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.DialogBeginEvent
@@ -238,5 +239,18 @@ class TriggerActionHeal(
         audioService.play(SoundAsset.HEAL1)
         return true
     }
+}
 
+class TriggerActionPauseEntity(
+    private val entity: Entity,
+    private val pause: Boolean,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        if (pause) {
+            entity.configure { it += Tag.PAUSE }
+        } else {
+            entity.configure { it -= Tag.PAUSE }
+        }
+        return true
+    }
 }

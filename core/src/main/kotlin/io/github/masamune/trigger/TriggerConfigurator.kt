@@ -2,6 +2,7 @@ package io.github.masamune.trigger
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.component.MonsterBook
 import io.github.masamune.component.Player
 import io.github.masamune.component.QuestLog
 import io.github.masamune.getEntityByTiledId
@@ -9,7 +10,9 @@ import io.github.masamune.hasItem
 import io.github.masamune.hasQuest
 import io.github.masamune.quest.FlowerGirlQuest
 import io.github.masamune.quest.MainQuest
+import io.github.masamune.quest.MonsterBookQuest
 import io.github.masamune.tiledmap.ItemType
+import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.ui.model.I18NKey
 import ktx.app.gdxError
 import ktx.log.logger
@@ -26,6 +29,7 @@ class TriggerConfigurator {
             "smith" -> world.smithTrigger(name, triggeringEntity, scriptEntity)
             "flower_girl" -> world.flowerGirlTrigger(name, triggeringEntity)
             "terealis_flower" -> world.terealisFlowerTrigger(name, scriptEntity, triggeringEntity)
+            "man_green" -> world.manGreenTrigger(name, scriptEntity, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }
@@ -164,6 +168,28 @@ class TriggerConfigurator {
     ): TriggerScript = trigger(name, this, triggeringEntity) {
         actionRemove(scriptEntity)
         actionAddItem(triggeringEntity, ItemType.TEREALIS_FLOWER)
+    }
+
+    private fun World.manGreenTrigger(
+        name: String,
+        scriptEntity: Entity,
+        triggeringEntity: Entity
+    ): TriggerScript = trigger(name, this, triggeringEntity) {
+        if (triggeringEntity hasNo MonsterBook) {
+            actionPauseEntity(scriptEntity, true)
+            actionDialog("man_green_00") {
+                actionPauseEntity(scriptEntity, false)
+                triggeringEntity.configure {
+                    it += MonsterBook(knownTypes = mutableListOf(TiledObjectType.BUTTERFLY, TiledObjectType.LARVA))
+                }
+                actionAddQuest(triggeringEntity, MonsterBookQuest())
+            }
+        } else {
+            actionPauseEntity(scriptEntity, true)
+            actionDialog("man_green_10") {
+                actionPauseEntity(scriptEntity, false)
+            }
+        }
     }
 
     companion object {

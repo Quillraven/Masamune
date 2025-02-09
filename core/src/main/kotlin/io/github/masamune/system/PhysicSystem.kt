@@ -10,6 +10,7 @@ import com.github.quillraven.fleks.World.Companion.inject
 import io.github.masamune.PhysicWorld
 import io.github.masamune.component.Move
 import io.github.masamune.component.Physic
+import io.github.masamune.component.Tag
 import io.github.masamune.component.Transform
 import ktx.math.component1
 import ktx.math.component2
@@ -38,9 +39,10 @@ class PhysicSystem(
         val (body, prevPosition) = entity[Physic]
         prevPosition.set(body.position)
 
-        entity.getOrNull(Move)?.let { (speed, direction) ->
+        entity.getOrNull(Move)?.let { (moveSpeed, direction) ->
             val (velX, velY) = body.linearVelocity
             val (dirX, dirY) = direction
+            val speed = if (entity has Tag.PAUSE) 0f else moveSpeed
 
             TMP_IMPULSE.set(speed * dirX - velX, speed * dirY - velY)
             body.applyLinearImpulse(TMP_IMPULSE.scl(body.mass), body.worldCenter, true)

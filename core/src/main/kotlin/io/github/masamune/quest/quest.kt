@@ -32,3 +32,13 @@ data class FlowerGirlQuest(var progress: Int = 0) : Quest {
         progress = 100
     }
 }
+
+data class MonsterBookQuest(var completed: Boolean = false) : Quest {
+    override val i18nKey = "quest.monster_book"
+
+    override fun isCompleted(): Boolean = completed
+
+    override fun complete() {
+        completed = true
+    }
+}
