@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="16" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="21">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="16" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="23">
  <properties>
   <property name="music" value="ROAD"/>
  </properties>
@@ -43,6 +43,17 @@
   <object id="16" gid="4107" x="160" y="320" width="48" height="48"/>
   <object id="17" gid="4107" x="48" y="464" width="48" height="48"/>
   <object id="18" gid="4107" x="112" y="624" width="48" height="48"/>
+  <object id="21" name="MAN_GREEN" gid="4116" x="192" y="592" width="16" height="16">
+   <properties>
+    <property name="path" type="object" value="22"/>
+    <property name="pathSpeed" type="float" value="0.75"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="10" name="path">
+  <object id="22" name="PATH_MAN_GREEN" x="201" y="585">
+   <polygon points="0,0 43,-36 21,-35 3,-18 -45,8 -45,53 -27,53 -27,26 -10,18"/>
+  </object>
  </objectgroup>
  <objectgroup id="7" name="trigger"/>
  <objectgroup color="#ffaa00" id="6" name="portal">
