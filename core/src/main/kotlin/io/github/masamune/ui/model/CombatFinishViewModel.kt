@@ -19,6 +19,7 @@ import io.github.masamune.screen.BlurTransitionType
 import io.github.masamune.screen.CombatScreen
 import io.github.masamune.screen.DefaultTransitionType
 import io.github.masamune.screen.GameScreen
+import io.github.masamune.tiledmap.TiledObjectType
 import ktx.log.logger
 import kotlin.math.roundToInt
 
@@ -39,6 +40,7 @@ class CombatFinishViewModel(
     var levelsToGain: Int by propertyNotify(0)
     val combatSummary: MutableMap<String, Int> by propertyNotify(mutableMapOf())
     var state: UiCombatFinishState by propertyNotify(UiCombatFinishState.UNDEFINED)
+    private val monsterTypesToAdd = mutableListOf<TiledObjectType>()
 
     override fun onEvent(event: Event) {
         when (event) {
@@ -47,6 +49,7 @@ class CombatFinishViewModel(
                 with(world) {
                     var totalXp = 0
                     var totalTalons = 0
+                    monsterTypesToAdd.clear()
                     combatSummary.clear()
                     event.enemies.forEach { enemy ->
                         val (_, xp) = enemy[Experience]
@@ -56,6 +59,8 @@ class CombatFinishViewModel(
                         val type = enemy[Tiled].objType
                         val name = bundle["enemy.${type.name.lowercase()}.name"]
                         combatSummary.merge(name, 1, Int::plus)
+
+                        monsterTypesToAdd += enemy[Tiled].objType
                     }
 
                     xpToGain = totalXp
@@ -81,7 +86,7 @@ class CombatFinishViewModel(
         val victory = state == UiCombatFinishState.VICTORY
         val combatScreen = masamune.getScreen<CombatScreen>()
         if (victory) {
-            combatScreen.updatePlayerAfterVictory(xpToGain, talonsToGain)
+            combatScreen.updatePlayerAfterVictory(xpToGain, talonsToGain, monsterTypesToAdd)
         } else {
             combatScreen.updatePlayerAfterDefeat()
         }

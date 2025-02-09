@@ -114,10 +114,10 @@ abstract class ViewModel(
             "DAMAGE" -> "${stats.damage.toInt()}"
             "INT" -> "${stats.intelligence.toInt()}"
             "LIFE" -> "${stats.life.toInt()}"
-            "MAXLIFE" -> "${stats.life.toInt()}"
+            "MAXLIFE" -> "${stats.lifeMax.toInt()}"
             "MAGEVA" -> "${round((stats.magicalEvade * 100)).toInt()}%"
             "MANA" -> "${stats.mana.toInt()}"
-            "MAXMANA" -> "${stats.mana.toInt()}"
+            "MAXMANA" -> "${stats.manaMax.toInt()}"
             "PHYEVA" -> "${round((stats.physicalEvade * 100)).toInt()}%"
             "RES" -> "${stats.resistance.toInt()}"
             "STR" -> "${stats.strength.toInt()}"
@@ -183,6 +183,27 @@ abstract class ViewModel(
         UIStats.RESISTANCE to this@toUiStatsMap.resistance.toInt(),
         UIStats.STRENGTH to this@toUiStatsMap.strength.toInt(),
     )
+
+    fun Triple<CharacterStats, Int, Int>.toUiStatsMap(): Map<UIStats, String> {
+        val stats = this.first
+        return mapOf(
+            UIStats.AGILITY to "${stats.agility.toInt()}",
+            UIStats.ARCANE_STRIKE to "${round((stats.arcaneStrike * 100)).toInt()}",
+            UIStats.ARMOR to "${stats.armor.toInt()}",
+            UIStats.CONSTITUTION to "${stats.constitution.toInt()}",
+            UIStats.CRITICAL_STRIKE to "${round((stats.criticalStrike * 100)).toInt()}",
+            UIStats.DAMAGE to "${stats.damage.toInt()}",
+            UIStats.INTELLIGENCE to "${stats.intelligence.toInt()}",
+            UIStats.LIFE_MAX to "${stats.lifeMax.toInt()}",
+            UIStats.MAGICAL_EVADE to "${round((stats.magicalEvade * 100)).toInt()}",
+            UIStats.MANA_MAX to "${stats.manaMax.toInt()}",
+            UIStats.PHYSICAL_EVADE to "${round((stats.physicalEvade * 100)).toInt()}",
+            UIStats.RESISTANCE to "${stats.resistance.toInt()}",
+            UIStats.STRENGTH to "${stats.strength.toInt()}",
+            UIStats.XP to "${this.second}",
+            UIStats.TALONS to "${this.third}",
+        )
+    }
 
     fun Entity.toItemModel(world: World, withConsumeInfo: Boolean = false): ItemModel = with(world) {
         val itemEntity = this@toItemModel

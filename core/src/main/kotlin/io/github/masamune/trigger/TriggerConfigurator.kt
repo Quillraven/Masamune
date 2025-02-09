@@ -175,16 +175,33 @@ class TriggerConfigurator {
         scriptEntity: Entity,
         triggeringEntity: Entity
     ): TriggerScript = trigger(name, this, triggeringEntity) {
-        if (triggeringEntity hasNo MonsterBook) {
+        val monsterBook = triggeringEntity.getOrNull(MonsterBook)
+        if (monsterBook == null) {
+            // no monster book yet -> add it
             actionPauseEntity(scriptEntity, true)
             actionDialog("man_green_00") {
                 actionPauseEntity(scriptEntity, false)
                 triggeringEntity.configure {
-                    it += MonsterBook(knownTypes = mutableListOf(TiledObjectType.BUTTERFLY, TiledObjectType.LARVA))
+                    it += MonsterBook(knownTypes = mutableSetOf(TiledObjectType.BUTTERFLY, TiledObjectType.LARVA))
                 }
                 actionAddQuest(triggeringEntity, MonsterBookQuest())
             }
+        } else if (triggeringEntity[QuestLog].getOrNull<MonsterBookQuest>()?.completed == true) {
+            // quest already completed
+            actionPauseEntity(scriptEntity, true)
+            actionDialog("man_green_30") {
+                actionPauseEntity(scriptEntity, false)
+            }
+        } else if (monsterBook.knownTypes.size >= 10) {
+            // quest completed! -> give reward
+            actionPauseEntity(scriptEntity, true)
+            actionDialog("man_green_20") {
+                actionPauseEntity(scriptEntity, false)
+            }
+            actionCompleteQuest(triggeringEntity[QuestLog].get<MonsterBookQuest>())
+            actionAddItem(triggeringEntity, ItemType.INTELLIGENCE_POTION)
         } else {
+            // dialog while quest is not completed
             actionPauseEntity(scriptEntity, true)
             actionDialog("man_green_10") {
                 actionPauseEntity(scriptEntity, false)

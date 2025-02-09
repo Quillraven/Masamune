@@ -98,7 +98,7 @@ class LoadingScreen(
         masamune.removeScreen<LoadingScreen>()
         dispose()
         masamune.setScreen<GameScreen>()
-        gameScreen.setMap(TiledMapAsset.PATH_TO_FOREST)
+        gameScreen.setMap(TiledMapAsset.VILLAGE)
     }
 
     override fun dispose() {

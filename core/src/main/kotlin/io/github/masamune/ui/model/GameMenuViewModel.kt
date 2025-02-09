@@ -2,7 +2,10 @@ package io.github.masamune.ui.model
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.I18NBundle
+import com.github.quillraven.fleks.World
 import io.github.masamune.audio.AudioService
+import io.github.masamune.component.MonsterBook
+import io.github.masamune.component.Player
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.GameExitEvent
@@ -12,8 +15,11 @@ import io.github.masamune.event.MenuEndEvent
 class GameMenuViewModel(
     bundle: I18NBundle,
     audioService: AudioService,
+    private val world: World,
     private val eventService: EventService
 ) : ViewModel(bundle, audioService) {
+
+    private val playerEntities = world.family { all(Player) }
 
     var options: List<String> by propertyNotify(listOf())
 
@@ -35,6 +41,11 @@ class GameMenuViewModel(
             2 -> {
                 triggerClose(fireOptionEvent = false)
                 eventService.fire(MenuBeginEvent(MenuType.QUEST))
+            }
+            // monster book
+            3 -> {
+                triggerClose(fireOptionEvent = false)
+                eventService.fire(MenuBeginEvent(MenuType.MONSTER_BOOK))
             }
             // back to game
             options.lastIndex - 1 -> {
@@ -60,14 +71,28 @@ class GameMenuViewModel(
     override fun onEvent(event: Event) {
         if (event is MenuBeginEvent && event.type == MenuType.GAME) {
             playSndMenuAccept()
-            options = listOf(
-                bundle["menu.option.stats"],
-                bundle["menu.option.inventory"],
-                bundle["menu.option.quests"],
-                bundle["menu.option.save"],
-                bundle["menu.option.back"],
-                bundle["menu.option.quit"],
-            )
+            with(world) {
+                if (playerEntities.first() has MonsterBook) {
+                    options = listOf(
+                        bundle["menu.option.stats"],
+                        bundle["menu.option.inventory"],
+                        bundle["menu.option.quests"],
+                        bundle["menu.option.monsterBook"],
+                        bundle["menu.option.save"],
+                        bundle["menu.option.back"],
+                        bundle["menu.option.quit"],
+                    )
+                } else {
+                    options = listOf(
+                        bundle["menu.option.stats"],
+                        bundle["menu.option.inventory"],
+                        bundle["menu.option.quests"],
+                        bundle["menu.option.save"],
+                        bundle["menu.option.back"],
+                        bundle["menu.option.quit"],
+                    )
+                }
+            }
         }
     }
 }

@@ -41,6 +41,7 @@ import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.model.GameMenuViewModel
 import io.github.masamune.ui.model.InventoryViewModel
+import io.github.masamune.ui.model.MonsterBookViewModel
 import io.github.masamune.ui.model.QuestItemViewModel
 import io.github.masamune.ui.model.QuestViewModel
 import io.github.masamune.ui.model.ShopViewModel
@@ -48,6 +49,7 @@ import io.github.masamune.ui.model.StatsViewModel
 import io.github.masamune.ui.view.dialogView
 import io.github.masamune.ui.view.gameMenuView
 import io.github.masamune.ui.view.inventoryView
+import io.github.masamune.ui.view.monsterBookView
 import io.github.masamune.ui.view.questItemView
 import io.github.masamune.ui.view.questView
 import io.github.masamune.ui.view.shopView
@@ -137,12 +139,13 @@ class GameScreen(
         stage.clear()
         stage.actors {
             dialogView(DialogViewModel(bundle, audioService, eventService), skin) { isVisible = false }
-            gameMenuView(GameMenuViewModel(bundle, audioService, eventService), skin) { isVisible = false }
+            gameMenuView(GameMenuViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
             statsView(StatsViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
             inventoryView(InventoryViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
             shopView(ShopViewModel(bundle, audioService, world, tiledService), skin) { isVisible = false }
             questItemView(QuestItemViewModel(bundle, audioService, world, gameViewport, uiViewport), skin) { isVisible = false }
             questView(QuestViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
+            monsterBookView(MonsterBookViewModel(bundle, audioService, world, assetService[AtlasAsset.CHARS_AND_PROPS], eventService, tiledService), skin) { isVisible = false }
         }
 
         // register all event listeners

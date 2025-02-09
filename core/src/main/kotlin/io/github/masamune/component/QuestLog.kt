@@ -9,5 +9,7 @@ data class QuestLog(val quests: MutableList<Quest> = mutableListOf()) : Componen
 
     inline fun <reified T : Quest> getOrNull(): T? = quests.filterIsInstance<T>().firstOrNull()
 
+    inline fun <reified T : Quest> get(): T = quests.filterIsInstance<T>().first()
+
     companion object : ComponentType<QuestLog>()
 }

@@ -29,6 +29,8 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             "villageExit" -> villageExitDialog(name)
             "man_green_00" -> manGreen00Dialog(name)
             "man_green_10" -> manGreen10Dialog(name)
+            "man_green_20" -> manGreen20Dialog(name)
+            "man_green_30" -> manGreen30Dialog(name)
 
             else -> gdxError("There is no dialog configured for name $name")
         }
@@ -134,6 +136,18 @@ class DialogConfigurator(private val bundle: I18NBundle) {
 
     private fun manGreen10Dialog(name: String): Dialog = dialog(name) {
         page(bundle["dialog.man_green_10.page1"], "man_green", bundle["npc.man_green.title"]) {
+            option(dialogOptionOk, ActionExit)
+        }
+    }
+
+    private fun manGreen20Dialog(name: String): Dialog = dialog(name) {
+        page(bundle["dialog.man_green_20.page1"], "man_green", bundle["npc.man_green.title"]) {
+            option(dialogOptionOk, ActionExit)
+        }
+    }
+
+    private fun manGreen30Dialog(name: String): Dialog = dialog(name) {
+        page(bundle["dialog.man_green_30.page1"], "man_green", bundle["npc.man_green.title"]) {
             option(dialogOptionOk, ActionExit)
         }
     }

@@ -22,7 +22,7 @@ class GameMenuView(
         setFillParent(true)
         optionTable = optionTable(skin) { cell ->
             background = skin.getDrawable("dialog_frame")
-            cell.width(225f)
+            cell.width(250f)
         }
 
         registerOnPropertyChanges()

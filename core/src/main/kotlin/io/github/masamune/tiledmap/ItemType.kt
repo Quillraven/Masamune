@@ -5,6 +5,7 @@ enum class ItemType {
     BOOTS,
     ELDER_SWORD,
     HELMET,
+    INTELLIGENCE_POTION,
     RING,
     SCROLL_INFERNO,
     SMALL_HEALTH_POTION,

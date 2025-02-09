@@ -664,6 +664,20 @@ class TiledService(
         gdxError("There is no enemy with type $type")
     }
 
+    fun loadEnemyStats(type: TiledObjectType): Triple<CharacterStats, Int, Int> {
+        val objectsTileSet = currentMap.objectsTileSet()
+        objectsTileSet.iterator().forEach { tile ->
+            if (tile.objType != type.name) {
+                return@forEach
+            }
+
+            val charStats = tile.stats.toCharacterStats() ?: gdxError("There are no stats defined for $type")
+            return Triple(charStats, tile.xp, tile.talons)
+        }
+
+        gdxError("There are no stats defined for $type")
+    }
+
     companion object {
         private val log = logger<TiledService>()
 

@@ -354,7 +354,8 @@
                 "SCROLL_INFERNO",
                 "SMALL_HEALTH_POTION",
                 "TEREALIS_FLOWER",
-                "SMALL_STRENGTH_POTION"
+                "SMALL_STRENGTH_POTION",
+                "INTELLIGENCE_POTION"
             ],
             "valuesAsFlags": false
         },

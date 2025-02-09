@@ -23,6 +23,7 @@ import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.component.Animation
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Combat.Companion.andEquipment
 import io.github.masamune.component.Equipment
@@ -32,10 +33,10 @@ import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.MonsterBook
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.ScreenBgd
-import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.EventService
@@ -235,7 +236,7 @@ class CombatScreen(
         eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))
     }
 
-    fun updatePlayerAfterVictory(xpGained: Int, talonsGained: Int) {
+    fun updatePlayerAfterVictory(xpGained: Int, talonsGained: Int, monsterTypesToAdd: MutableList<TiledObjectType>) {
         // update life and mana
         val combatStats = with(world) { combatPlayer[CharacterStats] }
         val gameStats = with(gameScreenWorld) { gameScreenPlayer[CharacterStats] }
@@ -249,6 +250,11 @@ class CombatScreen(
         with(gameScreenWorld) {
             gameScreenPlayer[Experience].gainXp(xpGained)
             gameScreenPlayer[Inventory].talons += talonsGained
+        }
+
+        // update monster book
+        with(gameScreenWorld) {
+            gameScreenPlayer.getOrNull(MonsterBook)?.knownTypes?.addAll(monsterTypesToAdd)
         }
     }
 

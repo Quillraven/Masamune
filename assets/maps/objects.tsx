@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="19" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="20" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -104,6 +104,7 @@
     <properties>
      <property name="agility" type="float" value="3"/>
      <property name="baseLife" type="float" value="20"/>
+     <property name="baseMana" type="float" value="5"/>
      <property name="damage" type="float" value="3"/>
     </properties>
    </property>
@@ -325,5 +326,19 @@
     </properties>
    </object>
   </objectgroup>
+ </tile>
+ <tile id="20" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="consumableType" propertytype="ConsumableType" value="INVENTORY_ONLY"/>
+   <property name="itemType" propertytype="ItemType" value="INTELLIGENCE_POTION"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="intelligence" type="float" value="5"/>
+     <property name="manaMax" type="float" value="10"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/intelligence_potion.png" width="9" height="11"/>
  </tile>
 </tileset>
