@@ -375,7 +375,8 @@
                 "TRIGGER",
                 "LARVA",
                 "BUTTERFLY",
-                "MUSHROOM"
+                "MUSHROOM",
+                "MAN_GREEN"
             ],
             "valuesAsFlags": false
         },

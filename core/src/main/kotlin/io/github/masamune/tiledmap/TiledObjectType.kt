@@ -8,6 +8,7 @@ enum class TiledObjectType {
     HERO,
     ITEM,
     LARVA,
+    MAN_GREEN,
     MERCHANT,
     MUSHROOM,
     PORTAL,

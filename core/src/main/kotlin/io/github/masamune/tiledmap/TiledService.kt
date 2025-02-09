@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.FileTextureData
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.MapProperties
+import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -33,6 +34,7 @@ import io.github.masamune.component.Equipment
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
+import io.github.masamune.component.FollowPath
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Interact
 import io.github.masamune.component.Inventory
@@ -60,6 +62,7 @@ import ktx.tiled.id
 import ktx.tiled.isEmpty
 import ktx.tiled.layer
 import ktx.tiled.property
+import ktx.tiled.propertyOrNull
 import ktx.tiled.set
 import ktx.tiled.width
 import ktx.tiled.x
@@ -304,6 +307,7 @@ class TiledService(
         it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
         configurePhysic(it, tile, world, x, y, BodyType.DynamicBody.name)
         configureTrigger(it, tile)
+        configurePathAndMove(it, tiledObj)
     }
 
     private fun loadGameEnemy(
@@ -424,6 +428,23 @@ class TiledService(
         }
 
         entity += Trigger(tile.triggerName)
+    }
+
+    private fun EntityCreateContext.configurePathAndMove(entity: Entity, tiledObj: TiledMapTileMapObject) {
+        val pathObj = tiledObj.propertyOrNull<MapObject>("path") ?: return
+        if (pathObj !is PolygonMapObject) {
+            gdxError("Path object must be a PolygonMapObject")
+        }
+
+        entity += FollowPath(
+            pathObj.polygon
+                .transformedVertices
+                .asList()
+                .windowed(size = 2, step = 2) {
+                    vec2(it[0] * UNIT_SCALE, it[1] * UNIT_SCALE)
+                }
+        )
+        entity += Move(speed = tiledObj.property("pathSpeed", 3f))
     }
 
     private fun MapProperties?.toItemStats(): ItemStats? {

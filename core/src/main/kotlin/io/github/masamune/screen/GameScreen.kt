@@ -25,6 +25,7 @@ import io.github.masamune.system.CameraSystem
 import io.github.masamune.system.DissolveSystem
 import io.github.masamune.system.FacingSystem
 import io.github.masamune.system.FadeSystem
+import io.github.masamune.system.FollowPathSystem
 import io.github.masamune.system.MoveSystem
 import io.github.masamune.system.MoveToSystem
 import io.github.masamune.system.PhysicSystem
@@ -105,6 +106,7 @@ class GameScreen(
         }
 
         systems {
+            add(FollowPathSystem())
             add(MoveSystem())
             add(MoveToSystem())
             add(PhysicSystem())

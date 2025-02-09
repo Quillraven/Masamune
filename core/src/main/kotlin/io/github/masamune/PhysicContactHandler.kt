@@ -2,6 +2,7 @@ package io.github.masamune
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.badlogic.gdx.physics.box2d.ContactListener
@@ -9,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.Manifold
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.component.FollowPath
 import io.github.masamune.component.Player
 import io.github.masamune.event.EventService
 import io.github.masamune.event.PlayerInteractBeginContactEvent
@@ -42,6 +44,18 @@ class PhysicContactHandler(
         }
 
         eventService.fire(PlayerInteractEndContactEvent(contact.playerEntity, contact.interactEntity))
+    }
+
+    override fun preSolve(contact: Contact, oldManifold: Manifold) = with(world) {
+        val userDataA = contact.fixtureA.body.userData
+        val userDataB = contact.fixtureB.body.userData
+
+        // entities that follow a path will not collide with static environment collision
+        if (userDataA is Entity && userDataA has FollowPath) {
+            contact.isEnabled = contact.fixtureB.body.type != BodyDef.BodyType.StaticBody
+        } else if (userDataB is Entity && userDataB has FollowPath) {
+            contact.isEnabled = contact.fixtureA.body.type != BodyDef.BodyType.StaticBody
+        }
     }
 
     private fun Contact.isPlayerInteract(): Boolean {
