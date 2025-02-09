@@ -71,7 +71,7 @@ class GameScreen(
     private val audioService: AudioService = masamune.audio,
 ) : KtxScreen {
     // viewports and stage
-    private val gameViewport: Viewport = ExtendViewport(16f, 9f)
+    private val gameViewport: Viewport = ExtendViewport(13f, 7f)
     private val uiViewport = ExtendViewport(928f, 522f)
     private val stage = Stage(uiViewport, batch)
     private val skin = assetService[SkinAsset.DEFAULT]
