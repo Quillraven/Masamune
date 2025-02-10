@@ -1,5 +1,6 @@
 package io.github.masamune.ui.widget
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -12,6 +13,7 @@ import io.github.masamune.ui.model.UIStats
 import io.github.masamune.ui.view.typingLabel
 import ktx.actors.txt
 import ktx.scene2d.KTable
+import ktx.scene2d.KTableWidget
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
@@ -54,85 +56,14 @@ class MonsterInfoTable(
         }
 
         table(skin) { statsTblCell ->
-            label("${statsLabels[UIStats.LIFE]}:", "dialog_content", skin) {
-                this.color = skin.getColor("green")
-                this.setAlignment(Align.left)
-                it.fillX().padLeft(10f)
-            }
-            this@MonsterInfoTable.lifeLabel = label("", "dialog_content", skin) { lblCell ->
-                this.color = skin.getColor("dark_grey")
-                lblCell.growX().padLeft(15f).row()
-            }
-
-            label("${statsLabels[UIStats.MANA]}:", "dialog_content", skin) {
-                this.color = skin.getColor("blue")
-                this.setAlignment(Align.left)
-                it.fillX().padLeft(10f)
-            }
-            this@MonsterInfoTable.manaLabel = label("", "dialog_content", skin) { lblCell ->
-                this.color = skin.getColor("dark_grey")
-                lblCell.growX().padLeft(15f).row()
-            }
-
-            label("${statsLabels[UIStats.AGILITY]}:", "dialog_content", skin) {
-                this.color = skin.getColor("dark_grey")
-                this.setAlignment(Align.left)
-                it.fillX().padLeft(10f)
-            }
-            this@MonsterInfoTable.agilityLabel = label("", "dialog_content", skin) { lblCell ->
-                this.color = skin.getColor("dark_grey")
-                lblCell.growX().padLeft(15f).row()
-            }
-
-            label("${statsLabels[UIStats.DAMAGE]}:", "dialog_content", skin) {
-                this.color = skin.getColor("dark_grey")
-                this.setAlignment(Align.left)
-                it.fillX().padLeft(10f)
-            }
-            this@MonsterInfoTable.damageLabel = label("", "dialog_content", skin) { lblCell ->
-                this.color = skin.getColor("dark_grey")
-                lblCell.growX().padLeft(15f).row()
-            }
-
-            label("${statsLabels[UIStats.ARMOR]}:", "dialog_content", skin) {
-                this.color = skin.getColor("dark_grey")
-                this.setAlignment(Align.left)
-                it.fillX().padLeft(10f)
-            }
-            this@MonsterInfoTable.armorLabel = label("", "dialog_content", skin) { lblCell ->
-                this.color = skin.getColor("dark_grey")
-                lblCell.growX().padLeft(15f).row()
-            }
-
-            label("${statsLabels[UIStats.RESISTANCE]}:", "dialog_content", skin) {
-                this.color = skin.getColor("dark_grey")
-                this.setAlignment(Align.left)
-                it.fillX().padLeft(10f)
-            }
-            this@MonsterInfoTable.resistanceLabel = label("", "dialog_content", skin) { lblCell ->
-                this.color = skin.getColor("dark_grey")
-                lblCell.growX().padLeft(15f).row()
-            }
-
-            label("${statsLabels[UIStats.XP]}:", "dialog_content", skin) {
-                this.color = skin.getColor("dark_grey")
-                this.setAlignment(Align.left)
-                it.fillX().padLeft(10f)
-            }
-            this@MonsterInfoTable.xpLabel = label("", "dialog_content", skin) { lblCell ->
-                this.color = skin.getColor("dark_grey")
-                lblCell.growX().padLeft(15f).row()
-            }
-
-            label("${statsLabels[UIStats.TALONS]}:", "dialog_content", skin) {
-                this.color = skin.getColor("dark_grey")
-                this.setAlignment(Align.left)
-                it.fillX().padLeft(10f)
-            }
-            this@MonsterInfoTable.talonsLabel = label("", "dialog_content", skin) { lblCell ->
-                this.color = skin.getColor("dark_grey")
-                lblCell.growX().padLeft(15f).row()
-            }
+            this@MonsterInfoTable.lifeLabel = statsLabel(statsLabels[UIStats.LIFE], skin, skin.getColor("green"))
+            this@MonsterInfoTable.manaLabel = statsLabel(statsLabels[UIStats.MANA], skin, skin.getColor("blue"))
+            this@MonsterInfoTable.agilityLabel = statsLabel(statsLabels[UIStats.AGILITY], skin)
+            this@MonsterInfoTable.damageLabel = statsLabel(statsLabels[UIStats.DAMAGE], skin)
+            this@MonsterInfoTable.armorLabel = statsLabel(statsLabels[UIStats.ARMOR], skin)
+            this@MonsterInfoTable.resistanceLabel = statsLabel(statsLabels[UIStats.RESISTANCE], skin)
+            this@MonsterInfoTable.xpLabel = statsLabel(statsLabels[UIStats.XP], skin)
+            this@MonsterInfoTable.talonsLabel = statsLabel(statsLabels[UIStats.TALONS], skin)
 
             statsTblCell.growX().padBottom(20f).row()
         }
@@ -173,6 +104,24 @@ class MonsterInfoTable(
         this.xpLabel.txt = ""
         this.talonsLabel.txt = ""
         this.image.drawable = null
+    }
+
+    companion object {
+        private fun KTableWidget.statsLabel(
+            statsLabel: String?,
+            skin: Skin,
+            color: Color = skin.getColor("dark_grey")
+        ): Label {
+            label("${statsLabel}:", "dialog_content", skin) {
+                this.color = color
+                this.setAlignment(Align.left)
+                it.fillX().padLeft(10f)
+            }
+            return label("", "dialog_content", skin) { lblCell ->
+                this.color = skin.getColor("dark_grey")
+                lblCell.growX().padLeft(15f).row()
+            }
+        }
     }
 }
 
