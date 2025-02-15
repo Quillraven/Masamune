@@ -58,7 +58,7 @@ i:b:/maps/objects/small_strength_potion.png:4541:1
 i:b:/maps/objects/flower_girl.png:492:1
 i:b:/maps/masamune-tiled.tiled-project:16283:1
 i:d:/ui:0:1
-i:b:/ui/skin.atlas:3015:1
+i:b:/ui/skin.atlas:3113:1
 i:b:/ui/skin.json:4342:1
 i:b:/ui/mm_bgd.png:1576101:1
 i:b:/ui/messages.properties:7467:1
@@ -66,7 +66,7 @@ i:b:/ui/PIXEARG_.fnt:10450:1
 i:b:/ui/messages_de.properties:8063:1
 i:b:/ui/pixel_arial_24_border.fnt:7774:1
 i:b:/ui/fipps_16.fnt:8935:1
-i:b:/ui/skin.png:222140:1
+i:b:/ui/skin.png:222929:1
 i:b:/ui/pixel_arial_16.fnt:8947:1
 c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
 c:b:/com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:9096:1
