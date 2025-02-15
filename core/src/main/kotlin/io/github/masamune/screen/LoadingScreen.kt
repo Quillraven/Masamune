@@ -17,7 +17,6 @@ import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.SkinAsset
-import io.github.masamune.asset.TiledMapAsset
 import ktx.actors.plusAssign
 import ktx.actors.then
 import ktx.actors.txt
@@ -91,14 +90,13 @@ class LoadingScreen(
     }
 
     private fun onFinishLoading() {
-        val gameScreen = GameScreen(masamune)
-        masamune.addScreen(gameScreen)
+        masamune.addScreen(GameScreen(masamune))
         masamune.addScreen(CombatScreen(masamune))
+        masamune.addScreen(MainMenuScreen(masamune))
 
         masamune.removeScreen<LoadingScreen>()
         dispose()
-        masamune.setScreen<GameScreen>()
-        gameScreen.setMap(TiledMapAsset.VILLAGE)
+        masamune.setScreen<MainMenuScreen>()
     }
 
     override fun dispose() {
