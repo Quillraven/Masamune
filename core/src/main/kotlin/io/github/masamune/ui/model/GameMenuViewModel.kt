@@ -44,6 +44,10 @@ class GameMenuViewModel(
             }
             // monster book
             3 -> {
+                if (options.size != 7) {
+                    // no monster book -> do nothing
+                    return
+                }
                 triggerClose(fireOptionEvent = false)
                 eventService.fire(MenuBeginEvent(MenuType.MONSTER_BOOK))
             }
