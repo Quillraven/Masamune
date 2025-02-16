@@ -9,7 +9,7 @@
    <property name="speed" type="float" value="5"/>
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
-     <property name="agility" type="float" value="1"/>
+     <property name="agility" type="float" value="3"/>
      <property name="arcaneStrike" type="float" value="0.1"/>
      <property name="baseLife" type="float" value="30"/>
      <property name="baseMana" type="float" value="20"/>
@@ -102,7 +102,7 @@
    <property name="objType" propertytype="MapObjectType" value="BUTTERFLY"/>
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
-     <property name="agility" type="float" value="3"/>
+     <property name="agility" type="float" value="2"/>
      <property name="baseLife" type="float" value="20"/>
      <property name="baseMana" type="float" value="5"/>
      <property name="damage" type="float" value="3"/>
@@ -154,7 +154,7 @@
    <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
-     <property name="agility" type="float" value="3"/>
+     <property name="agility" type="float" value="4"/>
      <property name="armor" type="float" value="10"/>
      <property name="baseLife" type="float" value="17"/>
      <property name="damage" type="float" value="6"/>
