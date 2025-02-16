@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="20" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="21" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -9,7 +9,7 @@
    <property name="speed" type="float" value="5"/>
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
-     <property name="agility" type="float" value="1"/>
+     <property name="agility" type="float" value="3"/>
      <property name="arcaneStrike" type="float" value="0.1"/>
      <property name="baseLife" type="float" value="30"/>
      <property name="baseMana" type="float" value="20"/>
@@ -102,7 +102,7 @@
    <property name="objType" propertytype="MapObjectType" value="BUTTERFLY"/>
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
-     <property name="agility" type="float" value="3"/>
+     <property name="agility" type="float" value="2"/>
      <property name="baseLife" type="float" value="20"/>
      <property name="baseMana" type="float" value="5"/>
      <property name="damage" type="float" value="3"/>
@@ -154,7 +154,7 @@
    <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
-     <property name="agility" type="float" value="3"/>
+     <property name="agility" type="float" value="4"/>
      <property name="armor" type="float" value="10"/>
      <property name="baseLife" type="float" value="17"/>
      <property name="damage" type="float" value="6"/>
@@ -340,5 +340,20 @@
    </property>
   </properties>
   <image source="objects/intelligence_potion.png" width="9" height="11"/>
+ </tile>
+ <tile id="21" type="NpcObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="objType" propertytype="MapObjectType" value="TRIGGER"/>
+   <property name="triggerName" value="masamune_forest"/>
+  </properties>
+  <image source="objects/masamune_forest.png" width="35" height="33"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="0" y="17" width="25" height="16">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
 </tileset>

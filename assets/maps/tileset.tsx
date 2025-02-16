@@ -61,6 +61,16 @@
    <object id="1" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="858">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="2" width="16" height="14"/>
+  </objectgroup>
+ </tile>
+ <tile id="859">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="15"/>
+  </objectgroup>
+ </tile>
  <tile id="986">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="16" height="16"/>
@@ -198,6 +208,11 @@
    <object id="1" x="1" y="0" width="15" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="2008">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="1" y="3" width="15" height="11"/>
+  </objectgroup>
+ </tile>
  <tile id="2009">
   <objectgroup draworder="index" id="2">
    <object id="1" x="1" y="1" width="14" height="14"/>
@@ -211,6 +226,11 @@
  <tile id="2011">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="2" width="16" height="14"/>
+  </objectgroup>
+ </tile>
+ <tile id="2014">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="1" width="16" height="14"/>
   </objectgroup>
  </tile>
  <tile id="2021">
@@ -254,6 +274,16 @@
   </objectgroup>
  </tile>
  <tile id="2139">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="16"/>
+  </objectgroup>
+ </tile>
+ <tile id="2146">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="16"/>
+  </objectgroup>
+ </tile>
+ <tile id="2147">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="16" height="16"/>
   </objectgroup>
@@ -575,6 +605,16 @@
    <object id="1" x="10" y="0">
     <polyline points="0,0 0,6 -5,11 -10,11"/>
    </object>
+  </objectgroup>
+ </tile>
+ <tile id="3651">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="1" y="0" width="15" height="16"/>
+  </objectgroup>
+ </tile>
+ <tile id="3652">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="15" height="16"/>
   </objectgroup>
  </tile>
  <tile id="3737">

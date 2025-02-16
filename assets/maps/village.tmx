@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="18">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="19">
  <editorsettings>
   <export target="village..tmx" format="tmx"/>
  </editorsettings>
@@ -10,12 +10,12 @@
  <tileset firstgid="4097" source="objects.tsx"/>
  <layer id="1" name="ground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJyVU0GOwjAMDKCUS/sUPgV8pNDTPgOQ4MIjmlL4ByDtXvYPOKotXGuaqoeRG8WZjsd2nTlXC7xzO4qN786tvlNYF879EY6EX8JGneN9GOCL2AO+A71b5c6dKb4YF8I17+fNCA/f59OoOD75fdS2Lb7/EH06t07wWY3x/ano169zSuJZUsxinYAzqG+tUbiEr1Xaon93iouEttZwRt/+2U/r3zzrc4UEb2BO6cdJ8aE+Wi92HvsgWt8FvqsQJ3sx5C1Ck/BKZin4aZyCW0JjmX1n6gZyK6AHwndcU+vW0H2S/j/AXrbgzVgPbd2je+S7Wf4xnHYG0ZwO8UVf0M7BGVJ1oZpkJkrTw7EZX5rcymhEOwz3h/1J1W69GZqfwLmIB+3FVDSMD0wMFso=
+   eJyVVMkNwkAMXEAbPqQUmgIaCeRFGRAJPhSRC/oAJPjQA7ZYK2biJMpjZEXrHcbjWfLIuTyg4uqd21ItqdbqTGMVO/cmHAkvwlp983mh+xUff+8MvgPdWy6cO1F9BJwJlwVoI0wIN9/waaSh3sN91raJm98QfbpXNFp8qJHvZ/H//NiXEM+casSzAqf2RWsULuET3/U+rlRnHdpq4GTfPsFP7GX/plHDVXRwytld7SNTfNYe0Yetb3ug538a+lq7gRxZvnah7PFKclT4cZyYR0tjEjV5qoze1NBjwv+4xs6tofcku7/Bm0Qdcmdohzj30BviPs7xHjgxg5jRPj72xXpvZobUXNZMkokEdjiU8Tn04n+L9X7N9xP86ZsdvenKTxF6LR7rXYxFGfAFluwW0w==
   </data>
  </layer>
  <layer id="2" name="decoration" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYKAuuM3MwHCHGbe8OAsDgwQQSwKxFAtldkXjsQcZ3GSnzJ6hDIgNI2LBdXYEpgYAxc2NIRI/1HYnNdLlLSq7CeZHSsx15GFgcAJiZx7quKkRaE4TEDejmefPy8AQwEuZ2SH8DAyhQBwGxP1AsyagmXceaOcFIv1xBah3CtCcqUA8DYgv8TEwXAbiK3wINfxANQK81C0HBwIwMzIwsAAxACQtGhI=
+   eJxjYKAuuM3MwHCHGbe8OAsDgwQQSwKxFAtldkXjsQcZ3GSnzJ6hDIgNI2LBdXYEpgYAxc2NIRI/1HYnNdLlLSq7CeZHfOa68DEwuPLhlnfkYWBwAmJnHuq4qRFoThMQN6OZ58/LwBDAS5nZIfwMDKFAHAbE/UCzJqCZdx5o5wUi/XEFqHcK0JypQDwNiC8Bw+gyEF9BCit+oBoBXuqWgwMBmBkZGFiAGAB0kBq3
   </data>
  </layer>
  <layer id="3" name="decoration2" width="20" height="20">
@@ -37,14 +37,14 @@
   <object id="13" gid="4107" x="122" y="132" width="48" height="48"/>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
-  <object id="7" name="villageExit" x="32" y="-12" width="80" height="44">
+  <object id="7" name="villageExit" x="48" y="-13" width="80" height="44">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup color="#ffaa00" id="8" name="portal">
-  <object id="11" name="PATH_TO_FOREST" type="Portal" x="48" y="-12" width="48" height="28">
+  <object id="11" name="PATH_TO_FOREST" type="Portal" x="64" y="-12" width="48" height="28">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
     <property name="targetPortalId" type="int" value="11"/>
@@ -53,7 +53,7 @@
  </objectgroup>
  <layer id="5" name="foreground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJybzczAMAeIcYHrQLkbQHwTiG/hUUcKmAE0ZyaVzEJ33x1eBoa7vJSbK8XHwCANxDJALMtHuXlRQDOigTgGiGOpYN4oGAXUAow8DAxMQMzMM9AuIQxE+BkYRIFYjB+/uunMiHJmFhXKGmqWg+jlHyXlIbq70PlHgWqOAfFhID5CmbPBgJWRgYGNEcEHALamIEs=
+   eJybzczAMAeIcYHrQLkbQHwTiG/hUUcKmAE0ZyaVzEJ33x1eBoa7vJSbK8XHwCANxDJALMtHuXlRQDOigTgGiGOpYN4oGAXEAhZgemPFk+YYeRgYmICYmYd+biIXiPAzMIgCsRg/fnXTmRHlzCwqlDXULAfRyz9KykN0d6HzjwLVHAPiw0B8hDJngwErIwMDGyOCDwANmSBw
   </data>
  </layer>
  <layer id="9" name="foreground2" width="20" height="20">
