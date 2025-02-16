@@ -108,7 +108,7 @@ class StatsView(
                     cell.row()
                 }
 
-            leftTableCell.fillX().growY().pad(EDGE_PADDING, EDGE_PADDING, EDGE_PADDING, 75f)
+            leftTableCell.fillX().growY().pad(EDGE_PADDING, EDGE_PADDING, EDGE_PADDING, PADDING_LEFT_RIGHT)
         }
 
         table(skin) { rightTableCell ->
@@ -191,19 +191,19 @@ class StatsView(
             xpProgressBar.value = xpPercentage.coerceIn(0f, 1f)
 
             // stats
-            strengthMenuItemLabel.valueAndDiff(stats[UIStats.STRENGTH] ?: missingValue, viewModel.equipmentBonus(UIStats.STRENGTH))
-            agilityMenuItemLabel.valueAndDiff(stats[UIStats.AGILITY] ?: missingValue, viewModel.equipmentBonus(UIStats.AGILITY))
-            constitutionMenuItemLabel.valueAndDiff(stats[UIStats.CONSTITUTION] ?: missingValue, viewModel.equipmentBonus(UIStats.CONSTITUTION))
-            intelligenceMenuItemLabel.valueAndDiff(stats[UIStats.INTELLIGENCE] ?: missingValue, viewModel.equipmentBonus(UIStats.INTELLIGENCE))
+            updateStatsLabel(strengthMenuItemLabel, UIStats.STRENGTH, stats)
+            updateStatsLabel(agilityMenuItemLabel, UIStats.AGILITY, stats)
+            updateStatsLabel(constitutionMenuItemLabel, UIStats.CONSTITUTION, stats)
+            updateStatsLabel(intelligenceMenuItemLabel, UIStats.INTELLIGENCE, stats)
 
-            attackMenuItemLabel.valueAndDiff(stats[UIStats.DAMAGE] ?: missingValue, viewModel.equipmentBonus(UIStats.DAMAGE))
-            armorMenuItemLabel.valueAndDiff(stats[UIStats.ARMOR] ?: missingValue, viewModel.equipmentBonus(UIStats.ARMOR))
-            resistanceMenuItemLabel.valueAndDiff(stats[UIStats.RESISTANCE] ?: missingValue, viewModel.equipmentBonus(UIStats.RESISTANCE))
+            updateStatsLabel(attackMenuItemLabel, UIStats.DAMAGE, stats)
+            updateStatsLabel(armorMenuItemLabel, UIStats.ARMOR, stats)
+            updateStatsLabel(resistanceMenuItemLabel, UIStats.RESISTANCE, stats)
 
-            physicalEvadeMenuItemLabel.valueAndDiff(stats[UIStats.PHYSICAL_EVADE] ?: missingValue, viewModel.equipmentBonus(UIStats.PHYSICAL_EVADE))
-            magicalEvadeMenuItemLabel.valueAndDiff(stats[UIStats.MAGICAL_EVADE] ?: missingValue, viewModel.equipmentBonus(UIStats.MAGICAL_EVADE))
-            criticalStrikeMenuItemLabel.valueAndDiff(stats[UIStats.CRITICAL_STRIKE] ?: missingValue, viewModel.equipmentBonus(UIStats.CRITICAL_STRIKE))
-            arcaneStrikeMenuItemLabel.valueAndDiff(stats[UIStats.ARCANE_STRIKE] ?: missingValue, viewModel.equipmentBonus(UIStats.ARCANE_STRIKE))
+            updateStatsLabel(physicalEvadeMenuItemLabel, UIStats.PHYSICAL_EVADE, stats)
+            updateStatsLabel(magicalEvadeMenuItemLabel, UIStats.MAGICAL_EVADE, stats)
+            updateStatsLabel(criticalStrikeMenuItemLabel, UIStats.CRITICAL_STRIKE, stats)
+            updateStatsLabel(arcaneStrikeMenuItemLabel, UIStats.ARCANE_STRIKE, stats)
 
             // life
             val lifeValue = stats[UIStats.LIFE] ?: missingValue
@@ -221,14 +221,22 @@ class StatsView(
         }
     }
 
+    private fun updateStatsLabel(label: MenuItemStatsLabel, uiStats: UIStats, stats: Map<UIStats, String>) {
+        val total = "${stats[uiStats]}"
+        val baseAndBonus = viewModel.baseAndBonus(uiStats)
+        label.valueAndDetail(total, baseAndBonus.first, baseAndBonus.second)
+
+    }
+
     override fun onBackPressed() {
         viewModel.triggerClose()
     }
 
     companion object {
-        private const val EDGE_PADDING = 25f
+        private const val EDGE_PADDING = 10f
         private const val CATEGORY_BOT_PADDING = 40f
         private const val MENU_ITEM_BOT_PADDING = 10f
+        private const val PADDING_LEFT_RIGHT = 30f
     }
 }
 

@@ -184,6 +184,22 @@ abstract class ViewModel(
         UIStats.STRENGTH to this@toUiStatsMap.strength.toInt(),
     )
 
+    fun CharacterStats.toUiStatsMap(): Map<UIStats, Int> = mapOf(
+        UIStats.AGILITY to this@toUiStatsMap.agility.toInt(),
+        UIStats.ARCANE_STRIKE to round((this@toUiStatsMap.arcaneStrike * 100)).toInt(),
+        UIStats.ARMOR to this@toUiStatsMap.armor.toInt(),
+        UIStats.CONSTITUTION to this@toUiStatsMap.constitution.toInt(),
+        UIStats.CRITICAL_STRIKE to round((this@toUiStatsMap.criticalStrike * 100)).toInt(),
+        UIStats.DAMAGE to this@toUiStatsMap.damage.toInt(),
+        UIStats.INTELLIGENCE to this@toUiStatsMap.intelligence.toInt(),
+        UIStats.LIFE_MAX to this@toUiStatsMap.lifeMax.toInt(),
+        UIStats.MAGICAL_EVADE to round((this@toUiStatsMap.magicalEvade * 100)).toInt(),
+        UIStats.MANA_MAX to this@toUiStatsMap.manaMax.toInt(),
+        UIStats.PHYSICAL_EVADE to round((this@toUiStatsMap.physicalEvade * 100)).toInt(),
+        UIStats.RESISTANCE to this@toUiStatsMap.resistance.toInt(),
+        UIStats.STRENGTH to this@toUiStatsMap.strength.toInt(),
+    )
+
     fun Triple<CharacterStats, Int, Int>.toUiStatsMap(): Map<UIStats, String> {
         val stats = this.first
         return mapOf(

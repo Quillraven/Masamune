@@ -38,7 +38,7 @@ import ktx.scene2d.actors
 /**
  * Test for [StatsViewModel] and [statsView] including equipment bonus.
  * - Strength should be 20 (10 default + 10 equipment)
- * - Arcane Strike should be -5% (-25% default + 20% equipment)
+ * - Arcane Strike should be -5% (0% default - 5% equipment)
  * - Life should be 250 (100 default + 50 bonus + 100 from equipment constitution)
  * - Mana should be 80 (30 default + 50 bonus)
  */
@@ -73,7 +73,7 @@ private class UiStatsTest : KtxApplicationAdapter {
                 baseLife = 100f,
                 baseMana = 30f,
                 criticalStrike = 0.15f,
-                arcaneStrike = -0.25f,
+                arcaneStrike = 0f,
                 physicalEvade = 1f,
                 magicalEvade = 1.25f,
             )
@@ -88,7 +88,7 @@ private class UiStatsTest : KtxApplicationAdapter {
             },
             world.entity {
                 it += Item(ItemType.BOOTS, 0, ItemCategory.BOOTS, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
-                it += ItemStats(arcaneStrike = 0.2f)
+                it += ItemStats(arcaneStrike = -0.05f)
             },
             world.entity {
                 it += Item(ItemType.STUDDED_LEATHER, 0, ItemCategory.ARMOR, "", ActionType.UNDEFINED, ConsumableType.UNDEFINED)
@@ -126,18 +126,8 @@ private class UiStatsTest : KtxApplicationAdapter {
 
         when {
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> updatePlayer(lifePerc = 0f, manaPerc = 0f, xpPerc = 0f)
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> updatePlayer(
-                lifePerc = 0.25f,
-                manaPerc = 0.25f,
-                xpPerc = 0.25f
-            )
-
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> updatePlayer(
-                lifePerc = 0.75f,
-                manaPerc = 0.75f,
-                xpPerc = 0.75f
-            )
-
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> updatePlayer(lifePerc = 0.25f, manaPerc = 0.25f, xpPerc = 0.25f)
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> updatePlayer(lifePerc = 0.75f, manaPerc = 0.75f, xpPerc = 0.75f)
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_4) -> updatePlayer(lifePerc = 1f, manaPerc = 1f, xpPerc = 1f)
         }
     }

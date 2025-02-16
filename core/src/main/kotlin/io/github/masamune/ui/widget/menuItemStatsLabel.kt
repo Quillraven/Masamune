@@ -21,22 +21,22 @@ class MenuItemStatsLabel(
 ) : KTable, Table(skin) {
 
     private val titleLabel: Label
-    private val statsLabel: ShopStatsLabel
+    private val statsLabel: StatsLabel
 
     init {
         titleLabel = label(title, "dialog_content", skin) { cell ->
             this.color = skin.getColor("dark_grey")
             cell.growX()
         }
-        statsLabel = shopStatsLabel(skin, value) { cell ->
+        statsLabel = statsLabel(skin, value) { cell ->
             this.color = skin.getColor("dark_grey")
-            cell.right().minWidth(120f)
+            cell.right().minWidth(180f)
         }
     }
 
-    fun valueAndDiff(value: String, diff: Int) {
-        statsLabel.valueTxt(value)
-        statsLabel.diffTxt(diff)
+    fun valueAndDetail(total: String, base: Int, bonus: Int) {
+        statsLabel.valueTxt(total)
+        statsLabel.detailTxt(base, bonus)
     }
 
 }
