@@ -36,7 +36,7 @@ class MainMenuView(
     private var currentSelection: Table
 
     init {
-        left().bottom().padBottom(100f).padLeft(10f)
+        left().bottom().padBottom(30f).padLeft(10f)
         setFillParent(true)
 
         table(skin) {

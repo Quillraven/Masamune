@@ -1,6 +1,5 @@
 package io.github.masamune.ui.model
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.World
 import io.github.masamune.audio.AudioService
@@ -8,7 +7,6 @@ import io.github.masamune.component.MonsterBook
 import io.github.masamune.component.Player
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
-import io.github.masamune.event.GameExitEvent
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.MenuEndEvent
 
@@ -20,6 +18,7 @@ class GameMenuViewModel(
 ) : ViewModel(bundle, audioService) {
 
     private val playerEntities = world.family { all(Player) }
+    var quitGame = false
 
     var options: List<String> by propertyNotify(listOf())
 
@@ -58,8 +57,8 @@ class GameMenuViewModel(
             }
             // quit
             options.lastIndex -> {
-                eventService.fire(GameExitEvent)
-                Gdx.app.exit()
+                quitGame = true
+                eventService.fire(MenuEndEvent)
             }
         }
     }

@@ -142,6 +142,12 @@ class TiledService(
         }
     }
 
+    fun unloadActiveMap(world: World) {
+        val map = currentMap ?: return
+        unloadMap(map, world)
+        currentMap = null
+    }
+
     private fun unloadMap(tiledMap: TiledMap, world: World) {
         val tiledMapAsset = tiledMap.property<TiledMapAsset>("tiledMapAsset")
         val unloadingTime = measureTimeMillis {

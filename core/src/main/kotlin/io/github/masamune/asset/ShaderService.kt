@@ -58,6 +58,11 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
     private var dissolveMaxUvIdx = -1
     private var dissolveNumFragmentsIdx = -1
 
+    // flash shader
+    private val flashShader by lazy { loadShader("default.vert", "flash.frag") }
+    private var flashColorIdx = -1
+    private var flashWeightIdx = -1
+
     /**
      * Loads all shaders and stores uniform locations internally for better performance.
      */
@@ -75,6 +80,9 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
         dissolveUvOffsetIdx = dissolveShader.getUniformLocation("u_uvOffset")
         dissolveMaxUvIdx = dissolveShader.getUniformLocation("u_atlasMaxUV")
         dissolveNumFragmentsIdx = dissolveShader.getUniformLocation("u_fragmentNumber")
+
+        flashColorIdx = flashShader.getUniformLocation("u_flashColor")
+        flashWeightIdx = flashShader.getUniformLocation("u_flashWeight")
     }
 
     /**
@@ -107,6 +115,23 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
             }
 
             // run render block
+            block()
+        }
+    }
+
+    /**
+     * Sets a **flash** shader as active shader for any draw calls of the [batch].
+     * The flash has the given [color] and is applied with the given [weight].
+     * A [weight] of zero means no flash is applied while a [weight] of 1 means the flash color is applied
+     * for each pixel of the rendering [block].
+     * After the draw [block] is executed, the previous shader of the [batch] is restored.
+     */
+    fun useFlashShader(batch: Batch, color: Color, weight: Float, block: () -> Unit) {
+        batch.useShader(flashShader) {
+            flashShader.use {
+                it.setUniformf(flashColorIdx, color)
+                it.setUniformf(flashWeightIdx, weight)
+            }
             block()
         }
     }
@@ -211,6 +236,7 @@ class ShaderService(private val fileHandleResolver: FileHandleResolver = Interna
         blurShader.dispose()
         grayscaleShader.dispose()
         dissolveShader.dispose()
+        flashShader.dispose()
         blurFbo.dispose()
         tmpFbo.dispose()
     }

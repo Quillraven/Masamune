@@ -90,6 +90,9 @@ class GameScreen(
     // ecs world
     val world = gameWorld()
 
+    // view stuff
+    private val gmViewModel = GameMenuViewModel(bundle, audioService, world, eventService)
+
     private fun gameWorld() = configureWorld {
         injectables {
             add(batch)
@@ -139,7 +142,7 @@ class GameScreen(
         stage.clear()
         stage.actors {
             dialogView(DialogViewModel(bundle, audioService, eventService), skin) { isVisible = false }
-            gameMenuView(GameMenuViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
+            gameMenuView(gmViewModel, skin) { isVisible = false }
             statsView(StatsViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
             inventoryView(InventoryViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
             shopView(ShopViewModel(bundle, audioService, world, tiledService), skin) { isVisible = false }
@@ -147,14 +150,17 @@ class GameScreen(
             questView(QuestViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
             monsterBookView(MonsterBookViewModel(bundle, audioService, world, assetService[AtlasAsset.CHARS_AND_PROPS], eventService, tiledService), skin) { isVisible = false }
         }
+        gmViewModel.quitGame = false
 
         // register all event listeners
         registerEventListeners()
     }
 
-    fun setMap(mapAsset: TiledMapAsset) {
-        // load map AFTER event listeners are registered
-        tiledService.loadMap(mapAsset).also {
+    fun startNewGame() {
+        // call this AFTER event listeners are registered
+        world.removeAll(true)
+        tiledService.unloadActiveMap(world)
+        tiledService.loadMap(TiledMapAsset.VILLAGE).also {
             tiledService.setMap(it, world)
         }
     }
@@ -185,6 +191,10 @@ class GameScreen(
         batch.setColor(1f, 1f, 1f, 1f)
 
         mapTransitionService.update(world, delta)
+
+        if (gmViewModel.quitGame) {
+            masamune.setScreen<MainMenuScreen>()
+        }
     }
 
     override fun dispose() {
