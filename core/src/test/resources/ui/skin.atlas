@@ -1,26 +1,34 @@
 
 skin.png
-size: 1024, 1024
+size: 512, 512
 format: RGBA8888
-filter: Nearest, Nearest
+filter: Linear, Linear
 repeat: none
 PIXEARG_
   rotate: false
-  xy: 4, 417
+  xy: 1, 244
   size: 503, 51
   orig: 503, 51
   offset: 0, 0
   index: -1
 arrow
   rotate: false
-  xy: 564, 610
+  xy: 361, 164
   size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+bar_bg
+  rotate: false
+  xy: 379, 182
+  size: 12, 12
+  split: 2, 2, 2, 2
   orig: 12, 12
   offset: 0, 0
   index: -1
 button_normal
   rotate: false
-  xy: 586, 630
+  xy: 343, 186
   size: 16, 8
   split: 3, 3, 3, 3
   pad: 2, 2, 2, 2
@@ -29,7 +37,7 @@ button_normal
   index: -1
 button_pressed
   rotate: false
-  xy: 518, 498
+  xy: 343, 176
   size: 16, 8
   split: 3, 3, 4, 2
   pad: 2, 2, 3, 1
@@ -38,7 +46,7 @@ button_pressed
   index: -1
 dialog_choice_frame
   rotate: false
-  xy: 586, 670
+  xy: 1, 174
   size: 64, 20
   split: 5, 5, 5, 5
   pad: 6, 6, 5, 5
@@ -47,7 +55,7 @@ dialog_choice_frame
   index: -1
 dialog_face_frame
   rotate: false
-  xy: 4, 361
+  xy: 1, 62
   size: 48, 48
   split: 13, 6, 16, 6
   pad: 0, 0, 0, 0
@@ -56,7 +64,7 @@ dialog_face_frame
   index: -1
 dialog_frame
   rotate: false
-  xy: 518, 630
+  xy: 1, 112
   size: 60, 60
   split: 8, 8, 8, 8
   orig: 60, 60
@@ -64,28 +72,28 @@ dialog_frame
   index: -1
 elder
   rotate: false
-  xy: 518, 584
+  xy: 1, 22
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 fipps_16
   rotate: false
-  xy: 4, 476
+  xy: 1, 436
   size: 506, 69
   orig: 506, 69
   offset: 0, 0
   index: -1
 flower_girl
   rotate: false
-  xy: 518, 538
+  xy: 147, 156
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 frame_1
   rotate: false
-  xy: 682, 674
+  xy: 361, 178
   size: 16, 16
   split: 5, 5, 5, 6
   pad: 5, 5, 5, 5
@@ -94,42 +102,49 @@ frame_1
   index: -1
 hero
   rotate: false
-  xy: 4, 269
+  xy: 187, 156
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 icon_items
   rotate: false
-  xy: 4, 226
+  xy: 51, 99
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
   index: -1
 icon_magic
   rotate: false
-  xy: 106, 372
+  xy: 227, 157
   size: 38, 37
   orig: 38, 37
   offset: 0, 0
   index: -1
 icon_sword
   rotate: false
-  xy: 542, 514
+  xy: 41, 44
   size: 7, 16
   orig: 7, 16
   offset: 0, 0
   index: -1
+man_green
+  rotate: false
+  xy: 267, 156
+  size: 38, 38
+  orig: 38, 38
+  offset: 0, 0
+  index: -1
 merchant
   rotate: false
-  xy: 4, 315
+  xy: 67, 156
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 nine_path_bg
   rotate: false
-  xy: 586, 646
+  xy: 1, 4
   size: 16, 16
   split: 3, 3, 3, 3
   pad: 0, 0, 0, 0
@@ -138,22 +153,29 @@ nine_path_bg
   index: -1
 nine_path_bg_2
   rotate: false
-  xy: 610, 646
+  xy: 325, 160
   size: 16, 16
   split: 3, 3, 3, 3
   orig: 16, 16
   offset: 0, 0
   index: -1
+pixel_arial_12
+  rotate: false
+  xy: 1, 196
+  size: 503, 46
+  orig: 503, 46
+  offset: 0, 0
+  index: -1
 pixel_arial_24_border
   rotate: false
-  xy: 4, 553
+  xy: 1, 297
   size: 506, 137
   orig: 506, 137
   offset: 0, 0
   index: -1
 slider_progress
   rotate: false
-  xy: 658, 674
+  xy: 307, 178
   size: 16, 16
   split: 4, 4, 4, 4
   pad: 0, 0, 0, 0
@@ -162,7 +184,7 @@ slider_progress
   index: -1
 slider_progress_blue
   rotate: false
-  xy: 4, 245
+  xy: 307, 160
   size: 16, 16
   split: 4, 5, 4, 4
   pad: 0, 0, 0, 0
@@ -171,16 +193,24 @@ slider_progress_blue
   index: -1
 slider_progress_green
   rotate: false
-  xy: 518, 514
+  xy: 19, 4
   size: 16, 16
   split: 4, 4, 4, 4
   pad: 0, 0, 0, 0
   orig: 16, 16
   offset: 0, 0
   index: -1
+slider_progress_white
+  rotate: false
+  xy: 343, 162
+  size: 16, 12
+  split: 3, 3, 4, 4
+  orig: 16, 12
+  offset: 0, 0
+  index: -1
 slider_progress_yellow
   rotate: false
-  xy: 152, 393
+  xy: 325, 178
   size: 16, 16
   split: 4, 6, 4, 4
   pad: 0, 0, 0, 0
@@ -189,7 +219,7 @@ slider_progress_yellow
   index: -1
 smith
   rotate: false
-  xy: 60, 371
+  xy: 107, 156
   size: 38, 38
   orig: 38, 38
   offset: 0, 0

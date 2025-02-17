@@ -6,6 +6,12 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 		markupEnabled: true
 		flip: false
 	}
+	pixel_arial_12: {
+		file: pixel_arial_12.fnt
+		scaledSize: -1
+		markupEnabled: true
+		flip: false
+	}
 	pixel_arial_16: {
 		file: PIXEARG_.fnt
 		scaledSize: -1
@@ -132,6 +138,26 @@ com.ray3k.tenpatch.TenPatchDrawable: {
 		playMode: 2
 		crushMode: 0
 	}
+	slider_progress_white_10: {
+		region: slider_progress_white
+		horizontalStretchAreas: [ 3, 12 ]
+		verticalStretchAreas: [ 4, 7 ]
+		tiling: true
+		minWidth: 0
+		minHeight: 12
+		rightWidth: 4
+		leftWidth: 4
+		bottomHeight: 5
+		topHeight: 5
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
 }
 io.github.masamune.ui.view.DialogViewStyle: {
 	default: {
@@ -200,6 +226,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		font: pixel_arial_24_border
 		fontColor: white
 	}
+	bar_content: {
+		font: pixel_arial_12
+		fontColor: white
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	default-horizontal: {
@@ -221,6 +251,10 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	yellow: {
 		background: nine_path_bg
 		knobBefore: slider_progress_yellow_10
+	}
+	white: {
+		background: bar_bg
+		knobBefore: slider_progress_white_10
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {

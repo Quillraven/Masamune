@@ -36,14 +36,14 @@ class Bar(
     stepSize: Float,
     barColor: Color,
     skin: Skin,
-) : ProgressBar(min, max, stepSize, false, skin, "green") {
+) : ProgressBar(min, max, stepSize, false, skin, "white") {
 
     private var tintInterpolation: Interpolation = SLOW_FAST_INTERPOLATION
     private var tintDuration = SLOW_DURATION
     private var tintFromValue = 0f
     private var tintTime = 0f
-    var negativeTintColor = Color(1f, 0f, 0f, 0.75f)
-    var positiveTintColor = Color(0f, 1f, 0f, 0.75f)
+    var negativeTintColor = Color(0.7f, 0f, 0f, 0.6f)
+    var positiveTintColor = Color(0f, 0.7f, 0f, 0.6f)
     private var tintColor = negativeTintColor
 
     val tintPercent: Float
@@ -84,7 +84,7 @@ class Bar(
 
         // render background
         this.backgroundDrawable?.let { bg ->
-            batch.setColor(color.r, color.g, color.b, color.a * parentAlpha)
+            batch.setColor(1f, 1f, 1f, color.a * parentAlpha)
             this.drawRound(
                 batch, bg,
                 x, (y + (height - bg.minHeight) * 0.5f).roundToInt().toFloat(),
@@ -106,7 +106,7 @@ class Bar(
             // it either slowly moves to the left AFTER the normal bar,
             // or it moves fast to the right BEFORE the normal bar
             val (tintR, tintG, tintB, tintA) = tintColor
-            batch.setColor(color.r * tintR, color.g * tintG, color.b * tintB, color.a * parentAlpha * tintA)
+            batch.setColor(tintR, tintG, tintB, parentAlpha * tintA)
             this.drawRound(
                 batch, knobBefore,
                 x + bgLeftWidth, y + (height - knobBefore.minHeight) * 0.5f,
