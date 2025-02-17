@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
@@ -15,8 +16,10 @@ import io.github.masamune.ui.model.CombatViewModel
 import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.ItemCombatModel
 import io.github.masamune.ui.model.MagicModel
+import io.github.masamune.ui.widget.Bar
 import io.github.masamune.ui.widget.ItemCombatTable
 import io.github.masamune.ui.widget.MagicTable
+import io.github.masamune.ui.widget.bar
 import io.github.masamune.ui.widget.itemCombatTable
 import io.github.masamune.ui.widget.magicTable
 import ktx.actors.plusAssign
@@ -33,6 +36,7 @@ import ktx.scene2d.imageButton
 import ktx.scene2d.label
 import ktx.scene2d.progressBar
 import ktx.scene2d.scene2d
+import ktx.scene2d.stack
 import ktx.scene2d.table
 import kotlin.math.max
 
@@ -78,6 +82,8 @@ class CombatView(
 
     private var uiAction: UiAction = UiAction.UNDEFINED
     private var uiState = UiCombatState.SELECT_ACTION
+
+    private val enemyHealthBars = mutableMapOf<Int, Stack>()
 
     init {
         playerInfoTable = table(skin) {
@@ -265,6 +271,59 @@ class CombatView(
         viewModel.onPropertyChange(CombatViewModel::combatDone) { isDone ->
             if (isDone) {
                 uiState = UiCombatState.VICTORY_DEFEAT
+            }
+        }
+
+        viewModel.onPropertyChange(CombatViewModel::enemyPosAndLifes) { enemyPosAndLifes ->
+            enemyHealthBars.values.forEach { it.remove() }
+            enemyHealthBars.clear()
+            val skin = skin
+            enemyPosAndLifes.forEach { (entity, values) ->
+                val (position, size, lifeAndMax) = values
+                val stack = scene2d.stack {
+                    val lifePerc = lifeAndMax.x / lifeAndMax.y
+                    bar(skin, lifePerc, 0f, 1f, 0.01f, skin.getColor("red"))
+                    label("${lifeAndMax.x.toInt()}", "bar_content", skin) {
+                        this.setAlignment(Align.top, Align.center)
+                    }
+
+                    this.setPosition(position.x, position.y - 25f)
+                    this.setSize(size.x, 20f)
+                }
+                enemyHealthBars[entity.id] = stack
+                stage.addActor(stack)
+                stack.toBack()
+            }
+        }
+        viewModel.onPropertyChange(CombatViewModel::enemyDamage) { (entity, lifeAndMax) ->
+            val skin = skin
+            var stack = enemyHealthBars[entity.id]
+            if (stack != null) {
+                if (lifeAndMax.x <= 1f) {
+                    stack.remove()
+                    return@onPropertyChange
+                }
+
+                val lifePerc = lifeAndMax.x / lifeAndMax.y
+                val bar = stack.children.first() as Bar
+                val label = stack.children.last() as Label
+                label.txt = "${lifeAndMax.x.toInt()}"
+                bar.value = lifePerc
+            } else {
+                val (position, size) = viewModel.getEnemyPositionAndSize(entity)
+                stack = scene2d.stack {
+                    val lifePerc = lifeAndMax.x / lifeAndMax.y
+                    bar(skin, lifePerc, 0f, 1f, 0.01f, skin.getColor("red"))
+                    label("${lifeAndMax.x.toInt()}", "bar_content", skin) {
+                        this.setAlignment(Align.top, Align.center)
+                    }
+
+                    this.setPosition(position.x, position.y - 25f)
+                    this.setSize(size.x, 20f)
+                }
+                enemyHealthBars[entity.id] = stack
+                stage.addActor(stack)
+                stack.toBack()
             }
         }
     }
