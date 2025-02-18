@@ -24,6 +24,7 @@ import io.github.masamune.combat.effect.DelayEffect
 import io.github.masamune.combat.effect.Effect
 import io.github.masamune.combat.effect.EffectStack
 import io.github.masamune.combat.effect.HealEffect
+import io.github.masamune.combat.effect.MissEffect
 import io.github.masamune.combat.effect.SfxEffect
 import io.github.masamune.combat.effect.SoundEffect
 import io.github.masamune.component.CharacterStats
@@ -251,7 +252,7 @@ class ActionExecutorService(
         val targetStats = realTarget[CharacterStats]
         val evadeChance = targetStats.physicalEvade
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
-            eventService.fire(CombatMissEvent(realTarget))
+            effectStack.addLast(MissEffect(source, realTarget))
             effectStack.addLast(SoundEffect(source, realTarget, SoundAsset.ATTACK_MISS))
             if (delay > 0f) {
                 effectStack.addLast(DelayEffect(source, realTarget, delay))
@@ -354,7 +355,7 @@ class ActionExecutorService(
         val targetStats = realTarget.stats
         val evadeChance = targetStats.magicalEvade
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
-            eventService.fire(CombatMissEvent(realTarget))
+            effectStack.addLast(MissEffect(source, realTarget))
             ignoreDamageCalls = false
             return DefaultEffect
         }

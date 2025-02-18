@@ -10,6 +10,7 @@ import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
 import io.github.masamune.event.CombatEntityTransformEvent
+import io.github.masamune.event.CombatMissEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.isEntityDead
 
@@ -139,6 +140,10 @@ data class EffectStack(
 
             effect is TransformEffect -> {
                 eventService.fire(CombatEntityTransformEvent(effect.newEntity, effect.newLife, effect.newLifeMax))
+            }
+
+            effect is MissEffect -> {
+                eventService.fire(CombatMissEvent(effect.target))
             }
         }
 
