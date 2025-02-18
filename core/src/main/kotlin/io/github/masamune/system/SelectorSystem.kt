@@ -12,7 +12,7 @@ class SelectorSystem : IteratingSystem(family { all(Selector, Transform) }) {
         val (target) = entity[Selector]
         val (targetPos, targetSize) = target[Transform]
         val (selectorPos, selectorSize) = entity[Transform]
-        selectorPos.set(targetPos)
+        selectorPos.set(targetPos.x, targetPos.y, 5f)
         selectorSize.set(targetSize)
     }
 
