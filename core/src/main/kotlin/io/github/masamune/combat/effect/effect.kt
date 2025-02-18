@@ -59,7 +59,7 @@ data class EffectStack(
     fun addLast(effect: Effect) = stack.addLast(effect)
 
     fun addAfter(effect: Effect, add: Effect) {
-        val idx = stack.indexOf(effect)
+        val idx = stack.indexOfFirst { it === effect }
         stack.add(idx + 1, add)
     }
 
