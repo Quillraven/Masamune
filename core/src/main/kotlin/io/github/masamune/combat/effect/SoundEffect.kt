@@ -9,7 +9,7 @@ import io.github.masamune.audio.AudioService
 data class SoundEffect(
     override val source: Entity,
     override val target: Entity,
-    private val soundAsset: SoundAsset,
+    val soundAsset: SoundAsset,
 ) : Effect {
 
     override fun World.onStart() {

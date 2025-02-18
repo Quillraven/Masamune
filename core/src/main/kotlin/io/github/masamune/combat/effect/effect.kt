@@ -63,6 +63,11 @@ data class EffectStack(
         stack.add(idx + 1, add)
     }
 
+    fun addBefore(effect: Effect, add: Effect) {
+        val idx = stack.indexOfFirst { it === effect }
+        stack.add(idx, add)
+    }
+
     private fun Entity.hasNoTransformEffect(): Boolean {
         return stack.filterIsInstance<TransformEffect>()
             .none { it.source == this || it.target == this }
@@ -147,7 +152,20 @@ data class EffectStack(
             }
         }
 
-        // 2) get next effect
+        // 2) remove consecutive sound effects of the same audio file to avoid super loud effects
+        if (stack.isNotEmpty() && currentEffect is SoundEffect) {
+            val currentSoundAsset = (currentEffect as SoundEffect).soundAsset
+            var nextEffect = stack.first()
+            while (nextEffect is SoundEffect && nextEffect.soundAsset == currentSoundAsset) {
+                stack.removeFirst()
+                if (stack.isEmpty()) {
+                    break
+                }
+                nextEffect = stack.first()
+            }
+        }
+
+        // 3) get next effect
         startNext()
 
         return currentEffect === DefaultEffect

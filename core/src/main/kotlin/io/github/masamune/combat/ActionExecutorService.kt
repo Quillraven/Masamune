@@ -36,7 +36,6 @@ import io.github.masamune.component.MoveBy
 import io.github.masamune.component.Player
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatEntityManaUpdateEvent
-import io.github.masamune.event.CombatMissEvent
 import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatTurnEndEvent
 import io.github.masamune.event.EventService
@@ -356,9 +355,15 @@ class ActionExecutorService(
         val targetStats = realTarget.stats
         val evadeChance = targetStats.magicalEvade
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
-            effectStack.addLast(MissEffect(source, realTarget))
+            soundAsset?.let { effectStack.addLast(SoundEffect(source, realTarget, it)) }
+            effectStack.addLast(SfxEffect(source, realTarget, sfxAtlasKey, sfxDuration, sfxScale))
+            val missEffect = MissEffect(source, realTarget)
+            effectStack.addLast(missEffect)
+            if (delay > 0f) {
+                effectStack.addLast(DelayEffect(source, realTarget, delay))
+            }
             ignoreDamageCalls = false
-            return DefaultEffect
+            return missEffect
         }
 
         // add intelligence to magic damage
@@ -416,20 +421,24 @@ class ActionExecutorService(
         targets.forEach {
             damageEffects += dealMagicDamage(source, amount, it, sfxAtlasKey, sfxDuration, sfxScale, null, 0f)
         }
-        val lastDamageEffect = damageEffects.last()
-        if (lastDamageEffect == effectStack.last) {
-            // no post magic damage effects triggered -> add delay/audio just once
-            effectStack.addLast(SoundEffect(source, lastDamageEffect.target, soundAsset))
+        val lastDamageEffect = damageEffects.last() // this is either a DamageEffect or MissEffect
+        if (lastDamageEffect === effectStack.last) {
+            // no post magic damage effects triggered -> process everything at once
+            // we need to add a sound effect for each target to avoid that the
+            // sound effect is completely skipped if the target dies.
+            // The EffectStack class takes care to remove consecutive sound effects
+            damageEffects.forEach {
+                effectStack.addBefore(damageEffects.first(), SoundEffect(source, it.target, soundAsset))
+            }
             effectStack.addLast(DelayEffect(source, lastDamageEffect.target, delay))
         } else {
-            // post magic damage effects -> add delay/audio after each damage effect to process post reaction one by one
-            damageEffects
-                .filterIsInstance<DamageEffect>()
-                .forEach { damageEffect ->
-                    // make add delay call BEFORE sound to get correct order (damage, audio, delay)
-                    effectStack.addAfter(damageEffect, DelayEffect(source, damageEffect.target, delay))
-                    effectStack.addAfter(damageEffect, SoundEffect(source, damageEffect.target, soundAsset))
-                }
+            // post magic damage effects -> add delay/audio to each damage effect to process post reaction one by one
+            damageEffects.forEach { damageEffect ->
+                // add sound before damage to play sound also if target dies
+                // add delay after damage
+                effectStack.addBefore(damageEffect, SoundEffect(source, damageEffect.target, soundAsset))
+                effectStack.addAfter(damageEffect, DelayEffect(source, damageEffect.target, delay))
+            }
         }
     }
 
