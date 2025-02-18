@@ -254,6 +254,7 @@ class ActionExecutorService(
         if (evadeChance > 0f && MathUtils.random() <= evadeChance) {
             effectStack.addLast(MissEffect(source, realTarget))
             effectStack.addLast(SoundEffect(source, realTarget, SoundAsset.ATTACK_MISS))
+            effectStack.addLast(SfxEffect(source, realTarget, source[Combat].attackSFX, delay * 0.5f, 2f))
             if (delay > 0f) {
                 effectStack.addLast(DelayEffect(source, realTarget, delay))
             }
