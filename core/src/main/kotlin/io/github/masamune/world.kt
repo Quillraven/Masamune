@@ -150,11 +150,11 @@ fun World.removeItem(item: Entity, from: Entity) {
 }
 
 fun World.isEntityDead(entity: Entity): Boolean = with(this) {
-    return entity[CharacterStats].life < 1f
+    return entity !in this || entity[CharacterStats].life < 1f
 }
 
 fun World.isEntityAlive(entity: Entity): Boolean = with(this) {
-    return entity[CharacterStats].life >= 1f
+    return entity in this && entity[CharacterStats].life >= 1f
 }
 
 fun World.canPerformAction(entity: Entity, action: Action): Boolean {
