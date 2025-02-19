@@ -68,7 +68,7 @@
     <property name="targetPortalId" type="int" value="11"/>
    </properties>
   </object>
-  <object id="20" name="FOREST_ENTRANCE" type="Portal" x="128" y="-4" width="60" height="20">
+  <object id="20" name="FOREST_ENTRANCE" type="Portal" x="128" y="-14.75" width="60" height="30.75">
    <properties>
     <property name="isSensor" type="bool" value="true"/>
     <property name="targetPortalId" type="int" value="33"/>

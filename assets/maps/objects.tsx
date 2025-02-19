@@ -4,7 +4,7 @@
  <tile id="0" type="PlayerObject">
   <properties>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,HEAL,USE_ITEM"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,USE_ITEM"/>
    <property name="objType" propertytype="MapObjectType" value="HERO"/>
    <property name="speed" type="float" value="5"/>
    <property name="stats" type="class" propertytype="CharStats">
@@ -103,7 +103,7 @@
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
      <property name="agility" type="float" value="2"/>
-     <property name="baseLife" type="float" value="20"/>
+     <property name="baseLife" type="float" value="8"/>
      <property name="baseMana" type="float" value="5"/>
      <property name="damage" type="float" value="3"/>
     </properties>
@@ -129,7 +129,7 @@
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
      <property name="agility" type="float" value="2"/>
-     <property name="baseLife" type="float" value="24"/>
+     <property name="baseLife" type="float" value="10"/>
      <property name="damage" type="float" value="4"/>
      <property name="resistance" type="float" value="20"/>
     </properties>
@@ -156,7 +156,7 @@
     <properties>
      <property name="agility" type="float" value="4"/>
      <property name="armor" type="float" value="10"/>
-     <property name="baseLife" type="float" value="17"/>
+     <property name="baseLife" type="float" value="6"/>
      <property name="damage" type="float" value="6"/>
      <property name="physicalEvade" type="float" value="0.1"/>
     </properties>
