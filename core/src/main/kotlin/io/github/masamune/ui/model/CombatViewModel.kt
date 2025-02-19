@@ -28,6 +28,7 @@ import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Selector
 import io.github.masamune.component.Transform
+import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
 import io.github.masamune.event.CombatEntityTakeDamageEvent
@@ -88,8 +89,8 @@ class CombatViewModel(
     var combatMana: Pair<Vector2, Int> by propertyNotify(Vector2.Zero to 0)
     var combatMiss: Vector2 by propertyNotify(Vector2.Zero)
     var combatDone: Boolean by propertyNotify(false)
-    var enemyPosAndLifes: MutableMap<Entity, Triple<Vector2, Vector2, Vector2>> by propertyNotify(mutableMapOf())
-    var enemyDamage: Pair<Entity, Vector2> by propertyNotify(Entity.NONE to Vector2.Zero)
+    var enemyPosAndLifes: MutableMap<Int, Triple<Vector2, Vector2, Vector2>> by propertyNotify(mutableMapOf())
+    var enemyDamage: Pair<Int, Vector2> by propertyNotify(-1 to Vector2.Zero)
 
     // special flag to set life/mana bar values instantly in the view instead of using an animation
     var combatStart = false
@@ -145,7 +146,7 @@ class CombatViewModel(
                 if (event.entity has Player) {
                     playerLife = event.life to event.maxLife
                 } else {
-                    enemyDamage = event.entity to vec2(event.life, event.maxLife)
+                    enemyDamage = event.entity.id to vec2(event.life, event.maxLife)
                 }
 
                 val (position, size) = event.entity[Transform]
@@ -158,7 +159,7 @@ class CombatViewModel(
                 if (event.entity has Player) {
                     playerLife = event.life to event.maxLife
                 } else {
-                    enemyDamage = event.entity to vec2(event.life, event.maxLife)
+                    enemyDamage = event.entity.id to vec2(event.life, event.maxLife)
                 }
 
                 val (position, size) = event.entity[Transform]
@@ -194,15 +195,20 @@ class CombatViewModel(
 
             is CombatEntityTransformEvent -> {
                 if (event.entity hasNo Player) {
-                    enemyDamage = event.entity to vec2(event.life, event.maxLife)
+                    enemyDamage = event.entity.id to vec2(event.life, event.maxLife)
                 }
+            }
+
+            is CombatEntityDeadEvent -> {
+                enemyDamage = event.entity.id to Vector2.Zero
             }
 
             else -> Unit
         }
     }
 
-    fun getEnemyPositionAndSize(enemy: Entity): Pair<Vector2, Vector2> = with(world) {
+    fun getEnemyPositionAndSize(enemyId: Int): Pair<Vector2, Vector2> = with(world) {
+        val enemy = enemyEntities.single { it.id == enemyId }
         val (position, size) = enemy[Transform]
         val uiPos = vec2(position.x, position.y).toUiPosition(gameViewport, uiViewport)
         val uiSize = vec2(size.x, size.y).toUiPosition(gameViewport, uiViewport)
@@ -256,7 +262,7 @@ class CombatViewModel(
             val uiPos = vec2(position.x, position.y).toUiPosition(gameViewport, uiViewport)
             val uiSize = vec2(size.x, size.y).toUiPosition(gameViewport, uiViewport)
             val enemyStats = enemy[CharacterStats]
-            enemyPosAndLifes[enemy] = Triple(uiPos, uiSize, vec2(enemyStats.life, enemyStats.lifeMax))
+            enemyPosAndLifes[enemy.id] = Triple(uiPos, uiSize, vec2(enemyStats.life, enemyStats.lifeMax))
         }
         notify(CombatViewModel::enemyPosAndLifes, enemyPosAndLifes)
         // no need to hold these values anymore

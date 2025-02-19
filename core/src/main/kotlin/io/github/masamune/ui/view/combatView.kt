@@ -278,7 +278,7 @@ class CombatView(
             enemyHealthBars.values.forEach { it.remove() }
             enemyHealthBars.clear()
             val skin = skin
-            enemyPosAndLifes.forEach { (entity, values) ->
+            enemyPosAndLifes.forEach { (entityId, values) ->
                 val (position, size, lifeAndMax) = values
                 val stack = scene2d.stack {
                     val lifePerc = lifeAndMax.x / lifeAndMax.y
@@ -290,27 +290,28 @@ class CombatView(
                     this.setPosition(position.x, position.y - 25f)
                     this.setSize(size.x, 20f)
                 }
-                enemyHealthBars[entity.id] = stack
+                enemyHealthBars[entityId] = stack
                 stage.addActor(stack)
                 stack.toBack()
             }
         }
-        viewModel.onPropertyChange(CombatViewModel::enemyDamage) { (entity, lifeAndMax) ->
-            val skin = skin
-            var stack = enemyHealthBars[entity.id]
-            if (stack != null) {
-                if (lifeAndMax.x <= 1f) {
-                    stack.remove()
-                    return@onPropertyChange
-                }
+        viewModel.onPropertyChange(CombatViewModel::enemyDamage) { (entityId, lifeAndMax) ->
+            if (lifeAndMax == Vector2.Zero) {
+                // entity is dead
+                enemyHealthBars[entityId]?.remove()
+                return@onPropertyChange
+            }
 
+            val skin = skin
+            var stack = enemyHealthBars[entityId]
+            if (stack != null) {
                 val lifePerc = lifeAndMax.x / lifeAndMax.y
                 val bar = stack.children.first() as Bar
                 val label = stack.children.last() as Label
                 label.txt = "${lifeAndMax.x.toInt()}"
                 bar.value = lifePerc
             } else {
-                val (position, size) = viewModel.getEnemyPositionAndSize(entity)
+                val (position, size) = viewModel.getEnemyPositionAndSize(entityId)
                 stack = scene2d.stack {
                     val lifePerc = lifeAndMax.x / lifeAndMax.y
                     bar(skin, lifePerc, 0f, 1f, 0.01f, skin.getColor("red"))
@@ -321,7 +322,7 @@ class CombatView(
                     this.setPosition(position.x, position.y - 25f)
                     this.setSize(size.x, 20f)
                 }
-                enemyHealthBars[entity.id] = stack
+                enemyHealthBars[entityId] = stack
                 stage.addActor(stack)
                 stack.toBack()
             }
