@@ -85,4 +85,9 @@ data class CombatEntityManaUpdateEvent(
     val state: ActionState,
 ) : Event
 data class CombatMissEvent(val entity: Entity) : Event
-data class CombatEntityTransformEvent(val entity: Entity, val life: Float, val maxLife: Float) : Event
+data class CombatEntityTransformEvent(
+    val originalEntity: Entity,
+    val newEntity: Entity,
+    val life: Float,
+    val maxLife: Float
+) : Event

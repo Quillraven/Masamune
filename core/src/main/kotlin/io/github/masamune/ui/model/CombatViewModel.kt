@@ -194,8 +194,11 @@ class CombatViewModel(
             is GameResizeEvent -> onResize()
 
             is CombatEntityTransformEvent -> {
-                if (event.entity hasNo Player) {
-                    enemyDamage = event.entity.id to vec2(event.life, event.maxLife)
+                // remove previous entity healthbar
+                enemyDamage = event.originalEntity.id to Vector2.Zero
+                // create new entity healthbar
+                if (event.newEntity hasNo Player) {
+                    enemyDamage = event.newEntity.id to vec2(event.life, event.maxLife)
                 }
             }
 
@@ -208,7 +211,10 @@ class CombatViewModel(
     }
 
     fun getEnemyPositionAndSize(enemyId: Int): Pair<Vector2, Vector2> = with(world) {
-        val enemy = enemyEntities.single { it.id == enemyId }
+        val enemy = enemyEntities.singleOrNull { it.id == enemyId }
+        // transformed entities are not part of the initial enemyEntities -> get entity from family
+            ?: world.family { all(Combat).none(Player) }.single { it.id == enemyId }
+
         val (position, size) = enemy[Transform]
         val uiPos = vec2(position.x, position.y).toUiPosition(gameViewport, uiViewport)
         val uiSize = vec2(size.x, size.y).toUiPosition(gameViewport, uiViewport)

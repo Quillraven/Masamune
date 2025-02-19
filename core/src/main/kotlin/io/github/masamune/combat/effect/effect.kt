@@ -144,7 +144,14 @@ data class EffectStack(
             }
 
             effect is TransformEffect -> {
-                eventService.fire(CombatEntityTransformEvent(effect.newEntity, effect.newLife, effect.newLifeMax))
+                eventService.fire(
+                    CombatEntityTransformEvent(
+                        effect.source,
+                        effect.newEntity,
+                        effect.newLife,
+                        effect.newLifeMax
+                    )
+                )
             }
 
             effect is MissEffect -> {
