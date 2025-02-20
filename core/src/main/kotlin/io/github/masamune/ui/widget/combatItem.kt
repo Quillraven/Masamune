@@ -35,7 +35,9 @@ class CombatItemWidget(
             cell.padRight(5f).padLeft(5f)
         }
 
-        label("$title [#${skin.getColor("red")}]${targetDescriptor.first()}[] ${amount}x", defaultStyle, skin) {
+        // remove target descriptor for now since it looks weird
+        // label("$title [#${skin.getColor("red")}]${targetDescriptor.first()}[] ${amount}x", defaultStyle, skin) {
+        label("$title ${amount}x", defaultStyle, skin) {
             it.left().expandX()
         }
     }

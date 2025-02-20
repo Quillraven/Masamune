@@ -95,6 +95,7 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
         return mutableEntityBagOf(
             masamune.tiled.loadItem(world, ItemType.SCROLL_INFERNO, 3),
             masamune.tiled.loadItem(world, ItemType.SMALL_MANA_POTION, 1),
+            masamune.tiled.loadItem(world, ItemType.SMALL_HEALTH_POTION, 2),
         )
     }
 

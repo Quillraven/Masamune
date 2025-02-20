@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import io.github.masamune.ui.model.CombatViewModel
 import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.ItemCombatModel
@@ -79,6 +80,9 @@ class CombatView(
 
     private val itemTable: ItemCombatTable
     private var itemModels: List<ItemCombatModel> = listOf()
+
+    private val actionDescriptionTable: Table
+    private val actionDescriptionLabel: TypingLabel
 
     private var uiAction: UiAction = UiAction.UNDEFINED
     private var uiState = UiCombatState.SELECT_ACTION
@@ -153,6 +157,18 @@ class CombatView(
 
         itemTable = itemCombatTable(skin) { this.isVisible = false }
 
+        actionDescriptionTable = table(skin) {
+            this.background = skin.getDrawable("nine_path_bg_2")
+            this.isVisible = false
+            this@CombatView.actionDescriptionLabel = typingLabel("", "dialog_content", skin) {
+                this.setAlignment(Align.topLeft)
+                this.wrap = true
+                it.pad(5f).grow()
+            }
+            this.pack()
+            this.setSize(MIN_MAGIC_ITEM_TABLE_WIDTH + 100f, 150f)
+        }
+
         registerOnPropertyChanges()
     }
 
@@ -185,22 +201,24 @@ class CombatView(
         viewModel.onPropertyChange(CombatViewModel::playerMagic) { magicList ->
             magicModels = magicList
             magicTable.clearEntries()
-            magicList.forEach { (_, name, targetDescriptor, mana, canPerform) ->
+            magicList.forEach { (_, name, _, targetDescriptor, mana, canPerform) ->
                 magicTable.magic(name, targetDescriptor, mana, canPerform)
             }
             magicTable.pack()
-            magicTable.height = 300f
-            magicTable.width = max(magicTable.width, 400f)
+            magicTable.height = MAGIC_ITEM_TABLE_HEIGHT
+            magicTable.width = max(magicTable.width, MIN_MAGIC_ITEM_TABLE_WIDTH)
+            updateActionDescription(magicList.firstOrNull()?.description ?: "")
         }
         viewModel.onPropertyChange(CombatViewModel::playerItems) { itemList ->
             itemModels = itemList
             itemTable.clearEntries()
-            itemList.forEach { (_, name, targetDescriptor, amount) ->
+            itemList.forEach { (_, name, _, targetDescriptor, amount) ->
                 itemTable.item(name, targetDescriptor, amount)
             }
             itemTable.pack()
-            itemTable.height = 300f
-            itemTable.width = max(itemTable.width, 400f)
+            itemTable.height = MAGIC_ITEM_TABLE_HEIGHT
+            itemTable.width = max(itemTable.width, MIN_MAGIC_ITEM_TABLE_WIDTH)
+            updateActionDescription(itemList.firstOrNull()?.description ?: "")
         }
 
         // ui position update
@@ -231,6 +249,10 @@ class CombatView(
             itemTable.setPosition(
                 position.x - infoW * 0.5f - itemTable.width * 0.5f,
                 playerInfoTable.height + 20f + actionTable.height
+            )
+            actionDescriptionTable.setPosition(
+                position.x - infoW * 0.5f - actionDescriptionTable.width * 0.5f,
+                playerInfoTable.height + 30f + actionTable.height + magicTable.height
             )
         }
 
@@ -329,6 +351,11 @@ class CombatView(
         }
     }
 
+    private fun updateActionDescription(description: String) {
+        actionDescriptionLabel.txt = description
+        actionDescriptionLabel.skipToTheEnd()
+    }
+
     private fun combatTxt(amount: Int, effect: String, color: Color, position: Vector2, duration: Float) {
         val label = scene2d.typingLabel("$effect$amount", "combat_number", skin) {
             this.color = color
@@ -365,6 +392,13 @@ class CombatView(
             UiCombatState.SELECT_MAGIC -> {
                 magicTable.prevEntry(magicTable.entriesPerRow)
                 viewModel.playSndMenuClick()
+                updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
+            }
+
+            UiCombatState.SELECT_ITEM -> {
+                itemTable.prevEntry(itemTable.entriesPerRow)
+                viewModel.playSndMenuClick()
+                updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
             }
 
             else -> Unit
@@ -383,10 +417,12 @@ class CombatView(
             UiCombatState.SELECT_MAGIC -> {
                 magicTable.prevEntry()
                 viewModel.playSndMenuClick()
+                updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
             }
             UiCombatState.SELECT_ITEM -> {
                 itemTable.prevEntry()
                 viewModel.playSndMenuClick()
+                updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
             }
             UiCombatState.VICTORY_DEFEAT -> Unit
         }
@@ -404,10 +440,12 @@ class CombatView(
             UiCombatState.SELECT_MAGIC -> {
                 magicTable.nextEntry()
                 viewModel.playSndMenuClick()
+                updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
             }
             UiCombatState.SELECT_ITEM -> {
                 itemTable.nextEntry()
                 viewModel.playSndMenuClick()
+                updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
             }
             UiCombatState.VICTORY_DEFEAT -> Unit
         }
@@ -418,11 +456,13 @@ class CombatView(
             UiCombatState.SELECT_MAGIC -> {
                 magicTable.nextEntry(magicTable.entriesPerRow)
                 viewModel.playSndMenuClick()
+                updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
             }
 
             UiCombatState.SELECT_ITEM -> {
                 itemTable.nextEntry(itemTable.entriesPerRow)
                 viewModel.playSndMenuClick()
+                updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
             }
 
             else -> Unit
@@ -439,12 +479,14 @@ class CombatView(
 
             UiCombatState.SELECT_MAGIC -> {
                 magicTable.isVisible = false
+                actionDescriptionTable.isVisible = false
                 uiState = UiCombatState.SELECT_ACTION
                 viewModel.playSndMenuAbort()
             }
 
             UiCombatState.SELECT_ITEM -> {
                 itemTable.isVisible = false
+                actionDescriptionTable.isVisible = false
                 uiState = UiCombatState.SELECT_ACTION
                 viewModel.playSndMenuAbort()
             }
@@ -465,14 +507,18 @@ class CombatView(
                 UiAction.MAGIC -> {
                     uiState = UiCombatState.SELECT_MAGIC
                     magicTable.isVisible = true
+                    actionDescriptionTable.isVisible = true
                     magicTable.selectFirstEntry()
+                    updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
                     viewModel.playSndMenuAccept()
                 }
 
                 UiAction.ITEM -> {
                     uiState = UiCombatState.SELECT_ITEM
                     itemTable.isVisible = true
+                    actionDescriptionTable.isVisible = true
                     itemTable.selectFirstEntry()
+                    updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
                     viewModel.playSndMenuAccept()
                 }
 
@@ -500,6 +546,7 @@ class CombatView(
                 uiState = UiCombatState.SELECT_TARGET
                 viewModel.selectMagic(magicModels[magicTable.selectedEntryIdx])
                 magicTable.isVisible = false
+                actionDescriptionTable.isVisible = false
             }
 
             UiCombatState.SELECT_ITEM -> {
@@ -511,6 +558,7 @@ class CombatView(
                 uiState = UiCombatState.SELECT_TARGET
                 viewModel.selectItem(itemModels[itemTable.selectedEntryIdx])
                 itemTable.isVisible = false
+                actionDescriptionTable.isVisible = false
             }
             UiCombatState.VICTORY_DEFEAT -> Unit
         }
@@ -519,6 +567,8 @@ class CombatView(
     companion object {
         private const val ACTION_BTN_SIZE = 30f
         private const val ACTION_BTN_IMG_PAD = 10f
+        private const val MAGIC_ITEM_TABLE_HEIGHT = 100f
+        private const val MIN_MAGIC_ITEM_TABLE_WIDTH = 400f
     }
 }
 

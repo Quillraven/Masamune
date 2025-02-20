@@ -226,6 +226,7 @@ class CombatViewModel(
             MagicModel(
                 it.type,
                 bundle["magic.${it.type.name.lowercase()}.name"],
+                bundle["magic.${it.type.name.lowercase()}.description"],
                 bundle["magic.target.${it.targetType.name.lowercase()}"],
                 it.manaCost,
                 it.run { actionExecutorService.canPerform(player) },
@@ -247,6 +248,7 @@ class CombatViewModel(
                 ItemCombatModel(
                     itemCmp.type,
                     bundle["item.${itemCmp.type.name.lowercase()}.name"],
+                    description("item.${itemCmp.type.name.lowercase()}.description", it, world),
                     bundle["magic.target.${itemCmp.action.targetType.name.lowercase()}"],
                     itemCmp.amount,
                 )

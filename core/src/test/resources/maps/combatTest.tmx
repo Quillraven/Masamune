@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
- <tileset firstgid="1" name="combatObjects" tilewidth="16" tileheight="16" tilecount="6" columns="0">
+ <tileset firstgid="1" name="combatObjects" tilewidth="16" tileheight="16" tilecount="7" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0" type="PlayerObject">
    <properties>
@@ -108,6 +108,21 @@
     </property>
    </properties>
    <image source="objects/elder_sword.png" width="6" height="15"/>
+  </tile>
+  <tile id="6" type="ItemObject">
+   <properties>
+    <property name="action" propertytype="ActionType" value="ITEM_HEALTH_RESTORE"/>
+    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+    <property name="category" propertytype="ItemCategory" value="OTHER"/>
+    <property name="consumableType" propertytype="ConsumableType" value="COMBAT_ONLY"/>
+    <property name="itemType" propertytype="ItemType" value="SMALL_HEALTH_POTION"/>
+    <property name="stats" type="class" propertytype="Stats">
+     <properties>
+      <property name="life" type="float" value="50"/>
+     </properties>
+    </property>
+   </properties>
+   <image source="objects/small_health_potion.png" width="9" height="11"/>
   </tile>
  </tileset>
  <layer id="1" name="Tile Layer 1" width="4" height="4">

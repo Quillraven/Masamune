@@ -45,7 +45,8 @@ class MagicEntryWidget(
 
         val labelTxt = buildString {
             append("[#${skin.getColor("white").cpy().mul(mulColor)}]$title[]")
-            append(" [#${skin.getColor("red").cpy().mul(mulColor)}]${targetDescriptor.first()}[]")
+            // remove target descriptor for now since it looks weird
+            // append(" [#${skin.getColor("red").cpy().mul(mulColor)}]${targetDescriptor.first()}[]")
             append(" [#${skin.getColor("blue").cpy().mul(mulColor)}]${mana}[]")
         }
         label(labelTxt, defaultStyle, skin) {
