@@ -2,8 +2,8 @@
 
 package io.github.masamune.teavm
 
-import com.github.xpenatan.gdx.backends.teavm.TeaApplicationConfiguration
 import com.github.xpenatan.gdx.backends.teavm.TeaApplication
+import com.github.xpenatan.gdx.backends.teavm.TeaApplicationConfiguration
 import io.github.masamune.Masamune
 
 /** Launches the TeaVM/HTML application. */
@@ -19,5 +19,5 @@ fun main() {
         width = 0
         height = 0
     }
-    TeaApplication(Masamune(), config)
+    TeaApplication(Masamune(webLauncher = true), config)
 }

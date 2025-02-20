@@ -22,6 +22,7 @@ fun scheduledTask(delay: Float, action: () -> Unit): Timer.Task = Timer.schedule
 }, delay)
 
 class Masamune(
+    val webLauncher: Boolean = false,
     private val serviceLocator: ServiceLocator = LazyServiceLocator(
         // replace with ImmediateMapTransitionService to change maps without any special effect
         mapTransitionServiceInitializer = { tiled -> DefaultMapTransitionService(tiled) }

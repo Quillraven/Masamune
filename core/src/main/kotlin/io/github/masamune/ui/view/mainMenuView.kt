@@ -26,6 +26,7 @@ import ktx.scene2d.table
 @Scene2dDsl
 class MainMenuView(
     model: MainMenuViewModel,
+    webView: Boolean,
     skin: Skin,
 ) : View<MainMenuViewModel>(skin, model), KTable {
 
@@ -44,12 +45,7 @@ class MainMenuView(
             this.defaults().pad(10f)
 
             this@MainMenuView.currentSelection = table(skin) { startGameTableCell ->
-                image(skin.getDrawable("arrow")) { cell ->
-                    setScaling(Scaling.contain)
-                    this += forever(fadeOut(0.5f) then fadeIn(0.25f) then delay(0.25f))
-                    cell.padRight(5f).left()
-                    this.name = "selection"
-                }
+                selectionImage(skin, visible = true)
                 this@MainMenuView.startGameLabel = label("Start Game", "dialog_option", skin) {
                     it.expandX()
                 }
@@ -61,13 +57,7 @@ class MainMenuView(
                 label("Music Volume", "dialog_content", skin) {
                     it.padBottom(5f).colspan(2).row()
                 }
-                image(skin.getDrawable("arrow")) { cell ->
-                    setScaling(Scaling.contain)
-                    this += forever(fadeOut(0.5f) then fadeIn(0.25f) then delay(0.25f))
-                    cell.padRight(5f).left()
-                    this.isVisible = false
-                    this.name = "selection"
-                }
+                selectionImage(skin)
                 this@MainMenuView.musicBar = progressBar(0f, 1f, 0.05f, false, "yellow", skin) {
                     this.value = model.musicVolume
                     this.name = "volumePB"
@@ -81,13 +71,7 @@ class MainMenuView(
                 label("Sound Volume", "dialog_content", skin) {
                     it.padBottom(5f).colspan(2).row()
                 }
-                image(skin.getDrawable("arrow")) { cell ->
-                    setScaling(Scaling.contain)
-                    this += forever(fadeOut(0.5f) then fadeIn(0.25f) then delay(0.25f))
-                    cell.padRight(5f).left()
-                    this.isVisible = false
-                    this.name = "selection"
-                }
+                selectionImage(skin)
                 this@MainMenuView.soundBar = progressBar(0f, 1f, 0.05f, false, "yellow", skin) {
                     this.value = model.soundVolume
                     this.name = "volumePB"
@@ -97,17 +81,14 @@ class MainMenuView(
             }
 
             table(skin) { quitGameTableCell ->
-                image(skin.getDrawable("arrow")) { cell ->
-                    setScaling(Scaling.contain)
-                    this += forever(fadeOut(0.5f) then fadeIn(0.25f) then delay(0.25f))
-                    cell.padRight(5f).left()
-                    this.isVisible = false
-                    this.name = "selection"
-                }
+                selectionImage(skin)
                 this@MainMenuView.quitGameLabel = label("Quit Game", "dialog_option", skin) {
                     it.expandX()
                 }
                 quitGameTableCell.uniformX().growX()
+            }
+            if (webView) {
+                this@MainMenuView.quitGameLabel.parent.remove()
             }
         }
 
@@ -188,11 +169,23 @@ class MainMenuView(
             3 -> viewModel.quitGame()
         }
     }
+
+    companion object {
+        private fun KTable.selectionImage(skin: Skin, visible: Boolean = false) =
+            image(skin.getDrawable("arrow")) { cell ->
+                setScaling(Scaling.contain)
+                this += forever(fadeOut(0.5f) then fadeIn(0.25f) then delay(0.25f))
+                cell.padRight(5f).left()
+                this.isVisible = visible
+                this.name = "selection"
+            }
+    }
 }
 
 @Scene2dDsl
 fun <S> KWidget<S>.mainMenuView(
     model: MainMenuViewModel,
+    webView: Boolean,
     skin: Skin,
     init: (@Scene2dDsl MainMenuView).(S) -> Unit = {},
-): MainMenuView = actor(MainMenuView(model, skin), init)
+): MainMenuView = actor(MainMenuView(model, webView, skin), init)

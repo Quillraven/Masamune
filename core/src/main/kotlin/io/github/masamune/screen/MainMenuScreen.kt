@@ -58,7 +58,7 @@ class MainMenuScreen(
         // setup UI views
         stage.clear()
         stage.actors {
-            mainMenuView(mmViewModel, skin)
+            mainMenuView(mmViewModel, masamune.webLauncher, skin)
         }
         mmViewModel.startGame = false
 
