@@ -243,15 +243,15 @@ class CombatView(
             )
 
             magicTable.setPosition(
-                position.x - infoW * 0.5f - magicTable.width * 0.5f,
+                max(10f, position.x - infoW * 0.5f - magicTable.width * 0.5f),
                 playerInfoTable.height + 20f + actionTable.height
             )
             itemTable.setPosition(
-                position.x - infoW * 0.5f - itemTable.width * 0.5f,
+                max(10f, position.x - infoW * 0.5f - itemTable.width * 0.5f),
                 playerInfoTable.height + 20f + actionTable.height
             )
             actionDescriptionTable.setPosition(
-                position.x - infoW * 0.5f - actionDescriptionTable.width * 0.5f,
+                max(10f, position.x - infoW * 0.5f - actionDescriptionTable.width * 0.5f),
                 playerInfoTable.height + 30f + actionTable.height + magicTable.height
             )
         }
@@ -390,12 +390,18 @@ class CombatView(
             }
 
             UiCombatState.SELECT_MAGIC -> {
+                if (magicTable.hasNoEntries()) {
+                    return
+                }
                 magicTable.prevEntry(magicTable.entriesPerRow)
                 viewModel.playSndMenuClick()
                 updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
             }
 
             UiCombatState.SELECT_ITEM -> {
+                if (itemTable.hasNoEntries()) {
+                    return
+                }
                 itemTable.prevEntry(itemTable.entriesPerRow)
                 viewModel.playSndMenuClick()
                 updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
@@ -415,11 +421,17 @@ class CombatView(
 
             UiCombatState.SELECT_TARGET -> viewModel.selectPrevTarget()
             UiCombatState.SELECT_MAGIC -> {
+                if (magicTable.hasNoEntries()) {
+                    return
+                }
                 magicTable.prevEntry()
                 viewModel.playSndMenuClick()
                 updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
             }
             UiCombatState.SELECT_ITEM -> {
+                if (itemTable.hasNoEntries()) {
+                    return
+                }
                 itemTable.prevEntry()
                 viewModel.playSndMenuClick()
                 updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
@@ -438,11 +450,17 @@ class CombatView(
 
             UiCombatState.SELECT_TARGET -> viewModel.selectNextTarget()
             UiCombatState.SELECT_MAGIC -> {
+                if (magicTable.hasNoEntries()) {
+                    return
+                }
                 magicTable.nextEntry()
                 viewModel.playSndMenuClick()
                 updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
             }
             UiCombatState.SELECT_ITEM -> {
+                if (itemTable.hasNoEntries()) {
+                    return
+                }
                 itemTable.nextEntry()
                 viewModel.playSndMenuClick()
                 updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
@@ -454,12 +472,18 @@ class CombatView(
     override fun onDownPressed() {
         when (uiState) {
             UiCombatState.SELECT_MAGIC -> {
+                if (magicTable.hasNoEntries()) {
+                    return
+                }
                 magicTable.nextEntry(magicTable.entriesPerRow)
                 viewModel.playSndMenuClick()
                 updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
             }
 
             UiCombatState.SELECT_ITEM -> {
+                if (itemTable.hasNoEntries()) {
+                    return
+                }
                 itemTable.nextEntry(itemTable.entriesPerRow)
                 viewModel.playSndMenuClick()
                 updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
@@ -507,18 +531,22 @@ class CombatView(
                 UiAction.MAGIC -> {
                     uiState = UiCombatState.SELECT_MAGIC
                     magicTable.isVisible = true
-                    actionDescriptionTable.isVisible = true
                     magicTable.selectFirstEntry()
-                    updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
+                    if (magicTable.hasEntries()) {
+                        actionDescriptionTable.isVisible = true
+                        updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
+                    }
                     viewModel.playSndMenuAccept()
                 }
 
                 UiAction.ITEM -> {
                     uiState = UiCombatState.SELECT_ITEM
                     itemTable.isVisible = true
-                    actionDescriptionTable.isVisible = true
                     itemTable.selectFirstEntry()
-                    updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
+                    if (itemTable.hasEntries()) {
+                        actionDescriptionTable.isVisible = true
+                        updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
+                    }
                     viewModel.playSndMenuAccept()
                 }
 
