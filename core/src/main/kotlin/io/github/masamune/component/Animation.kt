@@ -44,9 +44,12 @@ data class Animation(
             return Animation(atlas, gdxAnimation, speed = speed)
         }
 
-        fun ofAnimation(animation: Animation): Animation {
+        fun ofAnimation(
+            animation: Animation,
+            direction: FacingDirection = animation.gdxAnimation.direction,
+        ): Animation {
             val (atlas, gdxAnimation, _, speed) = animation
-            val (atlasKey, animationType, direction) = gdxAnimation
+            val (atlasKey, animationType) = gdxAnimation
             return Animation(atlas, atlas.gdxAnimation(atlasKey, animationType, direction), speed)
         }
     }

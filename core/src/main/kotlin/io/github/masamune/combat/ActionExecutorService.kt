@@ -35,8 +35,9 @@ import io.github.masamune.component.ItemStats
 import io.github.masamune.component.MoveBy
 import io.github.masamune.component.Player
 import io.github.masamune.component.Transform
+import io.github.masamune.event.CombatActionStartEvent
+import io.github.masamune.event.CombatActionsPerformedEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
-import io.github.masamune.event.CombatNextTurnEvent
 import io.github.masamune.event.CombatTurnEndEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.isEntityAlive
@@ -131,6 +132,12 @@ class ActionExecutorService(
         if (moveEntity) {
             moveEntityBy(queueEntry.entity, PERFORM_OFFSET, 0.5f)
         }
+
+        if (itemOwner != Entity.NONE) {
+            eventService.fire(CombatActionStartEvent(itemOwner))
+        } else {
+            eventService.fire(CombatActionStartEvent(source))
+        }
     }
 
     fun performItemAction(itemOwner: Entity, item: Entity, action: Action, targets: EntityBag) {
@@ -174,11 +181,7 @@ class ActionExecutorService(
                 eventService.fire(CombatTurnEndEvent)
             } else {
                 log.debug { "Combat trigger next turn" }
-                with(world) {
-                    val player = allPlayers.single { it has Player }
-                    val aliveEnemies = allEnemies.filter { it hasNo Player && isEntityAlive(it) }
-                    eventService.fire(CombatNextTurnEvent(player, aliveEnemies))
-                }
+                eventService.fire(CombatActionsPerformedEvent)
             }
             return
         }

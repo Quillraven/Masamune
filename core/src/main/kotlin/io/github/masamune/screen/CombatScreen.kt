@@ -218,7 +218,7 @@ class CombatScreen(
             it += xpCmp
             it += statsCmp.copy()
             it += Facing(FacingDirection.UP)
-            val animationCmp = Animation.ofAnimation(aniCmp)
+            val animationCmp = Animation.ofAnimation(aniCmp, FacingDirection.UP)
             animationCmp.changeTo = AnimationType.WALK
             animationCmp.speed = 0.4f
             it += animationCmp

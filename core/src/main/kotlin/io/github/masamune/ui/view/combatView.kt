@@ -20,9 +20,11 @@ import io.github.masamune.ui.model.MagicModel
 import io.github.masamune.ui.widget.Bar
 import io.github.masamune.ui.widget.ItemCombatTable
 import io.github.masamune.ui.widget.MagicTable
+import io.github.masamune.ui.widget.TurnOrderTable
 import io.github.masamune.ui.widget.bar
 import io.github.masamune.ui.widget.itemCombatTable
 import io.github.masamune.ui.widget.magicTable
+import io.github.masamune.ui.widget.turnOrderTable
 import ktx.actors.plusAssign
 import ktx.actors.then
 import ktx.actors.txt
@@ -88,6 +90,8 @@ class CombatView(
     private var uiState = UiCombatState.SELECT_ACTION
 
     private val enemyHealthBars = mutableMapOf<Int, Stack>()
+
+    private val turnOrderTable: TurnOrderTable
 
     init {
         playerInfoTable = table(skin) {
@@ -168,6 +172,8 @@ class CombatView(
             this.pack()
             this.setSize(MIN_MAGIC_ITEM_TABLE_WIDTH + 100f, 150f)
         }
+
+        turnOrderTable = turnOrderTable(skin) { }
 
         registerOnPropertyChanges()
     }
@@ -254,6 +260,9 @@ class CombatView(
                 max(10f, position.x - infoW * 0.5f - actionDescriptionTable.width * 0.5f),
                 playerInfoTable.height + 30f + actionTable.height + magicTable.height
             )
+
+            // center turn order table vertically
+            turnOrderTable.setPosition(0f, stage.height * 0.5f - turnOrderTable.height * 0.5f)
         }
 
         // action table fade in effect
@@ -348,6 +357,14 @@ class CombatView(
                 stage.addActor(stack)
                 stack.toBack()
             }
+        }
+
+        // turn order table related properties
+        viewModel.onPropertyChange(CombatViewModel::turnEntities) { entityDrawables ->
+            turnOrderTable.drawablesOfRound(entityDrawables)
+        }
+        viewModel.onPropertyChange(CombatViewModel::actionFinishedEntityId) {
+            turnOrderTable.removeDrawable(it)
         }
     }
 

@@ -3,7 +3,7 @@ atlasData: {
 	atlasCurrent: true
 	drawables: [
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/dialog_face_frame.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/dialog_face_frame.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -23,7 +23,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/elder.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/elder.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -43,7 +43,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/dialog_choice_frame.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/dialog_choice_frame.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -63,7 +63,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/arrow.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/arrow.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -83,7 +83,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/nine_path_bg.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/nine_path_bg.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -103,7 +103,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -123,7 +123,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/merchant.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/merchant.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -143,7 +143,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/smith.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/smith.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -163,7 +163,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/flower_girl.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/flower_girl.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -183,7 +183,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/hero.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/hero.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -203,7 +203,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -252,7 +252,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_green.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress_green.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -272,7 +272,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_green.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress_green.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -321,7 +321,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_blue.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress_blue.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -341,7 +341,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_blue.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress_blue.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -390,7 +390,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_yellow.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress_yellow.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -410,7 +410,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_yellow.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress_yellow.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -459,7 +459,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/nine_path_bg_2.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/nine_path_bg_2.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -479,7 +479,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/button_normal.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/button_normal.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -499,7 +499,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/button_pressed.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/button_pressed.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -519,7 +519,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/icon_sword.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/icon_sword.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -539,7 +539,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/icon_magic.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/icon_magic.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -559,7 +559,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/icon_items.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/icon_items.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -579,7 +579,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/frame_1.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/frame_1.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -599,7 +599,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/dialog_frame.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/dialog_frame.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -619,7 +619,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/man_green.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/man_green.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -639,7 +639,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_white.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress_white.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -659,7 +659,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_white.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/slider_progress_white.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -708,7 +708,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/bar_bg.9.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/bar_bg.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -730,7 +730,7 @@ atlasData: {
 	]
 	fontDrawables: [
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/fipps_16.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/fipps_16.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -750,7 +750,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/PIXEARG_.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/PIXEARG_.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -770,7 +770,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_24_border.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_24_border.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -790,7 +790,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_12.png
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_12.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -921,7 +921,7 @@ jsonData: {
 			flip: false
 			markupEnabled: true
 			scaling: -1
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/fipps_16.fnt
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/fipps_16.fnt
 		}
 		{
 			class: com.ray3k.skincomposer.data.FontData
@@ -929,7 +929,7 @@ jsonData: {
 			flip: false
 			markupEnabled: true
 			scaling: -1
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_12.fnt
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_12.fnt
 		}
 		{
 			class: com.ray3k.skincomposer.data.FontData
@@ -937,7 +937,7 @@ jsonData: {
 			flip: false
 			markupEnabled: true
 			scaling: -1
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/PIXEARG_.fnt
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/PIXEARG_.fnt
 		}
 		{
 			class: com.ray3k.skincomposer.data.FontData
@@ -945,7 +945,7 @@ jsonData: {
 			flip: false
 			markupEnabled: true
 			scaling: -1
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_24_border.fnt
+			file: C:/Users/Simon/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_24_border.fnt
 		}
 	]
 	freeTypeFonts: []
@@ -3444,7 +3444,7 @@ preferences: {
 	}
 	last-import-export-path: {
 		class: java.lang.String
-		value: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets/ui/skin.json
+		value: C:/Users/Simon/IdeaProjects/Masamune/assets/ui/skin.json
 	}
 	export-hex: {
 		class: java.lang.Boolean
@@ -3459,7 +3459,7 @@ preferences: {
 		value: 30
 	}
 }
-saveFile: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign.scmp
+saveFile: C:/Users/Simon/IdeaProjects/Masamune/skinDesign.scmp
 version: 58
 sceneComposer: {
 	children: [

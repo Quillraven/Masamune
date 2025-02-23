@@ -1,13 +1,14 @@
 package io.github.masamune.combat.state
 
 import com.github.quillraven.fleks.World
-import com.github.quillraven.fleks.collection.compareEntity
+import com.github.quillraven.fleks.collection.EntityComparator
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.component.AI
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
-import io.github.masamune.component.CharacterStats
 import io.github.masamune.event.CombatTurnBeginEvent
+import io.github.masamune.event.CombatTurnSortedEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.isEntityDead
 import ktx.log.logger
@@ -16,17 +17,23 @@ import ktx.log.logger
 // this state then calls enemy AI to pick their actions
 class CombatStatePrepareRound(
     private val world: World,
+    private val combatComparator: EntityComparator,
     private val eventService: EventService = world.inject(),
     private val actionExecutorService: ActionExecutorService = world.inject(),
 ) : CombatState {
     private val combatEntities = world.family { all(Combat) }
     private val enemyEntities = world.family { none(Player).all(Combat) }
+    private var turn = 0
 
-    // sort entities by their agility -> higher agility goes first
-    private val comparator = compareEntity(world) { e1, e2 ->
-        (e2[CharacterStats].agility - e1[CharacterStats].agility).toInt()
+    fun reset() {
+        turn = 0
+        sortEntitiesByAgility()
     }
-    var turn = 0
+
+    private fun sortEntitiesByAgility() {
+        combatEntities.sort(combatComparator)
+        eventService.fire(CombatTurnSortedEvent(combatEntities.entities))
+    }
 
     override fun onEnter() {
         if (turn == 0) {
@@ -45,7 +52,7 @@ class CombatStatePrepareRound(
         }
 
         // sort entities by their agility
-        combatEntities.sort(comparator)
+        sortEntitiesByAgility()
 
         log.debug { debugRound() }
         eventService.fire(CombatTurnBeginEvent(turn++))

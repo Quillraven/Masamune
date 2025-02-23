@@ -2,6 +2,8 @@ package io.github.masamune.ui.model
 
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.Entity
@@ -28,6 +30,7 @@ import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Selector
 import io.github.masamune.component.Transform
+import io.github.masamune.event.CombatActionStartEvent
 import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
@@ -39,9 +42,11 @@ import io.github.masamune.event.CombatPlayerActionEvent
 import io.github.masamune.event.CombatPlayerDefeatEvent
 import io.github.masamune.event.CombatPlayerVictoryEvent
 import io.github.masamune.event.CombatStartEvent
+import io.github.masamune.event.CombatTurnSortedEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.GameResizeEvent
+import io.github.masamune.isEntityAlive
 import io.github.masamune.selectorEntity
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.ConsumableType
@@ -91,6 +96,8 @@ class CombatViewModel(
     var combatDone: Boolean by propertyNotify(false)
     var enemyPosAndLifes: MutableMap<Int, Triple<Vector2, Vector2, Vector2>> by propertyNotify(mutableMapOf())
     var enemyDamage: Pair<Int, Vector2> by propertyNotify(-1 to Vector2.Zero)
+    var turnEntities: List<Pair<Int, Drawable>> by propertyNotify(emptyList())
+    var actionFinishedEntityId: Int by propertyNotify(-1)
 
     // special flag to set life/mana bar values instantly in the view instead of using an animation
     var combatStart = false
@@ -194,16 +201,32 @@ class CombatViewModel(
             is GameResizeEvent -> onResize()
 
             is CombatEntityTransformEvent -> {
-                // remove previous entity healthbar
+                // remove previous entity health bar
                 enemyDamage = event.originalEntity.id to Vector2.Zero
-                // create new entity healthbar
+                // create new entity health bar
                 if (event.newEntity hasNo Player) {
                     enemyDamage = event.newEntity.id to vec2(event.life, event.maxLife)
                 }
+                // remove entity from order overview
+                actionFinishedEntityId = event.originalEntity.id
             }
 
             is CombatEntityDeadEvent -> {
                 enemyDamage = event.entity.id to Vector2.Zero
+                actionFinishedEntityId = event.entity.id
+            }
+
+            is CombatTurnSortedEvent -> {
+                turnEntities = event.entities
+                    .filter { world.isEntityAlive(it) }
+                    .map { entity ->
+                        val texRegion = entity[Animation].gdxAnimation.getKeyFrame(0f)
+                        entity.id to TextureRegionDrawable(texRegion)
+                    }
+            }
+
+            is CombatActionStartEvent -> {
+                actionFinishedEntityId = event.entity.id
             }
 
             else -> Unit
