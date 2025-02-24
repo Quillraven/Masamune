@@ -1,5 +1,6 @@
 package io.github.masamune.teavm
 
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.github.xpenatan.gdx.backends.teavm.config.AssetFileHandle
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuildConfiguration
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuilder
@@ -44,12 +45,15 @@ object TeaVMBuilder {
         TeaReflectionSupplier.addReflectionClass(RainbowEffect::class.java)
         TeaReflectionSupplier.addReflectionClass(EaseEffect::class.java)
         TeaReflectionSupplier.addReflectionClass(BlinkEffect::class.java)
+        // free type font
+        TeaReflectionSupplier.addReflectionClass(FreeTypeFontGenerator::class.java)
 
         val tool = TeaBuilder.config(teaBuildConfiguration)
         tool.mainClass = "io.github.masamune.teavm.TeaVMLauncher"
         // For many (or most) applications, using the highest optimization won't add much to build time.
         // If your builds take too long, and runtime performance doesn't matter, you can change FULL to SIMPLE .
         tool.optimizationLevel = TeaVMOptimizationLevel.FULL
+        tool.setObfuscated(true)
         TeaBuilder.build(tool)
     }
 }
