@@ -3,7 +3,7 @@ atlasData: {
 	atlasCurrent: true
 	drawables: [
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/dialog_face_frame.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/dialog_face_frame.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -23,7 +23,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/elder.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/elder.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -43,7 +43,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/dialog_choice_frame.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/dialog_choice_frame.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -63,7 +63,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/arrow.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/arrow.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -83,7 +83,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/nine_path_bg.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/nine_path_bg.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -103,7 +103,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -123,7 +123,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/merchant.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/merchant.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -143,7 +143,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/smith.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/smith.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -163,7 +163,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/flower_girl.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/flower_girl.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -183,7 +183,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/hero.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/hero.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -203,7 +203,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -252,7 +252,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_green.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress_green.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -272,7 +272,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_green.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress_green.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -321,7 +321,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_blue.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress_blue.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -341,7 +341,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_blue.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress_blue.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -390,7 +390,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_yellow.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress_yellow.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -410,7 +410,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_yellow.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress_yellow.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -459,7 +459,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/nine_path_bg_2.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/nine_path_bg_2.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -479,7 +479,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/button_normal.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/button_normal.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -499,7 +499,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/button_pressed.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/button_pressed.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -519,7 +519,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/icon_sword.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/icon_sword.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -539,7 +539,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/icon_magic.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/icon_magic.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -559,7 +559,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/icon_items.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/icon_items.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -579,7 +579,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/frame_1.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/frame_1.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -599,7 +599,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/dialog_frame.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/dialog_frame.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -619,7 +619,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/man_green.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/man_green.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -639,7 +639,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_white.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress_white.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -659,7 +659,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/slider_progress_white.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/slider_progress_white.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -708,7 +708,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/bar_bg.9.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/bar_bg.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -730,27 +730,7 @@ atlasData: {
 	]
 	fontDrawables: [
 		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/fipps_16.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: fipps_16
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: FONT
-			hidden: false
-		}
-		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/PIXEARG_.png
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/PIXEARG_.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -760,46 +740,6 @@ atlasData: {
 			tint: null
 			tintName: null
 			name: PIXEARG_(2)
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: FONT
-			hidden: false
-		}
-		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_24_border.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: pixel_arial_24_border
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: FONT
-			hidden: false
-		}
-		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_12.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: pixel_arial_12
 			tiled: false
 			minWidth: -1
 			minHeight: -1
@@ -914,41 +854,125 @@ jsonData: {
 			name: white
 		}
 	]
-	fonts: [
+	fonts: []
+	freeTypeFonts: [
 		{
-			class: com.ray3k.skincomposer.data.FontData
-			name: fipps_16
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: fipps
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/Fipps-Regular.otf
+			previewTTF: IBMPlexSerif-Medium
+			useCustomSerializer: true
+			size: 16
+			mono: false
+			hinting: AutoMedium
+			color: white
+			gamma: 1.8
+			renderCount: 2
+			borderWidth: 0
+			borderColor: null
+			borderStraight: false
+			borderGamma: 1.8
+			shadowOffsetX: 0
+			shadowOffsetY: 0
+			shadowColor: null
+			spaceX: 4
+			spaceY: 4
+			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜ,.-;:_\"()[]{}%&/ß?!'#+*="
+			kerning: true
 			flip: false
-			markupEnabled: true
-			scaling: -1
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/fipps_16.fnt
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
 		}
 		{
-			class: com.ray3k.skincomposer.data.FontData
-			name: pixel_arial_12
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: pixel_arial_big
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/PIXEARG_.TTF
+			previewTTF: IBMPlexSerif-Medium
+			useCustomSerializer: true
+			size: 16
+			mono: false
+			hinting: AutoMedium
+			color: white
+			gamma: 1.8
+			renderCount: 2
+			borderWidth: 0
+			borderColor: null
+			borderStraight: false
+			borderGamma: 1.8
+			shadowOffsetX: 0
+			shadowOffsetY: 0
+			shadowColor: null
+			spaceX: 4
+			spaceY: 4
+			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜß,.-;:_#'+*!\"%&/()[]{}=?"
+			kerning: true
 			flip: false
-			markupEnabled: true
-			scaling: -1
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_12.fnt
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
 		}
 		{
-			class: com.ray3k.skincomposer.data.FontData
-			name: pixel_arial_16
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: pixel_arial_huge_border
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/PIXEARG_.TTF
+			previewTTF: IBMPlexSerif-Medium
+			useCustomSerializer: true
+			size: 16
+			mono: false
+			hinting: AutoMedium
+			color: white
+			gamma: 1.8
+			renderCount: 2
+			borderWidth: 2
+			borderColor: black
+			borderStraight: false
+			borderGamma: 3.8
+			shadowOffsetX: 0
+			shadowOffsetY: 0
+			shadowColor: null
+			spaceX: 4
+			spaceY: 4
+			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜß,.-;:_#'+*!\"%&/(){[]}=?"
+			kerning: true
 			flip: false
-			markupEnabled: true
-			scaling: -1
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/PIXEARG_.fnt
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
 		}
 		{
-			class: com.ray3k.skincomposer.data.FontData
-			name: pixel_arial_24_border
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: pixel_arial_small_border
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/PIXEARG_.TTF
+			previewTTF: IBMPlexSerif-Medium
+			useCustomSerializer: true
+			size: 12
+			mono: false
+			hinting: AutoMedium
+			color: white
+			gamma: 1.8
+			renderCount: 2
+			borderWidth: 1
+			borderColor: black
+			borderStraight: false
+			borderGamma: 1.8
+			shadowOffsetX: 0
+			shadowOffsetY: 0
+			shadowColor: null
+			spaceX: 4
+			spaceY: 4
+			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜß,.-;:_#'+*!\"%&/()[]{}=?"
+			kerning: true
 			flip: false
-			markupEnabled: true
-			scaling: -1
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/assets_raw/ui/pixel_arial_24_border.fnt
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
 		}
 	]
-	freeTypeFonts: []
 	classStyleMap: {
 		com.badlogic.gdx.scenes.scene2d.ui.TextField: [
 			{
@@ -1037,7 +1061,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_16
+						value: pixel_arial_big
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1064,7 +1088,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_16
+						value: pixel_arial_big
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1091,7 +1115,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: fipps_16
+						value: fipps
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1118,7 +1142,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_16
+						value: pixel_arial_big
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1145,7 +1169,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_24_border
+						value: pixel_arial_huge_border
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1172,7 +1196,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_12
+						value: pixel_arial_small_border
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -3438,8 +3462,8 @@ preferences: {
 	preview-bg-color: {
 		class: com.badlogic.gdx.graphics.Color
 		r: 1
-		g: 1
-		b: 1
+		g: 0
+		b: 0
 		a: 1
 	}
 	last-import-export-path: {
@@ -3452,7 +3476,7 @@ preferences: {
 	}
 	resources-relative: {
 		class: java.lang.Boolean
-		value: false
+		value: true
 	}
 	maxUndos: {
 		class: java.lang.Integer

@@ -44,12 +44,17 @@ object TeaVMBuilder {
         TeaReflectionSupplier.addReflectionClass(RainbowEffect::class.java)
         TeaReflectionSupplier.addReflectionClass(EaseEffect::class.java)
         TeaReflectionSupplier.addReflectionClass(BlinkEffect::class.java)
+        // freetype font
+        TeaReflectionSupplier.addReflectionClass("com.badlogic.gdx.graphics.g2d.freetype")
+        TeaReflectionSupplier.addReflectionClass("com.ray3k.stripe.FreeTypeSkinLoader")
+        TeaReflectionSupplier.addReflectionClass("com.ray3k.stripe.FreeTypeSkin")
 
         val tool = TeaBuilder.config(teaBuildConfiguration)
         tool.mainClass = "io.github.masamune.teavm.TeaVMLauncher"
         // For many (or most) applications, using the highest optimization won't add much to build time.
         // If your builds take too long, and runtime performance doesn't matter, you can change FULL to SIMPLE .
-        tool.optimizationLevel = TeaVMOptimizationLevel.FULL
+        tool.optimizationLevel = TeaVMOptimizationLevel.SIMPLE
+        tool.setObfuscated(false)
         TeaBuilder.build(tool)
     }
 }

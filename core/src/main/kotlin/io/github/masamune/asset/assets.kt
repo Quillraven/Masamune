@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.I18NBundle
+import com.ray3k.stripe.FreeTypeSkinLoader
 import ktx.assets.getAsset
 import ktx.assets.load
 import ktx.log.logger
@@ -109,6 +110,7 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
     private val manager = AssetManager(fileHandleResolver).apply {
         setLoader(TiledMap::class.java, TmxMapLoader(this.fileHandleResolver))
         setLoader(CachingAtlas::class.java, CachingAtlasLoader(this.fileHandleResolver))
+        setLoader(Skin::class.java, FreeTypeSkinLoader(this.fileHandleResolver))
     }
 
     /**
