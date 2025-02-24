@@ -165,3 +165,4 @@ Thumbs.db
 /.kotlin/
 assets/maps/masamune-tiled.tiled-session
 core/src/test/resources/maps/masamune-tiled.tiled-session
+skinDesign_data/

@@ -728,28 +728,7 @@ atlasData: {
 			hidden: false
 		}
 	]
-	fontDrawables: [
-		{
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/PIXEARG_.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: PIXEARG_(2)
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: FONT
-			hidden: false
-		}
-	]
+	fontDrawables: []
 }
 jsonData: {
 	colors: [
