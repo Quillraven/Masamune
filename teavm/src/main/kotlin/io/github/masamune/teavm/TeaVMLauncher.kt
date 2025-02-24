@@ -4,6 +4,7 @@ package io.github.masamune.teavm
 
 import com.github.xpenatan.gdx.backends.teavm.TeaApplication
 import com.github.xpenatan.gdx.backends.teavm.TeaApplicationConfiguration
+import com.github.xpenatan.gdx.backends.teavm.TeaAssetPreloadListener
 import io.github.masamune.Masamune
 
 /** Launches the TeaVM/HTML application. */
@@ -18,6 +19,7 @@ fun main() {
         //// If width and height are both -1, then the app will fill the canvas size.
         width = 0
         height = 0
+        preloadListener = TeaAssetPreloadListener { assetLoader -> assetLoader.loadScript("freetype.js") }
     }
     TeaApplication(Masamune(webLauncher = true), config)
 }
