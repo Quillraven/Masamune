@@ -18,16 +18,16 @@ Imagine an epic story here. Will be updated later.
 
 ### Screenshots
 <p float="left">
-    <img src="https://github.com/user-attachments/assets/ac47d508-1ce7-40bb-90e3-a4faa4378b5b" width="500">
-    <img src="https://github.com/user-attachments/assets/1a2200d2-22de-4738-9f1e-fa286e9b8f71" width="500">
+    <img src="https://github.com/user-attachments/assets/fc17f8fa-ff93-4a9d-98cc-7bfc39a78428" width="500">
+    <img src="https://github.com/user-attachments/assets/9b592595-b955-4ce4-a26d-926bbd5cb59b" width="500">
 </p>
 <p float="left">
-    <img src="https://github.com/user-attachments/assets/7a2eceb5-9542-4b50-8f1a-8823c0438cfb" width="500">
-    <img src="https://github.com/user-attachments/assets/c8553500-47d4-4b89-a535-6b720c19039a" width="500">
+    <img src="https://github.com/user-attachments/assets/fa9e03c4-8224-48b1-be90-3fa229072f3d" width="500">
+    <img src="https://github.com/user-attachments/assets/533f5136-c29e-44b3-ae20-2c21c6fd8131" width="500">
 </p>
 <p float="left">
-    <img src="https://github.com/user-attachments/assets/2af86b28-4783-4d0a-a95e-93101c96e079" width="500">
-    <img src="https://github.com/user-attachments/assets/4fdfbfea-f67a-436d-ae9f-0d1e015d7950" width="500">
+    <img src="https://github.com/user-attachments/assets/3a0ff295-bb5a-45f0-a178-919d3bd9abb1" width="500">
+    <img src="https://github.com/user-attachments/assets/e677d211-9920-4c0f-b888-186a668c40be" width="500">
 </p>
 
 ### Credits
