@@ -61,7 +61,7 @@ i:b:/maps/objects/flower_girl.png:492:1
 i:b:/maps/masamune-tiled.tiled-project:16283:1
 i:d:/ui:0:1
 i:b:/ui/skin.atlas:2933:1
-i:b:/ui/skin.json:6586:1
+i:b:/ui/skin.json:6594:1
 i:b:/ui/Fipps-Regular.otf:34220:1
 i:b:/ui/logo.png:347638:1
 i:b:/ui/messages.properties:7766:1
