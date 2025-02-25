@@ -12,6 +12,7 @@ import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
+import io.github.masamune.Masamune.Companion.uiViewport
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
@@ -81,7 +82,7 @@ class CombatScreen(
 ) : KtxScreen {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(8f, 8f)
-    private val uiViewport = ExtendViewport(928f, 522f)
+    private val uiViewport = uiViewport()
     private val stage = Stage(uiViewport, batch)
     private val skin = assetService[SkinAsset.DEFAULT]
 

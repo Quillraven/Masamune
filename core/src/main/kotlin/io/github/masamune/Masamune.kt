@@ -6,6 +6,8 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.utils.Timer
+import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.Viewport
 import io.github.masamune.event.GameResizeEvent
 import io.github.masamune.screen.LoadingScreen
 import io.github.masamune.screen.TransitionType
@@ -102,6 +104,8 @@ class Masamune(
          * pixels per meter for physic world and scaling value for tiled maps and graphics.
          */
         const val UNIT_SCALE = 1 / 16f
+
+        fun uiViewport(): Viewport = ExtendViewport(960f, 540f)
     }
 
 }

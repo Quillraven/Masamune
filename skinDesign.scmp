@@ -837,7 +837,94 @@ jsonData: {
 	freeTypeFonts: [
 		{
 			class: com.ray3k.skincomposer.data.FreeTypeFontData
-			name: fipps
+			name: default
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/CherryCreamSoda-Regular.ttf
+			previewTTF: IBMPlexSerif-Medium
+			useCustomSerializer: true
+			size: 16
+			mono: false
+			hinting: AutoMedium
+			color: white
+			gamma: 1.8
+			renderCount: 2
+			borderWidth: 0
+			borderColor: null
+			borderStraight: false
+			borderGamma: 1.8
+			shadowOffsetX: 0
+			shadowOffsetY: 0
+			shadowColor: null
+			spaceX: 4
+			spaceY: 4
+			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜß,.-;:_#'+*!\"%&/()[]{}=?<>"
+			kerning: true
+			flip: false
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
+		}
+		{
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: default_border
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/CherryCreamSoda-Regular.ttf
+			previewTTF: IBMPlexSerif-Medium
+			useCustomSerializer: true
+			size: 16
+			mono: false
+			hinting: AutoMedium
+			color: white
+			gamma: 1.8
+			renderCount: 2
+			borderWidth: 2
+			borderColor: black
+			borderStraight: false
+			borderGamma: 3.8
+			shadowOffsetX: 0
+			shadowOffsetY: 0
+			shadowColor: null
+			spaceX: 4
+			spaceY: 4
+			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜß,.-;:_#'+*!\"%&/(){[]}=?<>"
+			kerning: true
+			flip: false
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
+		}
+		{
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: small_shadow
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/CherryCreamSoda-Regular.ttf
+			previewTTF: IBMPlexSerif-Medium
+			useCustomSerializer: true
+			size: 13
+			mono: false
+			hinting: AutoMedium
+			color: white
+			gamma: 1.8
+			renderCount: 4
+			borderWidth: 0
+			borderColor: null
+			borderStraight: false
+			borderGamma: 1.8
+			shadowOffsetX: -1
+			shadowOffsetY: 1
+			shadowColor: black
+			spaceX: 4
+			spaceY: 4
+			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜß,.-;:_#'+*!\"%&/()[]{}=?<>"
+			kerning: true
+			flip: false
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
+		}
+		{
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: title
 			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/Fipps-Regular.otf
 			previewTTF: IBMPlexSerif-Medium
 			useCustomSerializer: true
@@ -856,94 +943,7 @@ jsonData: {
 			shadowColor: null
 			spaceX: 4
 			spaceY: 4
-			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜ,.-;:_\"()[]{}%&/ß?!'#+*="
-			kerning: true
-			flip: false
-			genMipMaps: false
-			minFilter: Nearest
-			magFilter: Nearest
-			incremental: false
-		}
-		{
-			class: com.ray3k.skincomposer.data.FreeTypeFontData
-			name: pixel_arial_big
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/PIXEARG_.TTF
-			previewTTF: IBMPlexSerif-Medium
-			useCustomSerializer: true
-			size: 16
-			mono: false
-			hinting: AutoMedium
-			color: white
-			gamma: 1.8
-			renderCount: 2
-			borderWidth: 0
-			borderColor: null
-			borderStraight: false
-			borderGamma: 1.8
-			shadowOffsetX: 0
-			shadowOffsetY: 0
-			shadowColor: null
-			spaceX: 4
-			spaceY: 4
-			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜß,.-;:_#'+*!\"%&/()[]{}=?"
-			kerning: true
-			flip: false
-			genMipMaps: false
-			minFilter: Nearest
-			magFilter: Nearest
-			incremental: false
-		}
-		{
-			class: com.ray3k.skincomposer.data.FreeTypeFontData
-			name: pixel_arial_huge_border
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/PIXEARG_.TTF
-			previewTTF: IBMPlexSerif-Medium
-			useCustomSerializer: true
-			size: 16
-			mono: false
-			hinting: AutoMedium
-			color: white
-			gamma: 1.8
-			renderCount: 2
-			borderWidth: 2
-			borderColor: black
-			borderStraight: false
-			borderGamma: 3.8
-			shadowOffsetX: 0
-			shadowOffsetY: 0
-			shadowColor: null
-			spaceX: 4
-			spaceY: 4
-			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜß,.-;:_#'+*!\"%&/(){[]}=?"
-			kerning: true
-			flip: false
-			genMipMaps: false
-			minFilter: Nearest
-			magFilter: Nearest
-			incremental: false
-		}
-		{
-			class: com.ray3k.skincomposer.data.FreeTypeFontData
-			name: pixel_arial_small_border
-			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/PIXEARG_.TTF
-			previewTTF: IBMPlexSerif-Medium
-			useCustomSerializer: true
-			size: 13
-			mono: false
-			hinting: AutoMedium
-			color: white
-			gamma: 1.8
-			renderCount: 4
-			borderWidth: 0
-			borderColor: null
-			borderStraight: false
-			borderGamma: 1.8
-			shadowOffsetX: -1
-			shadowOffsetY: 1
-			shadowColor: black
-			spaceX: 4
-			spaceY: 4
-			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜß,.-;:_#'+*!\"%&/()[]{}=?"
+			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜ,.-;:_\"()[]{}%&/ß?!'#+*=<>"
 			kerning: true
 			flip: false
 			genMipMaps: false
@@ -1040,7 +1040,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_big
+						value: default
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1067,7 +1067,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_big
+						value: default
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1094,7 +1094,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: fipps
+						value: title
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1121,7 +1121,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_big
+						value: default
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1148,7 +1148,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_huge_border
+						value: default_border
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -1175,7 +1175,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: pixel_arial_small_border
+						value: small_shadow
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color

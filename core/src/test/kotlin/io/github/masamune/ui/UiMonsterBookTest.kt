@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
-import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.github.quillraven.fleks.configureWorld
 import com.ray3k.stripe.FreeTypeSkin
+import io.github.masamune.Masamune.Companion.uiViewport
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
@@ -50,7 +50,7 @@ fun main() {
 }
 
 private class UiMonsterBookTest : KtxApplicationAdapter {
-    private val uiViewport = ExtendViewport(928f, 522f)
+    private val uiViewport = uiViewport()
     private val batch by lazy { SpriteBatch() }
     private val stage by lazy { Stage(uiViewport, batch) }
     private val uiAtlas by lazy { TextureAtlas("ui/skin.atlas".toClasspathFile()) }

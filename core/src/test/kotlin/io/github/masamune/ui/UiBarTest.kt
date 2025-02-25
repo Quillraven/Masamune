@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
+import io.github.masamune.Masamune.Companion.uiViewport
 import io.github.masamune.gdxTest
 import io.github.masamune.testSkin
 import io.github.masamune.ui.widget.Bar
@@ -34,7 +35,7 @@ fun main() = gdxTest("UI Bar Test; 1,2,3,4 to adjust bar value", UiBarTest())
 
 private class UiBarTest : KtxApplicationAdapter {
     private val gameViewport: Viewport = ExtendViewport(8f, 8f)
-    private val uiViewport = ExtendViewport(928f, 522f)
+    private val uiViewport = uiViewport()
     private val batch by lazy { SpriteBatch() }
     private val stage by lazy { Stage(uiViewport, batch) }
     private val charAtlas by lazy { TextureAtlas("graphics/chars_and_props.atlas".toClasspathFile()) }

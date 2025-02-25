@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
-import com.badlogic.gdx.utils.viewport.ExtendViewport
 import io.github.masamune.Masamune
+import io.github.masamune.Masamune.Companion.uiViewport
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.MusicAsset
@@ -35,7 +35,7 @@ class MainMenuScreen(
     private val shaderService: ShaderService = masamune.shader,
 ) : KtxScreen {
 
-    private val uiViewport = ExtendViewport(928f, 522f)
+    private val uiViewport = uiViewport()
     private val stage = Stage(uiViewport, batch)
     private val skin = assetService[SkinAsset.DEFAULT]
     private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]

@@ -43,7 +43,7 @@ Imagine an epic story here. Will be updated later.
   ```
 - [Ninja Adventure Asset Pack](https://pixel-boy.itch.io/ninja-adventure-asset-pack)
 - [8-Bit Fantasy Adventure Music Pack](https://xdeviruchi.itch.io/8-bit-fantasy-adventure-music-pack)
-- [Pixel Arial 11 font](https://www.dafont.com/de/search.php?q=pixel+arial+11)
+- [Cherry Cream Soda font](https://fonts.google.com/specimen/Cherry+Cream+Soda)
 - [Fipps font](https://www.dafont.com/de/search.php?q=fipps)
 - [Typing label](https://github.com/rafaskb/typing-label)
 - [RPG Icon Pack](https://clockworkraven.itch.io/free-rpg-icon-pack-100-accessories-and-armor-clockwork-raven-studios)

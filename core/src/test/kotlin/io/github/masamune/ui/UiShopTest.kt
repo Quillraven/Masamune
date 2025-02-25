@@ -6,11 +6,11 @@ import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
-import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import com.github.quillraven.fleks.configureWorld
+import io.github.masamune.Masamune.Companion.uiViewport
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.audio.AudioService
@@ -57,7 +57,7 @@ import ktx.scene2d.actors
 fun main() = gdxTest("UI Shop Test", UiShopTest())
 
 private class UiShopTest : KtxApplicationAdapter {
-    private val uiViewport = ExtendViewport(928f, 522f)
+    private val uiViewport = uiViewport()
     private val batch by lazy { SpriteBatch() }
     private val stage by lazy { Stage(uiViewport, batch) }
     private val skin by lazy { testSkin() }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
+import io.github.masamune.Masamune.Companion.uiViewport
 import io.github.masamune.PhysicContactHandler
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
@@ -72,7 +73,7 @@ class GameScreen(
 ) : KtxScreen {
     // viewports and stage
     private val gameViewport: Viewport = ExtendViewport(16f, 9f)
-    private val uiViewport = ExtendViewport(928f, 522f)
+    private val uiViewport = uiViewport()
     private val stage = Stage(uiViewport, batch)
     private val skin = assetService[SkinAsset.DEFAULT]
 
