@@ -61,13 +61,13 @@ i:b:/maps/objects/flower_girl.png:492:1
 i:b:/maps/masamune-tiled.tiled-project:16283:1
 i:d:/ui:0:1
 i:b:/ui/skin.atlas:2933:1
-i:b:/ui/skin.json:6594:1
+i:b:/ui/skin.json:6565:1
 i:b:/ui/Fipps-Regular.otf:34220:1
 i:b:/ui/logo.png:347638:1
 i:b:/ui/messages.properties:7766:1
 i:b:/ui/messages_de.properties:8426:1
 i:b:/ui/skin.png:10663:1
-i:b:/ui/PIXEARG_.TTF:57520:1
+i:b:/ui/CherryCreamSoda-Regular.ttf:49404:1
 c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
 c:b:/com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:9096:1
 c:b:/com/badlogic/gdx/graphics/g3d/particles/particles.fragment.glsl:820:1
