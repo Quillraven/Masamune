@@ -208,7 +208,7 @@
    <property name="itemType" propertytype="ItemType" value="BOOTS"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
-     <property name="armor" type="float" value="1"/>
+     <property name="armor" type="float" value="3"/>
     </properties>
    </property>
   </properties>
@@ -222,7 +222,7 @@
    <property name="itemType" propertytype="ItemType" value="HELMET"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
-     <property name="armor" type="float" value="1"/>
+     <property name="armor" type="float" value="3"/>
     </properties>
    </property>
   </properties>
