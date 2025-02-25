@@ -4,9 +4,7 @@ import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.github.quillraven.fleks.Entity
@@ -29,6 +27,7 @@ import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.gdxTest
 import io.github.masamune.input.ControllerStateUI
 import io.github.masamune.input.KeyboardController
+import io.github.masamune.testSkin
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.ConsumableType
 import io.github.masamune.tiledmap.ItemCategory
@@ -61,8 +60,7 @@ private class UiShopTest : KtxApplicationAdapter {
     private val uiViewport = ExtendViewport(928f, 522f)
     private val batch by lazy { SpriteBatch() }
     private val stage by lazy { Stage(uiViewport, batch) }
-    private val uiAtlas by lazy { TextureAtlas("ui/skin.atlas".toClasspathFile()) }
-    private val skin by lazy { Skin("ui/skin.json".toClasspathFile(), uiAtlas) }
+    private val skin by lazy { testSkin() }
     private val eventService by lazy { EventService() }
     private val assetService by lazy { AssetService(ClasspathFileHandleResolver()) }
     private val tiledService by lazy { mockk<TiledService>() }

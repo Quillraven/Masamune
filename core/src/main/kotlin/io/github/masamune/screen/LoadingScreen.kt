@@ -3,6 +3,7 @@ package io.github.masamune.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.forever
@@ -47,6 +48,7 @@ class LoadingScreen(
         assetService.load(I18NAsset.MESSAGES)
         assetService.finishLoading()
         val skin = assetService[SkinAsset.DEFAULT]
+        skin.getAll(BitmapFont::class.java).values().forEach { (it as BitmapFont).data.markupEnabled = true }
 
         setupUI(skin)
 

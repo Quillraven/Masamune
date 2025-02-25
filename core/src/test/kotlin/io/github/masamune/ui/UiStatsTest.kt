@@ -3,9 +3,7 @@ package io.github.masamune.ui
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
@@ -22,6 +20,7 @@ import io.github.masamune.equipItem
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.gdxTest
+import io.github.masamune.testSkin
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.ConsumableType
 import io.github.masamune.tiledmap.ItemCategory
@@ -49,8 +48,7 @@ private class UiStatsTest : KtxApplicationAdapter {
     private val uiViewport = ExtendViewport(928f, 522f)
     private val batch by lazy { SpriteBatch() }
     private val stage by lazy { Stage(uiViewport, batch) }
-    private val uiAtlas by lazy { TextureAtlas("ui/skin.atlas".toClasspathFile()) }
-    private val skin by lazy { Skin("ui/skin.json".toClasspathFile(), uiAtlas) }
+    private val skin by lazy { testSkin() }
     private val eventService by lazy { EventService() }
     private val world = configureWorld {}
     private val bundle by lazy { I18NBundle.createBundle("ui/messages".toClasspathFile(), Charsets.ISO_8859_1.name()) }

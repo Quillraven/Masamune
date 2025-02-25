@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import io.github.masamune.gdxTest
+import io.github.masamune.testSkin
 import io.github.masamune.ui.widget.Bar
 import io.github.masamune.ui.widget.bar
 import ktx.actors.txt
@@ -37,9 +37,8 @@ private class UiBarTest : KtxApplicationAdapter {
     private val uiViewport = ExtendViewport(928f, 522f)
     private val batch by lazy { SpriteBatch() }
     private val stage by lazy { Stage(uiViewport, batch) }
-    private val uiAtlas by lazy { TextureAtlas("ui/skin.atlas".toClasspathFile()) }
     private val charAtlas by lazy { TextureAtlas("graphics/chars_and_props.atlas".toClasspathFile()) }
-    private val skin by lazy { Skin("ui/skin.json".toClasspathFile(), uiAtlas) }
+    private val skin by lazy { testSkin() }
     private lateinit var bar: Bar
     private lateinit var label: Label
     private val butterflyTexture by lazy { charAtlas.findRegions("butterfly/idle_down").first() }

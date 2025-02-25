@@ -3,13 +3,12 @@ package io.github.masamune.ui
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.FitViewport
 import io.github.masamune.event.EventService
 import io.github.masamune.gdxTest
+import io.github.masamune.testSkin
 import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.view.DialogView
 import io.github.masamune.ui.view.dialogView
@@ -17,7 +16,6 @@ import io.github.masamune.ui.widget.OptionTable
 import io.mockk.mockk
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
-import ktx.assets.toClasspathFile
 import ktx.scene2d.actors
 
 /**
@@ -36,8 +34,7 @@ private class UiDialogTest : KtxApplicationAdapter {
     private val uiViewport = FitViewport(928f, 522f)
     private val batch by lazy { SpriteBatch() }
     private val stage by lazy { Stage(uiViewport, batch) }
-    private val uiAtlas by lazy { TextureAtlas("ui/skin.atlas".toClasspathFile()) }
-    private val skin by lazy { Skin("ui/skin.json".toClasspathFile(), uiAtlas) }
+    private val skin by lazy { testSkin() }
     private lateinit var dialogView: DialogView
     private val dialogOptionTable by lazy {
         (dialogView.getChild(0) as Table).children.filterIsInstance<OptionTable>().single()
