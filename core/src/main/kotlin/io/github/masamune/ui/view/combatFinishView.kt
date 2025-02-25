@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import io.github.masamune.ui.model.CombatFinishViewModel
 import io.github.masamune.ui.model.I18NKey
+import io.github.masamune.ui.model.UIStats
 import io.github.masamune.ui.model.UiCombatFinishState
 import io.github.masamune.ui.widget.OptionTable
 import io.github.masamune.ui.widget.optionTable
@@ -33,6 +34,7 @@ class CombatFinishView(
     private val xpLabel: Label
     private val talonsLabel: Label
     private val levelUpLabel: TypingLabel
+    private val lvlUpStatsLabel: Label
     private val combatSummary: Label
     private val optionTable: OptionTable
     private val centeredTable: Table
@@ -54,6 +56,10 @@ class CombatFinishView(
             }
             this@CombatFinishView.levelUpLabel = scene2d.typingLabel("", defaultStyle, skin) {
                 setAlignment(Align.topLeft)
+            }
+            this@CombatFinishView.lvlUpStatsLabel = scene2d.label("", defaultStyle, skin) {
+                setAlignment(Align.topLeft)
+                color = skin.getColor("white")
             }
             this@CombatFinishView.combatSummary = scene2d.label("", defaultStyle, skin) {
                 setAlignment(Align.topLeft)
@@ -82,11 +88,53 @@ class CombatFinishView(
         }
         viewModel.onPropertyChange(CombatFinishViewModel::levelsToGain) { lvl ->
             levelUpLabel.isVisible = lvl > 0
+            lvlUpStatsLabel.isVisible = lvl > 0
             levelUpLabel.txt = buildString {
                 append("{RAINBOW}")
                 append(i18nTxt(I18NKey.COMBAT_LEVEL_UPS))
                 append(": ")
                 append(lvl)
+            }
+        }
+        viewModel.onPropertyChange(CombatFinishViewModel::statsToGain) { stats ->
+            val supportedStats = listOf(
+                UIStats.STRENGTH to I18NKey.STATS_STRENGTH,
+                UIStats.INTELLIGENCE to I18NKey.STATS_INTELLIGENCE,
+                UIStats.MANA_MAX to I18NKey.STATS_MANA_MAX,
+                UIStats.CONSTITUTION to I18NKey.STATS_CONSTITUTION,
+                UIStats.AGILITY to I18NKey.STATS_AGILITY,
+            )
+
+            lvlUpStatsLabel.txt = buildString {
+                val defaultColor = skin.getColor("dark_grey")
+
+                append("[#${defaultColor}]")
+                append(i18nTxt(I18NKey.COMBAT_LEVEL_UP_STATS))
+                append(": ")
+                append("[]")
+                appendLine()
+
+                supportedStats.forEach { (uiStat, i18nKey) ->
+                    val gain = stats.getOrDefault(uiStat, 0f)
+                    if (gain == 0f) {
+                        return@forEach
+                    }
+
+                    if (uiStat == UIStats.MANA_MAX) {
+                        append("[#${skin.getColor("blue")}]")
+                        append(i18nTxt(i18nKey))
+                        append("[]")
+                    } else {
+                        append("[#${defaultColor}]")
+                        append(i18nTxt(i18nKey))
+                        append("[]")
+                    }
+                    append("[#${defaultColor}]")
+                    append(": ")
+                    append(gain)
+                    append("[]")
+                    appendLine()
+                }
             }
         }
         viewModel.onPropertyChange(CombatFinishViewModel::combatSummary) { combatSummary ->
@@ -114,9 +162,10 @@ class CombatFinishView(
                 centeredTable.add(xpLabel).grow().padBottom(5f).row()
                 centeredTable.add(talonsLabel).grow().padBottom(5f).row()
                 if (levelUpLabel.isVisible) {
-                    centeredTable.add(levelUpLabel).grow().padBottom(10f).padTop(10f).row()
+                    centeredTable.add(levelUpLabel).grow().padTop(20f).padBottom(10f).row()
+                    centeredTable.add(lvlUpStatsLabel).grow().row()
                 }
-                centeredTable.add(combatSummary).grow().padBottom(30f).padTop(30f).row()
+                centeredTable.add(combatSummary).grow().padBottom(20f).padTop(5f).row()
                 centeredTable.add(optionTable).fill().align(Align.left)
 
                 optionTable.option(i18nTxt(I18NKey.DIALOG_OPTION_OK))

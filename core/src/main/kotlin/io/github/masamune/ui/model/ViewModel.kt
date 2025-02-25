@@ -168,7 +168,7 @@ abstract class ViewModel(
         }
     }
 
-    private fun ItemStats.toUiStatsMap(): Map<UIStats, Int> = mapOf(
+    fun ItemStats.toUiStatsMap(): Map<UIStats, Int> = mapOf(
         UIStats.AGILITY to this@toUiStatsMap.agility.toInt(),
         UIStats.ARCANE_STRIKE to round((this@toUiStatsMap.arcaneStrike * 100)).toInt(),
         UIStats.ARMOR to this@toUiStatsMap.armor.toInt(),

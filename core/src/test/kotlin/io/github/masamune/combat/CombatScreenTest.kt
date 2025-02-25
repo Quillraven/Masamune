@@ -15,6 +15,7 @@ import io.github.masamune.combat.buff.ReflectMagicBuff
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Enemy
 import io.github.masamune.component.Equipment
+import io.github.masamune.component.Experience
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.MonsterBook
 import io.github.masamune.component.Player
@@ -89,6 +90,7 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
                 it += Equipment(items = equipment)
                 it += MonsterBook(knownTypes = mutableSetOf(TiledObjectType.BUTTERFLY))
             }
+            player[Experience].level = 1
         }
         return player
     }

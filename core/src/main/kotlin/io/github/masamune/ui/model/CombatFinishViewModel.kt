@@ -7,7 +7,9 @@ import io.github.masamune.Masamune
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Experience
 import io.github.masamune.component.Experience.Companion.calcLevelUps
+import io.github.masamune.component.Experience.Companion.levelUpStats
 import io.github.masamune.component.Inventory
+import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Tiled
 import io.github.masamune.event.CombatPlayerDefeatEvent
 import io.github.masamune.event.CombatPlayerVictoryEvent
@@ -38,9 +40,11 @@ class CombatFinishViewModel(
     var xpToGain: Int by propertyNotify(0)
     var talonsToGain: Int by propertyNotify(0)
     var levelsToGain: Int by propertyNotify(0)
+    var statsToGain: Map<UIStats, Int> by propertyNotify(emptyMap())
     val combatSummary: MutableMap<String, Int> by propertyNotify(mutableMapOf())
     var state: UiCombatFinishState by propertyNotify(UiCombatFinishState.UNDEFINED)
     private val monsterTypesToAdd = mutableListOf<TiledObjectType>()
+    private var lvlUpStats = ItemStats()
 
     override fun onEvent(event: Event) {
         when (event) {
@@ -67,6 +71,14 @@ class CombatFinishViewModel(
                     talonsToGain = totalTalons
                     val (playerLevel, playerXp) = event.player[Experience]
                     levelsToGain = calcLevelUps(playerLevel, playerXp, xpToGain)
+
+                    // get level up stat gains
+                    lvlUpStats = ItemStats()
+                    repeat(levelsToGain) {
+                        lvlUpStats.levelUpStats(playerLevel + (it + 1))
+                    }
+                    statsToGain = lvlUpStats.toUiStatsMap()
+
                     log.debug { "Total XP/talons to gain: xp=$xpToGain, talons=$talonsToGain, levels=$levelsToGain" }
                     notify(CombatFinishViewModel::combatSummary, combatSummary)
                 }
@@ -86,7 +98,7 @@ class CombatFinishViewModel(
         val victory = state == UiCombatFinishState.VICTORY
         val combatScreen = masamune.getScreen<CombatScreen>()
         if (victory) {
-            combatScreen.updatePlayerAfterVictory(xpToGain, talonsToGain, monsterTypesToAdd)
+            combatScreen.updatePlayerAfterVictory(xpToGain, lvlUpStats, talonsToGain, monsterTypesToAdd)
         } else {
             combatScreen.updatePlayerAfterDefeat()
         }

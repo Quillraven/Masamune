@@ -36,5 +36,13 @@ data class Experience(
             }
             return levelUps
         }
+
+        fun ItemStats.levelUpStats(forLevel: Int) {
+            strength += if (forLevel % 4 == 0) 3f else 2f
+            intelligence += if (forLevel % 5 == 0) 4f else 1f
+            manaMax += if (forLevel % 5 == 0) 5f else 0f
+            constitution += if (forLevel % 3 == 0) 2f else 1f
+            agility += if (forLevel % 5 == 0) 1f else 0f
+        }
     }
 }

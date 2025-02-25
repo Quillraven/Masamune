@@ -34,6 +34,7 @@ import io.github.masamune.component.FacingDirection
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.ItemStats
 import io.github.masamune.component.MonsterBook
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
@@ -239,12 +240,18 @@ class CombatScreen(
         eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))
     }
 
-    fun updatePlayerAfterVictory(xpGained: Int, talonsGained: Int, monsterTypesToAdd: MutableList<TiledObjectType>) {
+    fun updatePlayerAfterVictory(
+        xpGained: Int,
+        lvlUpStats: ItemStats,
+        talonsGained: Int,
+        monsterTypesToAdd: MutableList<TiledObjectType>
+    ) {
         // update life and mana
         val combatStats = with(world) { combatPlayer[CharacterStats] }
         val gameStats = with(gameScreenWorld) { gameScreenPlayer[CharacterStats] }
         gameStats.life = combatStats.life
         gameStats.mana = combatStats.mana
+        gameStats += lvlUpStats
 
         // update consumable items
         updatePlayerItemsAfterCombat()
