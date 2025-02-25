@@ -681,7 +681,8 @@ class TiledService(
             return Triple(charStats, tile.xp, tile.talons)
         }
 
-        gdxError("There are no stats defined for $type")
+        log.error { "There are no stats defined for $type" }
+        return Triple(CharacterStats(), 0, 0)
     }
 
     companion object {

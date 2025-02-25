@@ -34,7 +34,7 @@ class MonsterBookView(
     private val monsterInfoTable: MonsterInfoTable
     private var state = UiMonsterBookViewState.SELECT_OPTION
 
-    private var knownMonsters: List<MonsterModel> = emptyList()
+    private var monsterModels: List<MonsterModel> = emptyList()
 
     init {
         setFillParent(true)
@@ -89,7 +89,7 @@ class MonsterBookView(
     }
 
     override fun registerOnPropertyChanges() {
-        viewModel.onPropertyChange(MonsterBookViewModel::knownMonsters) { monsters ->
+        viewModel.onPropertyChange(MonsterBookViewModel::monsterModels) { monsters ->
             optionTable.firstOption()
             state = UiMonsterBookViewState.SELECT_OPTION
             isVisible = monsters.isNotEmpty()
@@ -98,7 +98,11 @@ class MonsterBookView(
     }
 
     private fun onMonsterSelected(monsterIdx: Int) {
-        val monster = knownMonsters[monsterIdx]
+        val monster = monsterModels[monsterIdx]
+        if (monster == MonsterModel.UNKNOWN) {
+            monsterInfoTable.monster(monster.name, "", null, emptyMap())
+            return
+        }
         monsterInfoTable.monster(monster.name, monster.description, monster.drawable, monster.stats)
     }
 
@@ -114,11 +118,11 @@ class MonsterBookView(
         state = UiMonsterBookViewState.SELECT_MONSTER
         viewModel.playSndMenuAccept()
         optionTable.stopSelectAnimation()
-        knownMonsters = monsters
+        monsterModels = monsters
 
         monsterTable.clearEntries()
-        monsters.forEach { questModel ->
-            monsterTable.quest(questModel.name)
+        monsters.forEach { monsterModel ->
+            monsterTable.quest(monsterModel.name)
         }
         monsterTable.selectFirstEntry()
 
@@ -179,7 +183,7 @@ class MonsterBookView(
         when (state) {
             UiMonsterBookViewState.SELECT_OPTION -> {
                 when (optionTable.selectedOption) {
-                    0 -> updateMonsters(viewModel.knownMonsters)
+                    0 -> updateMonsters(viewModel.monsterModels)
                     1 -> viewModel.quit()
                 }
             }

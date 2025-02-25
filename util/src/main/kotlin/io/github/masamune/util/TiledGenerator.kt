@@ -1,5 +1,6 @@
 package io.github.masamune.util
 
+import com.badlogic.gdx.utils.XmlReader
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -121,6 +122,9 @@ fun createEnum(enumName: String, values: List<String>) {
         if ("ActionType" == enumName) {
             this.createActionTypeEnum(enumName, values)
             return@buildString
+        } else if ("TiledObjectType" == enumName) {
+            this.createMapObjectTypeEnum(enumName, values)
+            return@buildString
         }
 
         appendLine("// $AUTO_GEN_INFO_TEXT")
@@ -147,6 +151,35 @@ fun createEnum(enumName: String, values: List<String>) {
 
     enumFile.writeText(content)
 }
+
+private fun StringBuilder.createMapObjectTypeEnum(enumName: String, values: List<String>) {
+    appendLine("// $AUTO_GEN_INFO_TEXT")
+    appendLine("enum class $enumName(val isEnemy: Boolean) {")
+
+    values.forEach { value ->
+        appendLine("    $value(${isEnemyObjectType(value)}),")
+    }
+
+    appendLine("}")
+}
+
+private val objectTiles by lazy {
+    val file = File("../assets/maps/objects.tsx")
+    val element = XmlReader().parse(file.reader())
+    element.getChildrenByName("tile")
+}
+
+private fun isEnemyObjectType(value: String): Boolean {
+    return objectTiles
+        .filter { it.attributes["type"] == "EnemyObject" }
+        .any { tile ->
+            val tileProperties = tile.getChildByName("properties")
+            val objTypeProperty = tileProperties.children.singleOrNull { it.attributes["name"] == "objType" }
+            val objType = objTypeProperty?.attributes?.get("value")
+            return@any objType != null && objType == value
+        }
+}
+
 
 private fun StringBuilder.createActionTypeEnum(enumName: String, values: List<String>) {
     fun String.toCamelCase(): String {

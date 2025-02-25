@@ -29,6 +29,8 @@ class MonsterInfoTable(
 
     private val image: Image
     private val nameLabel: Label
+    private val descriptionLabel: TypingLabel
+
     private val lifeLabel: Label
     private val manaLabel: Label
     private val agilityLabel: Label
@@ -37,7 +39,6 @@ class MonsterInfoTable(
     private val resistanceLabel: Label
     private val xpLabel: Label
     private val talonsLabel: Label
-    private val descriptionLabel: TypingLabel
 
     init {
         background = skin.getDrawable("dialog_frame")
@@ -78,10 +79,14 @@ class MonsterInfoTable(
         }
     }
 
-    fun monster(name: String, description: String, drawable: Drawable, stats: Map<UIStats, String>) {
+    fun monster(name: String, description: String, drawable: Drawable?, stats: Map<UIStats, String>) {
         this.nameLabel.txt = name
-        this.descriptionLabel.restart("{FAST}$description")
         this.image.drawable = drawable
+        this.descriptionLabel.restart("{FAST}$description")
+
+        // hide stats if there are none (e.g. unknown monster)
+        this.lifeLabel.parent.isVisible = stats.isNotEmpty()
+
         this.lifeLabel.txt = "${stats[UIStats.LIFE_MAX]}"
         this.manaLabel.txt = "${stats[UIStats.MANA_MAX]}"
         this.agilityLabel.txt = "${stats[UIStats.AGILITY]}"

@@ -23,7 +23,7 @@ class MonsterBookViewModel(
     private val tiledService: TiledService,
 ) : ViewModel(bundle, audioService) {
 
-    var knownMonsters: List<MonsterModel> by propertyNotify(emptyList())
+    var monsterModels: List<MonsterModel> by propertyNotify(emptyList())
 
     override fun onEvent(event: Event) {
         if (event !is MenuBeginEvent || event.type != MenuType.MONSTER_BOOK) {
@@ -33,7 +33,15 @@ class MonsterBookViewModel(
         with(world) {
             val player = world.family { all(Player) }.first()
             val knownTypes = player[MonsterBook].knownTypes
-            knownMonsters = knownTypes.map { it.toMonsterModel() }
+            monsterModels = TiledObjectType.entries
+                .filter { it.isEnemy }
+                .map {
+                    if (it in knownTypes) {
+                        it.toMonsterModel()
+                    } else {
+                        MonsterModel.UNKNOWN
+                    }
+                }
         }
     }
 
@@ -52,7 +60,7 @@ class MonsterBookViewModel(
         eventService.fire(MenuEndEvent)
         eventService.fire(MenuBeginEvent(MenuType.GAME))
         // clearing knownMonsters will hide the view
-        knownMonsters = emptyList()
+        monsterModels = emptyList()
     }
 
 }
