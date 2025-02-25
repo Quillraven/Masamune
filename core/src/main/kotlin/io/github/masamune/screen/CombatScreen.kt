@@ -201,6 +201,7 @@ class CombatScreen(
         val equipmentActionTypes = with(gameScreenWorld) { gameScreenPlayer[Equipment].items.map { it[Item].actionType } }
         val combatCmp = with(gameScreenWorld) { gameScreenPlayer[Combat] }
         val xpCmp = with(gameScreenWorld) { gameScreenPlayer[Experience] }
+        val monsterBookCmp = with(gameScreenWorld) { gameScreenPlayer.getOrNull(MonsterBook) }
         // clone OTHER ItemCategory items; they are the only ones that can be used during combat
         val clonedItems = MutableEntityBag()
         with(gameScreenWorld) {
@@ -231,6 +232,7 @@ class CombatScreen(
                 attackSFX = "slash1",
             )
             it += Inventory(clonedItems)
+            monsterBookCmp?.let { cmp -> it += cmp }
         }
 
         eventService.fire(CombatStartEvent(combatPlayer, enemyEntities.entities))

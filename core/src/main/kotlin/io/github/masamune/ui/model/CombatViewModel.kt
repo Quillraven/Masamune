@@ -26,9 +26,11 @@ import io.github.masamune.component.Combat
 import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
+import io.github.masamune.component.MonsterBook
 import io.github.masamune.component.Name
 import io.github.masamune.component.Player
 import io.github.masamune.component.Selector
+import io.github.masamune.component.Tiled
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatActionStartEvent
 import io.github.masamune.event.CombatEntityDeadEvent
@@ -463,6 +465,13 @@ class CombatViewModel(
         }
         // fire event to trigger CombatSystem and start round
         eventService.fire(CombatPlayerActionEvent(player))
+    }
+
+    fun isEnemyKnown(entityId: Int): Boolean = with(world) {
+        val enemy = enemyEntities.singleOrNull { it.id == entityId } ?: return false
+        val monsterBook = playerEntities.single().getOrNull(MonsterBook) ?: return false
+        val type = enemy[Tiled].objType
+        return type in monsterBook.knownTypes
     }
 
     companion object {

@@ -308,22 +308,9 @@ class CombatView(
         viewModel.onPropertyChange(CombatViewModel::enemyPosAndLifes) { enemyPosAndLifes ->
             enemyHealthBars.values.forEach { it.remove() }
             enemyHealthBars.clear()
-            val skin = skin
             enemyPosAndLifes.forEach { (entityId, values) ->
                 val (position, size, lifeAndMax) = values
-                val stack = scene2d.stack {
-                    val lifePerc = lifeAndMax.x / lifeAndMax.y
-                    bar(skin, lifePerc, 0f, 1f, 0.01f, skin.getColor("red"))
-                    label("${lifeAndMax.x.toInt()}", "bar_content", skin) {
-                        this.setAlignment(Align.top, Align.center)
-                    }
-
-                    this.setPosition(position.x, position.y - 25f)
-                    this.setSize(size.x, 20f)
-                }
-                enemyHealthBars[entityId] = stack
-                stage.addActor(stack)
-                stack.toBack()
+                healthBar(entityId, lifeAndMax.x, lifeAndMax.y, position, size)
             }
         }
         viewModel.onPropertyChange(CombatViewModel::enemyDamage) { (entityId, lifeAndMax) ->
@@ -333,8 +320,7 @@ class CombatView(
                 return@onPropertyChange
             }
 
-            val skin = skin
-            var stack = enemyHealthBars[entityId]
+            val stack = enemyHealthBars[entityId]
             if (stack != null) {
                 val lifePerc = lifeAndMax.x / lifeAndMax.y
                 val bar = stack.children.first() as Bar
@@ -343,19 +329,7 @@ class CombatView(
                 bar.value = lifePerc
             } else {
                 val (position, size) = viewModel.getEnemyPositionAndSize(entityId)
-                stack = scene2d.stack {
-                    val lifePerc = lifeAndMax.x / lifeAndMax.y
-                    bar(skin, lifePerc, 0f, 1f, 0.01f, skin.getColor("red"))
-                    label("${lifeAndMax.x.toInt()}", "bar_content", skin) {
-                        this.setAlignment(Align.top, Align.center)
-                    }
-
-                    this.setPosition(position.x, position.y - 25f)
-                    this.setSize(size.x, 20f)
-                }
-                enemyHealthBars[entityId] = stack
-                stage.addActor(stack)
-                stack.toBack()
+                healthBar(entityId, lifeAndMax.x, lifeAndMax.y, position, size)
             }
         }
 
@@ -367,6 +341,25 @@ class CombatView(
             turnOrderTable.removeDrawable(it)
         }
     }
+
+    private fun healthBar(entityId: Int, life: Float, lifeMax: Float, position: Vector2, size: Vector2) =
+        scene2d.stack {
+            val skin = this@CombatView.skin
+
+            val lifePerc = life / lifeMax
+            bar(skin, lifePerc, 0f, 1f, 0.01f, skin.getColor("red"))
+            label("${life.toInt()}", "bar_content", skin) {
+                this.setAlignment(Align.top, Align.center)
+            }
+
+            this.setPosition(position.x, position.y - 25f)
+            this.setSize(size.x, 20f)
+            this.isVisible = this@CombatView.viewModel.isEnemyKnown(entityId)
+
+            this@CombatView.enemyHealthBars[entityId] = this
+            this@CombatView.stage.addActor(this)
+            this.toBack()
+        }
 
     private fun updateActionDescription(description: String) {
         actionDescriptionLabel.txt = description

@@ -16,6 +16,7 @@ import io.github.masamune.component.Combat
 import io.github.masamune.component.Enemy
 import io.github.masamune.component.Equipment
 import io.github.masamune.component.Inventory
+import io.github.masamune.component.MonsterBook
 import io.github.masamune.component.Player
 import io.github.masamune.event.PlayerInteractCombatBeginEvent
 import io.github.masamune.gdxTest
@@ -86,6 +87,7 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
                 it += Player(gameProgress = 0)
                 it += Inventory(items = items)
                 it += Equipment(items = equipment)
+                it += MonsterBook(knownTypes = mutableSetOf(TiledObjectType.BUTTERFLY))
             }
         }
         return player
