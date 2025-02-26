@@ -56,6 +56,9 @@ class GameMenuView(
 
     override fun onSelectPressed() {
         viewModel.triggerOption(optionTable.selectedOption)
+        if (optionTable.selectedOption == optionTable.numOptions - 1) {
+            isVisible = false
+        }
     }
 
     override fun onBackPressed() {

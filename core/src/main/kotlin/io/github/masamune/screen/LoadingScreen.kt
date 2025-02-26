@@ -95,6 +95,7 @@ class LoadingScreen(
         masamune.addScreen(GameScreen(masamune))
         masamune.addScreen(CombatScreen(masamune))
         masamune.addScreen(MainMenuScreen(masamune))
+        masamune.addScreen(CutSceneScreen(masamune))
 
         masamune.removeScreen<LoadingScreen>()
         dispose()

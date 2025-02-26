@@ -97,6 +97,8 @@ class Masamune(
         serviceLocator.dispose()
     }
 
+    fun hasScreenTransition(): Boolean = screenTransition.hasActiveTransition
+
     companion object {
         private val log = logger<Masamune>()
 

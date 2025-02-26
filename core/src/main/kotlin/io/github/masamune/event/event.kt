@@ -18,6 +18,7 @@ data class PlayerMoveEvent(val direction: Vector2) : Event
 data class GameResizeEvent(val width: Int, val height: Int) : Event
 data class PlayerQuestItemBegin(val player: Entity, val item: Entity) : Event
 data object PlayerQuestItemEnd : Event
+data object GameStartEvent : Event
 
 // PLAYER INTERACT EVENTS
 data class PlayerInteractBeginContactEvent(val player: Entity, val other: Entity) : Event

@@ -212,6 +212,14 @@ class RenderSystem(
         }
     }
 
+    fun clearMapLayer() {
+        transitionBackground.clear()
+        transitionForeground.clear()
+        foregroundLayers.clear()
+        backgroundLayers.clear()
+        mapRenderer.map = null
+    }
+
     override fun onDispose() {
         mapRenderer.dispose()
     }

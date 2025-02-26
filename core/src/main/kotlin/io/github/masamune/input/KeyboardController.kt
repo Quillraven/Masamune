@@ -12,6 +12,7 @@ import io.github.masamune.event.DialogEndEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
+import io.github.masamune.event.GameStartEvent
 import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.event.MapTransitionEndEvent
 import io.github.masamune.event.MenuBeginEvent
@@ -116,6 +117,7 @@ class KeyboardController(
             is PlayerInteractCombatEndEvent -> activeState = gameState
             is PlayerQuestItemBegin -> activeState = disabledState
             is PlayerQuestItemEnd -> activeState = gameState
+            is GameStartEvent -> activeState = gameState
             else -> Unit
         }
     }

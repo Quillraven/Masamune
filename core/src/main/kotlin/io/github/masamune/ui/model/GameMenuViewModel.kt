@@ -2,6 +2,7 @@ package io.github.masamune.ui.model
 
 import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.World
+import io.github.masamune.Masamune
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.MonsterBook
 import io.github.masamune.component.Player
@@ -9,17 +10,18 @@ import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.MenuEndEvent
+import io.github.masamune.screen.FadeTransitionType
+import io.github.masamune.screen.MainMenuScreen
 
 class GameMenuViewModel(
     bundle: I18NBundle,
     audioService: AudioService,
     private val world: World,
-    private val eventService: EventService
+    private val eventService: EventService,
+    private val masamune: Masamune,
 ) : ViewModel(bundle, audioService) {
 
     private val playerEntities = world.family { all(Player) }
-    var quitGame = false
-
     var options: List<String> by propertyNotify(listOf())
 
     fun triggerOption(optionIdx: Int) {
@@ -57,7 +59,10 @@ class GameMenuViewModel(
             }
             // quit
             options.lastIndex -> {
-                quitGame = true
+                masamune.transitionScreen<MainMenuScreen>(
+                    FadeTransitionType(1f, 1f, 0.1f),
+                    FadeTransitionType(1f, 1f, 0.1f, delayInSeconds = 0.1f),
+                )
                 eventService.fire(MenuEndEvent)
             }
         }

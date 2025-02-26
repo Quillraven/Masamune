@@ -14,3 +14,11 @@ data class BlurTransitionType(
     val endAlpha: Float = 1f,
     val interpolation: Interpolation = Interpolation.linear,
 ) : TransitionType
+
+data class FadeTransitionType(
+    val startAlpha: Float,
+    val endAlpha: Float,
+    val time: Float,
+    val interpolation: Interpolation = Interpolation.linear,
+    val delayInSeconds: Float = 0f,
+) : TransitionType

@@ -18,6 +18,9 @@ class OptionTable(
     var selectedOption: Int = 0
         private set
 
+    val numOptions: Int
+        get() = children.size
+
     init {
         align(Align.left)
         options.forEach { option(it) }

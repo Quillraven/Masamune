@@ -10,17 +10,16 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.Masamune
 import io.github.masamune.Masamune.Companion.uiViewport
-import io.github.masamune.PhysicContactHandler
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.SkinAsset
-import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.component.Tag
+import io.github.masamune.component.Trigger
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
-import io.github.masamune.event.GameStartEvent
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CameraSystem
@@ -31,44 +30,28 @@ import io.github.masamune.system.FollowPathSystem
 import io.github.masamune.system.MoveSystem
 import io.github.masamune.system.MoveToSystem
 import io.github.masamune.system.PhysicSystem
-import io.github.masamune.system.PlayerInteractSystem
 import io.github.masamune.system.RemoveSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
 import io.github.masamune.system.StateSystem
 import io.github.masamune.system.TriggerSystem
-import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerConfigurator
-import io.github.masamune.ui.model.DialogViewModel
-import io.github.masamune.ui.model.GameMenuViewModel
-import io.github.masamune.ui.model.InventoryViewModel
-import io.github.masamune.ui.model.MonsterBookViewModel
-import io.github.masamune.ui.model.QuestItemViewModel
-import io.github.masamune.ui.model.QuestViewModel
-import io.github.masamune.ui.model.ShopViewModel
-import io.github.masamune.ui.model.StatsViewModel
-import io.github.masamune.ui.view.dialogView
-import io.github.masamune.ui.view.gameMenuView
-import io.github.masamune.ui.view.inventoryView
-import io.github.masamune.ui.view.monsterBookView
-import io.github.masamune.ui.view.questItemView
-import io.github.masamune.ui.view.questView
-import io.github.masamune.ui.view.shopView
-import io.github.masamune.ui.view.statsView
 import ktx.app.KtxScreen
+import ktx.app.gdxError
 import ktx.box2d.createWorld
 import ktx.log.logger
 import ktx.scene2d.actors
+import ktx.scene2d.label
+import ktx.scene2d.table
 
-class GameScreen(
+class CutSceneScreen(
     private val masamune: Masamune,
     private val batch: Batch = masamune.batch,
     private val inputProcessor: InputMultiplexer = masamune.inputProcessor,
     private val eventService: EventService = masamune.event,
     private val tiledService: TiledService = masamune.tiled,
     private val shaderService: ShaderService = masamune.shader,
-    private val mapTransitionService: MapTransitionService = masamune.mapTransition,
     private val assetService: AssetService = masamune.asset,
     private val audioService: AudioService = masamune.audio,
 ) : KtxScreen {
@@ -92,9 +75,6 @@ class GameScreen(
     // ecs world
     val world = gameWorld()
 
-    // view stuff
-    private val gmViewModel = GameMenuViewModel(bundle, audioService, world, eventService, masamune)
-
     private fun gameWorld() = configureWorld {
         injectables {
             add(batch)
@@ -105,7 +85,6 @@ class GameScreen(
             add(dialogConfigurator)
             add(triggerConfigurator)
             add(tiledService)
-            add<MapTransitionService>(mapTransitionService)
             add(assetService)
             add(masamune)
             add(audioService)
@@ -117,7 +96,6 @@ class GameScreen(
             add(MoveSystem())
             add(MoveToSystem())
             add(PhysicSystem())
-            add(PlayerInteractSystem())
             add(CameraSystem())
             add(StateSystem())
             add(DissolveSystem())
@@ -137,40 +115,30 @@ class GameScreen(
         inputProcessor.clear()
         inputProcessor.addProcessor(keyboardController)
 
-        // set physic contact handler (needs to be done AFTER ECS world is created)
-        physicWorld.setContactListener(PhysicContactHandler(eventService, world))
-
         // setup UI views
         stage.clear()
         stage.actors {
-            dialogView(DialogViewModel(bundle, audioService, eventService), skin) { isVisible = false }
-            gameMenuView(gmViewModel, skin) { isVisible = false }
-            statsView(StatsViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
-            inventoryView(InventoryViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
-            shopView(ShopViewModel(bundle, audioService, world, tiledService), skin) { isVisible = false }
-            questItemView(QuestItemViewModel(bundle, audioService, world, gameViewport, uiViewport), skin) { isVisible = false }
-            questView(QuestViewModel(bundle, audioService, world, eventService), skin) { isVisible = false }
-            monsterBookView(MonsterBookViewModel(bundle, audioService, world, assetService[AtlasAsset.CHARS_AND_PROPS], eventService, tiledService), skin) { isVisible = false }
+            table(skin) {
+                setFillParent(true)
+                label("Cut Scene", "default", skin) {
+                    it.grow()
+                }
+            }
         }
 
         // register all event listeners
         registerEventListeners()
-        eventService.fire(GameStartEvent)
     }
 
-    fun startNewGame() {
-        // call this AFTER event listeners are registered
-        world.removeAll(true)
-        tiledService.unloadActiveMap(world)
-        tiledService.loadMap(TiledMapAsset.VILLAGE).also {
-            tiledService.setMap(it, world)
+    fun startCutScene(name: String) {
+        when (name) {
+            "intro" -> world.entity {
+                it += Trigger("cut_scene_intro")
+                it += Tag.EXECUTE_TRIGGER
+            }
+
+            else -> gdxError("Unsupported cut scene $name")
         }
-    }
-
-    fun clearGameState() {
-        world.removeAll(true)
-        tiledService.unloadActiveMap(world)
-        world.system<RenderSystem>().clearMapLayer()
     }
 
     private fun registerEventListeners() {
@@ -197,18 +165,16 @@ class GameScreen(
         stage.act(delta)
         stage.draw()
         batch.setColor(1f, 1f, 1f, 1f)
-
-        mapTransitionService.update(world, delta)
     }
 
     override fun dispose() {
-        log.debug { "Disposing world with '${world.numEntities}' entities" }
+        log.debug { "Disposing cut-scene world with '${world.numEntities}' entities" }
         world.dispose()
         physicWorld.dispose()
         stage.dispose()
     }
 
     companion object {
-        private val log = logger<GameScreen>()
+        private val log = logger<CutSceneScreen>()
     }
 }

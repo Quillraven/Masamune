@@ -4,7 +4,9 @@ import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.MutableEntityBag
+import io.github.masamune.Masamune
 import io.github.masamune.addItem
+import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Animation
@@ -251,6 +253,35 @@ class TriggerActionPauseEntity(
         } else {
             entity.configure { it -= Tag.PAUSE }
         }
+        return true
+    }
+}
+
+class TriggerActionPlayMusic(
+    private val audioService: AudioService,
+    private val music: MusicAsset,
+    private val loop: Boolean = true,
+    private val keepPrevious: Boolean = false,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        audioService.play(music, loop, keepPrevious)
+        return true
+    }
+}
+
+class TriggerActionDelay(private var seconds: Float) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        seconds -= deltaTime
+        return seconds <= 0f
+    }
+}
+
+class TriggerActionChangeScreen(
+    private val masamune: Masamune,
+    private val action: Masamune.() -> Unit,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        masamune.action()
         return true
     }
 }

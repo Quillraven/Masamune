@@ -40,7 +40,6 @@ class MainMenuScreen(
     private val skin = assetService[SkinAsset.DEFAULT]
     private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]
     private val keyboardController = KeyboardController(eventService, initialState = ControllerStateUI::class)
-    private val mmViewModel = MainMenuViewModel(bundle, audioService)
     private val logo = Texture("ui/logo.png".toInternalFile())
 
     private var logoDelay = 2f
@@ -58,9 +57,16 @@ class MainMenuScreen(
         // setup UI views
         stage.clear()
         stage.actors {
-            mainMenuView(mmViewModel, masamune.webLauncher, skin)
+            mainMenuView(
+                MainMenuViewModel(
+                    this@MainMenuScreen.bundle,
+                    this@MainMenuScreen.audioService,
+                    this@MainMenuScreen.masamune
+                ),
+                masamune.webLauncher,
+                skin
+            )
         }
-        mmViewModel.startGame = false
 
         // register all event listeners
         eventService += stage
@@ -76,6 +82,7 @@ class MainMenuScreen(
     }
 
     override fun hide() {
+        logoDelay = 2f
         eventService.clearListeners()
     }
 
@@ -103,11 +110,6 @@ class MainMenuScreen(
 
         stage.act(delta)
         stage.draw()
-
-        if (mmViewModel.startGame) {
-            masamune.setScreen<GameScreen>()
-            masamune.getScreen<GameScreen>().startNewGame()
-        }
     }
 
     override fun dispose() {

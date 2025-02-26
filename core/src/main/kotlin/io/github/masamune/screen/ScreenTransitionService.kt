@@ -24,6 +24,7 @@ class ScreenTransitionService(
         return when (type) {
             is DefaultTransitionType -> DefaultTransition
             is BlurTransitionType -> BlurTransition(type, screen, batch, shaderService)
+            is FadeTransitionType -> FadeTransition(type, screen, batch, shaderService)
         }
     }
 

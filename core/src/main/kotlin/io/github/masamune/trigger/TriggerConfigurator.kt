@@ -1,7 +1,9 @@
 package io.github.masamune.trigger
 
+import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.asset.MusicAsset
 import io.github.masamune.component.MonsterBook
 import io.github.masamune.component.Player
 import io.github.masamune.component.QuestLog
@@ -11,6 +13,8 @@ import io.github.masamune.hasQuest
 import io.github.masamune.quest.FlowerGirlQuest
 import io.github.masamune.quest.MainQuest
 import io.github.masamune.quest.MonsterBookQuest
+import io.github.masamune.screen.FadeTransitionType
+import io.github.masamune.screen.GameScreen
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.ui.model.I18NKey
@@ -30,6 +34,7 @@ class TriggerConfigurator {
             "flower_girl" -> world.flowerGirlTrigger(name, triggeringEntity)
             "terealis_flower" -> world.terealisFlowerTrigger(name, scriptEntity, triggeringEntity)
             "man_green" -> world.manGreenTrigger(name, scriptEntity, triggeringEntity)
+            "cut_scene_intro" -> world.cutSceneIntroTrigger(name, scriptEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }
@@ -207,6 +212,23 @@ class TriggerConfigurator {
                 actionPauseEntity(scriptEntity, false)
             }
         }
+    }
+
+    private fun World.cutSceneIntroTrigger(
+        name: String,
+        scriptEntity: Entity,
+    ): TriggerScript = trigger(name, this, Entity.NONE) {
+        actionPlayMusic(MusicAsset.FOREST)
+        actionDelay(3f)
+        actionChangeScreen {
+            transitionScreen<GameScreen>(
+                FadeTransitionType(1f, 0f, 3f, Interpolation.fastSlow),
+                FadeTransitionType(0.33f, 1f, 0.25f, Interpolation.slowFast, delayInSeconds = 3f),
+            ) {
+                it.startNewGame()
+            }
+        }
+        actionRemove(scriptEntity)
     }
 
     companion object {

@@ -144,7 +144,6 @@ class MainMenuView(
     }
 
     override fun onLeftPressed() {
-
         val parentTable = currentSelection.parent
         when (parentTable.children.indexOf(currentSelection)) {
             1 -> {

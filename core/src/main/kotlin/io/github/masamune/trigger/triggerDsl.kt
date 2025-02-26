@@ -2,6 +2,8 @@ package io.github.masamune.trigger
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.Masamune
+import io.github.masamune.asset.MusicAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
@@ -69,6 +71,20 @@ class TriggerCfg(
 
     fun actionPauseEntity(entity: Entity, pause: Boolean) {
         actions += TriggerActionPauseEntity(entity, pause)
+    }
+
+    fun actionPlayMusic(music: MusicAsset, loop: Boolean = true, keepPrevious: Boolean = false) {
+        val audioService = world.inject<AudioService>()
+        actions += TriggerActionPlayMusic(audioService, music, loop, keepPrevious)
+    }
+
+    fun actionDelay(seconds: Float) {
+        actions += TriggerActionDelay(seconds)
+    }
+
+    fun actionChangeScreen(action: Masamune.() -> Unit) {
+        val masamune = world.inject<Masamune>()
+        actions += TriggerActionChangeScreen(masamune, action)
     }
 }
 
