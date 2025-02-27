@@ -19,9 +19,15 @@ import ktx.log.logger
 
 typealias PhysicWorld = World
 
-fun scheduledTask(delay: Float, action: () -> Unit): Timer.Task = Timer.schedule(object : Timer.Task() {
-    override fun run() = action()
-}, delay)
+fun scheduledTask(delay: Float, action: () -> Unit): Timer.Task =
+    Timer.schedule(object : Timer.Task() {
+        override fun run() = action()
+    }, delay)
+
+fun scheduledTask(delay: Float, intervalSeconds: Float, action: (Timer.Task) -> Unit): Timer.Task =
+    Timer.schedule(object : Timer.Task() {
+        override fun run() = action(this)
+    }, delay, intervalSeconds)
 
 class Masamune(
     val webLauncher: Boolean = false,

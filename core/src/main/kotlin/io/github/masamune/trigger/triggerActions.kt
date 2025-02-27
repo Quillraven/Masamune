@@ -1,5 +1,6 @@
 package io.github.masamune.trigger
 
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
@@ -297,4 +298,37 @@ class TriggerActionCutSceneText(
         eventService.fire(CutSceneTextEvent(i18NKey, align, duration))
         return true
     }
+}
+
+class TriggerActionFadeOutMusic(
+    private val duration: Float,
+    private val audioService: AudioService,
+) : TriggerAction {
+
+    private var initialVolumne = 0f
+    private var alpha = 0f
+    private lateinit var music: Music
+
+    override fun World.onStart() {
+        val intervalSeconds = 1 / 30f
+        music = audioService.currentMusic
+        initialVolumne = music.volume
+
+        scheduledTask(0f, intervalSeconds) { task ->
+            if (music !== audioService.currentMusic) {
+                // music has changed -> cancel fade out
+                task.cancel()
+                return@scheduledTask
+            }
+
+            alpha += intervalSeconds * (1f / duration)
+            val volume = Interpolation.linear.apply(initialVolumne, 0f, alpha.coerceAtMost(1f))
+            music.volume = volume
+            if (volume == 0f) {
+                task.cancel()
+            }
+        }
+    }
+
+    override fun World.onUpdate(): Boolean = true
 }

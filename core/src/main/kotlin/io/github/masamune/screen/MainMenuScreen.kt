@@ -84,6 +84,7 @@ class MainMenuScreen(
     override fun hide() {
         logoDelay = 2f
         eventService.clearListeners()
+        audioService.stopMusic()
     }
 
     override fun resize(width: Int, height: Int) {

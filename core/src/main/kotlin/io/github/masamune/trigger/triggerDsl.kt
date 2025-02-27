@@ -96,6 +96,15 @@ class TriggerCfg(
         actions += TriggerActionCutSceneText(i18NKey, align, duration, eventService)
         actionDelay(duration)
     }
+
+    fun actionFadeOutMusic(duration: Float, wait: Boolean) {
+        val audioService = world.inject<AudioService>()
+        actions += TriggerActionFadeOutMusic(duration, audioService)
+        if (wait) {
+            actionDelay(duration)
+        }
+    }
+
 }
 
 fun trigger(

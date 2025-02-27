@@ -219,27 +219,23 @@ class TriggerConfigurator {
         name: String,
         scriptEntity: Entity,
     ): TriggerScript = trigger(name, this, Entity.NONE) {
-        actionPlayMusic(MusicAsset.FOREST)
-
+        actionRemove(scriptEntity)
+        actionPlayMusic(MusicAsset.INTRO)
+        actionDelay(2f)
         actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT1, Align.center, duration = 11f)
-
         actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT2, Align.center, duration = 11f)
-
-        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT3, Align.center, duration = 7f)
-
-        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT4, Align.center, duration = 7f)
-
-        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT5, Align.center, duration = 6f)
-
+        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT3, Align.center, duration = 9f)
+        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT4, Align.center, duration = 9f)
+        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT5, Align.center, duration = 8f)
+        actionFadeOutMusic(3.5f, wait = false)
         actionChangeScreen {
             transitionScreen<GameScreen>(
-                FadeTransitionType(1f, 0f, 3f, Interpolation.fastSlow),
+                FadeTransitionType(1f, 0f, 4f, Interpolation.fastSlow),
                 FadeTransitionType(0.33f, 1f, 0.25f, Interpolation.slowFast, delayInSeconds = 3f),
             ) {
                 it.startNewGame()
             }
         }
-        actionRemove(scriptEntity)
     }
 
     companion object {

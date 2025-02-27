@@ -71,6 +71,7 @@ enum class MusicAsset(format: String) {
     COMBAT_VICTORY("mp3"),
     COMBAT_DEFEAT("mp3"),
     FOREST("mp3"),
+    INTRO("mp3"),
     ;
 
     val path = "music/${name.lowercase()}.$format"

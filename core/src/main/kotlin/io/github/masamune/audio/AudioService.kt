@@ -8,6 +8,7 @@ import io.github.masamune.asset.SoundAsset
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.MapChangeEvent
+import ktx.app.gdxError
 import ktx.log.logger
 import ktx.tiled.propertyOrNull
 
@@ -19,13 +20,16 @@ class AudioService(
     private var lastMusic: Pair<Music, MusicAsset>? = null
     private val soundCache = mutableMapOf<SoundAsset, Sound>()
 
+    val currentMusic: Music
+        get() = lastMusic?.first ?: gdxError("There is no music currently playing")
+
     var musicVolume: Float = 0.25f
         set(value) {
             field = value.coerceIn(0f, 1f)
             lastMusic?.first?.volume = field
         }
 
-    var soundVolume: Float = 0.8f
+    var soundVolume: Float = 0.5f
         set(value) {
             field = value.coerceIn(0f, 1f)
         }
@@ -58,6 +62,15 @@ class AudioService(
 
     fun playPrevMusic() {
         prevMusic?.let { play(it) }
+    }
+
+    fun stopMusic() {
+        lastMusic?.let { (prevMusic, prevMusicAsset) ->
+            log.debug { "Unloading previous music $prevMusicAsset" }
+            prevMusic.stop()
+            assetService.unload(prevMusicAsset)
+            lastMusic = null
+        }
     }
 
     fun play(soundAsset: SoundAsset, pitch: Float = 1f) {
