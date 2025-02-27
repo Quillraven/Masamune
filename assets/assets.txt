@@ -24,7 +24,7 @@ i:d:/ui:0:1
 i:b:/ui/skin.png:10663:1
 i:b:/ui/Fipps-Regular.otf:34220:1
 i:b:/ui/logo.png:347638:1
-i:b:/ui/messages_de.properties:9021:1
+i:b:/ui/messages_de.properties:9014:1
 i:b:/ui/messages.properties:8255:1
 i:b:/ui/skin.atlas:2933:1
 i:b:/ui/CherryCreamSoda-Regular.ttf:49404:1
@@ -32,6 +32,7 @@ i:b:/ui/skin.json:7113:1
 i:d:/music:0:1
 i:b:/music/road.mp3:709694:1
 i:b:/music/village.mp3:827559:1
+i:b:/music/intro.mp3:1651844:1
 i:b:/music/combat1.mp3:2005701:1
 i:b:/music/combat_defeat.mp3:145365:1
 i:b:/music/combat_victory.mp3:122795:1
