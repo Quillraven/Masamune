@@ -2,7 +2,9 @@ package io.github.masamune.screen
 
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.ExtendViewport
@@ -37,13 +39,15 @@ import io.github.masamune.system.StateSystem
 import io.github.masamune.system.TriggerSystem
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerConfigurator
+import io.github.masamune.ui.model.CutSceneViewModel
+import io.github.masamune.ui.view.cutSceneView
+import ktx.actors.alpha
 import ktx.app.KtxScreen
 import ktx.app.gdxError
 import ktx.box2d.createWorld
+import ktx.collections.GdxArray
 import ktx.log.logger
 import ktx.scene2d.actors
-import ktx.scene2d.label
-import ktx.scene2d.table
 
 class CutSceneScreen(
     private val masamune: Masamune,
@@ -71,6 +75,7 @@ class CutSceneScreen(
     private val keyboardController = KeyboardController(eventService)
     private val dialogConfigurator = DialogConfigurator(bundle)
     private val triggerConfigurator = TriggerConfigurator()
+    private var alphaDeltaTime = 0f
 
     // ecs world
     val world = gameWorld()
@@ -116,14 +121,8 @@ class CutSceneScreen(
         inputProcessor.addProcessor(keyboardController)
 
         // setup UI views
-        stage.clear()
         stage.actors {
-            table(skin) {
-                setFillParent(true)
-                label("Cut Scene", "default", skin) {
-                    it.grow()
-                }
-            }
+            cutSceneView(CutSceneViewModel(bundle, audioService), skin)
         }
 
         // register all event listeners
@@ -149,8 +148,14 @@ class CutSceneScreen(
     }
 
     override fun hide() {
+        stage.clear()
+        alphaDeltaTime = 0f
         eventService.clearListeners()
         physicWorld.setContactListener(null)
+        world.removeAll(true)
+        val bodies = GdxArray<Body>()
+        physicWorld.getBodies(bodies)
+        bodies.forEach { physicWorld.destroyBody(it) }
     }
 
     override fun resize(width: Int, height: Int) {
@@ -159,9 +164,13 @@ class CutSceneScreen(
     }
 
     override fun render(delta: Float) {
+        // cut scene screen fades in slowly
+        alphaDeltaTime = (alphaDeltaTime + delta * 0.33f).coerceAtMost(1f)
+        batch.color.a = Interpolation.fade.apply(0f, 1f, alphaDeltaTime)
         world.update(delta)
 
         uiViewport.apply()
+        stage.alpha = batch.color.a
         stage.act(delta)
         stage.draw()
         batch.setColor(1f, 1f, 1f, 1f)

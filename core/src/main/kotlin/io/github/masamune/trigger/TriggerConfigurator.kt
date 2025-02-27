@@ -1,6 +1,7 @@
 package io.github.masamune.trigger
 
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.utils.Align
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.asset.MusicAsset
@@ -219,6 +220,7 @@ class TriggerConfigurator {
         scriptEntity: Entity,
     ): TriggerScript = trigger(name, this, Entity.NONE) {
         actionPlayMusic(MusicAsset.FOREST)
+        actionCutSceneText("cutScene.intro.text1", Align.center)
         actionDelay(3f)
         actionChangeScreen {
             transitionScreen<GameScreen>(

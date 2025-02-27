@@ -21,6 +21,7 @@ import io.github.masamune.component.QuestLog
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Transform
 import io.github.masamune.dialog.DialogConfigurator
+import io.github.masamune.event.CutSceneTextEvent
 import io.github.masamune.event.DialogBeginEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.event.PlayerQuestItemBegin
@@ -33,6 +34,7 @@ import io.github.masamune.spawnSfx
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.ui.model.CutSceneTextModel
 import io.github.masamune.ui.model.I18NKey
 import ktx.log.logger
 import ktx.math.component1
@@ -282,6 +284,17 @@ class TriggerActionChangeScreen(
 ) : TriggerAction {
     override fun World.onUpdate(): Boolean {
         masamune.action()
+        return true
+    }
+}
+
+class TriggerActionCutSceneText(
+    private val text: String,
+    private val align: Int,
+    private val eventService: EventService
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        eventService.fire(CutSceneTextEvent(CutSceneTextModel(text, align)))
         return true
     }
 }

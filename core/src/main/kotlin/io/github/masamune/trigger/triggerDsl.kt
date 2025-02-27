@@ -86,6 +86,14 @@ class TriggerCfg(
         val masamune = world.inject<Masamune>()
         actions += TriggerActionChangeScreen(masamune, action)
     }
+
+    fun actionCutSceneText(
+        text: String,
+        align: Int,
+    ) {
+        val eventService = world.inject<EventService>()
+        actions += TriggerActionCutSceneText(text, align, eventService)
+    }
 }
 
 fun trigger(
