@@ -88,11 +88,13 @@ class TriggerCfg(
     }
 
     fun actionCutSceneText(
-        text: String,
+        i18NKey: I18NKey,
         align: Int,
+        duration: Float,
     ) {
         val eventService = world.inject<EventService>()
-        actions += TriggerActionCutSceneText(text, align, eventService)
+        actions += TriggerActionCutSceneText(i18NKey, align, duration, eventService)
+        actionDelay(duration)
     }
 }
 

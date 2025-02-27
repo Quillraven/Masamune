@@ -895,6 +895,35 @@ jsonData: {
 		}
 		{
 			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: large
+			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/CherryCreamSoda-Regular.ttf
+			previewTTF: IBMPlexSerif-Medium
+			useCustomSerializer: true
+			size: 22
+			mono: false
+			hinting: AutoMedium
+			color: white
+			gamma: 1.8
+			renderCount: 2
+			borderWidth: 0
+			borderColor: null
+			borderStraight: false
+			borderGamma: 1.8
+			shadowOffsetX: 0
+			shadowOffsetY: 0
+			shadowColor: null
+			spaceX: 4
+			spaceY: 4
+			characters: " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789öäüÖÄÜ,.-;:_#'+*!\"%&/()={[]}?ß"
+			kerning: true
+			flip: false
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
+		}
+		{
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
 			name: small_shadow
 			file: C:/Users/EKLAUSSZ8/IdeaProjects/Masamune/skinDesign_data/CherryCreamSoda-Regular.ttf
 			previewTTF: IBMPlexSerif-Medium
@@ -1176,6 +1205,33 @@ jsonData: {
 						name: font
 						optional: false
 						value: small_shadow
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: white
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default_large
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: large
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color

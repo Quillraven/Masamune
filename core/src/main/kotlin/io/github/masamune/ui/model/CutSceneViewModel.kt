@@ -15,7 +15,7 @@ class CutSceneViewModel(
     override fun onEvent(event: Event) {
         when (event) {
             is CutSceneTextEvent -> {
-                textModel = event.model
+                textModel = CutSceneTextModel(i18nTxt(event.i18NKey), event.align, event.duration)
             }
 
             else -> Unit

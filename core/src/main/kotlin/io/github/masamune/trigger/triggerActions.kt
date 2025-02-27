@@ -34,7 +34,6 @@ import io.github.masamune.spawnSfx
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
-import io.github.masamune.ui.model.CutSceneTextModel
 import io.github.masamune.ui.model.I18NKey
 import ktx.log.logger
 import ktx.math.component1
@@ -289,12 +288,13 @@ class TriggerActionChangeScreen(
 }
 
 class TriggerActionCutSceneText(
-    private val text: String,
+    private val i18NKey: I18NKey,
     private val align: Int,
+    private val duration: Float,
     private val eventService: EventService
 ) : TriggerAction {
     override fun World.onUpdate(): Boolean {
-        eventService.fire(CutSceneTextEvent(CutSceneTextModel(text, align)))
+        eventService.fire(CutSceneTextEvent(i18NKey, align, duration))
         return true
     }
 }

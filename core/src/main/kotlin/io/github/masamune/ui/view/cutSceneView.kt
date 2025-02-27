@@ -1,9 +1,14 @@
 package io.github.masamune.ui.view
 
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.delay
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Align
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import io.github.masamune.ui.model.CutSceneViewModel
+import ktx.actors.plusAssign
+import ktx.actors.then
 import ktx.actors.txt
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
@@ -22,21 +27,21 @@ class CutSceneView(
     init {
         setFillParent(true)
 
-        this@CutSceneView.topLabel = typingLabel("", "default", skin) {
-            this.defaultToken = "{SLOW}{FADE}"
+        this@CutSceneView.topLabel = typingLabel("", "default_large", skin) {
+            this.defaultToken = "{SLOWER}{FADE}"
             this.setAlignment(Align.topLeft)
             this.wrap = true
             it.grow().pad(20f).row()
         }
 
-        this@CutSceneView.centerLabel = typingLabel("", "default", skin) {
+        this@CutSceneView.centerLabel = typingLabel("", "default_large", skin) {
             this.defaultToken = "{SLOW}{FADE}"
             this.setAlignment(Align.center)
             this.wrap = true
             it.grow().pad(20f).row()
         }
 
-        this@CutSceneView.bottomLabel = typingLabel("", "default", skin) {
+        this@CutSceneView.bottomLabel = typingLabel("", "default_large", skin) {
             this.defaultToken = "{SLOW}{FADE}"
             this.setAlignment(Align.bottomLeft)
             this.wrap = true
@@ -48,25 +53,19 @@ class CutSceneView(
 
     override fun registerOnPropertyChanges() {
         viewModel.onPropertyChange(CutSceneViewModel::textModel) { textModel ->
-            stage.isDebugAll = true
-            when (textModel.align) {
-                Align.topLeft, Align.top, Align.topRight -> topLabel.run {
-                    this.restart()
-                    txt = textModel.text
-                    align(textModel.align)
-                }
+            val label = when (textModel.align) {
+                Align.topLeft, Align.top, Align.topRight -> topLabel
+                Align.bottomLeft, Align.bottom, Align.bottomRight -> bottomLabel
+                else -> centerLabel
+            }
 
-                Align.bottomLeft, Align.bottom, Align.bottomRight -> bottomLabel.run {
-                    this.restart()
-                    txt = textModel.text
-                    align(textModel.align)
-                }
+            label.run {
+                this.restart()
+                this.txt = textModel.text
+                this.setAlignment(textModel.align)
 
-                else -> centerLabel.run {
-                    this.restart()
-                    txt = textModel.text
-                    align(textModel.align)
-                }
+                this.clearActions()
+                this += alpha(1f) then delay(textModel.duration - 2f) then fadeOut(2f)
             }
         }
     }

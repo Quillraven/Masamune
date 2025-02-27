@@ -220,8 +220,17 @@ class TriggerConfigurator {
         scriptEntity: Entity,
     ): TriggerScript = trigger(name, this, Entity.NONE) {
         actionPlayMusic(MusicAsset.FOREST)
-        actionCutSceneText("cutScene.intro.text1", Align.center)
-        actionDelay(3f)
+
+        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT1, Align.center, duration = 11f)
+
+        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT2, Align.center, duration = 11f)
+
+        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT3, Align.center, duration = 7f)
+
+        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT4, Align.center, duration = 7f)
+
+        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT5, Align.center, duration = 6f)
+
         actionChangeScreen {
             transitionScreen<GameScreen>(
                 FadeTransitionType(1f, 0f, 3f, Interpolation.fastSlow),
