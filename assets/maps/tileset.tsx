@@ -111,6 +111,11 @@
    <object id="2" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="1244">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="16"/>
+  </objectgroup>
+ </tile>
  <tile id="1258">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="2" width="16" height="14"/>
@@ -188,12 +193,32 @@
    <object id="1" x="0" y="6" width="14" height="10"/>
   </objectgroup>
  </tile>
+ <tile id="1816">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="1" y="6" width="15" height="10"/>
+  </objectgroup>
+ </tile>
+ <tile id="1817">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="6" width="14" height="10"/>
+  </objectgroup>
+ </tile>
  <tile id="1878">
   <objectgroup draworder="index" id="2">
    <object id="1" x="1" y="0" width="15" height="13"/>
   </objectgroup>
  </tile>
  <tile id="1879">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="15" height="12"/>
+  </objectgroup>
+ </tile>
+ <tile id="1880">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="1" y="0" width="15" height="13"/>
+  </objectgroup>
+ </tile>
+ <tile id="1881">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="15" height="12"/>
   </objectgroup>
@@ -682,6 +707,16 @@
    <object id="1" x="2" y="13" width="12" height="3"/>
   </objectgroup>
  </tile>
+ <tile id="3907">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="1" y="0" width="15" height="16"/>
+  </objectgroup>
+ </tile>
+ <tile id="3908">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="15" height="16"/>
+  </objectgroup>
+ </tile>
  <tile id="3909">
   <objectgroup draworder="index" id="2">
    <object id="1" x="1" y="0" width="15" height="16"/>
@@ -735,6 +770,16 @@
  <tile id="3989">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="15" height="16"/>
+  </objectgroup>
+ </tile>
+ <tile id="4035">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="16"/>
+  </objectgroup>
+ </tile>
+ <tile id="4036">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
  <wangsets>

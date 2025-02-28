@@ -39,7 +39,7 @@ i:b:/music/combat_victory.mp3:122795:1
 i:b:/music/forest.mp3:577244:1
 i:d:/maps:0:1
 i:b:/maps/path_to_forest.tmx:4848:1
-i:b:/maps/forest_entrance.tmx:5216:1
+i:b:/maps/forest_entrance.tmx:5472:1
 i:b:/maps/tileset-orig.png:195892:1
 i:d:/maps/objects:0:1
 i:b:/maps/objects/small_health_potion.png:4313:1
@@ -66,7 +66,8 @@ i:b:/maps/objects/merchant.png:494:1
 i:b:/maps/objects/scroll_inferno.png:2975:1
 i:b:/maps/village.tmx:3415:1
 i:b:/maps/objects.tsx:15351:1
-i:b:/maps/tileset.tsx:25003:1
+i:b:/maps/tileset.tsx:26263:1
+i:b:/maps/forest_masamune.tmx:2490:1
 i:b:/maps/masamune-tiled.tiled-project:16283:1
 i:b:/maps/tileset.png:473544:1
 c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
