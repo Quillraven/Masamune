@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="44" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="34">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="44" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="35">
  <properties>
   <property name="music" value="FOREST"/>
   <property name="trigger" value="forest_entrance"/>
@@ -76,6 +76,12 @@
    <properties>
     <property name="isSensor" type="bool" value="true"/>
     <property name="targetPortalId" type="int" value="20"/>
+   </properties>
+  </object>
+  <object id="34" name="FOREST_MASAMUNE" type="Portal" x="690" y="62" width="18" height="50">
+   <properties>
+    <property name="isSensor" type="bool" value="true"/>
+    <property name="targetPortalId" type="int" value="33"/>
    </properties>
   </object>
  </objectgroup>

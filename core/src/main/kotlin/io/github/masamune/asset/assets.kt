@@ -37,6 +37,7 @@ enum class TiledMapAsset {
     VILLAGE,
     PATH_TO_FOREST,
     FOREST_ENTRANCE,
+    FOREST_MASAMUNE,
     ;
 
     val path = "maps/${name.lowercase()}.tmx"

@@ -1,24 +1,17 @@
 package io.github.masamune.trigger
 
-import com.badlogic.gdx.math.Interpolation
-import com.badlogic.gdx.utils.Align
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import io.github.masamune.asset.MusicAsset
-import io.github.masamune.component.MonsterBook
-import io.github.masamune.component.Player
-import io.github.masamune.component.QuestLog
-import io.github.masamune.getEntityByTiledId
-import io.github.masamune.hasItem
-import io.github.masamune.hasQuest
-import io.github.masamune.quest.FlowerGirlQuest
-import io.github.masamune.quest.MainQuest
-import io.github.masamune.quest.MonsterBookQuest
-import io.github.masamune.screen.FadeTransitionType
-import io.github.masamune.screen.GameScreen
-import io.github.masamune.tiledmap.ItemType
-import io.github.masamune.tiledmap.TiledObjectType
-import io.github.masamune.ui.model.I18NKey
+import io.github.masamune.trigger.cutscene.intro.cutSceneIntroTrigger
+import io.github.masamune.trigger.forest.entrance.forestEntranceTrigger
+import io.github.masamune.trigger.forest.entrance.terealisFlowerTrigger
+import io.github.masamune.trigger.forest.masamune.masamuneForestTrigger
+import io.github.masamune.trigger.forest.path.manGreenTrigger
+import io.github.masamune.trigger.village.elderTrigger
+import io.github.masamune.trigger.village.flowerGirlTrigger
+import io.github.masamune.trigger.village.merchantTrigger
+import io.github.masamune.trigger.village.smithTrigger
+import io.github.masamune.trigger.village.villageExitTrigger
 import ktx.app.gdxError
 import ktx.log.logger
 
@@ -36,6 +29,7 @@ class TriggerConfigurator {
             "terealis_flower" -> world.terealisFlowerTrigger(name, scriptEntity, triggeringEntity)
             "man_green" -> world.manGreenTrigger(name, scriptEntity, triggeringEntity)
             "cut_scene_intro" -> world.cutSceneIntroTrigger(name, scriptEntity)
+            "masamune_forest" -> world.masamuneForestTrigger(name, scriptEntity, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }
@@ -46,195 +40,6 @@ class TriggerConfigurator {
         return when (name) {
             "forest_entrance" -> world.forestEntranceTrigger(name)
             else -> gdxError("There is no trigger configured for name $name")
-        }
-    }
-
-    private fun World.villageExitTrigger(name: String, scriptEntity: Entity, triggeringEntity: Entity): TriggerScript {
-        val mainQuest = triggeringEntity[QuestLog].getOrNull<MainQuest>()
-
-        return when (mainQuest) {
-            null -> trigger(name, this, triggeringEntity) {
-                // push player away to not trigger the same map trigger again and again
-                actionMoveBack(triggeringEntity, distance = 0.75f, timeInSeconds = 0.25f, wait = true)
-                actionDialog("villageExit")
-            }
-
-            else -> trigger(name, this, triggeringEntity) {
-                actionRemove(scriptEntity)
-            }
-        }
-    }
-
-    private fun World.elderTrigger(name: String, triggeringEntity: Entity): TriggerScript {
-        return when {
-            hasQuest<MainQuest>(triggeringEntity) -> {
-                trigger(name, this, triggeringEntity) {
-                    actionDialog("elder_10")
-                }
-            }
-
-            else -> {
-                trigger(name, this, triggeringEntity) {
-                    actionDialog("elder_00")
-                    actionAddItem(triggeringEntity, ItemType.ELDER_SWORD)
-                    actionAddQuest(triggeringEntity, MainQuest())
-                }
-            }
-        }
-    }
-
-    private fun World.merchantTrigger(name: String, triggeringEntity: Entity, scriptEntity: Entity) =
-        trigger(name, this, triggeringEntity) {
-            actionDialog("merchant_00") { selectedOptionIdx ->
-                if (selectedOptionIdx == 0) {
-                    actionShop(
-                        triggeringEntity, scriptEntity, I18NKey.NPC_MERCHANT_TITLE, listOf(
-                            ItemType.SMALL_MANA_POTION,
-                            ItemType.SMALL_HEALTH_POTION,
-                            ItemType.SCROLL_INFERNO,
-                        )
-                    )
-                }
-            }
-        }
-
-    private fun World.smithTrigger(name: String, triggeringEntity: Entity, scriptEntity: Entity) =
-        trigger(name, this, triggeringEntity) {
-            actionDialog("smith_00") { selectedOptionIdx ->
-                if (selectedOptionIdx == 0) {
-                    actionShop(
-                        triggeringEntity, scriptEntity, I18NKey.NPC_SMITH_TITLE, listOf(
-                            ItemType.BOOTS,
-                            ItemType.HELMET,
-                        )
-                    )
-                }
-            }
-        }
-
-    private fun World.flowerGirlTrigger(name: String, triggeringEntity: Entity): TriggerScript {
-        val quest = triggeringEntity[QuestLog].getOrNull<FlowerGirlQuest>()
-        val hasTerealisFlower = hasItem(triggeringEntity, ItemType.TEREALIS_FLOWER)
-
-        return when {
-            quest != null && !quest.isCompleted() && hasTerealisFlower -> trigger(name, this, triggeringEntity) {
-                // quest completed -> give reward
-                actionDialog("flower_girl_20")
-                actionAddItem(triggeringEntity, ItemType.SMALL_STRENGTH_POTION)
-                actionRemoveItem(triggeringEntity, ItemType.TEREALIS_FLOWER, 1)
-                actionCompleteQuest(quest)
-                actionHeal(triggeringEntity, healLife = true, healMana = true)
-            }
-
-            quest != null && quest.isCompleted() -> trigger(name, this, triggeringEntity) {
-                // quest completed and reward already given
-                actionDialog("flower_girl_30")
-                actionHeal(triggeringEntity, healLife = true, healMana = true)
-            }
-
-            quest != null -> trigger(name, this, triggeringEntity) {
-                // quest started but not completed yet
-                actionDialog("flower_girl_10")
-                actionHeal(triggeringEntity, healLife = true, healMana = true)
-            }
-
-
-            else -> trigger(name, this, triggeringEntity) {
-                // first interaction -> no quest yet
-                actionDialog("flower_girl_00") { selectedOptionIdx ->
-                    if (selectedOptionIdx == 0) {
-                        actionAddQuest(triggeringEntity, FlowerGirlQuest())
-                        actionHeal(triggeringEntity, healLife = true, healMana = true)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun World.forestEntranceTrigger(name: String): TriggerScript? {
-        val player = this.family { all(Player) }.single()
-        val quest = player[QuestLog].getOrNull<FlowerGirlQuest>()
-        val hasTerealisFlower = hasItem(player, ItemType.TEREALIS_FLOWER)
-
-        return when {
-            quest == null || quest.isCompleted() || hasTerealisFlower -> trigger(name, this, player) {
-                // player doesn't have the flower quest or already has the item or the quest is completed
-                // -> remove the flower quest trigger of the map
-                actionRemove(getEntityByTiledId(32))
-            }
-
-            else -> null
-        }
-    }
-
-    private fun World.terealisFlowerTrigger(
-        name: String,
-        scriptEntity: Entity,
-        triggeringEntity: Entity
-    ): TriggerScript = trigger(name, this, triggeringEntity) {
-        actionRemove(scriptEntity)
-        actionAddItem(triggeringEntity, ItemType.TEREALIS_FLOWER)
-    }
-
-    private fun World.manGreenTrigger(
-        name: String,
-        scriptEntity: Entity,
-        triggeringEntity: Entity
-    ): TriggerScript = trigger(name, this, triggeringEntity) {
-        val monsterBook = triggeringEntity.getOrNull(MonsterBook)
-        if (monsterBook == null) {
-            // no monster book yet -> add it
-            actionPauseEntity(scriptEntity, true)
-            actionDialog("man_green_00") {
-                actionPauseEntity(scriptEntity, false)
-                triggeringEntity.configure {
-                    it += MonsterBook(knownTypes = mutableSetOf(TiledObjectType.BUTTERFLY, TiledObjectType.LARVA))
-                }
-                actionAddQuest(triggeringEntity, MonsterBookQuest())
-            }
-        } else if (triggeringEntity[QuestLog].getOrNull<MonsterBookQuest>()?.completed == true) {
-            // quest already completed
-            actionPauseEntity(scriptEntity, true)
-            actionDialog("man_green_30") {
-                actionPauseEntity(scriptEntity, false)
-            }
-        } else if (monsterBook.knownTypes.size >= 10) {
-            // quest completed! -> give reward
-            actionPauseEntity(scriptEntity, true)
-            actionDialog("man_green_20") {
-                actionPauseEntity(scriptEntity, false)
-            }
-            actionCompleteQuest(triggeringEntity[QuestLog].get<MonsterBookQuest>())
-            actionAddItem(triggeringEntity, ItemType.INTELLIGENCE_POTION)
-        } else {
-            // dialog while quest is not completed
-            actionPauseEntity(scriptEntity, true)
-            actionDialog("man_green_10") {
-                actionPauseEntity(scriptEntity, false)
-            }
-        }
-    }
-
-    private fun World.cutSceneIntroTrigger(
-        name: String,
-        scriptEntity: Entity,
-    ): TriggerScript = trigger(name, this, Entity.NONE) {
-        actionRemove(scriptEntity)
-        actionPlayMusic(MusicAsset.INTRO)
-        actionDelay(2f)
-        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT1, Align.center, duration = 11f)
-        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT2, Align.center, duration = 11f)
-        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT3, Align.center, duration = 9f)
-        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT4, Align.center, duration = 9f)
-        actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT5, Align.center, duration = 8f)
-        actionFadeOutMusic(3.5f, wait = false)
-        actionChangeScreen {
-            transitionScreen<GameScreen>(
-                FadeTransitionType(1f, 0f, 4f, Interpolation.fastSlow),
-                FadeTransitionType(0.33f, 1f, 0.25f, Interpolation.slowFast, delayInSeconds = 3f),
-            ) {
-                it.startNewGame()
-            }
         }
     }
 
