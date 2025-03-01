@@ -2,6 +2,8 @@ package io.github.masamune
 
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.World
@@ -28,6 +30,12 @@ fun scheduledTask(delay: Float, intervalSeconds: Float, action: (Timer.Task) -> 
     Timer.schedule(object : Timer.Task() {
         override fun run() = action(this)
     }, delay, intervalSeconds)
+
+fun Input.isAnyKeyPressed(): Boolean {
+    return isKeyJustPressed(Keys.ANY_KEY) ||
+        isKeyJustPressed(Keys.W) || isKeyJustPressed(Keys.A) || isKeyJustPressed(Keys.S) || isKeyJustPressed(Keys.D) ||
+        isKeyJustPressed(Keys.SPACE) || isKeyJustPressed(Keys.ESCAPE) || isKeyJustPressed(Keys.CONTROL_LEFT)
+}
 
 class Masamune(
     val webLauncher: Boolean = false,

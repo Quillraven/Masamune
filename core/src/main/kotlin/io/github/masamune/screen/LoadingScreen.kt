@@ -1,7 +1,6 @@
 package io.github.masamune.screen
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -18,6 +17,7 @@ import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.SkinAsset
+import io.github.masamune.isAnyKeyPressed
 import ktx.actors.plusAssign
 import ktx.actors.then
 import ktx.actors.txt
@@ -82,7 +82,7 @@ class LoadingScreen(
             done = true
             infoLabel.txt = i18n["loading.done"]
             infoLabel += forever(alpha(0.2f, 1f) then alpha(1f, 1f))
-        } else if (done && (Gdx.input.isKeyJustPressed(Keys.ANY_KEY) || Gdx.input.isTouched)) {
+        } else if (done && (Gdx.input.isAnyKeyPressed())) {
             onFinishLoading()
         }
 
@@ -96,10 +96,11 @@ class LoadingScreen(
         masamune.addScreen(CombatScreen(masamune))
         masamune.addScreen(MainMenuScreen(masamune))
         masamune.addScreen(CutSceneScreen(masamune))
+        masamune.addScreen(ControlsScreen(masamune))
 
         masamune.removeScreen<LoadingScreen>()
         dispose()
-        masamune.setScreen<MainMenuScreen>()
+        masamune.setScreen<ControlsScreen>()
     }
 
     override fun dispose() {

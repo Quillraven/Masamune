@@ -6,14 +6,14 @@ filter: Nearest, Nearest
 repeat: none
 arrow
   rotate: false
-  xy: 128, 184
+  xy: 107, 120
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 bar_bg
   rotate: false
-  xy: 148, 200
+  xy: 127, 120
   size: 12, 12
   split: 2, 2, 2, 2
   orig: 12, 12
@@ -21,7 +21,7 @@ bar_bg
   index: -1
 button_normal
   rotate: false
-  xy: 2, 2
+  xy: 4, 4
   size: 16, 8
   split: 3, 3, 3, 3
   pad: 2, 2, 2, 2
@@ -30,7 +30,7 @@ button_normal
   index: -1
 button_pressed
   rotate: false
-  xy: 22, 2
+  xy: 28, 4
   size: 16, 8
   split: 3, 3, 4, 2
   pad: 2, 2, 3, 1
@@ -39,7 +39,7 @@ button_pressed
   index: -1
 dialog_choice_frame
   rotate: false
-  xy: 2, 234
+  xy: 72, 232
   size: 64, 20
   split: 5, 5, 5, 5
   pad: 6, 6, 5, 5
@@ -48,7 +48,7 @@ dialog_choice_frame
   index: -1
 dialog_face_frame
   rotate: false
-  xy: 2, 118
+  xy: 4, 136
   size: 48, 48
   split: 13, 6, 16, 6
   pad: 0, 0, 0, 0
@@ -57,7 +57,7 @@ dialog_face_frame
   index: -1
 dialog_frame
   rotate: false
-  xy: 2, 170
+  xy: 4, 192
   size: 60, 60
   split: 8, 8, 8, 8
   orig: 60, 60
@@ -65,21 +65,21 @@ dialog_frame
   index: -1
 elder
   rotate: false
-  xy: 2, 76
+  xy: 4, 90
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 flower_girl
   rotate: false
-  xy: 112, 216
+  xy: 60, 140
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 frame_1
   rotate: false
-  xy: 108, 176
+  xy: 152, 138
   size: 16, 16
   split: 5, 5, 5, 6
   pad: 5, 5, 5, 5
@@ -88,49 +88,98 @@ frame_1
   index: -1
 hero
   rotate: false
-  xy: 154, 216
+  xy: 118, 186
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 icon_items
   rotate: false
-  xy: 144, 185
+  xy: 50, 93
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
   index: -1
 icon_magic
   rotate: false
-  xy: 196, 217
+  xy: 164, 193
   size: 38, 37
   orig: 38, 37
   offset: 0, 0
   index: -1
 icon_sword
   rotate: false
-  xy: 54, 150
+  xy: 50, 112
   size: 7, 16
   orig: 7, 16
   offset: 0, 0
   index: -1
+key_a
+  rotate: false
+  xy: 176, 149
+  size: 13, 14
+  orig: 13, 14
+  offset: 0, 0
+  index: -1
+key_ctrl
+  rotate: false
+  xy: 198, 238
+  size: 25, 14
+  orig: 25, 14
+  offset: 0, 0
+  index: -1
+key_d
+  rotate: false
+  xy: 86, 118
+  size: 13, 14
+  orig: 13, 14
+  offset: 0, 0
+  index: -1
+key_esc
+  rotate: false
+  xy: 176, 171
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+key_s
+  rotate: false
+  xy: 65, 118
+  size: 13, 14
+  orig: 13, 14
+  offset: 0, 0
+  index: -1
+key_space
+  rotate: false
+  xy: 144, 238
+  size: 46, 14
+  orig: 46, 14
+  offset: 0, 0
+  index: -1
+key_w
+  rotate: false
+  xy: 210, 216
+  size: 13, 14
+  orig: 13, 14
+  offset: 0, 0
+  index: -1
 man_green
   rotate: false
-  xy: 66, 174
+  xy: 106, 140
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 merchant
   rotate: false
-  xy: 2, 34
+  xy: 4, 44
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 nine_path_bg
   rotate: false
-  xy: 238, 238
+  xy: 4, 20
   size: 16, 16
   split: 3, 3, 3, 3
   pad: 0, 0, 0, 0
@@ -139,7 +188,7 @@ nine_path_bg
   index: -1
 nine_path_bg_2
   rotate: false
-  xy: 22, 14
+  xy: 152, 162
   size: 16, 16
   split: 3, 3, 3, 3
   orig: 16, 16
@@ -147,7 +196,7 @@ nine_path_bg_2
   index: -1
 slider_progress
   rotate: false
-  xy: 238, 218
+  xy: 231, 236
   size: 16, 16
   split: 4, 4, 4, 4
   pad: 0, 0, 0, 0
@@ -156,7 +205,7 @@ slider_progress
   index: -1
 slider_progress_blue
   rotate: false
-  xy: 2, 14
+  xy: 210, 192
   size: 16, 16
   split: 4, 5, 4, 4
   pad: 0, 0, 0, 0
@@ -165,7 +214,7 @@ slider_progress_blue
   index: -1
 slider_progress_green
   rotate: false
-  xy: 238, 198
+  xy: 28, 20
   size: 16, 16
   split: 4, 4, 4, 4
   pad: 0, 0, 0, 0
@@ -174,7 +223,7 @@ slider_progress_green
   index: -1
 slider_progress_white
   rotate: false
-  xy: 128, 200
+  xy: 231, 216
   size: 16, 12
   split: 3, 3, 4, 4
   orig: 16, 12
@@ -182,7 +231,7 @@ slider_progress_white
   index: -1
 slider_progress_yellow
   rotate: false
-  xy: 108, 196
+  xy: 234, 192
   size: 16, 16
   split: 4, 6, 4, 4
   pad: 0, 0, 0, 0
@@ -191,7 +240,7 @@ slider_progress_yellow
   index: -1
 smith
   rotate: false
-  xy: 70, 216
+  xy: 72, 186
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
