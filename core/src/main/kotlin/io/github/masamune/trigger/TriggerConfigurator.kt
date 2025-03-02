@@ -12,6 +12,7 @@ import io.github.masamune.trigger.village.flowerGirlTrigger
 import io.github.masamune.trigger.village.merchantTrigger
 import io.github.masamune.trigger.village.smithTrigger
 import io.github.masamune.trigger.village.villageExitTrigger
+import io.github.masamune.trigger.village.villageIntroTrigger
 import ktx.app.gdxError
 import ktx.log.logger
 
@@ -39,6 +40,7 @@ class TriggerConfigurator {
         log.debug { "Creating new trigger $name" }
         return when (name) {
             "forest_entrance" -> world.forestEntranceTrigger(name)
+            "village_intro" -> world.villageIntroTrigger(name)
             else -> gdxError("There is no trigger configured for name $name")
         }
     }

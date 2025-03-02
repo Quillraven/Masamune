@@ -38,6 +38,7 @@ enum class I18NKey(val key: String) {
     DIALOG_OPTION_OK("dialog.option.ok"),
     DIALOG_SMITH_00_PAGE1("dialog.smith_00.page1"),
     DIALOG_VILLAGE_EXIT_PAGE1("dialog.villageExit.page1"),
+    DIALOG_VILLAGE_INTRO_PAGE1("dialog.villageIntro.page1"),
     ENEMY_BUTTERFLY_DESCRIPTION("enemy.butterfly.description"),
     ENEMY_BUTTERFLY_NAME("enemy.butterfly.name"),
     ENEMY_LARVA_DESCRIPTION("enemy.larva.description"),

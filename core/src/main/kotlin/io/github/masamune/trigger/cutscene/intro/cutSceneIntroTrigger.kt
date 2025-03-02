@@ -20,7 +20,7 @@ fun World.cutSceneIntroTrigger(
     actionRemove(scriptEntity)
     actionPlayMusic(MusicAsset.INTRO)
     actionLoadMap(TiledMapAsset.FOREST_MASAMUNE, withBoundaries = false, withTriggers = false, withPortals = false)
-    val playerSelector = selectSingleFamilyEntity { all(Player) }
+    val playerSelector = selectEntity { family { all(Player) }.single() }
     actionHideEntity(playerSelector)
     actionEntitySpeed(playerSelector, 0.2f)
     actionFollowPath(playerSelector, pathId = 36, removeAtEnd = true, waitForEnd = false)

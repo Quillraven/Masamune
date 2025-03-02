@@ -1,5 +1,7 @@
 package io.github.masamune.trigger
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
@@ -354,9 +356,7 @@ class TriggerActionLoadMap(
 
 class TriggerActionHideEntity(private val entitySelector: EntitySelector) : TriggerAction {
     override fun World.onUpdate(): Boolean {
-        with(entitySelector) {
-            selectedEntity().configure { it[Graphic].color.a = 0f }
-        }
+        entitySelector.entity[Graphic].color.a = 0f
         return true
     }
 }
@@ -368,21 +368,15 @@ class TriggerActionFollowPath(
     private val waitForEnd: Boolean,
     private val tiledService: TiledService,
 ) : TriggerAction {
-
-    private var entity = Entity.NONE
-
     override fun World.onStart() {
         val pathVertices = tiledService.loadPath(pathId)
-        with(entitySelector) {
-            entity = selectedEntity()
-            entity.configure {
-                it += FollowPath(pathVertices, removeAtEnd, 0)
-            }
+        entitySelector.entity.configure {
+            it += FollowPath(pathVertices, removeAtEnd, 0)
         }
     }
 
     override fun World.onUpdate(): Boolean {
-        return !waitForEnd || entity hasNo FollowPath
+        return !waitForEnd || entitySelector.entity hasNo FollowPath
     }
 }
 
@@ -391,8 +385,20 @@ class TriggerActionEntitySpeed(
     private val speed: Float,
 ) : TriggerAction {
     override fun World.onUpdate(): Boolean {
-        with(entitySelector) {
-            selectedEntity().configure { it[Move].speed = speed }
+        entitySelector.entity[Move].speed = speed
+        return true
+    }
+}
+
+class TriggerActionEnableInput(
+    private val enable: Boolean,
+    private val processor: InputProcessor,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        if (enable) {
+            Gdx.input.inputProcessor = processor
+        } else {
+            Gdx.input.inputProcessor = null
         }
         return true
     }

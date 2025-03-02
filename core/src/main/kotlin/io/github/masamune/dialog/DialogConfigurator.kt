@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.component.Name
+import io.github.masamune.ui.model.I18NKey
+import io.github.masamune.ui.model.get
 import ktx.app.gdxError
 import ktx.log.logger
 
@@ -31,6 +33,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             "man_green_10" -> manGreen10Dialog(name)
             "man_green_20" -> manGreen20Dialog(name)
             "man_green_30" -> manGreen30Dialog(name)
+            "village_intro" -> villageIntroDialog(name, world, triggeringEntity)
 
             else -> gdxError("There is no dialog configured for name $name")
         }
@@ -148,6 +151,14 @@ class DialogConfigurator(private val bundle: I18NBundle) {
 
     private fun manGreen30Dialog(name: String): Dialog = dialog(name) {
         page(bundle["dialog.man_green_30.page1"], "man_green", bundle["npc.man_green.title"]) {
+            option(dialogOptionOk, ActionExit)
+        }
+    }
+
+    private fun villageIntroDialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+        val playerName = entityName(world, triggeringEntity)
+
+        page(bundle[I18NKey.DIALOG_VILLAGE_INTRO_PAGE1], "hero", playerName) {
             option(dialogOptionOk, ActionExit)
         }
     }

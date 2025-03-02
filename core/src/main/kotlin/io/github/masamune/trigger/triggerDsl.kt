@@ -1,7 +1,7 @@
 package io.github.masamune.trigger
 
+import com.badlogic.gdx.Gdx
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.FamilyDefinition
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune
 import io.github.masamune.asset.MusicAsset
@@ -14,7 +14,6 @@ import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerActionDialog.Companion.NO_CLOSE_ACTION
 import io.github.masamune.trigger.actions.EntitySelector
-import io.github.masamune.trigger.actions.SingleFamilyEntitySelector
 import io.github.masamune.ui.model.I18NKey
 import ktx.app.gdxError
 
@@ -139,12 +138,17 @@ class TriggerCfg(
         actions += TriggerActionFollowPath(entitySelector, pathId, removeAtEnd, waitForEnd, tiledService)
     }
 
-    fun selectSingleFamilyEntity(familyCfg: FamilyDefinition.() -> Unit): EntitySelector {
-        return SingleFamilyEntitySelector(familyCfg)
+    fun selectEntity(selector: () -> Entity): EntitySelector {
+        return EntitySelector(selector)
     }
 
     fun actionEntitySpeed(entitySelector: EntitySelector, speed: Float) {
         actions += TriggerActionEntitySpeed(entitySelector, speed)
+    }
+
+    fun actionEnableInput(enable: Boolean) {
+        val processor = Gdx.input.inputProcessor
+        actions += TriggerActionEnableInput(enable, processor)
     }
 }
 
