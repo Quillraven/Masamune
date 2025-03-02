@@ -18,7 +18,7 @@ i:b:/shader/dissolve.frag:966:1
 i:b:/shader/default.vert:316:1
 i:b:/shader/outline.frag:847:1
 i:b:/shader/blur.frag:1189:1
-i:b:/shader/flash.frag:616:1
+i:b:/shader/flash.frag:784:1
 i:b:/shader/grayscale.frag:484:1
 i:d:/ui:0:1
 i:b:/ui/skin.png:8867:1
@@ -67,7 +67,7 @@ i:b:/maps/objects/scroll_inferno.png:2975:1
 i:b:/maps/village.tmx:3415:1
 i:b:/maps/objects.tsx:15351:1
 i:b:/maps/tileset.tsx:26263:1
-i:b:/maps/forest_masamune.tmx:2490:1
+i:b:/maps/forest_masamune.tmx:2658:1
 i:b:/maps/masamune-tiled.tiled-project:16283:1
 i:b:/maps/tileset.png:473544:1
 c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
