@@ -55,17 +55,20 @@ class TriggerSystem(
     }
 
     override fun onEvent(event: Event) {
-        if (event !is MapChangeEvent) {
-            return
-        }
-
-        val tiledTriggerName = event.tiledMap.property("trigger", "")
-        if (tiledTriggerName.isNotBlank()) {
-            triggerConfigurator[tiledTriggerName, world]?.let { mapTrigger ->
-                activeTriggers += mapTrigger
+        when {
+            event is MapChangeEvent && !event.ignoreTrigger -> {
+                val tiledTriggerName = event.tiledMap.property("trigger", "")
+                if (tiledTriggerName.isNotBlank()) {
+                    triggerConfigurator[tiledTriggerName, world]?.let { mapTrigger ->
+                        activeTriggers += mapTrigger
+                    }
+                }
             }
+
+            else -> Unit
         }
     }
+
 
     companion object {
         private val log = logger<TriggerSystem>()

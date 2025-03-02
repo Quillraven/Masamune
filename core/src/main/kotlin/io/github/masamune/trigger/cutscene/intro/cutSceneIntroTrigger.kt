@@ -5,6 +5,8 @@ import com.badlogic.gdx.utils.Align
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.asset.MusicAsset
+import io.github.masamune.asset.TiledMapAsset
+import io.github.masamune.component.Player
 import io.github.masamune.screen.FadeTransitionType
 import io.github.masamune.screen.GameScreen
 import io.github.masamune.trigger.TriggerScript
@@ -17,6 +19,11 @@ fun World.cutSceneIntroTrigger(
 ): TriggerScript = trigger(name, this, Entity.NONE) {
     actionRemove(scriptEntity)
     actionPlayMusic(MusicAsset.INTRO)
+    actionLoadMap(TiledMapAsset.FOREST_MASAMUNE, withBoundaries = false, withTriggers = false, withPortals = false)
+    val playerSelector = selectSingleFamilyEntity { all(Player) }
+    actionHideEntity(playerSelector)
+    actionEntitySpeed(playerSelector, 0.2f)
+    actionFollowPath(playerSelector, pathId = 36, removeAtEnd = true, waitForEnd = false)
     actionDelay(2f)
     actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT1, Align.center, duration = 11f)
     actionCutSceneText(I18NKey.CUT_SCENE_INTRO_TEXT2, Align.center, duration = 11f)

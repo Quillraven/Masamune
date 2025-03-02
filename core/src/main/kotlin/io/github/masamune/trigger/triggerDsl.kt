@@ -1,9 +1,11 @@
 package io.github.masamune.trigger
 
 import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.FamilyDefinition
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune
 import io.github.masamune.asset.MusicAsset
+import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
@@ -11,6 +13,8 @@ import io.github.masamune.quest.Quest
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerActionDialog.Companion.NO_CLOSE_ACTION
+import io.github.masamune.trigger.actions.EntitySelector
+import io.github.masamune.trigger.actions.SingleFamilyEntitySelector
 import io.github.masamune.ui.model.I18NKey
 import ktx.app.gdxError
 
@@ -105,6 +109,43 @@ class TriggerCfg(
         }
     }
 
+    fun actionLoadMap(
+        asset: TiledMapAsset,
+        withBoundaries: Boolean = true,
+        withTriggers: Boolean = true,
+        withPortals: Boolean = true,
+    ) {
+        val tiledService = world.inject<TiledService>()
+        actions += TriggerActionLoadMap(
+            asset,
+            tiledService,
+            withBoundaries,
+            withTriggers,
+            withPortals,
+        )
+    }
+
+    fun actionHideEntity(entitySelector: EntitySelector) {
+        actions += TriggerActionHideEntity(entitySelector)
+    }
+
+    fun actionFollowPath(
+        entitySelector: EntitySelector,
+        pathId: Int,
+        removeAtEnd: Boolean,
+        waitForEnd: Boolean,
+    ) {
+        val tiledService = world.inject<TiledService>()
+        actions += TriggerActionFollowPath(entitySelector, pathId, removeAtEnd, waitForEnd, tiledService)
+    }
+
+    fun selectSingleFamilyEntity(familyCfg: FamilyDefinition.() -> Unit): EntitySelector {
+        return SingleFamilyEntitySelector(familyCfg)
+    }
+
+    fun actionEntitySpeed(entitySelector: EntitySelector, speed: Float) {
+        actions += TriggerActionEntitySpeed(entitySelector, speed)
+    }
 }
 
 fun trigger(

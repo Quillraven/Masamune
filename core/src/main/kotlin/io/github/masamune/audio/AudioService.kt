@@ -106,7 +106,7 @@ class AudioService(
 
     override fun onEvent(event: Event) {
         when {
-            event is MapChangeEvent -> {
+            event is MapChangeEvent && !event.ignoreTrigger -> {
                 event.tiledMap.propertyOrNull<String>("music")?.let { musicAssetStr ->
                     val musicAsset = MusicAsset.valueOf(musicAssetStr)
                     play(musicAsset, true)

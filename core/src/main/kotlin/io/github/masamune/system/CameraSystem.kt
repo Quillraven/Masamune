@@ -28,6 +28,8 @@ private enum class CameraMode {
 
 class CameraSystem(
     gameViewport: Viewport = inject(),
+    private val camFollowSpeed: Float = 3f,
+    private val camStationaryRange: Float = 1.5f,
 ) : IteratingSystem(family { all(Transform, Tag.CAMERA_FOCUS) }), EventListener {
 
     private val camera = gameViewport.camera
@@ -82,7 +84,7 @@ class CameraSystem(
             CameraMode.STATIONARY -> {
                 // stationary = don't move camera unless entity is out of stationary range
                 val (newCamX, newCamY) = camera.position
-                if (!tmpVec2.inRange(newCamX, newCamY, CAM_STATIONARY_RANGE)) {
+                if (!tmpVec2.inRange(newCamX, newCamY, camStationaryRange)) {
                     cameraMode = CameraMode.FOLLOW
                     camFollowSpeedMultiplier = 1f
                     lastCamDistance = tmpVec2.distanceTo(newCamX, newCamY)
@@ -104,7 +106,7 @@ class CameraSystem(
                 }
                 lastCamDistance = camDistance
 
-                val progress = CAM_FOLLOW_SPEED * camFollowSpeedMultiplier * deltaTime
+                val progress = camFollowSpeed * camFollowSpeedMultiplier * deltaTime
                 newCamX = MathUtils.lerp(newCamX, tmpVec2.x, progress)
                 newCamY = MathUtils.lerp(newCamY, tmpVec2.y, progress)
                 camera.position.set(newCamX, newCamY, camera.position.z)
@@ -168,10 +170,5 @@ class CameraSystem(
 
             else -> Unit
         }
-    }
-
-    companion object {
-        private const val CAM_FOLLOW_SPEED = 3f
-        private const val CAM_STATIONARY_RANGE = 1.5f
     }
 }

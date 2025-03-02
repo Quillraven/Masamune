@@ -50,7 +50,7 @@ data class ShopBeginEvent(val world: World, val player: Entity, val shop: Entity
 data object ShopEndEvent : Event
 
 // MAP + TRANSITION EVENTS
-data class MapChangeEvent(val tiledMap: TiledMap) : Event
+data class MapChangeEvent(val tiledMap: TiledMap, val ignoreTrigger: Boolean) : Event
 data class MapTransitionBeginEvent(
     val fromTiledMap: TiledMap,
     val toTiledMap: TiledMap,

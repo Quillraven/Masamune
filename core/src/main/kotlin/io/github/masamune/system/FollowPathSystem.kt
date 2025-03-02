@@ -28,6 +28,11 @@ class FollowPathSystem : IteratingSystem(family { all(FollowPath, Transform, Mov
         var targetVertex = pathCmp.path[pathCmp.currentVertexIdx]
         if (targetVertex.distanceTo(tmpCenter) < 0.05f) {
             pathCmp.currentVertexIdx = (pathCmp.currentVertexIdx + 1) % pathCmp.path.size
+            if (pathCmp.removeAtEnd && pathCmp.currentVertexIdx == 0) {
+                entity.configure { it -= FollowPath }
+                entity[Move].direction.setZero()
+                return
+            }
             log.debug { "Reached target vertex $targetVertex. Going to next vertex ${pathCmp.path[pathCmp.currentVertexIdx]}." }
             targetVertex = pathCmp.path[pathCmp.currentVertexIdx]
         }

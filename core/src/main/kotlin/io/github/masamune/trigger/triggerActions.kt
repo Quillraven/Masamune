@@ -9,11 +9,14 @@ import io.github.masamune.Masamune
 import io.github.masamune.addItem
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.SoundAsset
+import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Animation
 import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Facing
 import io.github.masamune.component.FacingDirection
+import io.github.masamune.component.FollowPath
+import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Move
 import io.github.masamune.component.MoveTo
@@ -35,6 +38,7 @@ import io.github.masamune.spawnSfx
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.trigger.actions.EntitySelector
 import io.github.masamune.ui.model.I18NKey
 import ktx.log.logger
 import ktx.math.component1
@@ -331,4 +335,65 @@ class TriggerActionFadeOutMusic(
     }
 
     override fun World.onUpdate(): Boolean = true
+}
+
+class TriggerActionLoadMap(
+    private val asset: TiledMapAsset,
+    private val tiledService: TiledService,
+    private val withBoundaries: Boolean,
+    private val withTriggers: Boolean,
+    private val withPortals: Boolean,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        val map = tiledService.loadMap(asset)
+        tiledService.setMap(map, this, withBoundaries, withTriggers, withPortals)
+
+        return true
+    }
+}
+
+class TriggerActionHideEntity(private val entitySelector: EntitySelector) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        with(entitySelector) {
+            selectedEntity().configure { it[Graphic].color.a = 0f }
+        }
+        return true
+    }
+}
+
+class TriggerActionFollowPath(
+    private val entitySelector: EntitySelector,
+    private val pathId: Int,
+    private val removeAtEnd: Boolean,
+    private val waitForEnd: Boolean,
+    private val tiledService: TiledService,
+) : TriggerAction {
+
+    private var entity = Entity.NONE
+
+    override fun World.onStart() {
+        val pathVertices = tiledService.loadPath(pathId)
+        with(entitySelector) {
+            entity = selectedEntity()
+            entity.configure {
+                it += FollowPath(pathVertices, removeAtEnd, 0)
+            }
+        }
+    }
+
+    override fun World.onUpdate(): Boolean {
+        return !waitForEnd || entity hasNo FollowPath
+    }
+}
+
+class TriggerActionEntitySpeed(
+    private val entitySelector: EntitySelector,
+    private val speed: Float,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        with(entitySelector) {
+            selectedEntity().configure { it[Move].speed = speed }
+        }
+        return true
+    }
 }

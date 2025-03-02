@@ -7,12 +7,14 @@ import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.objects.PolygonMapObject
+import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.github.quillraven.fleks.Entity
@@ -70,7 +72,7 @@ import ktx.tiled.y
 import kotlin.system.measureTimeMillis
 
 enum class ObjectLayer {
-    OBJECT, PORTAL, TRIGGER;
+    OBJECT, PORTAL, TRIGGER, PATH;
 
     val tiledName: String = this.name.lowercase()
 }
@@ -98,7 +100,13 @@ class TiledService(
         }
     }
 
-    fun setMap(tiledMap: TiledMap, world: World, withBoundaries: Boolean = true) {
+    fun setMap(
+        tiledMap: TiledMap,
+        world: World,
+        withBoundaries: Boolean = true,
+        withTriggers: Boolean = true,
+        withPortals: Boolean = true,
+    ) {
         currentMap?.let { unloadMap(it, world) }
         currentMap = tiledMap
 
@@ -107,9 +115,13 @@ class TiledService(
         }
         loadGroundCollision(tiledMap, world)
         loadObjects(tiledMap, world)
-        tiledMap[ObjectLayer.TRIGGER]?.objects?.forEach { loadTrigger(it, world) }
-        tiledMap[ObjectLayer.PORTAL]?.objects?.forEach { loadPortal(it, world) }
-        eventService.fire(MapChangeEvent(tiledMap))
+        if (withTriggers) {
+            tiledMap[ObjectLayer.TRIGGER]?.objects?.forEach { loadTrigger(it, world) }
+        }
+        if (withPortals) {
+            tiledMap[ObjectLayer.PORTAL]?.objects?.forEach { loadPortal(it, world) }
+        }
+        eventService.fire(MapChangeEvent(tiledMap, ignoreTrigger = !withTriggers))
     }
 
     fun loadObjects(tiledMap: TiledMap, world: World): List<Entity> {
@@ -436,20 +448,41 @@ class TiledService(
         entity += Trigger(tile.triggerName)
     }
 
-    private fun EntityCreateContext.configurePathAndMove(entity: Entity, tiledObj: TiledMapTileMapObject) {
-        val pathObj = tiledObj.propertyOrNull<MapObject>("path") ?: return
-        if (pathObj !is PolygonMapObject) {
-            gdxError("Path object must be a PolygonMapObject")
-        }
-
-        entity += FollowPath(
-            pathObj.polygon
+    private fun MapObject.toPathVertices(): List<Vector2> {
+        return when (this) {
+            is PolygonMapObject -> this.polygon
                 .transformedVertices
                 .asList()
                 .windowed(size = 2, step = 2) {
                     vec2(it[0] * UNIT_SCALE, it[1] * UNIT_SCALE)
                 }
-        )
+
+            is PolylineMapObject -> this.polyline
+                .transformedVertices
+                .asList()
+                .windowed(size = 2, step = 2) {
+                    vec2(it[0] * UNIT_SCALE, it[1] * UNIT_SCALE)
+                }
+
+            else -> gdxError("Path object must be a polygon or polyline map object")
+        }
+    }
+
+    fun loadPath(pathId: Int): List<Vector2> {
+        currentMap
+            ?.let { tiledMap ->
+                return tiledMap[ObjectLayer.PATH]
+                    ?.objects
+                    ?.single { it.id == pathId }
+                    ?.toPathVertices()
+                    ?: gdxError("There is no path of id $pathId in layer ${ObjectLayer.PATH}")
+            }
+            ?: gdxError("There is no active map loaded")
+    }
+
+    private fun EntityCreateContext.configurePathAndMove(entity: Entity, tiledObj: TiledMapTileMapObject) {
+        val pathObj = tiledObj.propertyOrNull<MapObject>("path") ?: return
+        entity += FollowPath(pathObj.toPathVertices())
         entity += Move(speed = tiledObj.property("pathSpeed", 3f))
     }
 
