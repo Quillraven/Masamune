@@ -24,8 +24,8 @@ i:d:/ui:0:1
 i:b:/ui/skin.png:8867:1
 i:b:/ui/Fipps-Regular.otf:34220:1
 i:b:/ui/logo.png:347638:1
-i:b:/ui/messages_de.properties:9227:1
-i:b:/ui/messages.properties:8453:1
+i:b:/ui/messages_de.properties:9379:1
+i:b:/ui/messages.properties:8601:1
 i:b:/ui/skin.atlas:3597:1
 i:b:/ui/CherryCreamSoda-Regular.ttf:49404:1
 i:b:/ui/skin.json:7660:1
@@ -64,7 +64,7 @@ i:b:/maps/objects/terealis_plant.png:463:1
 i:b:/maps/objects/mushroom.png:457:1
 i:b:/maps/objects/merchant.png:494:1
 i:b:/maps/objects/scroll_inferno.png:2975:1
-i:b:/maps/village.tmx:3415:1
+i:b:/maps/village.tmx:3622:1
 i:b:/maps/objects.tsx:15351:1
 i:b:/maps/tileset.tsx:26263:1
 i:b:/maps/forest_masamune.tmx:2658:1

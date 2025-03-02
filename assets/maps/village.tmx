@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="19">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-up" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="22">
  <editorsettings>
   <export target="village..tmx" format="tmx"/>
  </editorsettings>
  <properties>
   <property name="music" value="VILLAGE"/>
+  <property name="trigger" value="village_intro"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="4097" source="objects.tsx"/>
@@ -28,13 +29,10 @@
    eJxjYBgFQxHM4mNgmA3Ec4B4Lh/l5t0CmnEbiO8A8V0qmDcKRsEooBwI81PXvGAqmwcAebcG0Q==
   </data>
  </layer>
- <objectgroup id="6" name="object">
-  <object id="1" name="Player" gid="4097" x="176" y="160" width="16" height="16"/>
-  <object id="3" name="Elder" gid="4099" x="176" y="112" width="16" height="16"/>
-  <object id="4" name="Merchant" gid="4101" x="288" y="240" width="16" height="16"/>
-  <object id="5" name="Smith" gid="4102" x="16" y="288" width="16" height="16"/>
-  <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
-  <object id="13" gid="4107" x="122" y="132" width="48" height="48"/>
+ <objectgroup id="10" name="path">
+  <object id="21" name="intro_sequence_path" x="16" y="45">
+   <polyline points="80,3 65,59"/>
+  </object>
  </objectgroup>
  <objectgroup color="#5555ff" id="7" name="trigger">
   <object id="7" name="villageExit" x="48" y="-13" width="80" height="44">
@@ -50,6 +48,14 @@
     <property name="targetPortalId" type="int" value="11"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="6" name="object">
+  <object id="1" name="Player" gid="4097" x="88" y="48" width="16" height="16"/>
+  <object id="3" name="Elder" gid="4099" x="176" y="112" width="16" height="16"/>
+  <object id="4" name="Merchant" gid="4101" x="288" y="240" width="16" height="16"/>
+  <object id="5" name="Smith" gid="4102" x="16" y="288" width="16" height="16"/>
+  <object id="6" name="Flower Girl" gid="4100" x="0" y="176" width="16" height="16"/>
+  <object id="13" gid="4107" x="122" y="132" width="48" height="48"/>
  </objectgroup>
  <layer id="5" name="foreground" width="20" height="20">
   <data encoding="base64" compression="zlib">
