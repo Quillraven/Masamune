@@ -46,8 +46,7 @@ class MainMenuScreen(
     private var logoAlpha = 0f
     private val logoInterpolation = Interpolation.swingOut
     private var logoTime = 0f
-    private val logoColor = Color(1f, 1f, 1f, 1f)
-    private val logoFlashColor = Color(0.1f, 0.1f, 0.1f, 0.25f)
+    private val logoFlashColor = Color(1f, 1f, 1f, 0f)
 
     override fun show() {
         // set controller
@@ -97,18 +96,17 @@ class MainMenuScreen(
         // render logo
         logoDelay = (logoDelay - delta).coerceAtLeast(0f)
         if (logoDelay <= 0f) {
-            logoTime = (logoTime + delta * 0.33f).coerceAtMost(1f)
-            logoAlpha = logoInterpolation.apply(0.25f, 1f, logoTime)
-            logoColor.a = logoAlpha
+            logoTime = (logoTime + delta * 0.25f).coerceAtMost(1f)
+            logoAlpha = logoInterpolation.apply(0.2f, 1f, logoTime)
+            logoFlashColor.a = logoAlpha
             shaderService.useFlashShader(batch, logoFlashColor, 1f - logoTime) {
                 batch.use(uiViewport.camera) {
-                    batch.color = logoColor
                     it.draw(logo, 200f, 130f, 400f, 400f)
                 }
-                batch.color = Color.WHITE
             }
         }
 
+        batch.color = Color.WHITE
         stage.act(delta)
         stage.draw()
     }
