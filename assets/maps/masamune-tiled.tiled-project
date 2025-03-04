@@ -377,7 +377,10 @@
                 "LARVA",
                 "BUTTERFLY",
                 "MUSHROOM",
-                "MAN_GREEN"
+                "MAN_GREEN",
+                "DEMON_FIRE",
+                "DEMON_SPIRIT",
+                "CYCLOPS"
             ],
             "valuesAsFlags": false
         },
