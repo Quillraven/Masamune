@@ -158,11 +158,11 @@ class GameScreen(
         eventService.fire(GameStartEvent)
     }
 
-    fun startNewGame() {
+    fun startNewGame(initialMap:TiledMapAsset = TiledMapAsset.VILLAGE) {
         // call this AFTER event listeners are registered
         world.removeAll(true)
         tiledService.unloadActiveMap(world)
-        tiledService.loadMap(TiledMapAsset.VILLAGE).also {
+        tiledService.loadMap(initialMap).also {
             tiledService.setMap(it, world)
         }
     }

@@ -30,7 +30,7 @@ class TriggerConfigurator {
             "terealis_flower" -> world.terealisFlowerTrigger(name, scriptEntity, triggeringEntity)
             "man_green" -> world.manGreenTrigger(name, scriptEntity, triggeringEntity)
             "cut_scene_intro" -> world.cutSceneIntroTrigger(name, scriptEntity)
-            "masamune_forest" -> world.masamuneForestTrigger(name, scriptEntity, triggeringEntity)
+            "masamune_forest" -> world.masamuneForestTrigger(name, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }

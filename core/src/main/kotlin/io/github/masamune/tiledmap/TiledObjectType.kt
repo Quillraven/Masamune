@@ -15,4 +15,7 @@ enum class TiledObjectType(val isEnemy: Boolean) {
     BUTTERFLY(true),
     MUSHROOM(true),
     MAN_GREEN(false),
+    DEMON_FIRE(false),
+    DEMON_SPIRIT(false),
+    CYCLOPS(true),
 }

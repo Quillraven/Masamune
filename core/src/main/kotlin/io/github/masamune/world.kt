@@ -1,7 +1,9 @@
 package io.github.masamune
 
+import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.CachingAtlas
 import io.github.masamune.asset.SoundAsset
@@ -177,6 +179,22 @@ fun World.spawnSfx(target: Entity, sfxAtlasKey: String, duration: Float, scale: 
     entity {
         it += Transform(toPos.cpy().apply { z = 3f }, toSize.cpy(), toScale * scale)
         val animation = Animation.ofAtlas(sfxAtlas, sfxAtlasKey, AnimationType.IDLE)
+        animation.speed = 1f / (duration / animation.gdxAnimation.animationDuration)
+        animation.playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
+        it += animation
+        it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
+        it += Remove(duration)
+    }
+}
+
+fun World.spawnSfx(sfxAtlasKey: String, location: Vector2, duration: Float, scale: Float = 1f) {
+    val sfxAtlas = inject<CachingAtlas>(AtlasAsset.SFX.name)
+    val animation = Animation.ofAtlas(sfxAtlas, sfxAtlasKey, AnimationType.IDLE)
+    val keyFrame = animation.gdxAnimation.getKeyFrame(0f, false)
+    val size = vec2(keyFrame.regionWidth.toFloat(), keyFrame.regionHeight.toFloat()).scl(UNIT_SCALE)
+
+    entity {
+        it += Transform(vec3(location, z = 3f), size, scale)
         animation.speed = 1f / (duration / animation.gdxAnimation.animationDuration)
         animation.playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
         it += animation

@@ -34,6 +34,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             "man_green_20" -> manGreen20Dialog(name)
             "man_green_30" -> manGreen30Dialog(name)
             "village_intro" -> villageIntroDialog(name, world, triggeringEntity)
+            "masamune_forest_00" -> masamuneForest00Dialog(name, world, triggeringEntity)
 
             else -> gdxError("There is no dialog configured for name $name")
         }
@@ -159,6 +160,14 @@ class DialogConfigurator(private val bundle: I18NBundle) {
         val playerName = entityName(world, triggeringEntity)
 
         page(bundle[I18NKey.DIALOG_VILLAGE_INTRO_PAGE1], "hero", playerName) {
+            option(dialogOptionOk, ActionExit)
+        }
+    }
+
+    private fun masamuneForest00Dialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+        val playerName = entityName(world, triggeringEntity)
+
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_00_PAGE1], "hero", playerName) {
             option(dialogOptionOk, ActionExit)
         }
     }

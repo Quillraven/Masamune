@@ -1,16 +1,19 @@
 package io.github.masamune.trigger
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune
 import io.github.masamune.asset.MusicAsset
+import io.github.masamune.asset.SoundAsset
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.quest.Quest
 import io.github.masamune.tiledmap.ItemType
+import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerActionDialog.Companion.NO_CLOSE_ACTION
 import io.github.masamune.trigger.actions.EntitySelector
@@ -79,6 +82,11 @@ class TriggerCfg(
     fun actionPlayMusic(music: MusicAsset, loop: Boolean = true, keepPrevious: Boolean = false) {
         val audioService = world.inject<AudioService>()
         actions += TriggerActionPlayMusic(audioService, music, loop, keepPrevious)
+    }
+
+    fun actionPlaySound(sound: SoundAsset, pitch: Float = 1f) {
+        val audioService = world.inject<AudioService>()
+        actions += TriggerActionPlaySound(audioService, sound, pitch)
     }
 
     fun actionDelay(seconds: Float) {
@@ -150,6 +158,16 @@ class TriggerCfg(
         val processor = Gdx.input.inputProcessor
         actions += TriggerActionEnableInput(enable, processor)
     }
+
+    fun actionSpawnEntity(type: TiledObjectType, location: Vector2) {
+        val tiledService = world.inject<TiledService>()
+        actions += TriggerActionSpawnEntity(type, location, tiledService)
+    }
+
+    fun actionSpawnSfx(sfxAtlasKey: String, location: Vector2, duration: Float, scaling: Float) {
+        actions += TriggerActionSpawnSfx(sfxAtlasKey, location, duration, scaling)
+    }
+
 }
 
 fun trigger(

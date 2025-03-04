@@ -72,7 +72,7 @@ import ktx.tiled.y
 import kotlin.system.measureTimeMillis
 
 enum class ObjectLayer {
-    OBJECT, PORTAL, TRIGGER, PATH;
+    OBJECT, PORTAL, TRIGGER, PATH, CUT_SCENE_OBJECTS;
 
     val tiledName: String = this.name.lowercase()
 }
@@ -302,11 +302,26 @@ class TiledService(
     ): Entity = world.entity {
         log.debug { "Loading prop ${tiledObj.id} as entity $it" }
 
-        configureTiled(it, tiledObj, objType)
+        configureTiled(it, tiledObj.id, objType)
         it += Facing(FacingDirection.DOWN)
         val graphicCmp = configureGraphic(it, tile, AnimationType.UNDEFINED.name)
         it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
         configurePhysic(it, tile, world, x, y, BodyType.StaticBody.name)
+    }
+
+    fun loadNpc(location: Vector2, type: TiledObjectType, world: World): Entity {
+        val objectsTileSet = currentMap.objectsTileSet()
+        objectsTileSet.iterator().forEach { tile ->
+            if (tile.objType != type.name) {
+                return@forEach
+            }
+
+            val dummyObj = TiledMapTileMapObject(tile, false, false)
+            dummyObj.properties["id"] = tile.id
+            return loadNpc(location.x, location.y, type, tile, dummyObj, world)
+        }
+
+        gdxError("There is no enemy with type $type")
     }
 
     private fun loadNpc(
@@ -319,7 +334,7 @@ class TiledService(
     ): Entity = world.entity {
         log.debug { "Loading NPC ${tiledObj.id} as entity $it" }
 
-        configureTiled(it, tiledObj, objType)
+        configureTiled(it, tiledObj.id, objType)
         it += Facing(FacingDirection.DOWN)
         val graphicCmp = configureGraphic(it, tile, AnimationType.WALK.name)
         it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
@@ -338,7 +353,7 @@ class TiledService(
     ): Entity = world.entity {
         log.debug { "Loading game enemy ${tiledObj.id} as entity $it" }
 
-        configureTiled(it, tiledObj, objType)
+        configureTiled(it, tiledObj.id, objType)
         it += Facing(FacingDirection.DOWN)
         val graphicCmp = configureGraphic(it, tile, AnimationType.WALK.name)
         it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
@@ -367,10 +382,10 @@ class TiledService(
 
     private fun EntityCreateContext.configureTiled(
         entity: Entity,
-        tiledObj: TiledMapTileMapObject,
+        tiledObjId: Int,
         objectType: TiledObjectType
     ) {
-        entity += Tiled(tiledObj.id, objectType)
+        entity += Tiled(tiledObjId, objectType)
     }
 
     private fun EntityCreateContext.configureGraphic(
@@ -716,6 +731,18 @@ class TiledService(
 
         log.error { "There are no stats defined for $type" }
         return Triple(CharacterStats(), 0, 0)
+    }
+
+    fun loadPoint(pointName: String): Vector2 {
+        currentMap
+            ?.let { tiledMap ->
+                val point = tiledMap[ObjectLayer.CUT_SCENE_OBJECTS]
+                    ?.objects
+                    ?.single { it.name == pointName }
+                    ?: gdxError("There is no object with name $pointName in ${ObjectLayer.CUT_SCENE_OBJECTS} layer")
+                return vec2(point.x * UNIT_SCALE, point.y * UNIT_SCALE)
+            }
+            ?: gdxError("There is no active map loaded")
     }
 
     companion object {

@@ -69,6 +69,7 @@ enum class MusicAsset(format: String) {
     VILLAGE("mp3"),
     ROAD("mp3"),
     COMBAT1("mp3"),
+    COMBAT2("mp3"),
     COMBAT_VICTORY("mp3"),
     COMBAT_DEFEAT("mp3"),
     FOREST("mp3"),
@@ -91,6 +92,7 @@ enum class SoundAsset {
     HEAL1,
     ATTACK_MISS,
     QUEST_ITEM,
+    DEMON_TELEPORT,
     ;
 
     val path = "sound/${name.lowercase()}.wav"

@@ -31,6 +31,7 @@ enum class I18NKey(val key: String) {
     DIALOG_MAN_GREEN_10_PAGE1("dialog.man_green_10.page1"),
     DIALOG_MAN_GREEN_20_PAGE1("dialog.man_green_20.page1"),
     DIALOG_MAN_GREEN_30_PAGE1("dialog.man_green_30.page1"),
+    DIALOG_MASAMUNE_FOREST_00_PAGE1("dialog.masamune_forest_00.page1"),
     DIALOG_MERCHANT_00_PAGE1("dialog.merchant_00.page1"),
     DIALOG_OPTION_BUY("dialog.option.buy"),
     DIALOG_OPTION_EXIT("dialog.option.exit"),

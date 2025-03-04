@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="48" tileheight="48" tilecount="21" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="24" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -355,5 +355,58 @@
     </properties>
    </object>
   </objectgroup>
+ </tile>
+ <tile id="22" type="NpcObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="objType" propertytype="MapObjectType" value="DEMON_FIRE"/>
+  </properties>
+  <image source="objects/demon_fire.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="1" y="12" width="14" height="4">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+     <property name="isSensor" type="bool" value="false"/>
+    </properties>
+    <ellipse/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="23" type="NpcObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="objType" propertytype="MapObjectType" value="DEMON_SPIRIT"/>
+  </properties>
+  <image source="objects/demon_spirit.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="1" y="12" width="14" height="4">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+    </properties>
+    <ellipse/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="24" type="EnemyObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
+   <property name="level" type="int" value="5"/>
+   <property name="objType" propertytype="MapObjectType" value="CYCLOPS"/>
+   <property name="stats" type="class" propertytype="CharStats">
+    <properties>
+     <property name="agility" type="float" value="5"/>
+     <property name="armor" type="float" value="10"/>
+     <property name="baseLife" type="float" value="100"/>
+     <property name="baseMana" type="float" value="30"/>
+     <property name="damage" type="float" value="13"/>
+     <property name="physicalEvade" type="float" value="0.05"/>
+     <property name="resistance" type="float" value="10"/>
+    </properties>
+   </property>
+   <property name="talons" type="int" value="400"/>
+   <property name="xp" type="int" value="150"/>
+  </properties>
+  <image source="objects/cyclops.png" width="50" height="50"/>
  </tile>
 </tileset>

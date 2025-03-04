@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.MutableEntityBag
@@ -39,6 +40,7 @@ import io.github.masamune.scheduledTask
 import io.github.masamune.spawnSfx
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemType
+import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.actions.EntitySelector
 import io.github.masamune.ui.model.I18NKey
@@ -277,6 +279,17 @@ class TriggerActionPlayMusic(
     }
 }
 
+class TriggerActionPlaySound(
+    private val audioService: AudioService,
+    private val sound: SoundAsset,
+    private val pitch: Float,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        audioService.play(sound, pitch)
+        return true
+    }
+}
+
 class TriggerActionDelay(private var seconds: Float) : TriggerAction {
     override fun World.onUpdate(): Boolean {
         seconds -= deltaTime
@@ -385,7 +398,14 @@ class TriggerActionEntitySpeed(
     private val speed: Float,
 ) : TriggerAction {
     override fun World.onUpdate(): Boolean {
-        entitySelector.entity[Move].speed = speed
+        val entity = entitySelector.entity
+        if (entity hasNo Move) {
+            entity.configure {
+                it += Move(speed)
+            }
+        } else {
+            entitySelector.entity[Move].speed = speed
+        }
         return true
     }
 }
@@ -400,6 +420,29 @@ class TriggerActionEnableInput(
         } else {
             Gdx.input.inputProcessor = null
         }
+        return true
+    }
+}
+
+class TriggerActionSpawnEntity(
+    private val type: TiledObjectType,
+    private val location: Vector2,
+    private val tiledService: TiledService,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        tiledService.loadNpc(location, type, this)
+        return true
+    }
+}
+
+class TriggerActionSpawnSfx(
+    private val sfxAtlasKey: String,
+    private val location: Vector2,
+    private val duration: Float,
+    private val scale: Float,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        spawnSfx(sfxAtlasKey, location, duration, scale)
         return true
     }
 }
