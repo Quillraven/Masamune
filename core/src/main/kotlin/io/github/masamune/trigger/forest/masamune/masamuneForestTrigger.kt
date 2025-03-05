@@ -2,8 +2,12 @@ package io.github.masamune.trigger.forest.masamune
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import io.github.masamune.Masamune
+import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.component.Tiled
+import io.github.masamune.screen.FadeTransitionType
+import io.github.masamune.screen.MainMenuScreen
 import io.github.masamune.tiledmap.TiledObjectType
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerScript
@@ -74,6 +78,21 @@ fun World.masamuneForestTrigger(
     actionDelay(0.3f)
     actionRemove(demonSpirit)
 
-    // TODO start boss combat
+    // start boss combat
+    actionDelay(1.2f)
+    val cyclops = selectEntity { tiledFamily.single { it[Tiled].objType == TiledObjectType.CYCLOPS_NPC } }
     actionEnableInput(true)
+    val combatEnemies = mapOf(TiledObjectType.CYCLOPS to 1)
+    actionStartCombat(triggeringEntity, cyclops, MusicAsset.COMBAT2, combatEnemies) { victory ->
+        if (!victory) {
+            actionDialog("combat_defeat", withSound = true) {
+                this@masamuneForestTrigger.inject<Masamune>().transitionScreen<MainMenuScreen>(
+                    FadeTransitionType(1f, 1f, 0.1f),
+                    FadeTransitionType(1f, 1f, 0.1f, delayInSeconds = 0.1f),
+                )
+            }
+        } else {
+            actionDialog("masamune_forest_40", withSound = true)
+        }
+    }
 }

@@ -30,13 +30,20 @@ import io.github.masamune.component.Transform
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.CutSceneTextEvent
 import io.github.masamune.event.DialogBeginEvent
+import io.github.masamune.event.Event
+import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
+import io.github.masamune.event.PlayerInteractCombatBeginEvent
+import io.github.masamune.event.PlayerInteractCombatEndEvent
 import io.github.masamune.event.PlayerQuestItemBegin
 import io.github.masamune.event.PlayerQuestItemEnd
 import io.github.masamune.event.ShopBeginEvent
 import io.github.masamune.quest.Quest
 import io.github.masamune.removeItem
 import io.github.masamune.scheduledTask
+import io.github.masamune.screen.BlurTransitionType
+import io.github.masamune.screen.CombatScreen
+import io.github.masamune.screen.DefaultTransitionType
 import io.github.masamune.spawnSfx
 import io.github.masamune.tiledmap.AnimationType
 import io.github.masamune.tiledmap.ItemType
@@ -458,5 +465,58 @@ class TriggerActionSpawnSfx(
     override fun World.onUpdate(): Boolean {
         spawnSfx(sfxAtlasKey, location, duration, scale)
         return true
+    }
+}
+
+class TriggerActionStartCombat(
+    private val player: Entity,
+    private val gameScreenEnemy: EntitySelector,
+    private val music: MusicAsset,
+    private val enemies: Map<TiledObjectType, Int>,
+    private val onCombatEnd: (Boolean) -> Unit,
+    private val masamune: Masamune,
+    private val eventService: EventService,
+) : TriggerAction, EventListener {
+
+    private var combatFinished = false
+
+    override fun World.onStart() {
+        eventService.fire(PlayerInteractCombatBeginEvent)
+        eventService += this@TriggerActionStartCombat
+
+        masamune.getScreen<CombatScreen>().playCombatMusic(music)
+        masamune.transitionScreen<CombatScreen>(
+            fromType = BlurTransitionType(
+                startBlur = 0f,
+                endBlur = 6f,
+                startAlpha = 1f,
+                endAlpha = 0.4f,
+                time = 2f
+            ),
+            toType = DefaultTransitionType,
+        ) { combatScreen ->
+            combatScreen.spawnEnemies(gameScreenEnemy.entity, enemies)
+            // call spawnPlayer method AFTER spawnEnemies because it fires an event
+            // that starts the combat, and we need the enemy entities at that point already.
+            combatScreen.spawnPlayer(this, player)
+        }
+    }
+
+    override fun World.onUpdate(): Boolean {
+        if (combatFinished) {
+            eventService -= this@TriggerActionStartCombat
+            return true
+        }
+
+        return false
+    }
+
+    override fun onEvent(event: Event) {
+        if (event !is PlayerInteractCombatEndEvent) {
+            return
+        }
+
+        onCombatEnd(event.victory)
+        combatFinished = true
     }
 }

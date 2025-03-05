@@ -8,6 +8,7 @@ import io.github.masamune.dialog.forest.masamune.masamuneForest00Dialog
 import io.github.masamune.dialog.forest.masamune.masamuneForest10Dialog
 import io.github.masamune.dialog.forest.masamune.masamuneForest20Dialog
 import io.github.masamune.dialog.forest.masamune.masamuneForest30Dialog
+import io.github.masamune.dialog.forest.masamune.masamuneForest40Dialog
 import io.github.masamune.dialog.forest.path.manGreen00Dialog
 import io.github.masamune.dialog.forest.path.manGreen10Dialog
 import io.github.masamune.dialog.forest.path.manGreen20Dialog
@@ -22,15 +23,17 @@ import io.github.masamune.dialog.village.merchantDialog
 import io.github.masamune.dialog.village.smithDialog
 import io.github.masamune.dialog.village.villageExitDialog
 import io.github.masamune.dialog.village.villageIntroDialog
+import io.github.masamune.ui.model.I18NKey
+import io.github.masamune.ui.model.get
 import ktx.app.gdxError
 import ktx.log.logger
 
 class DialogConfigurator(val bundle: I18NBundle) {
 
-    val dialogOptionNext = bundle["dialog.option.next"]
-    val dialogOptionOk = bundle["dialog.option.ok"]
-    val dialogOptionExit = bundle["dialog.option.exit"]
-    val dialogOptionBuy = bundle["dialog.option.buy"]
+    val dialogOptionNext: String = bundle[I18NKey.DIALOG_OPTION_NEXT]
+    val dialogOptionOk: String = bundle[I18NKey.DIALOG_OPTION_OK]
+    val dialogOptionExit: String = bundle[I18NKey.DIALOG_OPTION_EXIT]
+    val dialogOptionBuy: String = bundle[I18NKey.DIALOG_OPTION_BUY]
 
     operator fun get(name: String, world: World, triggeringEntity: Entity): Dialog {
         log.debug { "Creating new dialog $name" }
@@ -54,8 +57,17 @@ class DialogConfigurator(val bundle: I18NBundle) {
             "masamune_forest_10" -> masamuneForest10Dialog(name, world, triggeringEntity)
             "masamune_forest_20" -> masamuneForest20Dialog(name, world, triggeringEntity)
             "masamune_forest_30" -> masamuneForest30Dialog(name)
+            "masamune_forest_40" -> masamuneForest40Dialog(name, world, triggeringEntity)
+            "combat_defeat" -> combatDefeatDialog(name, world, triggeringEntity)
 
             else -> gdxError("There is no dialog configured for name $name")
+        }
+    }
+
+    private fun combatDefeatDialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+        val playerName = entityName(world, triggeringEntity)
+        page(bundle[I18NKey.DIALOG_COMBAT_DEFEAT, playerName]) {
+            option(dialogOptionOk, ActionExit)
         }
     }
 

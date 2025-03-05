@@ -176,6 +176,18 @@ class TriggerCfg(
         actions += TriggerActionSpawnSfx(sfxAtlasKey, location, duration, scaling)
     }
 
+    fun actionStartCombat(
+        player: Entity,
+        enemy: EntitySelector,
+        music: MusicAsset,
+        enemies: Map<TiledObjectType, Int>,
+        onCombatEnd: (Boolean) -> Unit
+    ) {
+        val masamune = world.inject<Masamune>()
+        val eventService = world.inject<EventService>()
+        actions += TriggerActionStartCombat(player, enemy, music, enemies, onCombatEnd, masamune, eventService)
+    }
+
 }
 
 fun trigger(

@@ -1,6 +1,8 @@
 package io.github.masamune.trigger
 
 import com.github.quillraven.fleks.World
+import io.github.masamune.event.EventListener
+import io.github.masamune.event.EventService
 
 class TriggerScript(
     val name: String,
@@ -33,6 +35,13 @@ class TriggerScript(
         }
 
         return false
+    }
+
+    fun registerEventListeners(eventService: EventService) {
+        val activeAction = actions.first()
+        if (activeAction is EventListener) {
+            eventService += activeAction
+        }
     }
 
     override fun toString(): String {

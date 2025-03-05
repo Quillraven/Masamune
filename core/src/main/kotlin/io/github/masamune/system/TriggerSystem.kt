@@ -8,6 +8,7 @@ import io.github.masamune.component.Tag
 import io.github.masamune.component.Trigger
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
+import io.github.masamune.event.EventService
 import io.github.masamune.event.MapChangeEvent
 import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.trigger.TriggerScript
@@ -16,6 +17,7 @@ import ktx.tiled.property
 
 class TriggerSystem(
     private val triggerConfigurator: TriggerConfigurator = inject(),
+    private val eventService: EventService = inject(),
 ) : IteratingSystem(family { all(Trigger, Tag.EXECUTE_TRIGGER) }), EventListener {
 
     private val activeTriggers = mutableListOf<TriggerScript>()
@@ -69,6 +71,9 @@ class TriggerSystem(
         }
     }
 
+    fun registerTriggerListeners() {
+        activeTriggers.forEach { it.registerEventListeners(eventService) }
+    }
 
     companion object {
         private val log = logger<TriggerSystem>()

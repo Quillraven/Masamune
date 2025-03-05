@@ -178,6 +178,7 @@ class GameScreen(
         eventService += stage
         eventService += keyboardController
         eventService += masamune.audio
+        world.system<TriggerSystem>().registerTriggerListeners()
     }
 
     override fun hide() {
