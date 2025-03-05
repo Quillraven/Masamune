@@ -42,6 +42,8 @@ enum class I18NKey(val key: String) {
     DIALOG_MASAMUNE_FOREST_20_PAGE5("dialog.masamune_forest_20.page5"),
     DIALOG_MASAMUNE_FOREST_20_PAGE6("dialog.masamune_forest_20.page6"),
     DIALOG_MASAMUNE_FOREST_20_PAGE7("dialog.masamune_forest_20.page7"),
+    DIALOG_MASAMUNE_FOREST_30_PAGE1("dialog.masamune_forest_30.page1"),
+    DIALOG_MASAMUNE_FOREST_30_PAGE2("dialog.masamune_forest_30.page2"),
     DIALOG_MERCHANT_00_PAGE1("dialog.merchant_00.page1"),
     DIALOG_OPTION_BUY("dialog.option.buy"),
     DIALOG_OPTION_EXIT("dialog.option.exit"),

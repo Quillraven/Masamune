@@ -34,6 +34,10 @@ class TriggerCfg(
         actions += TriggerActionRemoveEntity(entity)
     }
 
+    fun actionRemove(selector: EntitySelector) {
+        actions += TriggerActionRemoveEntitySelector(selector)
+    }
+
     fun actionDialog(
         dialogName: String,
         withSound: Boolean = true,

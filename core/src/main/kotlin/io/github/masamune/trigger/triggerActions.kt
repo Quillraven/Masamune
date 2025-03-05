@@ -67,6 +67,19 @@ data class TriggerActionRemoveEntity(val entity: Entity) : TriggerAction {
     }
 }
 
+class TriggerActionRemoveEntitySelector(val selector: EntitySelector) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        val entity = selector.entity
+        if (entity == Entity.NONE || entity !in this) {
+            // entity already removed or not found
+            return true
+        }
+
+        entity.remove()
+        return true
+    }
+}
+
 class TriggerActionDialog(
     dialogConfigurator: DialogConfigurator,
     dialogName: String,

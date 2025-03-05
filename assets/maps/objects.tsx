@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="24" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="25" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -408,5 +408,12 @@
    <property name="xp" type="int" value="150"/>
   </properties>
   <image source="objects/cyclops.png" width="50" height="50"/>
+ </tile>
+ <tile id="25" type="NpcObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="objType" propertytype="MapObjectType" value="CYCLOPS_NPC"/>
+  </properties>
+  <image source="objects/cyclops_npc.png" width="16" height="16"/>
  </tile>
 </tileset>

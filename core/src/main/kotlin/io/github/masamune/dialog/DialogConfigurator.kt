@@ -37,6 +37,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             "masamune_forest_00" -> masamuneForest00Dialog(name, world, triggeringEntity)
             "masamune_forest_10" -> masamuneForest10Dialog(name, world, triggeringEntity)
             "masamune_forest_20" -> masamuneForest20Dialog(name, world, triggeringEntity)
+            "masamune_forest_30" -> masamuneForest30Dialog(name)
 
             else -> gdxError("There is no dialog configured for name $name")
         }
@@ -226,6 +227,18 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             option(dialogOptionNext, ActionNext)
         }
         page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_20_PAGE7], "hero", playerName) {
+            option(dialogOptionOk, ActionExit)
+        }
+    }
+
+    private fun masamuneForest30Dialog(name: String): Dialog = dialog(name) {
+        val demonFireTitle = bundle["npc.demon_fire.title"]
+        val demonSpiritTitle = bundle["npc.demon_spirit.title"]
+
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_30_PAGE1], "demon_fire", demonFireTitle) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_30_PAGE2], "demon_spirit", demonSpiritTitle) {
             option(dialogOptionOk, ActionExit)
         }
     }
