@@ -380,7 +380,8 @@
                 "MAN_GREEN",
                 "DEMON_FIRE",
                 "DEMON_SPIRIT",
-                "CYCLOPS"
+                "CYCLOPS",
+                "CYCLOPS_NPC"
             ],
             "valuesAsFlags": false
         },
