@@ -78,7 +78,7 @@ class TriggerTest {
         val dialogCloseAction: (Int) -> Unit = {}
 
         val script = trigger(testTriggerName, testWorld, testTriggeringEntity) {
-            actionDialog("dialog", dialogCloseAction)
+            actionDialog("dialog", withSound = false, dialogCloseAction)
         }
 
         val action = script.getAction<TriggerActionDialog>(0)
