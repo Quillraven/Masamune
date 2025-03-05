@@ -39,14 +39,14 @@ button_pressed
   index: -1
 demon_fire
   rotate: false
-  xy: 210, 214
+  xy: 164, 192
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
-demon_sprit
+demon_spirit
   rotate: false
-  xy: 164, 192
+  xy: 210, 214
   size: 38, 38
   orig: 38, 38
   offset: 0, 0

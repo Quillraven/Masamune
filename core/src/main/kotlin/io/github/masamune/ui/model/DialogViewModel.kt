@@ -60,6 +60,7 @@ class DialogViewModel(
             is DialogBeginEvent -> {
                 activeDialog = event.dialog
                 player = event.player
+                sound = event.withSound
 
                 updateContent()
             }

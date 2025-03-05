@@ -105,7 +105,7 @@ class PlayerInteractSystem(
 
             interactEntity has Dialog -> {
                 val namedDialog = dialogConfigurator[interactEntity[Dialog].dialogName, world, player]
-                eventService.fire(DialogBeginEvent(world, player, namedDialog))
+                eventService.fire(DialogBeginEvent(world, player, namedDialog, withSound = true))
             }
 
             interactEntity has Trigger -> {

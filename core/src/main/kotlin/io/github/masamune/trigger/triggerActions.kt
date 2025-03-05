@@ -70,6 +70,7 @@ data class TriggerActionRemoveEntity(val entity: Entity) : TriggerAction {
 class TriggerActionDialog(
     dialogConfigurator: DialogConfigurator,
     dialogName: String,
+    val withSound: Boolean,
     world: World,
     val triggeringEntity: Entity,
     val eventService: EventService,
@@ -78,7 +79,7 @@ class TriggerActionDialog(
     private val namedDialog = dialogConfigurator[dialogName, world, triggeringEntity]
 
     override fun World.onStart() {
-        eventService.fire(DialogBeginEvent(this, triggeringEntity, namedDialog))
+        eventService.fire(DialogBeginEvent(this, triggeringEntity, namedDialog, withSound))
     }
 
     override fun World.onUpdate(): Boolean {

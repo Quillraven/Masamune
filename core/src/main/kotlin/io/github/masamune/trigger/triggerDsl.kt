@@ -34,10 +34,14 @@ class TriggerCfg(
         actions += TriggerActionRemoveEntity(entity)
     }
 
-    fun actionDialog(dialogName: String, closeAction: (selectedOptionIdx: Int) -> Unit = NO_CLOSE_ACTION) {
+    fun actionDialog(
+        dialogName: String,
+        withSound: Boolean = true,
+        closeAction: (selectedOptionIdx: Int) -> Unit = NO_CLOSE_ACTION
+    ) {
         val configurator = world.inject<DialogConfigurator>()
         val eventService = world.inject<EventService>()
-        actions += TriggerActionDialog(configurator, dialogName, world, triggeringEntity, eventService, closeAction)
+        actions += TriggerActionDialog(configurator, dialogName, withSound, world, triggeringEntity, eventService, closeAction)
     }
 
     fun actionAddItem(entity: Entity, itemType: ItemType) {

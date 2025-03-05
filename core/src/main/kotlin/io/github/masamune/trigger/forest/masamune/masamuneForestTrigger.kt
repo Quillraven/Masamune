@@ -19,19 +19,23 @@ fun World.masamuneForestTrigger(
     val tiledService = inject<TiledService>()
 
     actionFadeOutMusic(2f, wait = false)
-    actionDialog("masamune_forest_00")
+    actionDialog("masamune_forest_00", withSound = false)
 
     // fire demon part 1
-    val spawnDemonFire = tiledService.loadPoint("spawn_demon_1")
     actionEnableInput(false)
+    val spawnDemonFire = tiledService.loadPoint("spawn_demon_1")
     actionDelay(1.5f)
     actionPlaySound(SoundAsset.DEMON_TELEPORT)
     actionSpawnEntity(TiledObjectType.DEMON_FIRE, spawnDemonFire)
     val demonFire = selectEntity { tiledFamily.single { it[Tiled].objType == TiledObjectType.DEMON_FIRE } }
     actionEntitySpeed(demonFire, 2f)
     actionFollowPath(demonFire, 39, removeAtEnd = true, waitForEnd = true)
+    actionEnableInput(true)
+    actionDialog("masamune_forest_10", withSound = false)
 
     // spirit demon part 1
+    actionEnableInput(false)
+    actionDelay(1.5f)
     val spawnDemonSpirit = tiledService.loadPoint("spawn_demon_2")
     actionPlaySound(SoundAsset.DEMON_TELEPORT)
     actionSpawnSfx("portal_white", spawnDemonSpirit - vec2(1.6f, 1.6f), 1f, 0.75f)
@@ -40,6 +44,6 @@ fun World.masamuneForestTrigger(
     val demonSpirit = selectEntity { tiledFamily.single { it[Tiled].objType == TiledObjectType.DEMON_SPIRIT } }
     actionEntitySpeed(demonSpirit, 1.5f)
     actionFollowPath(demonSpirit, 40, removeAtEnd = true, waitForEnd = true)
-
     actionEnableInput(true)
+    actionDialog("masamune_forest_20", withSound = false)
 }

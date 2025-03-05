@@ -35,6 +35,8 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             "man_green_30" -> manGreen30Dialog(name)
             "village_intro" -> villageIntroDialog(name, world, triggeringEntity)
             "masamune_forest_00" -> masamuneForest00Dialog(name, world, triggeringEntity)
+            "masamune_forest_10" -> masamuneForest10Dialog(name, world, triggeringEntity)
+            "masamune_forest_20" -> masamuneForest20Dialog(name, world, triggeringEntity)
 
             else -> gdxError("There is no dialog configured for name $name")
         }
@@ -95,7 +97,7 @@ class DialogConfigurator(private val bundle: I18NBundle) {
             option(dialogOptionExit, ActionExit)
         }
         page(bundle.format("dialog.flower_girl_00.page3", playerName), "flower_girl", flowerGirlTitle) {
-            option(dialogOptionOk, ActionNext)
+            option(dialogOptionNext, ActionNext)
         }
         page(bundle.format("dialog.flower_girl_00.page4", playerName), "flower_girl", flowerGirlTitle) {
             option(dialogOptionOk, ActionExit)
@@ -168,6 +170,62 @@ class DialogConfigurator(private val bundle: I18NBundle) {
         val playerName = entityName(world, triggeringEntity)
 
         page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_00_PAGE1], "hero", playerName) {
+            option(dialogOptionOk, ActionExit)
+        }
+    }
+
+    private fun masamuneForest10Dialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+        val playerName = entityName(world, triggeringEntity)
+        val demonFireTitle = bundle["npc.demon_fire.title"]
+        val demonSpiritTitle = bundle["npc.demon_spirit.title"]
+
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_10_PAGE1], "demon_fire", demonFireTitle) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_10_PAGE2], "hero", playerName) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(
+            bundle.format(I18NKey.DIALOG_MASAMUNE_FOREST_10_PAGE3.key, demonSpiritTitle),
+            "demon_fire",
+            demonFireTitle
+        ) {
+            option(dialogOptionOk, ActionExit)
+        }
+    }
+
+    private fun masamuneForest20Dialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+        val playerName = entityName(world, triggeringEntity)
+        val demonFireTitle = bundle["npc.demon_fire.title"]
+        val demonSpiritTitle = bundle["npc.demon_spirit.title"]
+
+        page(
+            bundle.format(I18NKey.DIALOG_MASAMUNE_FOREST_20_PAGE1.key, demonFireTitle),
+            "demon_spirit",
+            demonSpiritTitle
+        ) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_20_PAGE2], "demon_spirit", demonSpiritTitle) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_20_PAGE3], "hero", playerName) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(
+            bundle.format(I18NKey.DIALOG_MASAMUNE_FOREST_20_PAGE4.key, demonFireTitle),
+            "demon_spirit",
+            demonSpiritTitle
+        ) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_20_PAGE5], "demon_fire", demonFireTitle) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_20_PAGE6], "demon_spirit", demonSpiritTitle) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(bundle[I18NKey.DIALOG_MASAMUNE_FOREST_20_PAGE7], "hero", playerName) {
             option(dialogOptionOk, ActionExit)
         }
     }

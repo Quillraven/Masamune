@@ -32,6 +32,8 @@ abstract class ViewModel(
     val audioService: AudioService,
 ) : EventListener {
 
+    var sound: Boolean = true
+
     @PublishedApi
     internal val actionsMap = mutableMapOf<KProperty<*>, MutableList<(Any) -> Unit>>()
 
@@ -126,14 +128,23 @@ abstract class ViewModel(
     }
 
     fun playSndMenuClick() {
+        if (!sound) {
+            return
+        }
         audioService.play(SoundAsset.MENU_CLICK)
     }
 
     fun playSndMenuAccept() {
+        if (!sound) {
+            return
+        }
         audioService.play(SoundAsset.MENU_ACCEPT)
     }
 
     fun playSndMenuAbort() {
+        if (!sound) {
+            return
+        }
         audioService.play(SoundAsset.MENU_ABORT)
     }
 
