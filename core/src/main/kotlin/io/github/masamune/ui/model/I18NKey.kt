@@ -161,3 +161,5 @@ enum class I18NKey(val key: String) {
 }
 
 operator fun I18NBundle.get(key: I18NKey): String = this[key.key]
+
+operator fun I18NBundle.get(key: I18NKey, vararg args: Any): String = this.format(key.key, *args)

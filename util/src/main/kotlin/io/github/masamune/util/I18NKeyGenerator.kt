@@ -34,6 +34,8 @@ fun main() {
 
         append("}").appendLine().appendLine()
         append("operator fun I18NBundle.get(key: I18NKey): String = this[key.key]").appendLine()
+        appendLine()
+        append("operator fun I18NBundle.get(key: I18NKey, vararg args: Any): String = this.format(key.key, *args)").appendLine()
     }
 
     if (i18nKeyFile.exists()) {
