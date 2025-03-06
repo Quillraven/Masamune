@@ -122,10 +122,11 @@ class GameScreen(
             add(StateSystem())
             add(DissolveSystem())
             add(ScaleSystem())
-            add(AnimationSystem())
             add(FadeSystem())
             add(RenderSystem())
             add(TriggerSystem())
+            // animation system must run after trigger to correctly update animation if facing direction gets changed
+            add(AnimationSystem())
             // FacingSystem must run at the end of a frame to correctly detect facing changes in any system before
             add(FacingSystem())
             add(RemoveSystem())

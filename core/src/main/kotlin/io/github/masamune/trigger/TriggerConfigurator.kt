@@ -5,6 +5,7 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.trigger.cutscene.intro.cutSceneIntroTrigger
 import io.github.masamune.trigger.forest.entrance.forestEntranceTrigger
 import io.github.masamune.trigger.forest.entrance.terealisFlowerTrigger
+import io.github.masamune.trigger.forest.masamune.forestMasamuneMapTrigger
 import io.github.masamune.trigger.forest.masamune.masamuneForestTrigger
 import io.github.masamune.trigger.forest.path.manGreenTrigger
 import io.github.masamune.trigger.village.elderTrigger
@@ -30,7 +31,7 @@ class TriggerConfigurator {
             "terealis_flower" -> world.terealisFlowerTrigger(name, scriptEntity, triggeringEntity)
             "man_green" -> world.manGreenTrigger(name, scriptEntity, triggeringEntity)
             "cut_scene_intro" -> world.cutSceneIntroTrigger(name, scriptEntity)
-            "masamune_forest" -> world.masamuneForestTrigger(name, triggeringEntity)
+            "masamune_forest" -> world.masamuneForestTrigger(name, scriptEntity, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }
@@ -41,6 +42,7 @@ class TriggerConfigurator {
         return when (name) {
             "forest_entrance" -> world.forestEntranceTrigger(name)
             "village_intro" -> world.villageIntroTrigger(name)
+            "forest_masamune" -> world.forestMasamuneMapTrigger(name)
             else -> gdxError("There is no trigger configured for name $name")
         }
     }

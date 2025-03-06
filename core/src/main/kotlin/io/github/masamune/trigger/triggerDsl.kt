@@ -3,12 +3,14 @@ package io.github.masamune.trigger
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.EntityUpdateContext
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.audio.AudioService
+import io.github.masamune.component.FacingDirection
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.quest.Quest
@@ -186,6 +188,14 @@ class TriggerCfg(
         val masamune = world.inject<Masamune>()
         val eventService = world.inject<EventService>()
         actions += TriggerActionStartCombat(player, enemy, music, enemies, onCombatEnd, masamune, eventService)
+    }
+
+    fun actionConfigureEntity(entity: Entity, configuration: EntityUpdateContext.(Entity) -> Unit) {
+        actions += TriggerActionConfigureEntity(entity, configuration)
+    }
+
+    fun actionFacing(entity: Entity, direction: FacingDirection) {
+        actions += TriggerActionFacing(entity, direction)
     }
 
 }

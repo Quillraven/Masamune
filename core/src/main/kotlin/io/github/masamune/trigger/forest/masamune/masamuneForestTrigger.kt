@@ -5,7 +5,13 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.SoundAsset
+import io.github.masamune.component.FacingDirection
+import io.github.masamune.component.QuestLog
 import io.github.masamune.component.Tiled
+import io.github.masamune.component.Trigger
+import io.github.masamune.event.EventService
+import io.github.masamune.event.PlayerInteractEndContactEvent
+import io.github.masamune.quest.MainQuest
 import io.github.masamune.screen.FadeTransitionType
 import io.github.masamune.screen.MainMenuScreen
 import io.github.masamune.tiledmap.TiledObjectType
@@ -17,13 +23,21 @@ import ktx.math.vec2
 
 fun World.masamuneForestTrigger(
     name: String,
+    scriptEntity: Entity,
     triggeringEntity: Entity
 ): TriggerScript = trigger(name, this, triggeringEntity) {
     val tiledFamily = family { all(Tiled) }
     val tiledService = inject<TiledService>()
 
+    // remove trigger from masamune to remove outline and make it not interactable anymore after the cutscene
+    scriptEntity.configure { it -= Trigger }
+    world.inject<EventService>().fire(PlayerInteractEndContactEvent(triggeringEntity, scriptEntity))
+    // update main quest
+    triggeringEntity[QuestLog].get<MainQuest>().progress = 50
+
     actionFadeOutMusic(2f, wait = false)
     actionDialog("masamune_forest_00", withSound = false)
+    actionFacing(triggeringEntity, FacingDirection.UP)
 
     // fire demon
     actionEnableInput(false)

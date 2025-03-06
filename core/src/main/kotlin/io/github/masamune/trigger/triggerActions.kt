@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.EntityUpdateContext
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.MutableEntityBag
 import io.github.masamune.Masamune
@@ -518,5 +519,25 @@ class TriggerActionStartCombat(
 
         onCombatEnd(event.victory)
         combatFinished = true
+    }
+}
+
+class TriggerActionConfigureEntity(
+    private val entity: Entity,
+    private val configuration: EntityUpdateContext.(Entity) -> Unit,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        entity.configure(configuration)
+        return true
+    }
+}
+
+class TriggerActionFacing(
+    private val entity: Entity,
+    private val direction: FacingDirection,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        entity[Facing].direction = direction
+        return true
     }
 }
