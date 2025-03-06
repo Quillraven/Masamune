@@ -37,6 +37,11 @@ class AudioService(
     fun play(musicAsset: MusicAsset, loop: Boolean = true, keepPrevious: Boolean = false) {
         // stop previous music instance if there is any and unload it
         lastMusic?.let { (prevMusic, prevMusicAsset) ->
+            if (prevMusicAsset == musicAsset) {
+                // music is currently playing -> ignore this call
+                return
+            }
+
             log.debug { "Unloading previous music $prevMusicAsset" }
             prevMusic.stop()
             assetService.unload(prevMusicAsset)
