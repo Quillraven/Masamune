@@ -73,7 +73,7 @@ i:b:/maps/objects/scroll_inferno.png:2975:1
 i:b:/maps/village.tmx:3622:1
 i:b:/maps/objects.tsx:17860:1
 i:b:/maps/tileset.tsx:26263:1
-i:b:/maps/forest_masamune.tmx:3342:1
+i:b:/maps/forest_masamune.tmx:3395:1
 i:b:/maps/masamune-tiled.tiled-project:16403:1
 i:b:/maps/tileset.png:473544:1
 c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
