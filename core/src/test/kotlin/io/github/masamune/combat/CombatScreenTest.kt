@@ -111,7 +111,12 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
     }
 
     private fun spawnEnemy(world: World): Entity = world.entity {
-        it += Enemy(combatEntities = mapOf(TiledObjectType.BUTTERFLY to 1, TiledObjectType.MUSHROOM to 1))
+        it += Enemy(
+            combatEntities = mapOf(
+                TiledObjectType.CYCLOPS to 1,
+                TiledObjectType.MUSHROOM to 1
+            ),
+        )
     }
 
     override fun resize(width: Int, height: Int) {
