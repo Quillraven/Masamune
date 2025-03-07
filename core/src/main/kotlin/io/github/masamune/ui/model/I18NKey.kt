@@ -62,6 +62,7 @@ enum class I18NKey(val key: String) {
     ENEMY_LARVA_NAME("enemy.larva.name"),
     ENEMY_MUSHROOM_DESCRIPTION("enemy.mushroom.description"),
     ENEMY_MUSHROOM_NAME("enemy.mushroom.name"),
+    GENERAL_CONFIRM_QUIT("general.confirmQuit"),
     GENERAL_CONTROLS("general.controls"),
     GENERAL_CONTROLS_CANCEL("general.controls.cancel"),
     GENERAL_CONTROLS_INTERACT("general.controls.interact"),
