@@ -1,4 +1,4 @@
-package io.github.masamune.ai.task
+package io.github.masamune.ai.guard
 
 import com.badlogic.gdx.ai.btree.LeafTask
 import com.badlogic.gdx.ai.btree.Task

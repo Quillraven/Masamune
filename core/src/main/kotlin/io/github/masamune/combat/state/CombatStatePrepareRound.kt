@@ -24,6 +24,8 @@ class CombatStatePrepareRound(
     private val combatEntities = world.family { all(Combat) }
     private val enemyEntities = world.family { none(Player).all(Combat) }
     private var turn = 0
+    val currentTurn: Int
+        get() = turn
 
     fun reset() {
         turn = 0

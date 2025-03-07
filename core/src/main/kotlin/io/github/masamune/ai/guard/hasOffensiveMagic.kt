@@ -1,4 +1,4 @@
-package io.github.masamune.ai.task
+package io.github.masamune.ai.guard
 
 import com.badlogic.gdx.ai.btree.Task
 import com.github.quillraven.fleks.Entity

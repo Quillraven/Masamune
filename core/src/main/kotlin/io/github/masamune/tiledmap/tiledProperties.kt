@@ -48,6 +48,9 @@ val TiledMapTile.itemType: String
 val TiledMapTile.stats: MapProperties?
     get() = this.propertyOrNull<MapProperties>("stats")
 
+val TiledMapTile.behavior: String
+    get() = this.property<String>("behavior", "default")
+
 val TiledMapTile.combatActions: String
     get() = this.property<String>("combatActions", "")
 

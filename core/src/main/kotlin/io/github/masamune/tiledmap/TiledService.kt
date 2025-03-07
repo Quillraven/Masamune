@@ -23,6 +23,7 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.ai.AnimationStateIdle
 import io.github.masamune.ai.FleksStateMachine
+import io.github.masamune.ai.cyclopsBehavior
 import io.github.masamune.ai.defaultBehavior
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
@@ -620,6 +621,15 @@ class TiledService(
         entity += charStats
     }
 
+    private fun EntityCreateContext.configureAI(world: World, entity: Entity, tile: TiledMapTile) {
+        val aiCmp = when (tile.behavior) {
+            "default" -> AI(defaultBehavior(world, entity))
+            "cyclops" -> AI(cyclopsBehavior(world, entity))
+            else -> gdxError("Unsupported behavior ${tile.behavior}")
+        }
+        entity += aiCmp
+    }
+
     private fun EntityCreateContext.configureEnemyInventory(entity: Entity, tile: TiledMapTile) {
         entity += Inventory(talons = tile.talons)
     }
@@ -711,7 +721,7 @@ class TiledService(
                 configureCombat(it, tile)
                 configureEnemyInventory(it, tile)
                 it += Experience(tile.level, tile.xp)
-                it += AI(defaultBehavior(world, it))
+                configureAI(world, it, tile)
             }
         }
 

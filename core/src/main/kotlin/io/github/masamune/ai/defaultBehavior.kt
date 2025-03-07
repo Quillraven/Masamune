@@ -4,9 +4,9 @@ import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.ai.utils.random.ConstantFloatDistribution
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import io.github.masamune.ai.task.hasAttack
-import io.github.masamune.ai.task.hasDefensiveMagic
-import io.github.masamune.ai.task.hasOffensiveMagic
+import io.github.masamune.ai.guard.hasAttack
+import io.github.masamune.ai.guard.hasDefensiveMagic
+import io.github.masamune.ai.guard.hasOffensiveMagic
 import io.github.masamune.ai.task.useAttack
 import io.github.masamune.ai.task.useDefensiveMagic
 import io.github.masamune.ai.task.useNothing

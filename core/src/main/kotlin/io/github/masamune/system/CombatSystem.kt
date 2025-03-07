@@ -31,9 +31,10 @@ class CombatSystem(
     private val comparator = compareEntity(world) { e1, e2 ->
         (e2[CharacterStats].agility - e1[CharacterStats].agility).toInt()
     }
+    private val combatStatePrepareRound = CombatStatePrepareRound(world, comparator)
     private val states = listOf(
         CombatStateIdle,
-        CombatStatePrepareRound(world, comparator),
+        combatStatePrepareRound,
         CombatStatePerformAction(world),
         CombatStateEndRound(world, comparator),
         CombatStateVictory(world),
@@ -42,6 +43,9 @@ class CombatSystem(
     private var prevState: CombatState = CombatStateIdle
     private var currentState: CombatState = CombatStateIdle
     private var globalState: CombatState = CombatStateIdle
+
+    val turn: Int
+        get() = combatStatePrepareRound.currentTurn
 
     override fun onTick() {
         globalState.onUpdate(deltaTime)
