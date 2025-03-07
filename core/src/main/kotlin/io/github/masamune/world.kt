@@ -32,6 +32,7 @@ import ktx.log.Logger
 import ktx.math.vec2
 import ktx.math.vec3
 import kotlin.math.max
+import kotlin.math.min
 
 private val log = Logger("World")
 
@@ -176,8 +177,16 @@ fun World.spawnSfx(target: Entity, sfxAtlasKey: String, duration: Float, scale: 
     val (toPos, toSize, toScale) = target[Transform]
     val sfxAtlas = inject<CachingAtlas>(AtlasAsset.SFX.name)
 
+    val maxSize = 1.5f
+    val diffMaxX = toSize.x - maxSize
+    val diffMaxY = toSize.y - maxSize
+
     entity {
-        it += Transform(toPos.cpy().apply { z = 3f }, toSize.cpy(), toScale * scale)
+        val sfxPosition = toPos.cpy()
+        sfxPosition.add(max(0f, diffMaxX) * 0.5f, max(0f, diffMaxY) * 0.5f, 3f)
+        val sfxSize = vec2(min(maxSize, toSize.x), min(maxSize, toSize.y))
+        it += Transform(sfxPosition, sfxSize, toScale * scale)
+
         val animation = Animation.ofAtlas(sfxAtlas, sfxAtlasKey, AnimationType.IDLE)
         animation.speed = 1f / (duration / animation.gdxAnimation.animationDuration)
         animation.playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
