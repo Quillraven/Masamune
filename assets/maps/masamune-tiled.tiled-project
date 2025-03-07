@@ -180,6 +180,11 @@
                     "value": "UNDEFINED"
                 },
                 {
+                    "name": "behavior",
+                    "type": "string",
+                    "value": "default"
+                },
+                {
                     "name": "combatActions",
                     "propertyType": "ActionType",
                     "type": "string",

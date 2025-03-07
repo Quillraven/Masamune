@@ -390,6 +390,7 @@
  <tile id="24" type="EnemyObject">
   <properties>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="behavior" value="cyclops"/>
    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
    <property name="level" type="int" value="5"/>
    <property name="objType" propertytype="MapObjectType" value="CYCLOPS"/>
