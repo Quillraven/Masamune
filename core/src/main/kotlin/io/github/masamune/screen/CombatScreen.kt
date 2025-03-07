@@ -69,6 +69,13 @@ import ktx.app.gdxError
 import ktx.log.logger
 import ktx.math.vec3
 import ktx.scene2d.actors
+import kotlin.collections.Map
+import kotlin.collections.MutableList
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.firstOrNull
+import kotlin.collections.forEach
+import kotlin.collections.sum
 
 class CombatScreen(
     private val masamune: Masamune,
@@ -317,9 +324,18 @@ class CombatScreen(
         enemiesMap.forEach { (type, amount) ->
             repeat(amount) {
                 val spawnX = x + MathUtils.random(-0.5f, 0.5f)
-                val spawnY = y + MathUtils.random(-2f, 1f)
+                val spawnY = y + MathUtils.random(-2f, 0.5f)
                 val enemy = tiledService.loadCombatEnemy(world, type, spawnX, spawnY)
-                with(world) { enemy[Animation].speed = 0.4f }
+                // adjust animation speed and position, if enemy is outside screen (e.g. boss enemies are
+                // sometimes larger than 1 game unit)
+                with(world) {
+                    enemy[Animation].speed = 0.4f
+                    val transformCmp = enemy[Transform]
+                    val sizeY = transformCmp.size.y
+                    if (spawnY + sizeY > gameViewport.worldHeight) {
+                        transformCmp.position.y -= ((spawnY + sizeY) - gameViewport.worldHeight)
+                    }
+                }
                 x += diffX
             }
         }
