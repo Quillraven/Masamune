@@ -398,9 +398,9 @@
     <properties>
      <property name="agility" type="float" value="2"/>
      <property name="armor" type="float" value="10"/>
-     <property name="baseLife" type="float" value="100"/>
+     <property name="baseLife" type="float" value="90"/>
      <property name="baseMana" type="float" value="100"/>
-     <property name="damage" type="float" value="13"/>
+     <property name="damage" type="float" value="10"/>
      <property name="physicalEvade" type="float" value="0.05"/>
      <property name="resistance" type="float" value="10"/>
     </properties>
