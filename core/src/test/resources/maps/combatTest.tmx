@@ -5,7 +5,7 @@
   <tile id="0" type="PlayerObject">
    <properties>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,USE_ITEM"/>
+    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,USE_ITEM,SLOW,DEMI1,DOUBLE_STRIKE"/>
     <property name="objType" propertytype="MapObjectType" value="HERO"/>
     <property name="stats" type="class" propertytype="CharStats">
      <properties>

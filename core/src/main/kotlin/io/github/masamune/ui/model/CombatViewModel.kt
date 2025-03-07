@@ -100,6 +100,7 @@ class CombatViewModel(
     var enemyDamage: Pair<Int, Vector2> by propertyNotify(-1 to Vector2.Zero)
     var turnEntities: List<Pair<Int, Drawable>> by propertyNotify(emptyList())
     var actionFinishedEntityId: Int by propertyNotify(-1)
+    var currentAction: String by propertyNotify("")
 
     // special flag to set life/mana bar values instantly in the view instead of using an animation
     var combatStart = false
@@ -228,6 +229,15 @@ class CombatViewModel(
             }
 
             is CombatActionStartEvent -> {
+                if (event.entity hasNo Player && event.actionType != ActionType.ATTACK_SINGLE && event.actionType != ActionType.USE_ITEM) {
+                    val tmp = I18NBundle.getExceptionOnMissingKey()
+                    I18NBundle.setExceptionOnMissingKey(false)
+                    val actionName = bundle["magic.${event.actionType.name.lowercase()}.name"]
+                    I18NBundle.setExceptionOnMissingKey(tmp)
+                    if (!actionName.startsWith("???")) {
+                        currentAction = actionName
+                    }
+                }
                 actionFinishedEntityId = event.entity.id
             }
 

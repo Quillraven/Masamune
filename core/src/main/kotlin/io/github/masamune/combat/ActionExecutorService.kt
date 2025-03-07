@@ -131,13 +131,13 @@ class ActionExecutorService(
         this.state = ActionState.START
         this.currentQueueEntry = queueEntry
         if (moveEntity) {
-            moveEntityBy(queueEntry.entity, PERFORM_OFFSET, 0.5f)
+            moveEntityBy(queueEntry.entity, PERFORM_OFFSET, 0.75f)
         }
 
         if (itemOwner != Entity.NONE) {
-            eventService.fire(CombatActionStartEvent(itemOwner))
+            eventService.fire(CombatActionStartEvent(itemOwner, queueEntry.action.type))
         } else {
-            eventService.fire(CombatActionStartEvent(source))
+            eventService.fire(CombatActionStartEvent(source, queueEntry.action.type))
         }
     }
 
@@ -479,11 +479,11 @@ class ActionExecutorService(
         log.debug { "Cleaning up ${this@ActionExecutorService}" }
 
         if (itemOwner != Entity.NONE) {
-            moveEntityBy(itemOwner, -PERFORM_OFFSET, 0.3f)
+            moveEntityBy(itemOwner, -PERFORM_OFFSET, 0.5f)
             itemOwner[Combat].clearAction()
             itemOwner = Entity.NONE
         } else {
-            moveEntityBy(source, -PERFORM_OFFSET, 0.3f)
+            moveEntityBy(source, -PERFORM_OFFSET, 0.5f)
             source[Combat].clearAction()
         }
         currentQueueEntry = DEFAULT_QUEUE_ACTION

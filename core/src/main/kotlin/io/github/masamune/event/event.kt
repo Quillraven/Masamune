@@ -8,6 +8,7 @@ import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.EntityBag
 import io.github.masamune.combat.ActionState
 import io.github.masamune.dialog.Dialog
+import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.MapTransitionType
 import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.MenuType
@@ -66,7 +67,7 @@ data object MapTransitionEndEvent : Event
 // COMBAT EVENTS
 data class CombatStartEvent(val player: Entity, val enemies: EntityBag) : Event
 data class CombatPlayerActionEvent(val player: Entity) : Event
-data class CombatActionStartEvent(val entity: Entity) : Event
+data class CombatActionStartEvent(val entity: Entity, val actionType: ActionType) : Event
 data object CombatActionsPerformedEvent : Event
 data class CombatNextTurnEvent(val player: Entity, val enemies: EntityBag) : Event
 data class CombatTurnBeginEvent(val turn: Int) : Event
