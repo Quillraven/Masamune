@@ -6,6 +6,9 @@ import io.github.masamune.combat.effect.Effect
 
 sealed interface Buff {
     val owner: Entity
+
+    fun ActionExecutorService.onApply() = Unit
+    fun ActionExecutorService.onRemove() = Unit
 }
 
 sealed interface OnAttackDamageBuff : Buff {
@@ -30,4 +33,9 @@ sealed interface OnMagicDamageTakenBuff : Buff {
 
 sealed interface OnDeathBuff : Buff {
     fun ActionExecutorService.onDeath(source: Entity, target: Entity): List<Effect>
+}
+
+sealed interface OnTurnBuff : Buff {
+    fun ActionExecutorService.onTurnBegin() = Unit
+    fun ActionExecutorService.onTurnEnd() = Unit
 }

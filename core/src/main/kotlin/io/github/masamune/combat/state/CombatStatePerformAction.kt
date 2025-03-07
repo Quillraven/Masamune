@@ -3,9 +3,9 @@ package io.github.masamune.combat.state
 import com.github.quillraven.fleks.World
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.action.DefaultAction
+import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
-import io.github.masamune.component.CharacterStats
 import io.github.masamune.isEntityDead
 import ktx.log.logger
 
@@ -29,8 +29,8 @@ class CombatStatePerformAction(
                 // execute any action -> do nothing
                 return@forEach
             }
+            actionExecutorService.performOnTurnBeginBuffs(entity)
             actionExecutorService.queueAction(entity, action, targets)
-
         }
         actionExecutorService.performFirst()
     }
@@ -54,6 +54,12 @@ class CombatStatePerformAction(
     }
 
     override fun onExit() {
+        combatEntities.forEach { entity ->
+            if (world.isEntityDead(entity)) {
+                return@forEach
+            }
+            actionExecutorService.performOnTurnEndBuffs(entity)
+        }
         log.debug { debugCombatEntities() }
     }
 

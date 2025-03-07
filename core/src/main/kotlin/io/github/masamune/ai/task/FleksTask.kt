@@ -37,6 +37,11 @@ abstract class FleksTask(val world: World) : LeafTask<Entity>() {
         // update targets
         val targets = combatCmp.targets
         targets.clear()
+        if (combatCmp.action.targetType == ActionTargetType.NONE) {
+            // self cast action
+            return@with
+        }
+
         val potentialTargets = if (defensive) enemyEntities else playerEntities
         when (combatCmp.action.targetType) {
             ActionTargetType.ALL -> targets += potentialTargets

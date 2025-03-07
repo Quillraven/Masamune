@@ -23,32 +23,36 @@ fun cyclopsBehavior(
 
     selector {
         // regenerate once when below 30% life
-        sequence {
-            isLifeLowerThan(world, 0.3f)
-            canPerform(world, ActionType.HEAL)
-            perform(world, ActionType.HEAL)
+        onlyOnce {
+            sequence {
+                isLifeLowerThan(world, 0.3f)
+                canPerform(world, ActionType.REGENERATE1)
+                perform(world, ActionType.REGENERATE1)
+            }
         }
 
-        // cast DEMI once when below 10% life
-        sequence {
-            isLifeLowerThan(world, 0.1f)
-            canPerform(world, ActionType.FIREBALL)
-            perform(world, ActionType.FIREBALL)
+        // cast DEMI once when below 20% life
+        onlyOnce {
+            sequence {
+                isLifeLowerThan(world, 0.2f)
+                canPerform(world, ActionType.DEMI1)
+                perform(world, ActionType.DEMI1)
+            }
         }
 
         // perform double attack every 4 turns
         sequence {
-            isTurnMultipleOf(world, 4)
-            canPerform(world, ActionType.FIREBOLT)
-            perform(world, ActionType.FIREBOLT)
+            isTurnMultipleOf(world, 4, ignoreFirstTurn = true)
+            canPerform(world, ActionType.DOUBLE_STRIKE)
+            perform(world, ActionType.DOUBLE_STRIKE)
         }
 
         // perform slow every 5 turns
         // double attack has priority if we have a turn where slow and double attack shall be performed
         sequence {
             isTurnMultipleOf(world, 5)
-            canPerform(world, ActionType.FIREBOLT)
-            perform(world, ActionType.FIREBOLT)
+            canPerform(world, ActionType.SLOW)
+            perform(world, ActionType.SLOW)
         }
 
         // otherwise, just attack

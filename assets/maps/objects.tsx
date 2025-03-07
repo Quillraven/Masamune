@@ -391,15 +391,15 @@
   <properties>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="behavior" value="cyclops"/>
-   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,SLOW,DEMI1,REGENERATE1,DOUBLE_STRIKE"/>
    <property name="level" type="int" value="5"/>
    <property name="objType" propertytype="MapObjectType" value="CYCLOPS"/>
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
-     <property name="agility" type="float" value="5"/>
+     <property name="agility" type="float" value="2"/>
      <property name="armor" type="float" value="10"/>
      <property name="baseLife" type="float" value="100"/>
-     <property name="baseMana" type="float" value="30"/>
+     <property name="baseMana" type="float" value="100"/>
      <property name="damage" type="float" value="13"/>
      <property name="physicalEvade" type="float" value="0.05"/>
      <property name="resistance" type="float" value="10"/>

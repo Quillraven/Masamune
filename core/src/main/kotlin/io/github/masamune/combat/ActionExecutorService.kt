@@ -18,6 +18,7 @@ import io.github.masamune.combat.buff.OnAttackDamageBuff
 import io.github.masamune.combat.buff.OnAttackDamageTakenBuff
 import io.github.masamune.combat.buff.OnMagicDamageBuff
 import io.github.masamune.combat.buff.OnMagicDamageTakenBuff
+import io.github.masamune.combat.buff.OnTurnBuff
 import io.github.masamune.combat.effect.DamageEffect
 import io.github.masamune.combat.effect.DefaultEffect
 import io.github.masamune.combat.effect.DelayEffect
@@ -497,10 +498,12 @@ class ActionExecutorService(
     inline fun <reified T : Buff> addBuff(buff: T) = with(world) {
         val ownerBuffs = buff.owner[Combat].buffs
         ownerBuffs.removeIf { it is T }
+        with(buff) { onApply() }
         ownerBuffs += buff
     }
 
     fun Buff.removeBuff() = with(world) {
+        onRemove()
         owner[Combat].buffs -= this@removeBuff
     }
 
@@ -538,6 +541,14 @@ class ActionExecutorService(
             }
         }
         currentQueueEntry = tmpQueueEntry
+    }
+
+    fun performOnTurnBeginBuffs(entity: Entity) {
+        entity.applyBuffs<OnTurnBuff> { onTurnBegin() }
+    }
+
+    fun performOnTurnEndBuffs(entity: Entity) {
+        entity.applyBuffs<OnTurnBuff> { onTurnEnd() }
     }
 
     override fun toString(): String {
