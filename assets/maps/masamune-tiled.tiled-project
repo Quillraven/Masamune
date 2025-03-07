@@ -26,7 +26,11 @@
                 "ITEM_MANA_RESTORE",
                 "USE_ITEM",
                 "TRANSFORM",
-                "ITEM_HEALTH_RESTORE"
+                "ITEM_HEALTH_RESTORE",
+                "SLOW",
+                "DEMI1",
+                "REGENERATE1",
+                "DOUBLE_STRIKE"
             ],
             "valuesAsFlags": true
         },
