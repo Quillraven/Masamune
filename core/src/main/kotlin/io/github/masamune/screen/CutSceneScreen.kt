@@ -142,6 +142,12 @@ class CutSceneScreen(
                     it += Tag.EXECUTE_TRIGGER
                 }
             }
+            "outro" -> {
+                world.entity {
+                    it += Trigger("cut_scene_outro")
+                    it += Tag.EXECUTE_TRIGGER
+                }
+            }
 
             else -> gdxError("Unsupported cut scene $name")
         }

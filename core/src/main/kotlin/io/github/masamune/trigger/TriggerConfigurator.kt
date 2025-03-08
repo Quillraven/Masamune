@@ -3,6 +3,7 @@ package io.github.masamune.trigger
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.trigger.cutscene.intro.cutSceneIntroTrigger
+import io.github.masamune.trigger.cutscene.outro.cutSceneOutroTrigger
 import io.github.masamune.trigger.forest.entrance.forestEntranceTrigger
 import io.github.masamune.trigger.forest.entrance.terealisFlowerTrigger
 import io.github.masamune.trigger.forest.masamune.forestMasamuneMapTrigger
@@ -31,6 +32,7 @@ class TriggerConfigurator {
             "terealis_flower" -> world.terealisFlowerTrigger(name, scriptEntity, triggeringEntity)
             "man_green" -> world.manGreenTrigger(name, scriptEntity, triggeringEntity)
             "cut_scene_intro" -> world.cutSceneIntroTrigger(name, scriptEntity)
+            "cut_scene_outro" -> world.cutSceneOutroTrigger(name, scriptEntity)
             "masamune_forest" -> world.masamuneForestTrigger(name, scriptEntity, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
