@@ -27,8 +27,8 @@ i:d:/ui:0:1
 i:b:/ui/skin.png:9491:1
 i:b:/ui/Fipps-Regular.otf:34220:1
 i:b:/ui/logo.png:347638:1
-i:b:/ui/messages_de.properties:11712:1
-i:b:/ui/messages.properties:10721:1
+i:b:/ui/messages_de.properties:11928:1
+i:b:/ui/messages.properties:10938:1
 i:b:/ui/skin.atlas:3787:1
 i:b:/ui/CherryCreamSoda-Regular.ttf:49404:1
 i:b:/ui/skin.json:7660:1
