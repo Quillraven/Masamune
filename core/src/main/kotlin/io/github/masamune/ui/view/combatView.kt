@@ -287,7 +287,7 @@ class CombatView(
         // action table fade in effect
         viewModel.onPropertyChange(CombatViewModel::combatTurn) {
             playerInfoTable.height + 10f
-            actionTable.actions.clear()
+            actionTable.clearActions()
             actionTable += Actions.moveBy(0f, actionTable.height * 0.7f + 10f, 1f, Interpolation.bounceIn)
             actionTable.buttonGroup.uncheckAll()
             actionTable.userObject = "show"
@@ -594,8 +594,8 @@ class CombatView(
                     uiState = UiCombatState.SELECT_ACTION
                     uiAction = UiAction.UNDEFINED
                     actionTable.buttonGroup.uncheckAll()
-                    // hide action table again
-                    actionTable.actions.clear()
+                    // hide action table again but first complete any remaining UI effect actions
+                    actionTable.act(10f)
                     actionTable += Actions.moveBy(0f, -actionTable.height * 0.7f - 10f, 1f, Interpolation.bounceOut)
                     actionTable.userObject = null
                 }
