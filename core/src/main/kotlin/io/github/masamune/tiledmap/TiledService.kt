@@ -646,7 +646,7 @@ class TiledService(
     private fun EntityCreateContext.configurePlayer(world: World, entity: Entity) {
         log.debug { "Configuring player" }
         entity += Tag.CAMERA_FOCUS
-        entity += Player(gameProgress = 0)
+        entity += Player()
         entity += Name("Alexxius")
         entity += Interact()
         entity += Inventory(talons = 100)

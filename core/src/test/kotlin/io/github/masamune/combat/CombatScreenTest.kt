@@ -85,7 +85,7 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
             val items = spawnPlayerItems(world)
             val equipment = spawnPlayerEquipment(world)
             player.configure {
-                it += Player(gameProgress = 0)
+                it += Player()
                 it += Inventory(items = items)
                 it += Equipment(items = equipment)
                 it += MonsterBook(knownTypes = mutableSetOf(TiledObjectType.BUTTERFLY))
