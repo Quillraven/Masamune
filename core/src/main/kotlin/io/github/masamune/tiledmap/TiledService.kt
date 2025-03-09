@@ -127,7 +127,7 @@ class TiledService(
         }
         if (withMapChangeEvent) {
             eventService.fire(BeforeMapChangeEvent(tiledMap, world))
-            eventService.fire(MapChangeEvent(tiledMap, ignoreTrigger = !withTriggers))
+            eventService.fire(MapChangeEvent(tiledMap, ignoreTrigger = !withTriggers, world))
         }
     }
 

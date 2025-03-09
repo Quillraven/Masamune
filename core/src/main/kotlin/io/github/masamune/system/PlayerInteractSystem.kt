@@ -114,7 +114,7 @@ class PlayerInteractSystem(
             }
 
             interactEntity has Enemy -> {
-                eventService.fire(PlayerInteractCombatBeginEvent)
+                eventService.fire(PlayerInteractCombatBeginEvent(world, autoSave = true))
                 masamune.getScreen<CombatScreen>().playCombatMusic(MusicAsset.COMBAT1)
                 masamune.transitionScreen<CombatScreen>(
                     fromType = BlurTransitionType(

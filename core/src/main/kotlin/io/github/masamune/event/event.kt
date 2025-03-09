@@ -29,7 +29,7 @@ data class LoadEvent(val world: World) : Event
 data class PlayerInteractBeginContactEvent(val player: Entity, val other: Entity) : Event
 data class PlayerInteractEndContactEvent(val player: Entity, val other: Entity) : Event
 data object PlayerInteractEvent : Event
-data object PlayerInteractCombatBeginEvent : Event
+data class PlayerInteractCombatBeginEvent(val world: World, val autoSave:Boolean) : Event
 data class PlayerInteractCombatEndEvent(val victory: Boolean, val enemy: Entity) : Event
 
 // MENU EVENTS
@@ -53,7 +53,7 @@ data class ShopBeginEvent(val world: World, val player: Entity, val shop: Entity
 data object ShopEndEvent : Event
 
 // MAP + TRANSITION EVENTS
-data class MapChangeEvent(val tiledMap: TiledMap, val ignoreTrigger: Boolean) : Event
+data class MapChangeEvent(val tiledMap: TiledMap, val ignoreTrigger: Boolean, val world: World) : Event
 data class BeforeMapChangeEvent(val tiledMap: TiledMap, val world: World) : Event
 data class MapTransitionBeginEvent(
     val fromTiledMap: TiledMap,
@@ -64,6 +64,7 @@ data class MapTransitionBeginEvent(
     val mapOffset: Vector2,
     val newPlayerPos: Vector2, // position in new map (=toTiledMap)
     val playerSize: Vector2, // position in new map (=toTiledMap)
+    val world: World,
 ) : Event
 data class MapTransitionAfterObjectLoadEvent(val toTiledMap: TiledMap, val world: World) : Event
 data object MapTransitionEndEvent : Event

@@ -185,6 +185,7 @@ class DefaultMapTransitionService(
                 mapOffset,
                 playerTargetPosition,
                 playerTransformCmp.size,
+                world,
             )
         )
 

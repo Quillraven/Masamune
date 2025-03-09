@@ -31,6 +31,8 @@ import io.github.masamune.event.EventService
 import io.github.masamune.event.LoadEvent
 import io.github.masamune.event.MapChangeEvent
 import io.github.masamune.event.MapTransitionAfterObjectLoadEvent
+import io.github.masamune.event.MapTransitionBeginEvent
+import io.github.masamune.event.PlayerInteractCombatBeginEvent
 import io.github.masamune.event.SaveEvent
 import io.github.masamune.scheduledTask
 import io.github.masamune.tiledmap.ActionType
@@ -97,9 +99,25 @@ class SaveService(
     private val preferences: Preferences by lazy { Gdx.app.getPreferences("masamune_save") }
     private var activeSaveState: SaveState? = null
 
+    fun clearSaveState() {
+        preferences.flush {
+            this.remove(KEY_SATE)
+        }
+    }
+
     override fun onEvent(event: Event) {
         when (event) {
             is SaveEvent -> save(event.world)
+            is MapTransitionBeginEvent -> {
+                save(event.world)
+            }
+
+            is PlayerInteractCombatBeginEvent -> {
+                if (!event.autoSave) {
+                    return
+                }
+                save(event.world)
+            }
             is LoadEvent -> load(event.world)
             is BeforeMapChangeEvent -> removeTiledObjects(event.tiledMap, event.world)
             is MapTransitionAfterObjectLoadEvent -> removeTiledObjects(event.toTiledMap, event.world)
@@ -194,7 +212,7 @@ class SaveService(
 
         // fire map change event now AFTER player is configured (for correct map trigger behavior)
         removeTiledObjects(tiledService.activeMap, world)
-        eventService.fire(MapChangeEvent(tiledService.activeMap, ignoreTrigger = false))
+        eventService.fire(MapChangeEvent(tiledService.activeMap, ignoreTrigger = false, world))
     }
 
     private fun save(world: World) {

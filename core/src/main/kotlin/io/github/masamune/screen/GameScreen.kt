@@ -167,6 +167,8 @@ class GameScreen(
         tiledService.loadMap(initialMap).also {
             tiledService.setMap(it, world)
         }
+
+        masamune.save.clearSaveState()
         eventService.fire(SaveEvent(world))
     }
 

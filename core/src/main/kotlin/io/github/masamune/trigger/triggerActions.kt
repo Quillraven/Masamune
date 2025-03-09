@@ -482,7 +482,7 @@ class TriggerActionStartCombat(
     private var combatFinished = false
 
     override fun World.onStart() {
-        eventService.fire(PlayerInteractCombatBeginEvent)
+        eventService.fire(PlayerInteractCombatBeginEvent(this, autoSave = false))
         eventService += this@TriggerActionStartCombat
 
         masamune.getScreen<CombatScreen>().playCombatMusic(music)
