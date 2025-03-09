@@ -131,7 +131,7 @@ class SaveService(
     }
 
     fun loadLocale(): Locale {
-        val locale = Locale.forLanguageTag(settingsPreferences.getString("locale", Locale.getDefault().language))
+        val locale = Locale(settingsPreferences.getString("locale", Locale.getDefault().language))
         if (locale.language == "de") {
             return locale
         }
