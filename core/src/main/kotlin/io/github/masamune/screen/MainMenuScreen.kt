@@ -105,7 +105,7 @@ class MainMenuScreen(
             logoFlashColor.a = logoAlpha
             shaderService.useFlashShader(batch, logoFlashColor, 1f - logoTime) {
                 batch.use(uiViewport.camera) {
-                    it.draw(logo, 200f, 130f, 400f, 400f)
+                    it.draw(logo, 220f, 130f, 400f, 400f)
                 }
             }
         }

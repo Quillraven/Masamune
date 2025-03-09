@@ -49,6 +49,10 @@ class PopupTable(
         options.forEach { optionTable.option(it) }
     }
 
+    fun message(message: String) {
+        messageLabel.txt = message
+    }
+
     fun prevOption(): Boolean = optionTable.prevOption()
 
     fun nextOption(): Boolean = optionTable.nextOption()

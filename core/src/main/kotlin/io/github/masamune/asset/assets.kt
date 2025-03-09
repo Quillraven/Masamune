@@ -167,8 +167,8 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
     /**
      * Queues a [I18NAsset] for loading.
      */
-    fun load(asset: I18NAsset) {
-        manager.load<I18NBundle>(asset.path, I18NBundleParameter(Locale.getDefault(), Charsets.ISO_8859_1.name()))
+    fun load(asset: I18NAsset, locale: Locale) {
+        manager.load<I18NBundle>(asset.path, I18NBundleParameter(locale, Charsets.ISO_8859_1.name()))
     }
 
     /**

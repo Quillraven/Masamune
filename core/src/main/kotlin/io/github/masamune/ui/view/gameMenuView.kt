@@ -82,10 +82,10 @@ class GameMenuView(
     override fun onSelectPressed() {
         if (popupTable.hasParent()) {
             optionTable.resumeSelectAnimation()
+            popupTable.remove()
             if (popupTable.selectedOption == 0) {
                 // don't quit game
                 viewModel.playSndMenuAbort()
-                popupTable.remove()
             } else {
                 isVisible = false
                 viewModel.triggerOption(optionTable.numOptions - 1)

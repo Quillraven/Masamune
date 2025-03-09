@@ -37,6 +37,13 @@ button_pressed
   orig: 16, 8
   offset: 0, 0
   index: -1
+checked
+  rotate: false
+  xy: 50, 88
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 demon_fire
   rotate: false
   xy: 164, 192
@@ -109,7 +116,7 @@ hero
   index: -1
 icon_items
   rotate: false
-  xy: 52, 29
+  xy: 74, 55
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
@@ -130,7 +137,7 @@ icon_sword
   index: -1
 key_a
   rotate: false
-  xy: 74, 118
+  xy: 74, 96
   size: 13, 14
   orig: 13, 14
   offset: 0, 0
@@ -144,21 +151,21 @@ key_ctrl
   index: -1
 key_d
   rotate: false
-  xy: 95, 118
+  xy: 74, 74
   size: 13, 14
   orig: 13, 14
   offset: 0, 0
   index: -1
 key_esc
   rotate: false
-  xy: 50, 70
+  xy: 52, 22
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 key_s
   rotate: false
-  xy: 74, 96
+  xy: 95, 118
   size: 13, 14
   orig: 13, 14
   offset: 0, 0
@@ -172,7 +179,7 @@ key_space
   index: -1
 key_w
   rotate: false
-  xy: 50, 48
+  xy: 74, 118
   size: 13, 14
   orig: 13, 14
   offset: 0, 0
@@ -237,7 +244,7 @@ slider_progress_green
   index: -1
 slider_progress_white
   rotate: false
-  xy: 50, 92
+  xy: 50, 44
   size: 16, 12
   split: 3, 3, 4, 4
   orig: 16, 12
@@ -257,5 +264,12 @@ smith
   xy: 72, 186
   size: 38, 38
   orig: 38, 38
+  offset: 0, 0
+  index: -1
+unchecked
+  rotate: false
+  xy: 50, 64
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
   index: -1

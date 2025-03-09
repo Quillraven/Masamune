@@ -46,6 +46,7 @@ import ktx.log.logger
 import ktx.preferences.flush
 import ktx.preferences.set
 import ktx.tiled.property
+import java.util.*
 
 @Serializable
 private data class PlayerState(
@@ -101,6 +102,10 @@ class SaveService(
     private val settingsPreferences: Preferences by lazy { Gdx.app.getPreferences("masamune_settings") }
     private var activeSaveState: SaveState? = null
 
+    fun hasNoSaveState(): Boolean = KEY_SATE !in savePreferences
+
+    fun hasSaveState(): Boolean = KEY_SATE in savePreferences
+
     fun clearSaveState() {
         savePreferences.flush {
             this.remove(KEY_SATE)
@@ -117,6 +122,20 @@ class SaveService(
     fun loadAudioSettings(audioService: AudioService) {
         audioService.musicVolume = settingsPreferences.getFloat("music", 0.25f)
         audioService.soundVolume = settingsPreferences.getFloat("sound", 0.5f)
+    }
+
+    fun saveLocale(locale: Locale) {
+        settingsPreferences.flush {
+            this["locale"] = locale.language
+        }
+    }
+
+    fun loadLocale(): Locale {
+        val locale = Locale.forLanguageTag(settingsPreferences.getString("locale", Locale.getDefault().language))
+        if (locale.language == "de") {
+            return locale
+        }
+        return Locale("", "", "")
     }
 
     override fun onEvent(event: Event) {
