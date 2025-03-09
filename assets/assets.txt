@@ -31,6 +31,7 @@ i:b:/ui/messages_de.properties:12363:1
 i:b:/ui/messages.properties:11346:1
 i:b:/ui/skin.atlas:3977:1
 i:b:/ui/CherryCreamSoda-Regular.ttf:49404:1
+i:b:/ui/logo_bgd.png:366428:1
 i:b:/ui/skin.json:7801:1
 i:d:/music:0:1
 i:b:/music/road.mp3:709694:1
@@ -73,6 +74,7 @@ i:b:/maps/objects/mushroom.png:457:1
 i:b:/maps/objects/merchant.png:494:1
 i:b:/maps/objects/scroll_inferno.png:2975:1
 i:b:/maps/village.tmx:3622:1
+i:b:/maps/menu.tmx:1843:1
 i:b:/maps/objects.tsx:17944:1
 i:b:/maps/tileset.tsx:26263:1
 i:b:/maps/forest_masamune.tmx:3395:1
