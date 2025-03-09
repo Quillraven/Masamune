@@ -161,7 +161,7 @@ class GameScreen(
         eventService.fire(GameStartEvent)
     }
 
-    fun startNewGame(initialMap:TiledMapAsset = TiledMapAsset.VILLAGE) {
+    fun startNewGame(initialMap: TiledMapAsset = TiledMapAsset.VILLAGE, ignoreSaveService: Boolean = false) {
         // call this AFTER event listeners are registered
         world.removeAll(true)
         tiledService.unloadActiveMap(world)
@@ -169,8 +169,10 @@ class GameScreen(
             tiledService.setMap(it, world)
         }
 
-        masamune.save.clearSaveState()
-        eventService.fire(SaveEvent(world))
+        if (!ignoreSaveService) {
+            masamune.save.clearSaveState()
+            eventService.fire(SaveEvent(world))
+        }
     }
 
     fun loadSaveState() {

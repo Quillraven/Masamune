@@ -65,7 +65,7 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
         masamune.addScreen(CombatScreen(masamune))
         masamune.setScreen<GameScreen>()
         val gameScreen = masamune.getScreen<GameScreen>()
-        gameScreen.startNewGame()
+        gameScreen.startNewGame(ignoreSaveService = true)
 
         // trigger combat event like it is done in real game
         val player = spawnPlayer(gameScreen.world)
