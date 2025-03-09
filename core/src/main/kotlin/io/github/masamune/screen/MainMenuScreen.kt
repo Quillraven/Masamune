@@ -1,19 +1,29 @@
 package io.github.masamune.screen
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.HdpiUtils
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.I18NBundle
+import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.Viewport
 import io.github.masamune.Masamune
+import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.Masamune.Companion.uiViewport
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.ShaderService
+import io.github.masamune.asset.ShaderService.Companion.renderToFbo
 import io.github.masamune.asset.SkinAsset
+import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.audio.AudioService
 import io.github.masamune.event.EventService
 import io.github.masamune.input.ControllerStateUI
@@ -22,6 +32,10 @@ import io.github.masamune.ui.model.MainMenuViewModel
 import io.github.masamune.ui.view.mainMenuView
 import ktx.app.KtxScreen
 import ktx.assets.toInternalFile
+import ktx.graphics.component1
+import ktx.graphics.component2
+import ktx.graphics.component3
+import ktx.graphics.component4
 import ktx.graphics.use
 import ktx.scene2d.actors
 
@@ -35,12 +49,20 @@ class MainMenuScreen(
     private val shaderService: ShaderService = masamune.shader,
 ) : KtxScreen {
 
+    private val gameViewport: Viewport = ExtendViewport(12f, 6.7f)
     private val uiViewport = uiViewport()
     private val stage = Stage(uiViewport, batch)
     private val skin = assetService[SkinAsset.DEFAULT]
     private val bundle: I18NBundle = assetService[I18NAsset.MESSAGES]
     private val keyboardController = KeyboardController(eventService, initialState = ControllerStateUI::class)
     private val logo = Texture("ui/logo.png".toInternalFile())
+    private val logoBgd = Texture("ui/logo_bgd.png".toInternalFile())
+    private val menuMap: TiledMap by lazy {
+        assetService.load(TiledMapAsset.MENU)
+        assetService.finishLoading()
+        assetService[TiledMapAsset.MENU]
+    }
+    private val mapRenderer = OrthogonalTiledMapRenderer(menuMap, UNIT_SCALE, batch)
 
     private var logoDelay = 2f
     private var logoAlpha = 0f
@@ -91,10 +113,17 @@ class MainMenuScreen(
     }
 
     override fun resize(width: Int, height: Int) {
+        gameViewport.update(width, height, true)
         uiViewport.update(width, height, true)
     }
 
     override fun render(delta: Float) {
+        gameViewport.apply()
+        batch.color = Color.GRAY
+        mapRenderer.setView(gameViewport.camera as OrthographicCamera)
+        mapRenderer.render()
+        batch.color = Color.WHITE
+
         uiViewport.apply()
 
         // render logo
@@ -103,11 +132,24 @@ class MainMenuScreen(
             logoTime = (logoTime + delta * 0.25f).coerceAtMost(1f)
             logoAlpha = logoInterpolation.apply(0.2f, 1f, logoTime)
             logoFlashColor.a = logoAlpha
-            shaderService.useFlashShader(batch, logoFlashColor, 1f - logoTime) {
+            shaderService.tmpFbo.renderToFbo {
                 batch.use(uiViewport.camera) {
-                    it.draw(logo, 220f, 130f, 400f, 400f)
+                    batch.draw(logoBgd, 220f, 130f, 400f, 400f)
+                }
+                shaderService.useFlashShader(batch, logoFlashColor, 1f - logoTime) {
+                    batch.use(uiViewport.camera) {
+                        it.draw(logo, 220f, 130f, 400f, 400f)
+                    }
                 }
             }
+
+            val (r, g, b, a) = batch.color
+            batch.setColor(r, g, b, logoAlpha)
+            HdpiUtils.glViewport(0, 0, Gdx.graphics.width, Gdx.graphics.height)
+            batch.use(batch.projectionMatrix.idt()) {
+                it.draw(shaderService.tmpFbo.colorBufferTexture, -1f, 1f, 2f, -2f)
+            }
+            batch.setColor(r, g, b, a)
         }
 
         batch.color = Color.WHITE
@@ -119,5 +161,7 @@ class MainMenuScreen(
         masamune.save.saveAudioSettings(audioService)
         stage.dispose()
         logo.dispose()
+        logoBgd.dispose()
+        mapRenderer.dispose()
     }
 }
