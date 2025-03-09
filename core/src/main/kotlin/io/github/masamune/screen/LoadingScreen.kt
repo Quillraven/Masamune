@@ -27,7 +27,6 @@ import ktx.scene2d.defaultStyle
 import ktx.scene2d.label
 import ktx.scene2d.progressBar
 import ktx.scene2d.table
-import java.util.*
 
 class LoadingScreen(
     private val masamune: Masamune,
@@ -49,7 +48,6 @@ class LoadingScreen(
         // load default skin to be able to render basic UI with loading bar
         assetService.load(SkinAsset.DEFAULT)
         assetService.load(I18NAsset.MESSAGES, locale)
-        println(Locale.getDefault())
         assetService.finishLoading()
         val skin = assetService[SkinAsset.DEFAULT]
         skin.getAll(BitmapFont::class.java).values().forEach { (it as BitmapFont).data.markupEnabled = true }

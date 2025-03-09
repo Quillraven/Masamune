@@ -1,12 +1,10 @@
 package io.github.masamune.screen
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.glutils.HdpiUtils
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Interpolation
@@ -21,7 +19,6 @@ import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.ShaderService
-import io.github.masamune.asset.ShaderService.Companion.renderToFbo
 import io.github.masamune.asset.SkinAsset
 import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.audio.AudioService
@@ -32,10 +29,6 @@ import io.github.masamune.ui.model.MainMenuViewModel
 import io.github.masamune.ui.view.mainMenuView
 import ktx.app.KtxScreen
 import ktx.assets.toInternalFile
-import ktx.graphics.component1
-import ktx.graphics.component2
-import ktx.graphics.component3
-import ktx.graphics.component4
 import ktx.graphics.use
 import ktx.scene2d.actors
 
@@ -69,6 +62,7 @@ class MainMenuScreen(
     private val logoInterpolation = Interpolation.swingOut
     private var logoTime = 0f
     private val logoFlashColor = Color(1f, 1f, 1f, 0f)
+    private val mapColor = Color(Color.GRAY)
 
     override fun show() {
         // set controller
@@ -119,10 +113,12 @@ class MainMenuScreen(
 
     override fun render(delta: Float) {
         gameViewport.apply()
-        batch.color = Color.GRAY
+        val batchAlpha = batch.color.a
+        mapColor.a = batchAlpha
+        batch.color = mapColor
         mapRenderer.setView(gameViewport.camera as OrthographicCamera)
         mapRenderer.render()
-        batch.color = Color.WHITE
+        batch.setColor(1f, 1f, 1f, batchAlpha)
 
         uiViewport.apply()
 
@@ -132,27 +128,18 @@ class MainMenuScreen(
             logoTime = (logoTime + delta * 0.25f).coerceAtMost(1f)
             logoAlpha = logoInterpolation.apply(0.2f, 1f, logoTime)
             logoFlashColor.a = logoAlpha
-            shaderService.tmpFbo.renderToFbo {
+            batch.setColor(1f, 1f, 1f, logoAlpha)
+            batch.use(uiViewport.camera) {
+                batch.draw(logoBgd, 220f, 130f, 400f, 400f)
+            }
+            shaderService.useFlashShader(batch, logoFlashColor, 1f - logoTime) {
                 batch.use(uiViewport.camera) {
-                    batch.draw(logoBgd, 220f, 130f, 400f, 400f)
-                }
-                shaderService.useFlashShader(batch, logoFlashColor, 1f - logoTime) {
-                    batch.use(uiViewport.camera) {
-                        it.draw(logo, 220f, 130f, 400f, 400f)
-                    }
+                    it.draw(logo, 220f, 130f, 400f, 400f)
                 }
             }
-
-            val (r, g, b, a) = batch.color
-            batch.setColor(r, g, b, logoAlpha)
-            HdpiUtils.glViewport(0, 0, Gdx.graphics.width, Gdx.graphics.height)
-            batch.use(batch.projectionMatrix.idt()) {
-                it.draw(shaderService.tmpFbo.colorBufferTexture, -1f, 1f, 2f, -2f)
-            }
-            batch.setColor(r, g, b, a)
         }
 
-        batch.color = Color.WHITE
+        batch.setColor(1f, 1f, 1f, batchAlpha)
         stage.act(delta)
         stage.draw()
     }

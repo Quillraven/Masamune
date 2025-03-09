@@ -228,6 +228,7 @@ class MainMenuView(
         popupTable.firstOption()
         popupTable.userObject = userObject
         stage.addActor(popupTable)
+        viewModel.playSndMenuAccept()
     }
 
     override fun onLeftPressed() {

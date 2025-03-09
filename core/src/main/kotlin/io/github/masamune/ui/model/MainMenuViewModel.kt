@@ -7,7 +7,6 @@ import io.github.masamune.Masamune
 import io.github.masamune.audio.AudioService
 import io.github.masamune.event.Event
 import io.github.masamune.screen.CutSceneScreen
-import io.github.masamune.screen.DefaultTransition
 import io.github.masamune.screen.DefaultTransitionType
 import io.github.masamune.screen.FadeTransitionType
 import io.github.masamune.screen.GameScreen
