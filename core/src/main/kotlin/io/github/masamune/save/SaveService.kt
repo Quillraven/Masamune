@@ -7,6 +7,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import io.github.masamune.asset.TiledMapAsset
+import io.github.masamune.audio.AudioService
 import io.github.masamune.component.CharacterStats
 import io.github.masamune.component.CharacterStats.Companion.toItemStats
 import io.github.masamune.component.Combat
@@ -96,13 +97,26 @@ class SaveService(
     private val eventService: EventService,
 ) : EventListener {
 
-    private val preferences: Preferences by lazy { Gdx.app.getPreferences("masamune_save") }
+    private val savePreferences: Preferences by lazy { Gdx.app.getPreferences("masamune_save") }
+    private val settingsPreferences: Preferences by lazy { Gdx.app.getPreferences("masamune_settings") }
     private var activeSaveState: SaveState? = null
 
     fun clearSaveState() {
-        preferences.flush {
+        savePreferences.flush {
             this.remove(KEY_SATE)
         }
+    }
+
+    fun saveAudioSettings(audioService: AudioService) {
+        settingsPreferences.flush {
+            this["music"] = audioService.musicVolume
+            this["sound"] = audioService.soundVolume
+        }
+    }
+
+    fun loadAudioSettings(audioService: AudioService) {
+        audioService.musicVolume = settingsPreferences.getFloat("music", 0.25f)
+        audioService.soundVolume = settingsPreferences.getFloat("sound", 0.5f)
     }
 
     override fun onEvent(event: Event) {
@@ -144,13 +158,13 @@ class SaveService(
     }
 
     private fun load(world: World) {
-        if (KEY_SATE !in preferences) {
+        if (KEY_SATE !in savePreferences) {
             log.error { "Trying to load a non-existing save state." }
             activeSaveState = null
             return
         }
 
-        val saveState = Json.decodeFromString<SaveState>(preferences.getString(KEY_SATE))
+        val saveState = Json.decodeFromString<SaveState>(savePreferences.getString(KEY_SATE))
         activeSaveState = saveState
         log.info { "Loading save state: $saveState" }
 
@@ -216,8 +230,8 @@ class SaveService(
     }
 
     private fun save(world: World) {
-        val mapData: MutableMap<TiledMapAsset, MapState> = if (KEY_SATE in preferences) {
-            val state: SaveState = Json.decodeFromString(preferences.getString(KEY_SATE))
+        val mapData: MutableMap<TiledMapAsset, MapState> = if (KEY_SATE in savePreferences) {
+            val state: SaveState = Json.decodeFromString(savePreferences.getString(KEY_SATE))
             state.mapData.toMutableMap()
         } else {
             mutableMapOf()
@@ -234,7 +248,7 @@ class SaveService(
         activeSaveState = saveState
         val saveStateStr = Json.encodeToString(saveState)
         log.debug { "Saving state: $saveStateStr" }
-        preferences.flush {
+        savePreferences.flush {
             this[KEY_SATE] = saveStateStr
         }
     }

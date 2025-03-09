@@ -23,13 +23,13 @@ class AudioService(
     val currentMusic: Music
         get() = lastMusic?.first ?: gdxError("There is no music currently playing")
 
-    var musicVolume: Float = 0.25f
+    var musicVolume: Float = 1f
         set(value) {
             field = value.coerceIn(0f, 1f)
             lastMusic?.first?.volume = field
         }
 
-    var soundVolume: Float = 0.5f
+    var soundVolume: Float = 1f
         set(value) {
             field = value.coerceIn(0f, 1f)
         }

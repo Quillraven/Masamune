@@ -53,6 +53,9 @@ class MainMenuScreen(
         inputProcessor.clear()
         inputProcessor.addProcessor(keyboardController)
 
+        // load audio settings
+        masamune.save.loadAudioSettings(audioService)
+
         // setup UI views
         stage.clear()
         stage.actors {
@@ -84,6 +87,7 @@ class MainMenuScreen(
         logoDelay = 2f
         eventService.clearListeners()
         audioService.stopMusic()
+        masamune.save.saveAudioSettings(audioService)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -112,6 +116,7 @@ class MainMenuScreen(
     }
 
     override fun dispose() {
+        masamune.save.saveAudioSettings(audioService)
         stage.dispose()
         logo.dispose()
     }
