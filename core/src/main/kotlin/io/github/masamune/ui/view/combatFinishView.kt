@@ -115,8 +115,8 @@ class CombatFinishView(
                 appendLine()
 
                 supportedStats.forEach { (uiStat, i18nKey) ->
-                    val gain = stats.getOrDefault(uiStat, 0f)
-                    if (gain == 0f) {
+                    val gain: Int = stats.getOrDefault(uiStat, 0)
+                    if (gain == 0) {
                         return@forEach
                     }
 
