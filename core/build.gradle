@@ -1,3 +1,7 @@
+plugins {
+  id 'org.jetbrains.kotlin.plugin.serialization' version "${kotlinVersion}"
+}
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
@@ -24,6 +28,7 @@ dependencies {
   api "com.github.raeleus.stripe:stripe:$stripeVersion"
   api "com.github.raeleus.stripe:freetype:$stripeVersion"
   api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+  api "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion"
 
   testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"

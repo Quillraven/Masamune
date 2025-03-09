@@ -54,6 +54,7 @@ import io.github.masamune.component.Tag
 import io.github.masamune.component.Tiled
 import io.github.masamune.component.Transform
 import io.github.masamune.component.Trigger
+import io.github.masamune.event.BeforeMapChangeEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MapChangeEvent
 import ktx.app.gdxError
@@ -97,7 +98,7 @@ class TiledService(
 
         // set the TiledMapAsset as property on the TiledMap to make it easier to identify it
         return assetService[asset].also {
-            it.properties["tiledMapAsset"] = asset
+            it.properties[TILED_MAP_ASSET_PROPERTY_KEY] = asset
         }
     }
 
@@ -107,9 +108,11 @@ class TiledService(
         withBoundaries: Boolean = true,
         withTriggers: Boolean = true,
         withPortals: Boolean = true,
+        withMapChangeEvent: Boolean = true,
     ) {
         currentMap?.let { unloadMap(it, world) }
         currentMap = tiledMap
+        val tiledMapAsset: TiledMapAsset = tiledMap.property(TILED_MAP_ASSET_PROPERTY_KEY)
 
         if (withBoundaries) {
             staticCollisionBodies += tiledMap.spawnBoundaryBody(world)
@@ -117,12 +120,15 @@ class TiledService(
         loadGroundCollision(tiledMap, world)
         loadObjects(tiledMap, world)
         if (withTriggers) {
-            tiledMap[ObjectLayer.TRIGGER]?.objects?.forEach { loadTrigger(it, world) }
+            tiledMap[ObjectLayer.TRIGGER]?.objects?.forEach { loadTrigger(it, world, tiledMapAsset) }
         }
         if (withPortals) {
-            tiledMap[ObjectLayer.PORTAL]?.objects?.forEach { loadPortal(it, world) }
+            tiledMap[ObjectLayer.PORTAL]?.objects?.forEach { loadPortal(it, world, tiledMapAsset) }
         }
-        eventService.fire(MapChangeEvent(tiledMap, ignoreTrigger = !withTriggers))
+        if (withMapChangeEvent) {
+            eventService.fire(BeforeMapChangeEvent(tiledMap, world))
+            eventService.fire(MapChangeEvent(tiledMap, ignoreTrigger = !withTriggers))
+        }
     }
 
     fun loadObjects(tiledMap: TiledMap, world: World): List<Entity> {
@@ -135,8 +141,9 @@ class TiledService(
 
         // at this point we know that mapObjects are not null
         val result = mutableListOf<Entity>()
+        val tiledMapAsset = tiledMap.property<TiledMapAsset>(TILED_MAP_ASSET_PROPERTY_KEY)
         mapObjects.forEach {
-            result += loadObject(it, world)
+            result += loadObject(it, world, tiledMapAsset)
         }
         tiledMap.objectsLoaded = true
         return result
@@ -162,7 +169,7 @@ class TiledService(
     }
 
     private fun unloadMap(tiledMap: TiledMap, world: World) {
-        val tiledMapAsset = tiledMap.property<TiledMapAsset>("tiledMapAsset")
+        val tiledMapAsset = tiledMap.property<TiledMapAsset>(TILED_MAP_ASSET_PROPERTY_KEY)
         val unloadingTime = measureTimeMillis {
             assetService.unload(tiledMapAsset)
             assetService.finishLoading()
@@ -208,7 +215,11 @@ class TiledService(
         }
     }
 
-    private fun loadPortal(mapObject: MapObject, world: World) {
+    private fun loadPortal(
+        mapObject: MapObject,
+        world: World,
+        tiledMapAsset: TiledMapAsset,
+    ) {
         val x = mapObject.x * UNIT_SCALE
         val y = mapObject.y * UNIT_SCALE
         val w = mapObject.width * UNIT_SCALE
@@ -223,7 +234,7 @@ class TiledService(
         world.entity { entity ->
             log.debug { "Loading portal ${mapObject.id} as entity $entity" }
 
-            entity += Tiled(mapObject.id, TiledObjectType.PORTAL)
+            entity += Tiled(mapObject.id, TiledObjectType.PORTAL, tiledMapAsset)
             entity += Portal(toMapAsset, mapObject.targetPortalId)
             val body = mapObject.toBody(world, x, y, data = entity)
             entity += Physic(body)
@@ -231,7 +242,11 @@ class TiledService(
         }
     }
 
-    private fun loadTrigger(mapObject: MapObject, world: World) {
+    private fun loadTrigger(
+        mapObject: MapObject,
+        world: World,
+        tiledMapAsset: TiledMapAsset,
+    ) {
         val x = mapObject.x * UNIT_SCALE
         val y = mapObject.y * UNIT_SCALE
         val triggerName = mapObject.name ?: ""
@@ -245,11 +260,11 @@ class TiledService(
             entity += Trigger(triggerName)
             val body = mapObject.toBody(world, x, y, data = entity)
             entity += Physic(body)
-            entity += Tiled(mapObject.id, TiledObjectType.TRIGGER)
+            entity += Tiled(mapObject.id, TiledObjectType.TRIGGER, tiledMapAsset)
         }
     }
 
-    private fun loadObject(mapObject: MapObject, world: World): Entity {
+    private fun loadObject(mapObject: MapObject, world: World, tiledMapAsset: TiledMapAsset): Entity {
         val tiledObj = mapObject as TiledMapTileMapObject
         val isPlayerObj = mapObject.name == "Player"
         val playerFamily = world.family { all(Player) }
@@ -266,9 +281,9 @@ class TiledService(
         val objType = TiledObjectType.valueOf(objTypeStr)
         val tiledClass: String = tile.property("type", "")
         return when (tiledClass) {
-            "EnemyObject" -> loadGameEnemy(x, y, objType, tile, tiledObj, world)
-            "NpcObject" -> loadNpc(x, y, objType, tile, tiledObj, world)
-            "PropObject" -> loadPropObject(x, y, objType, tile, tiledObj, world)
+            "EnemyObject" -> loadGameEnemy(x, y, objType, tile, tiledObj, world, tiledMapAsset)
+            "NpcObject" -> loadNpc(x, y, objType, tile, tiledObj, world, tiledMapAsset)
+            "PropObject" -> loadPropObject(x, y, objType, tile, tiledObj, world, tiledMapAsset)
             "PlayerObject" -> loadPlayerObject(x, y, tile, tiledObj, world)
             else -> gdxError("Unsupported tile class $tiledClass for tile ${tile.id}")
         }
@@ -299,11 +314,12 @@ class TiledService(
         objType: TiledObjectType,
         tile: TiledMapTile,
         tiledObj: TiledMapTileMapObject,
-        world: World
+        world: World,
+        tiledMapAsset: TiledMapAsset,
     ): Entity = world.entity {
         log.debug { "Loading prop ${tiledObj.id} as entity $it" }
 
-        configureTiled(it, tiledObj.id, objType)
+        configureTiled(it, tiledObj.id, objType, tiledMapAsset)
         it += Facing(FacingDirection.DOWN)
         val graphicCmp = configureGraphic(it, tile, AnimationType.UNDEFINED.name)
         it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
@@ -319,7 +335,8 @@ class TiledService(
 
             val dummyObj = TiledMapTileMapObject(tile, false, false)
             dummyObj.properties["id"] = tile.id
-            return loadNpc(location.x, location.y, type, tile, dummyObj, world)
+            val tiledMapAsset = activeMap.property<TiledMapAsset>(TILED_MAP_ASSET_PROPERTY_KEY)
+            return loadNpc(location.x, location.y, type, tile, dummyObj, world, tiledMapAsset)
         }
 
         gdxError("There is no enemy with type $type")
@@ -332,10 +349,11 @@ class TiledService(
         tile: TiledMapTile,
         tiledObj: TiledMapTileMapObject,
         world: World,
+        tiledMapAsset: TiledMapAsset,
     ): Entity = world.entity {
         log.debug { "Loading NPC ${tiledObj.id} as entity $it" }
 
-        configureTiled(it, tiledObj.id, objType)
+        configureTiled(it, tiledObj.id, objType, tiledMapAsset)
         it += Facing(FacingDirection.DOWN)
         val graphicCmp = configureGraphic(it, tile, AnimationType.WALK.name)
         it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
@@ -351,10 +369,11 @@ class TiledService(
         tile: TiledMapTile,
         tiledObj: TiledMapTileMapObject,
         world: World,
+        tiledMapAsset: TiledMapAsset,
     ): Entity = world.entity {
         log.debug { "Loading game enemy ${tiledObj.id} as entity $it" }
 
-        configureTiled(it, tiledObj.id, objType)
+        configureTiled(it, tiledObj.id, objType, tiledMapAsset)
         it += Facing(FacingDirection.DOWN)
         val graphicCmp = configureGraphic(it, tile, AnimationType.WALK.name)
         it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
@@ -384,9 +403,10 @@ class TiledService(
     private fun EntityCreateContext.configureTiled(
         entity: Entity,
         tiledObjId: Int,
-        objectType: TiledObjectType
+        objectType: TiledObjectType,
+        tiledMapAsset: TiledMapAsset,
     ) {
-        entity += Tiled(tiledObjId, objectType)
+        entity += Tiled(tiledObjId, objectType, tiledMapAsset)
     }
 
     private fun EntityCreateContext.configureGraphic(
@@ -708,10 +728,11 @@ class TiledService(
                 return@forEach
             }
 
+            val tiledMapAsset: TiledMapAsset = activeMap.property(TILED_MAP_ASSET_PROPERTY_KEY)
             return world.entity {
                 log.debug { "Loading enemy $type as entity $it" }
 
-                it += Tiled(tile.id, type)
+                it += Tiled(tile.id, type, tiledMapAsset)
                 val graphic = configureGraphic(it, tile, AnimationType.WALK.name)
                 it += graphic
                 it += Transform(vec3(x, y, 0f), graphic.regionSize)
@@ -757,6 +778,7 @@ class TiledService(
 
     companion object {
         private val log = logger<TiledService>()
+        const val TILED_MAP_ASSET_PROPERTY_KEY = "tiledMapAsset"
 
         fun TiledMap.portal(portalId: Int): MapObject {
             return layer("portal").objects

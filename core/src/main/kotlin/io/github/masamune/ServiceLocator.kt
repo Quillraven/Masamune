@@ -8,6 +8,7 @@ import io.github.masamune.asset.ShaderService
 import io.github.masamune.audio.AudioService
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.event.EventService
+import io.github.masamune.save.SaveService
 import io.github.masamune.screen.ScreenTransitionService
 import io.github.masamune.tiledmap.ImmediateMapTransitionService
 import io.github.masamune.tiledmap.MapTransitionService
@@ -23,6 +24,7 @@ interface ServiceLocator : Disposable {
     val audio: AudioService
     val screenTransition: ScreenTransitionService
     val actionExecutor: ActionExecutorService
+    val save: SaveService
 }
 
 class LazyServiceLocator(
@@ -43,6 +45,12 @@ class LazyServiceLocator(
     actionExecutorServiceInitializer: (AudioService, EventService) -> ActionExecutorService = { audioService, eventService ->
         ActionExecutorService(audioService, eventService)
     },
+    saveServiceInitializer: (TiledService, EventService) -> SaveService = { tiledService, eventService ->
+        SaveService(
+            tiledService,
+            eventService
+        )
+    },
 ) : ServiceLocator {
     override val batch: Batch by lazy(batchInitializer)
     override val asset: AssetService by lazy(assetServiceInitializer)
@@ -53,6 +61,7 @@ class LazyServiceLocator(
     override val audio: AudioService by lazy { audioServiceInitializer(asset) }
     override val screenTransition: ScreenTransitionService by lazy { screenTransitionServiceInitializer(batch, shader) }
     override val actionExecutor: ActionExecutorService by lazy { actionExecutorServiceInitializer(audio, event) }
+    override val save: SaveService by lazy { saveServiceInitializer(tiled, event) }
 
     override fun dispose() {
         batch.dispose()

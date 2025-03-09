@@ -11,7 +11,7 @@ import io.github.masamune.combat.buff.Buff
 import io.github.masamune.tiledmap.ActionType
 
 data class Combat(
-    val availableActionTypes: List<ActionType>,
+    var availableActionTypes: List<ActionType>,
     var action: Action = DefaultAction,
     val targets: MutableEntityBag = MutableEntityBag(4),
     val attackSnd: SoundAsset = SoundAsset.ATTACK_SWIPE,

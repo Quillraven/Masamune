@@ -22,6 +22,8 @@ data class PlayerQuestItemBegin(val player: Entity, val item: Entity) : Event
 data object PlayerQuestItemEnd : Event
 data object GameStartEvent : Event
 data class CutSceneTextEvent(val i18NKey: I18NKey, val align: Int, val duration: Float) : Event
+data class SaveEvent(val world: World) : Event
+data class LoadEvent(val world: World) : Event
 
 // PLAYER INTERACT EVENTS
 data class PlayerInteractBeginContactEvent(val player: Entity, val other: Entity) : Event
@@ -52,6 +54,7 @@ data object ShopEndEvent : Event
 
 // MAP + TRANSITION EVENTS
 data class MapChangeEvent(val tiledMap: TiledMap, val ignoreTrigger: Boolean) : Event
+data class BeforeMapChangeEvent(val tiledMap: TiledMap, val world: World) : Event
 data class MapTransitionBeginEvent(
     val fromTiledMap: TiledMap,
     val toTiledMap: TiledMap,
@@ -62,6 +65,7 @@ data class MapTransitionBeginEvent(
     val newPlayerPos: Vector2, // position in new map (=toTiledMap)
     val playerSize: Vector2, // position in new map (=toTiledMap)
 ) : Event
+data class MapTransitionAfterObjectLoadEvent(val toTiledMap: TiledMap, val world: World) : Event
 data object MapTransitionEndEvent : Event
 
 // COMBAT EVENTS

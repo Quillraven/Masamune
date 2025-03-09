@@ -2,7 +2,9 @@ package io.github.masamune.quest
 
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed interface Quest : EventListener {
     val i18nKey: String
 
@@ -13,6 +15,7 @@ sealed interface Quest : EventListener {
     override fun onEvent(event: Event) = Unit
 }
 
+@Serializable
 data class MainQuest(var progress: Int = 0) : Quest {
     override val i18nKey = "quest.main"
 
@@ -23,6 +26,7 @@ data class MainQuest(var progress: Int = 0) : Quest {
     }
 }
 
+@Serializable
 data class FlowerGirlQuest(var progress: Int = 0) : Quest {
     override val i18nKey = "quest.flower_girl"
 
@@ -33,6 +37,7 @@ data class FlowerGirlQuest(var progress: Int = 0) : Quest {
     }
 }
 
+@Serializable
 data class MonsterBookQuest(var completed: Boolean = false) : Quest {
     override val i18nKey = "quest.monster_book"
 

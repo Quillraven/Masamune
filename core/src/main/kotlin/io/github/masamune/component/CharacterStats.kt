@@ -99,7 +99,6 @@ class CharacterStats(
     override fun type() = CharacterStats
 
     operator fun plusAssign(other: ItemStats) {
-        // life and mana are excluded because
         this.agility += other.agility
         this.arcaneStrike += other.arcaneStrike
         this.armor += other.armor
@@ -164,10 +163,47 @@ class CharacterStats(
         return "CharacterStats(agility=$agility, arcaneStrike=$arcaneStrike, armor=$armor, criticalStrike=$criticalStrike, intelligence=$intelligence, magicalEvade=$magicalEvade, physicalEvade=$physicalEvade, resistance=$resistance, life=$life, lifeMax=$lifeMax, constitution=$constitution, damage=$damage, strength=$strength, mana=$mana, manaMax=$manaMax)"
     }
 
-
     companion object : ComponentType<CharacterStats>() {
         const val DAM_PER_STR = 1 / 2f
         const val MAG_DAM_PER_INT = 1 / 4f
         const val LIFE_PER_CONST = 10f
+
+        fun CharacterStats.toItemStats() = ItemStats(
+            agility = agility,
+            arcaneStrike = arcaneStrike,
+            armor = armor,
+            constitution = constitution,
+            criticalStrike = criticalStrike,
+            damage = damage,
+            intelligence = intelligence,
+            life = life,
+            lifeMax = lifeMax,
+            magicalEvade = magicalEvade,
+            mana = mana,
+            manaMax = manaMax,
+            physicalEvade = physicalEvade,
+            resistance = resistance,
+            strength = strength,
+        )
+
+        fun fromItemStats(itemStats: ItemStats): CharacterStats {
+            return CharacterStats().apply {
+                this.agility = itemStats.agility
+                this.arcaneStrike = itemStats.arcaneStrike
+                this.armor = itemStats.armor
+                this.criticalStrike = itemStats.criticalStrike
+                this.intelligence = itemStats.intelligence
+                this.magicalEvade = itemStats.magicalEvade
+                this.manaMax = itemStats.manaMax
+                this.mana = itemStats.mana
+                this.physicalEvade = itemStats.physicalEvade
+                this.resistance = itemStats.resistance
+                this.constitution = itemStats.constitution
+                this.lifeMax = itemStats.lifeMax
+                this.life = itemStats.life
+                this.strength = itemStats.strength
+                this.damage = itemStats.damage
+            }
+        }
     }
 }

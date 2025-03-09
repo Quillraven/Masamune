@@ -21,6 +21,7 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.event.GameStartEvent
+import io.github.masamune.event.SaveEvent
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CameraSystem
@@ -166,6 +167,7 @@ class GameScreen(
         tiledService.loadMap(initialMap).also {
             tiledService.setMap(it, world)
         }
+        eventService.fire(SaveEvent(world))
     }
 
     fun clearGameState() {
@@ -179,6 +181,7 @@ class GameScreen(
         eventService += stage
         eventService += keyboardController
         eventService += masamune.audio
+        eventService += masamune.save
         world.system<TriggerSystem>().registerTriggerListeners()
     }
 

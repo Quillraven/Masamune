@@ -2,7 +2,9 @@ package io.github.masamune.component
 
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ItemStats(
     var agility: Float = 0f,
     var arcaneStrike: Float = 0f,

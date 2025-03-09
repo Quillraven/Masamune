@@ -15,6 +15,7 @@ import io.github.masamune.component.Portal
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Transform
 import io.github.masamune.component.teleport
+import io.github.masamune.event.MapTransitionAfterObjectLoadEvent
 import io.github.masamune.event.MapTransitionBeginEvent
 import io.github.masamune.event.MapTransitionEndEvent
 import io.github.masamune.system.RenderSystem
@@ -130,7 +131,9 @@ class DefaultMapTransitionService(
             tiledService.setMap(nextMap, world)
 
             // reset the render offset of the new map objects and activate their physic bodies again
-            newMapObjects.forEach { mapObjEntity ->
+            newMapObjects
+                .filter { it in world } // object might be removed due to previous map save state
+                .forEach { mapObjEntity ->
                 mapObjEntity.getOrNull(Physic)?.body?.isActive = true
                 if (mapObjEntity hasNo Player) {
                     mapObjEntity.getOrNull(Transform)?.offset?.setZero()
@@ -181,7 +184,7 @@ class DefaultMapTransitionService(
                 transitionType,
                 mapOffset,
                 playerTargetPosition,
-                playerTransformCmp.size
+                playerTransformCmp.size,
             )
         )
 
@@ -199,6 +202,7 @@ class DefaultMapTransitionService(
             }
             mapObjEntity.configure { it += Tag.MAP_TRANSITION }
         }
+        tiledService.eventService.fire(MapTransitionAfterObjectLoadEvent(toTiledMap, world))
 
         // move player to target location of new map
         // this is equal to a position outside the current active map which will be fixed at the end of the transition
