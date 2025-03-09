@@ -120,6 +120,8 @@ fun World.consumeItem(item: Entity, consumer: Entity) {
     consumerStats += itemStats
     if (itemStats.life > 0f || itemStats.mana > 0f) {
         inject<AudioService>().play(SoundAsset.HEAL1)
+    } else {
+        inject<AudioService>().play(SoundAsset.CONSUME)
     }
 
     removeItem(itemCmp.type, 1, consumer, removeEntity = true)
