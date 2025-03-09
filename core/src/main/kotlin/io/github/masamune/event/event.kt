@@ -67,7 +67,7 @@ data class MapTransitionBeginEvent(
     val world: World,
 ) : Event
 data class MapTransitionAfterObjectLoadEvent(val toTiledMap: TiledMap, val world: World) : Event
-data object MapTransitionEndEvent : Event
+data class MapTransitionEndEvent(val world: World) : Event
 
 // COMBAT EVENTS
 data class CombatStartEvent(val player: Entity, val enemies: EntityBag) : Event

@@ -33,6 +33,7 @@ import io.github.masamune.event.LoadEvent
 import io.github.masamune.event.MapChangeEvent
 import io.github.masamune.event.MapTransitionAfterObjectLoadEvent
 import io.github.masamune.event.MapTransitionBeginEvent
+import io.github.masamune.event.MapTransitionEndEvent
 import io.github.masamune.event.PlayerInteractCombatBeginEvent
 import io.github.masamune.event.SaveEvent
 import io.github.masamune.scheduledTask
@@ -142,6 +143,9 @@ class SaveService(
         when (event) {
             is SaveEvent -> save(event.world)
             is MapTransitionBeginEvent -> {
+                save(event.world)
+            }
+            is MapTransitionEndEvent -> {
                 save(event.world)
             }
 

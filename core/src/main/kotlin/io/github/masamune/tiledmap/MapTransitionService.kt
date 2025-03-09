@@ -141,7 +141,9 @@ class DefaultMapTransitionService(
                 mapObjEntity.configure { it -= Tag.MAP_TRANSITION }
             }
 
-            tiledService.eventService.fire(MapTransitionEndEvent)
+            // trigger update to teleport player properly before firing event -> necessary for correct save
+            world.update(0f)
+            tiledService.eventService.fire(MapTransitionEndEvent(world))
         }
     }
 
