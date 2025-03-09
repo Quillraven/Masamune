@@ -2,6 +2,7 @@ i:d:/sound:0:1
 i:b:/sound/menu_accept.wav:109000:1
 i:b:/sound/heal1.wav:134072:1
 i:b:/sound/quest_item.wav:276834:1
+i:b:/sound/consume.wav:53076:1
 i:b:/sound/menu_click.wav:33612:1
 i:b:/sound/menu_abort.wav:73332:1
 i:b:/sound/demi1.wav:108408:1
