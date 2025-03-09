@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="25" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="28" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -416,5 +416,83 @@
    <property name="objType" propertytype="MapObjectType" value="CYCLOPS_NPC"/>
   </properties>
   <image source="objects/cyclops_npc.png" width="16" height="16"/>
+ </tile>
+ <tile id="26" type="EnemyObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,HEAL"/>
+   <property name="level" type="int" value="3"/>
+   <property name="objType" propertytype="MapObjectType" value="AXOLOT"/>
+   <property name="stats" type="class" propertytype="CharStats">
+    <properties>
+     <property name="agility" type="float" value="3"/>
+     <property name="baseLife" type="float" value="12"/>
+     <property name="damage" type="float" value="5"/>
+     <property name="physicalEvade" type="float" value="0.2"/>
+    </properties>
+   </property>
+   <property name="talons" type="int" value="40"/>
+   <property name="xp" type="int" value="25"/>
+  </properties>
+  <image source="objects/axolot.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="0" y="0" width="16" height="15">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="27" type="EnemyObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,SLOW"/>
+   <property name="level" type="int" value="2"/>
+   <property name="objType" propertytype="MapObjectType" value="SLIME"/>
+   <property name="stats" type="class" propertytype="CharStats">
+    <properties>
+     <property name="agility" type="float" value="2"/>
+     <property name="baseLife" type="float" value="8"/>
+     <property name="damage" type="float" value="4"/>
+     <property name="physicalEvade" type="float" value="0.1"/>
+    </properties>
+   </property>
+   <property name="talons" type="int" value="20"/>
+   <property name="xp" type="int" value="19"/>
+  </properties>
+  <image source="objects/slime.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="0" y="6" width="16" height="9">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="28" type="EnemyObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
+   <property name="level" type="int" value="2"/>
+   <property name="objType" propertytype="MapObjectType" value="SPIDER"/>
+   <property name="stats" type="class" propertytype="CharStats">
+    <properties>
+     <property name="agility" type="float" value="3"/>
+     <property name="baseLife" type="float" value="9"/>
+     <property name="damage" type="float" value="5"/>
+     <property name="resistance" type="float" value="40"/>
+    </properties>
+   </property>
+   <property name="talons" type="int" value="27"/>
+   <property name="xp" type="int" value="17"/>
+  </properties>
+  <image source="objects/spider.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="0" y="2" width="16" height="13">
+    <properties>
+     <property name="density" type="float" value="50000"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
 </tileset>

@@ -19,4 +19,7 @@ enum class TiledObjectType(val isEnemy: Boolean) {
     DEMON_SPIRIT(false),
     CYCLOPS(true),
     CYCLOPS_NPC(false),
+    AXOLOT(true),
+    SPIDER(true),
+    SLIME(true),
 }

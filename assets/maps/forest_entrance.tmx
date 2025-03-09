@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="44" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="35">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="44" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="40">
  <properties>
   <property name="music" value="FOREST"/>
   <property name="trigger" value="forest_entrance"/>
@@ -22,19 +22,9 @@
   </data>
  </layer>
  <objectgroup id="4" name="object">
-  <object id="8" gid="4103" x="308" y="327" width="16" height="16">
-   <properties>
-    <property name="enemies" value="BUTTERFLY=1"/>
-   </properties>
-  </object>
   <object id="9" gid="4104" x="258" y="161" width="16" height="16">
    <properties>
     <property name="enemies" value="LARVA=2"/>
-   </properties>
-  </object>
-  <object id="10" gid="4105" x="458" y="208" width="16" height="16">
-   <properties>
-    <property name="enemies" value="MUSHROOM=1;BUTTERFLY=1"/>
    </properties>
   </object>
   <object id="12" name="Player" gid="4097" x="312" y="422" width="16" height="16"/>
@@ -69,6 +59,31 @@
    </properties>
   </object>
   <object id="32" gid="4113" x="70" y="399" width="16" height="16"/>
+  <object id="35" gid="4124" x="477" y="211" width="16" height="16">
+   <properties>
+    <property name="enemies" value="SLIME=1"/>
+   </properties>
+  </object>
+  <object id="36" gid="4124" x="442" y="66" width="16" height="16">
+   <properties>
+    <property name="enemies" value="SLIME=3"/>
+   </properties>
+  </object>
+  <object id="37" gid="4123" x="502" y="267" width="16" height="16">
+   <properties>
+    <property name="enemies" value="AXOLOT=2"/>
+   </properties>
+  </object>
+  <object id="38" gid="4125" x="279" y="95" width="16" height="16">
+   <properties>
+    <property name="enemies" value="SPIDER=2"/>
+   </properties>
+  </object>
+  <object id="39" gid="4123" x="202" y="71" width="16" height="16">
+   <properties>
+    <property name="enemies" value="AXOLOT=1"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="7" name="trigger"/>
  <objectgroup color="#ffaa00" id="6" name="portal">

@@ -1,5 +1,6 @@
 package io.github.masamune.screen
 
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -17,6 +18,7 @@ import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.I18NAsset
 import io.github.masamune.asset.ShaderService
 import io.github.masamune.asset.SkinAsset
+import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.isAnyKeyPressed
 import ktx.actors.plusAssign
 import ktx.actors.then
@@ -102,7 +104,8 @@ class LoadingScreen(
 
         masamune.removeScreen<LoadingScreen>()
         dispose()
-        masamune.setScreen<ControlsScreen>()
+        masamune.setScreen<GameScreen>()
+        masamune.getScreen<GameScreen>().startNewGame(TiledMapAsset.FOREST_ENTRANCE)
     }
 
     override fun dispose() {

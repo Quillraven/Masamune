@@ -390,7 +390,10 @@
                 "DEMON_FIRE",
                 "DEMON_SPIRIT",
                 "CYCLOPS",
-                "CYCLOPS_NPC"
+                "CYCLOPS_NPC",
+                "AXOLOT",
+                "SPIDER",
+                "SLIME"
             ],
             "valuesAsFlags": false
         },

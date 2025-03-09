@@ -16,6 +16,13 @@ import io.github.masamune.trigger.trigger
 fun World.forestEntranceTrigger(name: String): TriggerScript? {
     val player = this.family { all(Player) }.single()
 
+    // the next code never happens in a real game but is useful if we need to test the forest entrance
+    // map separately. In that case the player doesn't have the MainQuest and the game crashes.
+    // In the real game this is impossible because the player always has the MainQuest at this point.
+    if (player[QuestLog].quests.isEmpty()) {
+        player[QuestLog].quests += MainQuest()
+    }
+
     // check main quest progress: if boss fight is completed then demo is over
     val mainQuest = player[QuestLog].get<MainQuest>()
     if (mainQuest.progress >= 50) {

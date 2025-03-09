@@ -32,7 +32,7 @@ fun World.manGreenTrigger(
         actionDialog("man_green_30") {
             actionPauseEntity(scriptEntity, false)
         }
-    } else if (monsterBook.knownTypes.size >= 10) {
+    } else if (monsterBook.knownTypes.size >= 5) {
         // quest completed! -> give reward
         actionPauseEntity(scriptEntity, true)
         actionDialog("man_green_20") {

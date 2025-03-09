@@ -13,6 +13,7 @@ import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.ShaderService
+import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
@@ -21,10 +22,12 @@ import io.github.masamune.system.PlayerInteractSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.MapTransitionService
 import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.tiledmap.TiledService.Companion.TILED_MAP_ASSET_PROPERTY_KEY
 import io.mockk.mockk
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.box2d.createWorld
+import ktx.tiled.set
 
 /**
  * Test for [PlayerInteractSystem], [RenderSystem] and [ShaderService].
@@ -78,6 +81,7 @@ private class InteractTest : KtxApplicationAdapter {
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
         val tiledMap = TmxMapLoader(ClasspathFileHandleResolver()).load("maps/interactTest.tmx")
+        tiledMap.properties[TILED_MAP_ASSET_PROPERTY_KEY] = TiledMapAsset.VILLAGE
         tiledService.setMap(tiledMap, world)
 
         Gdx.input.inputProcessor = KeyboardController(eventService)
