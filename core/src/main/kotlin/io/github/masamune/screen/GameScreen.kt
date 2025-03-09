@@ -21,6 +21,7 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.dialog.DialogConfigurator
 import io.github.masamune.event.EventService
 import io.github.masamune.event.GameStartEvent
+import io.github.masamune.event.LoadEvent
 import io.github.masamune.event.SaveEvent
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
@@ -170,6 +171,10 @@ class GameScreen(
 
         masamune.save.clearSaveState()
         eventService.fire(SaveEvent(world))
+    }
+
+    fun loadSaveState() {
+        eventService.fire(LoadEvent(world))
     }
 
     fun clearGameState() {

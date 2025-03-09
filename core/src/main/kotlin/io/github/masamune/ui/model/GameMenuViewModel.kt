@@ -10,6 +10,7 @@ import io.github.masamune.event.Event
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MenuBeginEvent
 import io.github.masamune.event.MenuEndEvent
+import io.github.masamune.event.SaveEvent
 import io.github.masamune.screen.FadeTransitionType
 import io.github.masamune.screen.MainMenuScreen
 
@@ -46,11 +47,16 @@ class GameMenuViewModel(
             // monster book
             3 -> {
                 if (options.size != 7) {
-                    // no monster book -> do nothing
+                    // no monster book -> save option
+                    eventService.fire(SaveEvent(world))
                     return
                 }
                 triggerClose(fireOptionEvent = false)
                 eventService.fire(MenuBeginEvent(MenuType.MONSTER_BOOK))
+            }
+            // save
+            options.lastIndex - 2 -> {
+                eventService.fire(SaveEvent(world))
             }
             // back to game
             options.lastIndex - 1 -> {
