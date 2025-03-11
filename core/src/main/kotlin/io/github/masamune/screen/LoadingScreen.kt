@@ -1,34 +1,16 @@
 package io.github.masamune.screen
 
-import com.badlogic.gdx.Game
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha
-import com.badlogic.gdx.scenes.scene2d.actions.Actions.forever
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.FitViewport
 import io.github.masamune.Masamune
-import io.github.masamune.asset.AssetService
-import io.github.masamune.asset.AtlasAsset
-import io.github.masamune.asset.I18NAsset
-import io.github.masamune.asset.ShaderService
-import io.github.masamune.asset.SkinAsset
-import io.github.masamune.asset.TiledMapAsset
-import io.github.masamune.isAnyKeyPressed
-import ktx.actors.plusAssign
-import ktx.actors.then
-import ktx.actors.txt
+import io.github.masamune.asset.*
 import ktx.app.KtxScreen
-import ktx.scene2d.actors
-import ktx.scene2d.defaultStyle
-import ktx.scene2d.label
-import ktx.scene2d.progressBar
-import ktx.scene2d.table
+import ktx.scene2d.*
 
 class LoadingScreen(
     private val masamune: Masamune,
@@ -37,11 +19,9 @@ class LoadingScreen(
     batch: Batch = masamune.batch,
 ) : KtxScreen {
 
-    private var done = false
     private val uiViewport = FitViewport(928f, 522f)
     private val stage = Stage(uiViewport, batch)
     private val progressBar by lazy { stage.root.findActor<ProgressBar>("progressBar") }
-    private val infoLabel by lazy { stage.root.findActor<Label>("infoLabel") }
     private val i18n by lazy { assetService[I18NAsset.MESSAGES] }
 
     override fun show() {
@@ -81,13 +61,10 @@ class LoadingScreen(
     }
 
     override fun render(delta: Float) {
-        if (!done && assetService.update()) {
+        if (assetService.update()) {
             shaderService.loadAllShader()
-            done = true
-            infoLabel.txt = i18n["loading.done"]
-            infoLabel += forever(alpha(0.2f, 1f) then alpha(1f, 1f))
-        } else if (done && (Gdx.input.isAnyKeyPressed())) {
             onFinishLoading()
+            return
         }
 
         stage.act(delta)
@@ -104,8 +81,7 @@ class LoadingScreen(
 
         masamune.removeScreen<LoadingScreen>()
         dispose()
-        masamune.setScreen<GameScreen>()
-        masamune.getScreen<GameScreen>().startNewGame(TiledMapAsset.FOREST_ENTRANCE)
+        masamune.setScreen<ControlsScreen>()
     }
 
     override fun dispose() {
