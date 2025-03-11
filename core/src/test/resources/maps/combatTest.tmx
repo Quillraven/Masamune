@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
- <tileset firstgid="1" name="combatObjects" tilewidth="50" tileheight="50" tilecount="8" columns="0">
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="combatObjects" tilewidth="50" tileheight="50" tilecount="9" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0" type="PlayerObject">
    <properties>
@@ -97,7 +97,7 @@
   </tile>
   <tile id="5" type="ItemObject">
    <properties>
-    <property name="action" propertytype="ActionType" value="HEAL"/>
+    <property name="action" propertytype="ActionType" value="STR_BOOSTER"/>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
     <property name="category" propertytype="ItemCategory" value="WEAPON"/>
     <property name="itemType" propertytype="ItemType" value="ELDER_SWORD"/>
@@ -143,6 +143,20 @@
     <property name="xp" type="int" value="150"/>
    </properties>
    <image source="objects/cyclops.png" width="50" height="50"/>
+  </tile>
+  <tile id="8" type="ItemObject">
+   <properties>
+    <property name="action" propertytype="ActionType" value="REGENERATE_MANA_RING"/>
+    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+    <property name="category" propertytype="ItemCategory" value="ACCESSORY"/>
+    <property name="itemType" propertytype="ItemType" value="RING"/>
+    <property name="stats" type="class" propertytype="Stats">
+     <properties>
+      <property name="manaMax" type="float" value="10"/>
+     </properties>
+    </property>
+   </properties>
+   <image source="objects/ring.png" width="16" height="16"/>
   </tile>
  </tileset>
  <layer id="1" name="Tile Layer 1" width="4" height="4">

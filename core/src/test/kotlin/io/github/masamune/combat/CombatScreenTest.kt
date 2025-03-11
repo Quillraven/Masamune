@@ -107,6 +107,7 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
     private fun spawnPlayerEquipment(world: World): MutableEntityBag {
         return mutableEntityBagOf(
             masamune.tiled.loadItem(world, ItemType.ELDER_SWORD, 1),
+            masamune.tiled.loadItem(world, ItemType.RING,1),
         )
     }
 
