@@ -20,6 +20,7 @@ import io.github.masamune.event.CombatPlayerDefeatEvent
 import io.github.masamune.event.CombatPlayerVictoryEvent
 import io.github.masamune.event.CombatStartEvent
 import io.github.masamune.event.CombatTurnBeginEvent
+import io.github.masamune.event.CombatTurnEndEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import ktx.log.logger
@@ -32,10 +33,11 @@ class CombatSystem(
         (e2[CharacterStats].agility - e1[CharacterStats].agility).toInt()
     }
     private val combatStatePrepareRound = CombatStatePrepareRound(world, comparator)
+    private val combatStatePerformAction = CombatStatePerformAction(world)
     private val states = listOf(
         CombatStateIdle,
         combatStatePrepareRound,
-        CombatStatePerformAction(world),
+        combatStatePerformAction,
         CombatStateEndRound(world, comparator),
         CombatStateVictory(world),
         CombatStateDefeat(world),
@@ -76,6 +78,7 @@ class CombatSystem(
             is CombatNextTurnEvent -> changeState<CombatStateIdle>()
             is CombatPlayerActionEvent -> changeState<CombatStatePrepareRound>()
             is CombatTurnBeginEvent -> changeState<CombatStatePerformAction>()
+            is CombatTurnEndEvent -> combatStatePerformAction.onTurnEnd()
             is CombatActionsPerformedEvent -> changeState<CombatStateEndRound>()
             is CombatPlayerDefeatEvent -> {
                 actionExecutorService.clear()

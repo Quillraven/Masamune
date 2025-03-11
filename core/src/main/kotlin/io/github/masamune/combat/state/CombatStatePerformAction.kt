@@ -53,13 +53,16 @@ class CombatStatePerformAction(
         actionExecutorService.update()
     }
 
-    override fun onExit() {
+    fun onTurnEnd() {
         combatEntities.forEach { entity ->
             if (world.isEntityDead(entity)) {
                 return@forEach
             }
             actionExecutorService.performOnTurnEndBuffs(entity)
         }
+    }
+
+    override fun onExit() {
         log.debug { debugCombatEntities() }
     }
 

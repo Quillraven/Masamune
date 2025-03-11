@@ -181,6 +181,12 @@ class ActionExecutorService(
                 endTurnPerformed = true
                 eventService.fire(CombatTurnEndEvent)
             } else {
+                if (!effectStack.update()) {
+                    // there are still effects on the stack -> wait for them to be finished
+                    // they got added by the CombatTurnEndEvent (e.g. onTurnEnd buffs)
+                    return
+                }
+
                 log.debug { "Combat trigger next turn" }
                 eventService.fire(CombatActionsPerformedEvent)
             }
