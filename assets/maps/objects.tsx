@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="28" columns="0">
+<tileset version="1.10" tiledversion="1.11.1-99-gec89c545" name="objects" tilewidth="50" tileheight="50" tilecount="28" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -254,7 +254,7 @@
    <property name="itemType" propertytype="ItemType" value="SCROLL_INFERNO"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
-     <property name="damage" type="float" value="50"/>
+     <property name="damage" type="float" value="20"/>
     </properties>
    </property>
   </properties>
