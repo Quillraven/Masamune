@@ -631,7 +631,7 @@ class TiledService(
     }
 
     private fun EntityCreateContext.configureItemStats(entity: Entity, tile: TiledMapTile) {
-        val itemStats = tile.stats.toItemStats() ?: return
+        val itemStats = tile.stats.toItemStats() ?: ItemStats()
         entity += itemStats
     }
 
@@ -715,6 +715,7 @@ class TiledService(
                 configureItemStats(it, tile)
                 configureGraphic(it, tile, AnimationType.UNDEFINED.name)
                 configureItem(it, tile, amount)
+                configureMove(it, tile)
             }
         }
 

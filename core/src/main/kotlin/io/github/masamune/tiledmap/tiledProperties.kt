@@ -45,6 +45,9 @@ val TiledMapTile.cost: Int
 val TiledMapTile.itemType: String
     get() = this.property<String>("itemType", "UNDEFINED")
 
+val TiledMapTile.speed: Float
+    get() = this.property<Float>("speed", 0f)
+
 val TiledMapTile.stats: MapProperties?
     get() = this.propertyOrNull<MapProperties>("stats")
 
@@ -68,6 +71,3 @@ val TiledMapTile.xp: Int
 
 val TiledMapTile.triggerName: String
     get() = this.property<String>("triggerName", "")
-
-val TiledMapTile.speed: Float
-    get() = this.property<Float>("speed", 0f)

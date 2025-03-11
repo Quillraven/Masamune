@@ -17,6 +17,7 @@ import io.github.masamune.component.Graphic
 import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
 import io.github.masamune.component.ItemStats
+import io.github.masamune.component.Move
 import io.github.masamune.component.Player
 import io.github.masamune.component.QuestLog
 import io.github.masamune.component.Remove
@@ -94,6 +95,9 @@ fun World.equipItem(itemEntity: Entity, to: Entity) {
     // equip item (= add to equipment and modify stats)
     equipmentItems += itemEntity
     toStats += itemEntity[ItemStats]
+    to.getOrNull(Move)?.let { toMove ->
+        toMove.speed += itemEntity.getOrNull(Move)?.speed ?: 0f
+    }
 }
 
 fun World.removeEquipment(category: ItemCategory, from: Entity) {
@@ -105,6 +109,9 @@ fun World.removeEquipment(category: ItemCategory, from: Entity) {
     equipmentItems.singleOrNull { it[Item].category == category }?.let { existingItem ->
         equipmentItems -= existingItem
         from[CharacterStats] -= existingItem[ItemStats]
+        from.getOrNull(Move)?.let { fromMove ->
+            fromMove.speed -= existingItem.getOrNull(Move)?.speed ?: 0f
+        }
 
         // move item to inventory
         addItem(existingItem, from, equipItem = false)
