@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="28" columns="0">
+<tileset version="1.10" tiledversion="1.11.1-99-gec89c545" name="objects" tilewidth="50" tileheight="50" tilecount="35" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -254,7 +254,7 @@
    <property name="itemType" propertytype="ItemType" value="SCROLL_INFERNO"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
-     <property name="damage" type="float" value="50"/>
+     <property name="damage" type="float" value="20"/>
     </properties>
    </property>
   </properties>
@@ -494,5 +494,111 @@
     </properties>
    </object>
   </objectgroup>
+ </tile>
+ <tile id="29" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="category" propertytype="ItemCategory" value="ARMOR"/>
+   <property name="cost" type="int" value="150"/>
+   <property name="itemType" propertytype="ItemType" value="STUDDED_LEATHER"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="armor" type="float" value="3"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/studded_leather.png" width="16" height="16"/>
+ </tile>
+ <tile id="30" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="category" propertytype="ItemCategory" value="ARMOR"/>
+   <property name="cost" type="int" value="250"/>
+   <property name="itemType" propertytype="ItemType" value="CHAIN_MAIL"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="armor" type="float" value="5"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/chain_mail.png" width="32" height="32"/>
+ </tile>
+ <tile id="31" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="category" propertytype="ItemCategory" value="ARMOR"/>
+   <property name="cost" type="int" value="250"/>
+   <property name="itemType" propertytype="ItemType" value="MAGIC_VEST"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="armor" type="float" value="3"/>
+     <property name="magicalEvade" type="float" value="0.1"/>
+     <property name="resistance" type="float" value="10"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/magic_vest.png" width="32" height="32"/>
+ </tile>
+ <tile id="32" type="ItemObject">
+  <properties>
+   <property name="action" propertytype="ActionType" value="HEAL"/>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="category" propertytype="ItemCategory" value="WEAPON"/>
+   <property name="cost" type="int" value="400"/>
+   <property name="itemType" propertytype="ItemType" value="SWORD_HEAL"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="damage" type="float" value="6"/>
+     <property name="intelligence" type="float" value="2"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/sword_heal.png" width="32" height="32"/>
+ </tile>
+ <tile id="33" type="ItemObject">
+  <properties>
+   <property name="action" propertytype="ActionType" value="REGENERATE_MANA_RING"/>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="category" propertytype="ItemCategory" value="ACCESSORY"/>
+   <property name="cost" type="int" value="500"/>
+   <property name="itemType" propertytype="ItemType" value="RING"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="manaMax" type="float" value="10"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/ring.png" width="16" height="16"/>
+ </tile>
+ <tile id="34" type="ItemObject">
+  <properties>
+   <property name="action" propertytype="ActionType" value="STR_BOOSTER"/>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="category" propertytype="ItemCategory" value="WEAPON"/>
+   <property name="cost" type="int" value="500"/>
+   <property name="itemType" propertytype="ItemType" value="SWORD_STRENGTH"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="damage" type="float" value="8"/>
+     <property name="strength" type="float" value="2"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/sword_strength.png" width="32" height="32"/>
+ </tile>
+ <tile id="35" type="ItemObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="category" propertytype="ItemCategory" value="BOOTS"/>
+   <property name="cost" type="int" value="100"/>
+   <property name="itemType" propertytype="ItemType" value="BOOTS_SPEED"/>
+   <property name="speed" type="float" value="7"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="armor" type="float" value="1"/>
+    </properties>
+   </property>
+  </properties>
+  <image source="objects/boots_speed.png" width="32" height="32"/>
  </tile>
 </tileset>

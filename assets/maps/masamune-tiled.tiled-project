@@ -30,7 +30,9 @@
                 "SLOW",
                 "DEMI1",
                 "REGENERATE1",
-                "DOUBLE_STRIKE"
+                "DOUBLE_STRIKE",
+                "REGENERATE_MANA_RING",
+                "STR_BOOSTER"
             ],
             "valuesAsFlags": true
         },
@@ -326,6 +328,11 @@
                     "value": "UNDEFINED"
                 },
                 {
+                    "name": "speed",
+                    "type": "float",
+                    "value": 0
+                },
+                {
                     "name": "stats",
                     "propertyType": "Stats",
                     "type": "class",
@@ -364,7 +371,12 @@
                 "SMALL_HEALTH_POTION",
                 "TEREALIS_FLOWER",
                 "SMALL_STRENGTH_POTION",
-                "INTELLIGENCE_POTION"
+                "INTELLIGENCE_POTION",
+                "CHAIN_MAIL",
+                "MAGIC_VEST",
+                "SWORD_HEAL",
+                "SWORD_STRENGTH",
+                "BOOTS_SPEED"
             ],
             "valuesAsFlags": false
         },

@@ -15,8 +15,8 @@ i:b:/sound/attack_miss.wav:117714:1
 i:d:/graphics:0:1
 i:b:/graphics/sfx.png:356380:1
 i:b:/graphics/sfx.atlas:7461:1
-i:b:/graphics/chars_and_props.atlas:10449:1
-i:b:/graphics/chars_and_props.png:61628:1
+i:b:/graphics/chars_and_props.atlas:10649:1
+i:b:/graphics/chars_and_props.png:64436:1
 i:d:/shader:0:1
 i:b:/shader/dissolve.frag:966:1
 i:b:/shader/default.vert:316:1
@@ -28,8 +28,8 @@ i:d:/ui:0:1
 i:b:/ui/skin.png:9724:1
 i:b:/ui/Fipps-Regular.otf:34220:1
 i:b:/ui/logo.png:347638:1
-i:b:/ui/messages_de.properties:12704:1
-i:b:/ui/messages.properties:11683:1
+i:b:/ui/messages_de.properties:13488:1
+i:b:/ui/messages.properties:12451:1
 i:b:/ui/skin.atlas:3977:1
 i:b:/ui/CherryCreamSoda-Regular.ttf:49404:1
 i:b:/ui/logo_bgd.png:366428:1
@@ -58,8 +58,10 @@ i:b:/maps/objects/elder_sword.png:198:1
 i:b:/maps/objects/man_green.png:478:1
 i:b:/maps/objects/larva.png:442:1
 i:b:/maps/objects/butterfly.png:437:1
+i:b:/maps/objects/magic_vest.png:467:1
 i:b:/maps/objects/helmet.png:436:1
 i:b:/maps/objects/hero.png:505:1
+i:b:/maps/objects/sword_strength.png:1264:1
 i:b:/maps/objects/cyclops.png:629:1
 i:b:/maps/objects/demon_fire.png:452:1
 i:b:/maps/objects/slime.png:425:1
@@ -68,8 +70,11 @@ i:b:/maps/objects/masamune_forest.png:10589:1
 i:b:/maps/objects/studded_leather.png:423:1
 i:b:/maps/objects/spider.png:492:1
 i:b:/maps/objects/elder.png:481:1
+i:b:/maps/objects/chain_mail.png:452:1
+i:b:/maps/objects/boots_speed.png:496:1
 i:b:/maps/objects/small_mana_potion.png:2829:1
 i:b:/maps/objects/small_strength_potion.png:4541:1
+i:b:/maps/objects/sword_heal.png:1213:1
 i:b:/maps/objects/axolot.png:437:1
 i:b:/maps/objects/flower_girl.png:492:1
 i:b:/maps/objects/ring.png:393:1
@@ -79,10 +84,10 @@ i:b:/maps/objects/merchant.png:494:1
 i:b:/maps/objects/scroll_inferno.png:2975:1
 i:b:/maps/village.tmx:3622:1
 i:b:/maps/menu.tmx:1843:1
-i:b:/maps/objects.tsx:21269:1
+i:b:/maps/objects.tsx:25869:1
 i:b:/maps/tileset.tsx:26263:1
 i:b:/maps/forest_masamune.tmx:3395:1
-i:b:/maps/masamune-tiled.tiled-project:16747:1
+i:b:/maps/masamune-tiled.tiled-project:17115:1
 i:b:/maps/tileset.png:473544:1
 c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
 c:b:/com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:9096:1
