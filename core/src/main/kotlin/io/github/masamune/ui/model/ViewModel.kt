@@ -302,22 +302,13 @@ abstract class ViewModel(
 
             // compare selected item with currently equipped item
             return mapOf(
-                UIStats.STRENGTH to (equipStats.strength - selectedStats.getOrDefault(UIStats.STRENGTH, 0)).toInt(),
-                UIStats.AGILITY to (equipStats.agility - selectedStats.getOrDefault(UIStats.AGILITY, 0)).toInt(),
-                UIStats.CONSTITUTION to (equipStats.constitution - selectedStats.getOrDefault(
-                    UIStats.CONSTITUTION,
-                    0
-                )).toInt(),
-                UIStats.INTELLIGENCE to (equipStats.intelligence - selectedStats.getOrDefault(
-                    UIStats.INTELLIGENCE,
-                    0
-                )).toInt(),
-                UIStats.DAMAGE to (equipStats.damage - selectedStats.getOrDefault(UIStats.DAMAGE, 0)).toInt(),
-                UIStats.ARMOR to (equipStats.armor - selectedStats.getOrDefault(UIStats.ARMOR, 0)).toInt(),
-                UIStats.RESISTANCE to (equipStats.resistance - selectedStats.getOrDefault(
-                    UIStats.RESISTANCE,
-                    0
-                )).toInt(),
+                UIStats.STRENGTH to (selectedStats.getOrDefault(UIStats.STRENGTH, 0) - equipStats.strength).toInt(),
+                UIStats.AGILITY to (selectedStats.getOrDefault(UIStats.AGILITY, 0) - equipStats.agility).toInt(),
+                UIStats.CONSTITUTION to (selectedStats.getOrDefault(UIStats.CONSTITUTION, 0) - equipStats.constitution).toInt(),
+                UIStats.INTELLIGENCE to (selectedStats.getOrDefault(UIStats.INTELLIGENCE, 0) - equipStats.intelligence).toInt(),
+                UIStats.DAMAGE to (selectedStats.getOrDefault(UIStats.DAMAGE, 0) - equipStats.damage).toInt(),
+                UIStats.ARMOR to (selectedStats.getOrDefault(UIStats.ARMOR, 0) - equipStats.armor).toInt(),
+                UIStats.RESISTANCE to (selectedStats.getOrDefault(UIStats.RESISTANCE, 0) - equipStats.resistance).toInt(),
             )
         }
     }
