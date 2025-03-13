@@ -420,6 +420,7 @@
  <tile id="26" type="EnemyObject">
   <properties>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+   <property name="behavior" value="support"/>
    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,HEAL"/>
    <property name="level" type="int" value="3"/>
    <property name="objType" propertytype="MapObjectType" value="AXOLOT"/>
@@ -427,6 +428,7 @@
     <properties>
      <property name="agility" type="float" value="3"/>
      <property name="baseLife" type="float" value="12"/>
+     <property name="baseMana" type="float" value="7"/>
      <property name="damage" type="float" value="5"/>
      <property name="physicalEvade" type="float" value="0.2"/>
     </properties>
