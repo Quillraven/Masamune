@@ -152,7 +152,7 @@ class InventoryView(
                 val items = activeEquipmentItems
                 updateItemTableAndInfo(items, itemTable.selectedEntryIdx)
                 equipmentStatsTable.clearDiff()
-                if (itemTable.numEntries == 1) {
+                if (itemTable.numEntries == 0) {
                     return@onPropertyChange
                 }
 
