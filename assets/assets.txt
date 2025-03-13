@@ -28,8 +28,8 @@ i:d:/ui:0:1
 i:b:/ui/skin.png:9724:1
 i:b:/ui/Fipps-Regular.otf:34220:1
 i:b:/ui/logo.png:347638:1
-i:b:/ui/messages_de.properties:13488:1
-i:b:/ui/messages.properties:12451:1
+i:b:/ui/messages_de.properties:14432:1
+i:b:/ui/messages.properties:13322:1
 i:b:/ui/skin.atlas:3977:1
 i:b:/ui/CherryCreamSoda-Regular.ttf:49404:1
 i:b:/ui/logo_bgd.png:366428:1
@@ -45,7 +45,7 @@ i:b:/music/combat_victory.mp3:122795:1
 i:b:/music/forest.mp3:577244:1
 i:d:/maps:0:1
 i:b:/maps/path_to_forest.tmx:4848:1
-i:b:/maps/forest_entrance.tmx:5937:1
+i:b:/maps/forest_entrance.tmx:5957:1
 i:b:/maps/tileset-orig.png:195892:1
 i:d:/maps/objects:0:1
 i:b:/maps/objects/demon_spirit.png:445:1
@@ -84,7 +84,7 @@ i:b:/maps/objects/merchant.png:494:1
 i:b:/maps/objects/scroll_inferno.png:2975:1
 i:b:/maps/village.tmx:3622:1
 i:b:/maps/menu.tmx:1843:1
-i:b:/maps/objects.tsx:25869:1
+i:b:/maps/objects.tsx:25857:1
 i:b:/maps/tileset.tsx:26263:1
 i:b:/maps/forest_masamune.tmx:3395:1
 i:b:/maps/masamune-tiled.tiled-project:17115:1

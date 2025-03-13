@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.1-99-gec89c545" name="objects" tilewidth="50" tileheight="50" tilecount="35" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="35" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -154,7 +154,7 @@
    <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
-     <property name="agility" type="float" value="4"/>
+     <property name="agility" type="float" value="5"/>
      <property name="armor" type="float" value="10"/>
      <property name="baseLife" type="float" value="6"/>
      <property name="damage" type="float" value="6"/>
@@ -398,15 +398,15 @@
     <properties>
      <property name="agility" type="float" value="2"/>
      <property name="armor" type="float" value="10"/>
-     <property name="baseLife" type="float" value="90"/>
-     <property name="baseMana" type="float" value="100"/>
-     <property name="damage" type="float" value="10"/>
+     <property name="baseLife" type="float" value="100"/>
+     <property name="baseMana" type="float" value="120"/>
+     <property name="damage" type="float" value="12"/>
      <property name="physicalEvade" type="float" value="0.05"/>
      <property name="resistance" type="float" value="10"/>
     </properties>
    </property>
-   <property name="talons" type="int" value="400"/>
-   <property name="xp" type="int" value="150"/>
+   <property name="talons" type="int" value="500"/>
+   <property name="xp" type="int" value="250"/>
   </properties>
   <image source="objects/cyclops.png" width="50" height="50"/>
  </tile>
@@ -454,11 +454,11 @@
      <property name="agility" type="float" value="2"/>
      <property name="baseLife" type="float" value="8"/>
      <property name="damage" type="float" value="4"/>
-     <property name="physicalEvade" type="float" value="0.1"/>
+     <property name="physicalEvade" type="float" value="0.5"/>
     </properties>
    </property>
    <property name="talons" type="int" value="20"/>
-   <property name="xp" type="int" value="19"/>
+   <property name="xp" type="int" value="39"/>
   </properties>
   <image source="objects/slime.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">
@@ -592,7 +592,7 @@
    <property name="category" propertytype="ItemCategory" value="BOOTS"/>
    <property name="cost" type="int" value="100"/>
    <property name="itemType" propertytype="ItemType" value="BOOTS_SPEED"/>
-   <property name="speed" type="float" value="7"/>
+   <property name="speed" type="float" value="4"/>
    <property name="stats" type="class" propertytype="Stats">
     <properties>
      <property name="armor" type="float" value="1"/>

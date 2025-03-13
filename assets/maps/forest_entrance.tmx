@@ -22,7 +22,7 @@
   </data>
  </layer>
  <objectgroup id="4" name="object">
-  <object id="9" gid="4104" x="258" y="161" width="16" height="16">
+  <object id="9" gid="4104" x="246.333" y="206.333" width="16" height="16">
    <properties>
     <property name="enemies" value="LARVA=2"/>
    </properties>
@@ -33,12 +33,12 @@
   <object id="23" gid="4107" x="131" y="313" width="48" height="48"/>
   <object id="24" gid="4107" x="511" y="377" width="48" height="48"/>
   <object id="25" gid="4107" x="238" y="105" width="48" height="48"/>
-  <object id="26" gid="4105" x="343" y="193" width="16" height="16">
+  <object id="26" gid="4105" x="317.333" y="171" width="16" height="16">
    <properties>
     <property name="enemies" value="MUSHROOM=3"/>
    </properties>
   </object>
-  <object id="27" gid="4104" x="197" y="309" width="16" height="16">
+  <object id="27" gid="4104" x="129.333" y="308.667" width="16" height="16">
    <properties>
     <property name="enemies" value="LARVA=1;BUTTERFLY=1"/>
    </properties>
@@ -53,7 +53,7 @@
     <property name="enemies" value="BUTTERFLY=1;MUSHROOM=1;LARVA=1"/>
    </properties>
   </object>
-  <object id="30" gid="4104" x="631" y="137" width="16" height="16">
+  <object id="30" gid="4104" x="625" y="123" width="16" height="16">
    <properties>
     <property name="enemies" value="LARVA=1;MUSHROOM=1"/>
    </properties>
