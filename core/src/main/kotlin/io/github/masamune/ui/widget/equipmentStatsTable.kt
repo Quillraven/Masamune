@@ -59,8 +59,8 @@ class EquipmentStatsTable(
                 val greenColor = skin.getColor("green")
                 val blueColor = skin.getColor("blue")
                 this@EquipmentStatsTable.statsLabels = mapOf(
-                    UIStats.LIFE to statsRow(skin, statsNames.zeroIfMissing(UIStats.LIFE), greenColor),
-                    UIStats.MANA to statsRow(skin, statsNames.zeroIfMissing(UIStats.MANA), blueColor),
+                    UIStats.LIFE to statsRow(skin, statsNames.zeroIfMissing(UIStats.LIFE), greenColor, 0f),
+                    UIStats.MANA to statsRow(skin, statsNames.zeroIfMissing(UIStats.MANA), blueColor, 0f),
                     UIStats.STRENGTH to statsRow(skin, statsNames.zeroIfMissing(UIStats.STRENGTH), normalColor),
                     UIStats.AGILITY to statsRow(skin, statsNames.zeroIfMissing(UIStats.AGILITY), normalColor),
                     UIStats.CONSTITUTION to statsRow(skin, statsNames.zeroIfMissing(UIStats.CONSTITUTION), normalColor),
@@ -83,7 +83,7 @@ class EquipmentStatsTable(
             item(ItemCategory.ACCESSORY, equipmentNames[ItemCategory.ACCESSORY] ?: "")
 
             this.isVisible = false
-            cell.align(Align.bottomLeft).padBottom(20f).growX()
+            cell.align(Align.bottomLeft).padBottom(80f).growX()
         }
     }
 
@@ -141,14 +141,19 @@ class EquipmentStatsTable(
     }
 
     companion object {
-        private fun KTableWidget.statsRow(skin: Skin, name: String, color: Color): ShopStatsLabel {
+        private fun KTableWidget.statsRow(
+            skin: Skin,
+            name: String,
+            color: Color,
+            minDiffWidth: Float = 40f,
+        ): ShopStatsLabel {
             label(name, defaultStyle, skin) {
                 this.color = skin.getColor("dark_grey")
                 setAlignment(Align.right)
                 it.fillX()
             }
-            return shopStatsLabel(skin, "", color) {
-                it.padLeft(25f).align(Align.left).row()
+            return shopStatsLabel(skin, "", color, minDiffWidth) {
+                it.padLeft(20f).align(Align.left).row()
             }
         }
     }

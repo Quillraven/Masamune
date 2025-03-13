@@ -39,7 +39,7 @@ class EquipmentItemWidget(
         image = image(skin.getDrawable("arrow")) { cell ->
             setScaling(Scaling.contain)
             this += forever(fadeOut(0.5f) then fadeIn(0.25f) then delay(0.25f))
-            cell.padRight(5f).padLeft(5f)
+            cell.padRight(5f)
         }
 
         label(categoryName, defaultStyle, skin) {
@@ -51,7 +51,7 @@ class EquipmentItemWidget(
             this.color = skin.getColor("dark_grey")
             this.setEllipsis(true)
             this.setEllipsis("..")
-            it.padLeft(30f).align(Align.left).minWidth(0f).growX().row()
+            it.padLeft(20f).align(Align.left).minWidth(0f).growX().row()
         }
     }
 

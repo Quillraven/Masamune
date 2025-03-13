@@ -23,6 +23,7 @@ class ShopStatsLabel(
     skin: Skin,
     initValue: String,
     valueColor: Color,
+    minDiffWidth: Float = 40f,
 ) : KTable, Table(skin) {
 
     private val valueLabel: Label
@@ -36,7 +37,7 @@ class ShopStatsLabel(
         }
         diffLabel = label("", "dialog_content", skin) { cell ->
             this.setAlignment(Align.right)
-            cell.growX().padLeft(10f).minWidth(40f)
+            cell.growX().padLeft(10f).minWidth(minDiffWidth)
         }
     }
 
@@ -65,5 +66,6 @@ fun <S> KWidget<S>.shopStatsLabel(
     skin: Skin,
     initValue: String,
     valueColor: Color = skin.getColor("dark_grey"),
+    minDiffWidth: Float = 40f,
     init: (@Scene2dDsl ShopStatsLabel).(S) -> Unit = {},
-): ShopStatsLabel = actor(ShopStatsLabel(skin, initValue, valueColor), init)
+): ShopStatsLabel = actor(ShopStatsLabel(skin, initValue, valueColor, minDiffWidth), init)

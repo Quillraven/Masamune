@@ -94,6 +94,7 @@
      <properties>
       <property name="armor" type="float" value="-2"/>
       <property name="damage" type="float" value="-2"/>
+      <property name="manaMax" type="float" value="10"/>
      </properties>
     </property>
    </properties>

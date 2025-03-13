@@ -377,6 +377,11 @@ class InventoryView(
             equipmentStatsTable.clearDiff()
             equipmentStatsTable.title("")
             equipmentStatsTable.showEquipment(false)
+            return
+        }
+
+        if (optionTable.lastOption()) {
+            viewModel.playSndMenuAbort()
         }
     }
 }
