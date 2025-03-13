@@ -26,6 +26,7 @@ import io.github.masamune.ai.AnimationStateIdle
 import io.github.masamune.ai.FleksStateMachine
 import io.github.masamune.ai.cyclopsBehavior
 import io.github.masamune.ai.defaultBehavior
+import io.github.masamune.ai.supportBehavior
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.TiledMapAsset
@@ -645,6 +646,7 @@ class TiledService(
     private fun EntityCreateContext.configureAI(world: World, entity: Entity, tile: TiledMapTile) {
         val aiCmp = when (tile.behavior) {
             "default" -> AI(defaultBehavior(world, entity))
+            "support" -> AI(supportBehavior(world, entity))
             "cyclops" -> AI(cyclopsBehavior(world, entity))
             else -> gdxError("Unsupported behavior ${tile.behavior}")
         }

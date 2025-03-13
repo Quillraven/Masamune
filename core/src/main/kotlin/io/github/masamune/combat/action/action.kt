@@ -22,3 +22,6 @@ sealed class Action(
 }
 
 data object DefaultAction : Action(ActionType.UNDEFINED, ActionTargetType.NONE, manaCost = 0)
+
+val Action.isHealing: Boolean
+    get() = this is HealAction

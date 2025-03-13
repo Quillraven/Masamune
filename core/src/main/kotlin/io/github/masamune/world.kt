@@ -169,6 +169,10 @@ fun World.isEntityAlive(entity: Entity): Boolean = with(this) {
     return entity in this && entity[CharacterStats].life >= 1f
 }
 
+fun World.isEntityHurt(entity: Entity): Boolean {
+    return this.isEntityAlive(entity) && entity[CharacterStats].life < entity[CharacterStats].lifeMax
+}
+
 fun World.canPerformAction(entity: Entity, action: Action): Boolean {
     val actionExecutorService = inject<ActionExecutorService>()
     return action.run { actionExecutorService.canPerform(entity) }

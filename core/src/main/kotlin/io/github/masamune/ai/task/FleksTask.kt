@@ -5,9 +5,9 @@ import com.badlogic.gdx.ai.btree.Task
 import com.badlogic.gdx.math.MathUtils.random
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import com.github.quillraven.fleks.collection.EntityBag
 import io.github.masamune.combat.action.Action
 import io.github.masamune.combat.action.ActionTargetType
-import io.github.masamune.combat.action.DefaultAction.defensive
 import io.github.masamune.component.Combat
 import io.github.masamune.component.Player
 import ktx.app.gdxError
@@ -28,7 +28,10 @@ abstract class FleksTask(val world: World) : LeafTask<Entity>() {
 
     abstract fun World.onExecute()
 
-    fun useAction(block: Combat.() -> Action) = with(world) {
+    fun useAction(
+        targetCondition: (World.(target: Entity) -> Boolean)? = null,
+        block: Combat.() -> Action,
+    ) = with(world) {
         val combatCmp = entity[Combat]
 
         // set action
@@ -42,10 +45,16 @@ abstract class FleksTask(val world: World) : LeafTask<Entity>() {
             return@with
         }
 
-        val potentialTargets = if (defensive) enemyEntities else playerEntities
+        var potentialTargets: EntityBag = when {
+            combatCmp.action.defensive -> enemyEntities.entities
+            else -> playerEntities.entities
+        }
+        targetCondition?.let { condition ->
+            potentialTargets = potentialTargets.filter { condition(it) }
+        }
         when (combatCmp.action.targetType) {
             ActionTargetType.ALL -> targets += potentialTargets
-            ActionTargetType.MULTI -> targets += potentialTargets.take(random(1, potentialTargets.numEntities))
+            ActionTargetType.MULTI -> targets += potentialTargets.take(random(1, potentialTargets.size))
             ActionTargetType.SINGLE -> targets += potentialTargets.random()
             else -> gdxError("$this action is configured incorrectly. Target type NONE is not supported at this point.")
         }
