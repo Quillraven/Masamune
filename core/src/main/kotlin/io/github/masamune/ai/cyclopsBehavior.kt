@@ -40,6 +40,15 @@ fun cyclopsBehavior(
             }
         }
 
+        // cast DEMI once in the second round
+        onlyOnce {
+            sequence {
+                isTurnMultipleOf(world, 1, ignoreFirstTurn = true)
+                canPerform(world, ActionType.DEMI1)
+                perform(world, ActionType.DEMI1)
+            }
+        }
+
         // perform double attack every 4 turns
         sequence {
             isTurnMultipleOf(world, 4, ignoreFirstTurn = true)
