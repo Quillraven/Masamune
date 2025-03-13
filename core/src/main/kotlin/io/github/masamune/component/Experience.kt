@@ -44,7 +44,7 @@ data class Experience(
             intelligence += if (forLevel % 5 == 0) 4f else 1f
             manaMax += if (forLevel % 5 == 0) 5f else 0f
             constitution += if (forLevel % 3 == 0) 2f else 1f
-            agility += if (forLevel % 5 == 0) 1f else 0f
+            agility += if (forLevel % 5 == 0 || forLevel == 3) 2f else 0f
         }
     }
 }

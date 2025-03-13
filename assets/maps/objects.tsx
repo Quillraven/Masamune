@@ -154,7 +154,7 @@
    <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
    <property name="stats" type="class" propertytype="CharStats">
     <properties>
-     <property name="agility" type="float" value="4"/>
+     <property name="agility" type="float" value="5"/>
      <property name="armor" type="float" value="10"/>
      <property name="baseLife" type="float" value="6"/>
      <property name="damage" type="float" value="6"/>
