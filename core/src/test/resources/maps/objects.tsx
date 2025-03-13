@@ -67,6 +67,11 @@
    <property name="level" type="int" value="1"/>
    <property name="numEnemies" type="int" value="1"/>
    <property name="objType" propertytype="MapObjectType" value="MUSHROOM"/>
+   <property name="stats" type="class" propertytype="CharStats">
+    <properties>
+     <property name="agility" type="float" value="1"/>
+    </properties>
+   </property>
   </properties>
   <image source="objects/mushroom.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">

@@ -74,7 +74,15 @@ private class UiMonsterBookTest : KtxApplicationAdapter {
 
         world.entity {
             it += Player()
-            it += MonsterBook(knownTypes = mutableSetOf(TiledObjectType.BUTTERFLY))
+            it += MonsterBook(knownTypes = mutableSetOf(
+                TiledObjectType.BUTTERFLY,
+//                TiledObjectType.LARVA,
+//                TiledObjectType.MUSHROOM,
+//                TiledObjectType.CYCLOPS,
+//                TiledObjectType.SLIME,
+//                TiledObjectType.AXOLOT,
+//                TiledObjectType.SPIDER,
+            ))
         }
         val tiledMap = tiledService.loadMap(TiledMapAsset.VILLAGE)
         tiledService.setMap(tiledMap, world, false)

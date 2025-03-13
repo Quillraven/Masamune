@@ -454,11 +454,11 @@
      <property name="agility" type="float" value="2"/>
      <property name="baseLife" type="float" value="8"/>
      <property name="damage" type="float" value="4"/>
-     <property name="physicalEvade" type="float" value="0.1"/>
+     <property name="physicalEvade" type="float" value="0.5"/>
     </properties>
    </property>
    <property name="talons" type="int" value="20"/>
-   <property name="xp" type="int" value="19"/>
+   <property name="xp" type="int" value="39"/>
   </properties>
   <image source="objects/slime.png" width="16" height="16"/>
   <objectgroup draworder="index" id="2">

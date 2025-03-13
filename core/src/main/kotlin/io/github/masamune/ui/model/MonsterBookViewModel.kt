@@ -50,7 +50,7 @@ class MonsterBookViewModel(
         val statsXpAndTalons = tiledService.loadEnemyStats(this)
         return MonsterModel(
             name = bundle["enemy.${monsterKey}.name"],
-            description = bundle["enemy.${monsterKey}.description"],
+            description = description("enemy.${monsterKey}.description"),
             drawable = TextureRegionDrawable(monsterAtlas.findRegions("$monsterKey/idle_down").first()),
             stats = statsXpAndTalons.toUiStatsMap(),
         )

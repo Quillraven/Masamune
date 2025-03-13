@@ -94,12 +94,13 @@ abstract class ViewModel(
 
     // function to get game object descriptions like for items.
     // It detects special strings like %STAT.MANA% and replaces it with the proper entity data
-    fun description(key: String, entity: Entity, world: World): String {
+    fun description(key: String, entity: Entity = Entity.NONE, world: World? = null): String {
         // user format method of bundle to correctly replace colors like {{COLOR=ROYAL}}
         val description = bundle.format(key)
         return description.replace(DESCR_TOKEN_REGEX) {
             when (it.groupValues[1]) {
-                "STAT" -> replaceStatToken(it.groupValues[2], entity, world)
+                "STAT" -> replaceStatToken(it.groupValues[2], entity, world!!)
+                "I18N" -> bundle[it.groupValues[2]]
                 else -> gdxError("Unsupported description token in key $key: ${it.groupValues.first()}")
             }
         }
@@ -315,6 +316,7 @@ abstract class ViewModel(
 
     companion object {
         // format example: %STAT.MANA%
-        private val DESCR_TOKEN_REGEX = "%([A-Z]+)\\.([A-Z]+)%".toRegex()
+        // format example: %I18N.magic.double_strike.name%
+        private val DESCR_TOKEN_REGEX = "%([A-Z0-9]+)\\.([A-Za-z0-9._]+)%".toRegex()
     }
 }
