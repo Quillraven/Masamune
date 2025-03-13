@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityCreateContext
 import com.github.quillraven.fleks.World
+import com.github.quillraven.fleks.collection.mutableEntityBagOf
 import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.ai.AnimationStateIdle
 import io.github.masamune.ai.FleksStateMachine
@@ -669,7 +670,13 @@ class TiledService(
         entity += Player()
         entity += Name("Alexxius")
         entity += Interact()
-        entity += Inventory(talons = 100)
+        entity += Inventory(
+            talons = 100,
+            items = mutableEntityBagOf(
+                loadItem(world, ItemType.SMALL_HEALTH_POTION, 3),
+                loadItem(world, ItemType.SMALL_MANA_POTION, 1),
+            )
+        )
         entity += Equipment()
         entity += QuestLog()
         entity += State(FleksStateMachine(world, entity, AnimationStateIdle))
