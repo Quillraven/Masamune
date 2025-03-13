@@ -6,10 +6,12 @@ import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Trigger
+import io.github.masamune.event.CutSceneAbortEvent
 import io.github.masamune.event.Event
 import io.github.masamune.event.EventListener
 import io.github.masamune.event.EventService
 import io.github.masamune.event.MapChangeEvent
+import io.github.masamune.trigger.TriggerActionChangeScreen
 import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.trigger.TriggerScript
 import ktx.log.logger
@@ -65,6 +67,16 @@ class TriggerSystem(
                         activeTriggers += mapTrigger
                     }
                 }
+            }
+            event is CutSceneAbortEvent && activeTriggers.isNotEmpty() -> {
+                // cancel cut scene:
+                // - get change screen action which is usually the last action
+                // - ignore any other actions and just execute the screen change
+                log.info { "Cancel cut scene" }
+                val cutSceneTrigger = activeTriggers.single()
+                val changeScreenAction = cutSceneTrigger.actions.single { it is TriggerActionChangeScreen }
+                cutSceneTrigger.actions.clear()
+                cutSceneTrigger.actions += changeScreenAction
             }
 
             else -> Unit

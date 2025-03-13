@@ -1,5 +1,7 @@
 package io.github.masamune.screen
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
@@ -22,6 +24,7 @@ import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Trigger
 import io.github.masamune.dialog.DialogConfigurator
+import io.github.masamune.event.CutSceneAbortEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.input.KeyboardController
 import io.github.masamune.system.AnimationSystem
@@ -41,6 +44,7 @@ import io.github.masamune.system.TriggerSystem
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerConfigurator
 import io.github.masamune.ui.model.CutSceneViewModel
+import io.github.masamune.ui.view.CutSceneView
 import io.github.masamune.ui.view.cutSceneView
 import ktx.actors.alpha
 import ktx.app.KtxScreen
@@ -77,6 +81,10 @@ class CutSceneScreen(
     private val triggerConfigurator = TriggerConfigurator()
     private var alphaDeltaTime = 0f
     private val cutSceneWorldColor = Color(1f, 1f, 1f, 1f)
+
+    // cancel cutscene stuff
+    private var cancelHoldTimer = 0f
+    private var canCancel = false
 
     // ecs world
     val world = gameWorld()
@@ -126,7 +134,9 @@ class CutSceneScreen(
 
         // setup UI views
         stage.actors {
-            cutSceneView(CutSceneViewModel(bundle, audioService), skin)
+            cutSceneView(CutSceneViewModel(bundle, audioService), skin) {
+                this.name = "cutSceneView"
+            }
         }
 
         // register all event listeners
@@ -134,8 +144,12 @@ class CutSceneScreen(
     }
 
     fun startCutScene(name: String) {
+        canCancel = false
+        cancelHoldTimer = 0f
+
         when (name) {
             "intro" -> {
+                canCancel = true
                 cutSceneWorldColor.set(0.5f, 0.3f, 0.3f, 1f)
                 world.entity {
                     it += Trigger("cut_scene_intro")
@@ -150,6 +164,11 @@ class CutSceneScreen(
             }
 
             else -> gdxError("Unsupported cut scene $name")
+        }
+
+        if (canCancel) {
+            val view = stage.root.findActor<CutSceneView>("cutSceneView")
+            view.showCancelInfo()
         }
     }
 
@@ -190,6 +209,17 @@ class CutSceneScreen(
         stage.act(delta)
         stage.draw()
         batch.setColor(1f, 1f, 1f, 1f)
+
+        if (canCancel && Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            cancelHoldTimer += delta
+            if (cancelHoldTimer > 1f) {
+                // hold for one second to abort
+                canCancel = false
+                eventService.fire(CutSceneAbortEvent)
+            }
+        } else {
+            cancelHoldTimer = 0f
+        }
     }
 
     override fun dispose() {

@@ -22,6 +22,7 @@ data class PlayerQuestItemBegin(val player: Entity, val item: Entity) : Event
 data object PlayerQuestItemEnd : Event
 data object GameStartEvent : Event
 data class CutSceneTextEvent(val i18NKey: I18NKey, val align: Int, val duration: Float) : Event
+data object CutSceneAbortEvent : Event
 data class SaveEvent(val world: World) : Event
 data class LoadEvent(val world: World) : Event
 
