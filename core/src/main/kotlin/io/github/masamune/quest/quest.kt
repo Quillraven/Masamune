@@ -47,3 +47,14 @@ data class MonsterBookQuest(var completed: Boolean = false) : Quest {
         completed = true
     }
 }
+
+@Serializable
+data class SpiritQuest(var progress: Int = 0) : Quest {
+    override val i18nKey = "quest.spirit"
+
+    override fun isCompleted(): Boolean = progress == 100
+
+    override fun complete() {
+        progress = 100
+    }
+}

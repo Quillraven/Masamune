@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="38" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="39" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -643,6 +643,19 @@
    <object id="1" type="FixtureDefinition" x="1" y="11" width="14" height="5">
     <properties>
      <property name="density" type="float" value="50000"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="39" type="PropObject">
+  <properties>
+   <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
+  </properties>
+  <image source="objects/spirit.png" width="32" height="32"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="FixtureDefinition" x="10" y="5" width="14" height="25">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
     </properties>
    </object>
   </objectgroup>

@@ -8,6 +8,7 @@ import io.github.masamune.trigger.forest.entrance.forestEntranceTrigger
 import io.github.masamune.trigger.forest.entrance.healthPotForest1Trigger
 import io.github.masamune.trigger.forest.entrance.healthPotForest2Trigger
 import io.github.masamune.trigger.forest.entrance.manaPotForest1Trigger
+import io.github.masamune.trigger.forest.entrance.spiritForestTrigger
 import io.github.masamune.trigger.forest.entrance.terealisFlowerTrigger
 import io.github.masamune.trigger.forest.masamune.forestMasamuneMapTrigger
 import io.github.masamune.trigger.forest.masamune.masamuneForestTrigger
@@ -42,6 +43,7 @@ class TriggerConfigurator {
             "health_pot_forest2" -> world.healthPotForest2Trigger(name, scriptEntity, triggeringEntity)
             "mana_pot_forest1" -> world.manaPotForest1Trigger(name, scriptEntity, triggeringEntity)
             "snowy" -> world.snowyTrigger(name, triggeringEntity)
+            "spirit_forest" -> world.spiritForestTrigger(name, scriptEntity, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }

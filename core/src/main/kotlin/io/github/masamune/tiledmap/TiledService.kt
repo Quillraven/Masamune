@@ -324,8 +324,17 @@ class TiledService(
 
         configureTiled(it, tiledObj.id, objType, tiledMapAsset)
         it += Facing(FacingDirection.DOWN)
-        val graphicCmp = configureGraphic(it, tile, AnimationType.UNDEFINED.name)
-        it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
+
+        val animation = tiledObj.property("animation", "")
+        val aniType = when {
+            animation.isNotEmpty() -> AnimationType.valueOf(animation.uppercase())
+            else -> AnimationType.UNDEFINED
+        }
+        configureGraphic(it, tile, aniType.name, tiledObj.property("animationSpeed", 1f))
+        it += Transform(
+            position = vec3(x, y, 0f),
+            size = vec2(tiledObj.width * UNIT_SCALE, tiledObj.height * UNIT_SCALE),
+        )
         configurePhysic(it, tile, world, x, y, BodyType.StaticBody.name)
         configureTrigger(it, tiledObj)
     }
@@ -417,6 +426,7 @@ class TiledService(
         entity: Entity,
         tile: TiledMapTile,
         animationTypeStr: String,
+        animationSpeed: Float = 1f,
     ): Graphic {
         val atlasStr = tile.atlas
         val atlasAsset = AtlasAsset.entries.firstOrNull { it.name == atlasStr }
@@ -432,7 +442,13 @@ class TiledService(
         // optional animation component
         val graphicCmpRegion: TextureRegion = if (aniType != AnimationType.UNDEFINED) {
             // add animation component
-            val animationCmp = Animation.ofAtlas(atlas, atlasRegionKey, aniType, FacingDirection.DOWN)
+            val animationCmp = Animation.ofAtlas(
+                atlas,
+                atlasRegionKey,
+                aniType,
+                FacingDirection.DOWN,
+                speed = animationSpeed
+            )
             entity += animationCmp
             // use first frame for graphic component
             animationCmp.gdxAnimation.getKeyFrame(0f)

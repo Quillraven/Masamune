@@ -4,6 +4,10 @@ import com.badlogic.gdx.utils.I18NBundle
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.component.Name
+import io.github.masamune.dialog.forest.entrance.spiritForest00Dialog
+import io.github.masamune.dialog.forest.entrance.spiritForest10Dialog
+import io.github.masamune.dialog.forest.entrance.spiritForest20Dialog
+import io.github.masamune.dialog.forest.entrance.spiritForest30Dialog
 import io.github.masamune.dialog.forest.masamune.masamuneForest00Dialog
 import io.github.masamune.dialog.forest.masamune.masamuneForest10Dialog
 import io.github.masamune.dialog.forest.masamune.masamuneForest20Dialog
@@ -62,6 +66,10 @@ class DialogConfigurator(val bundle: I18NBundle) {
             "masamune_forest_40" -> masamuneForest40Dialog(name, world, triggeringEntity)
             "combat_defeat" -> combatDefeatDialog(name, world, triggeringEntity)
             "snowy" -> snowyDialog(name)
+            "spiritForest_00" -> spiritForest00Dialog(name)
+            "spiritForest_10" -> spiritForest10Dialog(name)
+            "spiritForest_20" -> spiritForest20Dialog(name)
+            "spiritForest_30" -> spiritForest30Dialog(name)
 
             else -> gdxError("There is no dialog configured for name $name")
         }

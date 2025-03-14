@@ -1,15 +1,19 @@
 package io.github.masamune.trigger.forest.entrance
 
 import com.github.quillraven.fleks.World
+import io.github.masamune.component.Graphic
+import io.github.masamune.component.Physic
 import io.github.masamune.component.Player
 import io.github.masamune.component.QuestLog
-import io.github.masamune.getEntityByTiledId
-import io.github.masamune.hasItem
+import io.github.masamune.component.Trigger
+import io.github.masamune.getEntityByTiledIdOrNull
 import io.github.masamune.quest.FlowerGirlQuest
 import io.github.masamune.quest.MainQuest
+import io.github.masamune.quest.SpiritQuest
 import io.github.masamune.screen.CutSceneScreen
 import io.github.masamune.screen.FadeTransitionType
-import io.github.masamune.tiledmap.ItemType
+import io.github.masamune.teleportEntity
+import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerScript
 import io.github.masamune.trigger.trigger
 
@@ -39,14 +43,30 @@ fun World.forestEntranceTrigger(name: String): TriggerScript? {
     }
 
     val flowerQuest = player[QuestLog].getOrNull<FlowerGirlQuest>()
-    val hasTerealisFlower = hasItem(player, ItemType.TEREALIS_FLOWER)
-    return when {
-        flowerQuest == null || flowerQuest.isCompleted() || hasTerealisFlower -> trigger(name, this, player) {
-            // player doesn't have the flower quest or already has the item or the quest is completed
-            // -> remove the flower quest trigger of the map
-            actionRemove(getEntityByTiledId(32))
+    if (flowerQuest == null) {
+        // player doesn't have flower quest -> make flower non interactable and hide it
+        getEntityByTiledIdOrNull(32)?.let { flower ->
+            flower.configure {
+                it -= Trigger
+                it -= Physic
+                it[Graphic].color.a = 0f
+            }
         }
-
-        else -> null
     }
+
+    val spiritQuest = player[QuestLog].getOrNull<SpiritQuest>()
+    if (spiritQuest != null && !spiritQuest.isCompleted()) {
+        // player has non-finished spirit quest -> adjust spirit location
+        val questProgress = spiritQuest.progress
+        getEntityByTiledIdOrNull(44)?.let { spirit ->
+            val targetPosition = when (questProgress) {
+                0 -> this.inject<TiledService>().loadPoint("spirit_pos_2")
+                25 -> this.inject<TiledService>().loadPoint("spirit_pos_3")
+                else -> this.inject<TiledService>().loadPoint("spirit_pos_4")
+            }
+            this.teleportEntity(spirit, targetPosition)
+        }
+    }
+
+    return null
 }

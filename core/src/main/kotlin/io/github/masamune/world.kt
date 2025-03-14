@@ -18,6 +18,7 @@ import io.github.masamune.component.Inventory
 import io.github.masamune.component.Item
 import io.github.masamune.component.ItemStats
 import io.github.masamune.component.Move
+import io.github.masamune.component.Physic
 import io.github.masamune.component.Player
 import io.github.masamune.component.QuestLog
 import io.github.masamune.component.Remove
@@ -170,7 +171,7 @@ fun World.isEntityAlive(entity: Entity): Boolean = with(this) {
 }
 
 fun World.isEntityHurt(entity: Entity): Boolean {
-    return this.isEntityAlive(entity) && entity[CharacterStats].life < entity[CharacterStats].lifeMax
+    return this.isEntityAlive(entity) && entity[CharacterStats].life < (entity[CharacterStats].lifeMax - 1f)
 }
 
 fun World.canPerformAction(entity: Entity, action: Action): Boolean {
@@ -227,4 +228,19 @@ fun World.spawnSfx(sfxAtlasKey: String, location: Vector2, duration: Float, scal
 
 fun World.getEntityByTiledId(tiledId: Int): Entity {
     return this.family { all(Tiled) }.firstOrNull { it[Tiled].id == tiledId } ?: Entity.NONE
+}
+
+fun World.getEntityByTiledIdOrNull(tiledId: Int): Entity? {
+    return this.family { all(Tiled) }.firstOrNull { it[Tiled].id == tiledId }
+}
+
+fun World.teleportEntity(entity: Entity, to: Vector2) {
+    entity.getOrNull(Physic)?.let { physic ->
+        physic.body.setTransform(to.x, to.y, physic.body.angle)
+        physic.prevPosition.set(to)
+    }
+    entity[Transform].position.run {
+        this.x = to.x
+        this.y = to.y
+    }
 }
