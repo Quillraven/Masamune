@@ -10,6 +10,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.audio.AudioService
 import io.github.masamune.component.Graphic
+import io.github.masamune.component.Item
 import io.github.masamune.component.Name
 import io.github.masamune.component.Transform
 import io.github.masamune.event.Event
@@ -41,7 +42,12 @@ class QuestItemViewModel(
 
                 val itemRegion = event.item[Graphic].region
                 itemDrawable = TextureRegionDrawable(itemRegion)
-                itemName = bundle["item.${event.item[Name].name}.name"]
+                val amount = event.item[Item].amount
+                itemName = when (amount) {
+                    1 -> bundle["item.${event.item[Name].name}.name"]
+                    else -> "${amount}x ${bundle["item.${event.item[Name].name}.name"]}"
+                }
+
                 onResize()
             }
 

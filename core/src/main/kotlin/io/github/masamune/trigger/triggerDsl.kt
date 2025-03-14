@@ -50,11 +50,11 @@ class TriggerCfg(
         actions += TriggerActionDialog(configurator, dialogName, withSound, world, triggeringEntity, eventService, closeAction)
     }
 
-    fun actionAddItem(entity: Entity, itemType: ItemType) {
+    fun actionAddItem(entity: Entity, itemType: ItemType, amount: Int = 1) {
         val tiledService = world.inject<TiledService>()
         val eventService = world.inject<EventService>()
         val audioService = world.inject<AudioService>()
-        actions += TriggerActionAddItem(entity, itemType, eventService, tiledService, audioService)
+        actions += TriggerActionAddItem(entity, itemType, amount, eventService, tiledService, audioService)
     }
 
     fun actionRemoveItem(entity: Entity, itemType: ItemType, amount: Int) {

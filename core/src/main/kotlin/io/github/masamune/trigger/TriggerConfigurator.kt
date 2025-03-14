@@ -5,6 +5,9 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.trigger.cutscene.intro.cutSceneIntroTrigger
 import io.github.masamune.trigger.cutscene.outro.cutSceneOutroTrigger
 import io.github.masamune.trigger.forest.entrance.forestEntranceTrigger
+import io.github.masamune.trigger.forest.entrance.healthPotForest1
+import io.github.masamune.trigger.forest.entrance.healthPotForest2
+import io.github.masamune.trigger.forest.entrance.manaPotForest1
 import io.github.masamune.trigger.forest.entrance.terealisFlowerTrigger
 import io.github.masamune.trigger.forest.masamune.forestMasamuneMapTrigger
 import io.github.masamune.trigger.forest.masamune.masamuneForestTrigger
@@ -34,6 +37,9 @@ class TriggerConfigurator {
             "cut_scene_intro" -> world.cutSceneIntroTrigger(name, scriptEntity)
             "cut_scene_outro" -> world.cutSceneOutroTrigger(name, scriptEntity)
             "masamune_forest" -> world.masamuneForestTrigger(name, scriptEntity, triggeringEntity)
+            "health_pot_forest1" -> world.healthPotForest1(name, scriptEntity, triggeringEntity)
+            "health_pot_forest2" -> world.healthPotForest2(name, scriptEntity, triggeringEntity)
+            "mana_pot_forest1" -> world.manaPotForest1(name, scriptEntity, triggeringEntity)
 
             else -> gdxError("There is no trigger configured for name $name")
         }

@@ -121,6 +121,7 @@ class TriggerActionDialog(
 class TriggerActionAddItem(
     private val entity: Entity,
     private val itemType: ItemType,
+    private val amount: Int,
     private val eventService: EventService,
     private val tiledService: TiledService,
     private val audioService: AudioService,
@@ -128,7 +129,7 @@ class TriggerActionAddItem(
     private var duration = 4.5f
 
     override fun World.onStart() {
-        val item: Entity = tiledService.loadItem(this, itemType)
+        val item: Entity = tiledService.loadItem(this, itemType, amount)
         eventService.fire(PlayerQuestItemBegin(entity, item))
         addItem(item, entity, true)
         entity[Animation].changeTo = AnimationType.ITEM

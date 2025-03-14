@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="44" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="40">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="44" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="44">
  <properties>
   <property name="music" value="FOREST"/>
   <property name="trigger" value="forest_entrance"/>
@@ -82,6 +82,21 @@
   <object id="39" gid="4123" x="202" y="71" width="16" height="16">
    <properties>
     <property name="enemies" value="AXOLOT=1"/>
+   </properties>
+  </object>
+  <object id="41" gid="4133" x="26" y="301" width="9" height="11">
+   <properties>
+    <property name="triggerName" value="health_pot_forest1"/>
+   </properties>
+  </object>
+  <object id="42" gid="4133" x="664" y="283" width="9" height="11">
+   <properties>
+    <property name="triggerName" value="health_pot_forest2"/>
+   </properties>
+  </object>
+  <object id="43" gid="4134" x="668" y="414" width="9" height="11">
+   <properties>
+    <property name="triggerName" value="mana_pot_forest1"/>
    </properties>
   </object>
  </objectgroup>

@@ -327,6 +327,7 @@ class TiledService(
         val graphicCmp = configureGraphic(it, tile, AnimationType.UNDEFINED.name)
         it += Transform(position = vec3(x, y, 0f), size = graphicCmp.regionSize)
         configurePhysic(it, tile, world, x, y, BodyType.StaticBody.name)
+        configureTrigger(it, tiledObj)
     }
 
     fun loadNpc(location: Vector2, type: TiledObjectType, world: World): Entity {
@@ -485,6 +486,11 @@ class TiledService(
         }
 
         entity += Trigger(tile.triggerName)
+    }
+
+    private fun EntityCreateContext.configureTrigger(entity: Entity, tiledObj: TiledMapTileMapObject) {
+        val trigger = tiledObj.propertyOrNull<String>("triggerName") ?: return
+        entity += Trigger(trigger)
     }
 
     private fun MapObject.toPathVertices(): List<Vector2> {
@@ -807,10 +813,10 @@ class TiledService(
         val TiledMapTile.imageName: String
             get() {
                 val name = (textureRegion.texture.textureData as FileTextureData).fileHandle.nameWithoutExtension()
-                return if (property("type", "") == "ItemObject") {
-                    "items/$name"
-                } else {
-                    name
+                return when {
+                    property("type", "") == "ItemObject" -> "items/$name"
+                    property("regionPrefix", "").isNotEmpty() -> "${property("regionPrefix", "")}/$name"
+                    else -> name
                 }
             }
 
