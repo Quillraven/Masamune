@@ -32,7 +32,8 @@
                 "REGENERATE1",
                 "DOUBLE_STRIKE",
                 "REGENERATE_MANA_RING",
-                "STR_BOOSTER"
+                "STR_BOOSTER",
+                "POISON_ATTACK"
             ],
             "valuesAsFlags": true
         },
