@@ -12,6 +12,7 @@ import com.rafaskoberg.gdx.typinglabel.effects.EaseEffect
 import com.rafaskoberg.gdx.typinglabel.effects.FadeEffect
 import com.rafaskoberg.gdx.typinglabel.effects.JumpEffect
 import com.rafaskoberg.gdx.typinglabel.effects.RainbowEffect
+import com.rafaskoberg.gdx.typinglabel.effects.ShakeEffect
 import com.ray3k.tenpatch.TenPatchDrawable
 import io.github.masamune.ui.view.DialogViewStyle
 import io.github.masamune.ui.widget.DialogOptionStyle
@@ -45,6 +46,7 @@ object TeaVMBuilder {
         TeaReflectionSupplier.addReflectionClass(RainbowEffect::class.java)
         TeaReflectionSupplier.addReflectionClass(EaseEffect::class.java)
         TeaReflectionSupplier.addReflectionClass(BlinkEffect::class.java)
+        TeaReflectionSupplier.addReflectionClass(ShakeEffect::class.java)
         // free type font
         TeaReflectionSupplier.addReflectionClass(FreeTypeFontGenerator::class.java)
 
