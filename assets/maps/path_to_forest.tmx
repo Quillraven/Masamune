@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="25">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="26">
  <properties>
   <property name="music" value="ROAD"/>
  </properties>
@@ -54,6 +54,7 @@
     <property name="enemies" value="LARVA=1"/>
    </properties>
   </object>
+  <object id="25" name="SNOWY" gid="4135" x="123" y="394" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="10" name="path">
   <object id="22" name="PATH_MAN_GREEN" x="233" y="585">
