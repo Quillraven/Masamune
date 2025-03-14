@@ -25,3 +25,6 @@ data object DefaultAction : Action(ActionType.UNDEFINED, ActionTargetType.NONE, 
 
 val Action.isHealing: Boolean
     get() = this is HealAction
+
+val Action.isPoison: Boolean
+    get() = this is PoisonAttackAction

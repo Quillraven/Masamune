@@ -7,6 +7,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.collection.EntityBag
 import io.github.masamune.combat.ActionState
+import io.github.masamune.component.StatusType
 import io.github.masamune.dialog.Dialog
 import io.github.masamune.tiledmap.ActionType
 import io.github.masamune.tiledmap.MapTransitionType
@@ -104,3 +105,5 @@ data class CombatEntityTransformEvent(
     val life: Float,
     val maxLife: Float
 ) : Event
+data class CombatPlayerBuffAddEvent(val type: StatusType) : Event
+data class CombatPlayerBuffRemoveEvent(val type: StatusType) : Event

@@ -7,9 +7,9 @@ import io.github.masamune.tiledmap.ActionType
 
 class PoisonAttackAction : Action(ActionType.POISON_ATTACK, ActionTargetType.SINGLE) {
     override fun ActionExecutorService.onStart() {
-        addBuff(PoisonBuff(singleTarget, 2f, 2))
-        play(SoundAsset.SLOW)
-        addSfx(singleTarget, "slow1", 1.25f, 1.75f)
-        wait(1.5f)
+        addBuff(PoisonBuff(singleTarget, 0.05f, 2))
+        play(SoundAsset.POISON1)
+        addSfx(singleTarget, "poison1", 0.75f, 1.5f)
+        wait(0.9f)
     }
 }

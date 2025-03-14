@@ -18,6 +18,7 @@ import io.github.masamune.component.GdxAnimation
 import io.github.masamune.tiledmap.AnimationType
 import ktx.app.gdxError
 import ktx.collections.GdxArray
+import ktx.collections.gdxArrayOf
 import ktx.log.logger
 import com.badlogic.gdx.utils.StringBuilder as GdxStringBuilder
 
@@ -52,6 +53,21 @@ data class CachingAtlas(
             }
             regions
         }
+    }
+
+    /**
+     * Returns a single region with the specified [name]. If the region
+     * is not part of the cache, then it is retrieved from the underlying
+     * [TextureAtlas] first.
+     *
+     * @throws [GdxRuntimeException] if there is no region for the given [name].
+     */
+    fun findRegion(name: String): TextureAtlas.AtlasRegion {
+        return regionCache.getOrPut(name) {
+            val region = textureAtlas.findRegion(name)
+                ?: gdxError("There is no region with name '$name' in atlas '$type'")
+            gdxArrayOf(region)
+        }.single()
     }
 
     /**

@@ -19,6 +19,8 @@ import io.github.masamune.combat.buff.OnAttackDamageTakenBuff
 import io.github.masamune.combat.buff.OnMagicDamageBuff
 import io.github.masamune.combat.buff.OnMagicDamageTakenBuff
 import io.github.masamune.combat.buff.OnTurnBuff
+import io.github.masamune.combat.buff.PoisonBuff
+import io.github.masamune.combat.buff.SlowBuff
 import io.github.masamune.combat.effect.DamageEffect
 import io.github.masamune.combat.effect.DefaultEffect
 import io.github.masamune.combat.effect.DelayEffect
@@ -35,10 +37,13 @@ import io.github.masamune.component.Item
 import io.github.masamune.component.ItemStats
 import io.github.masamune.component.MoveBy
 import io.github.masamune.component.Player
+import io.github.masamune.component.StatusType
 import io.github.masamune.component.Transform
 import io.github.masamune.event.CombatActionStartEvent
 import io.github.masamune.event.CombatActionsPerformedEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
+import io.github.masamune.event.CombatPlayerBuffAddEvent
+import io.github.masamune.event.CombatPlayerBuffRemoveEvent
 import io.github.masamune.event.CombatTurnEndEvent
 import io.github.masamune.event.EventService
 import io.github.masamune.isEntityAlive
@@ -545,11 +550,29 @@ class ActionExecutorService(
         ownerBuffs.removeIf { it is T }
         with(buff) { onApply() }
         ownerBuffs += buff
+
+        // fire special events for specific player buffs to show them (=PlayerStatusAilmentSystem)
+        if (buff.owner has Player) {
+            if (buff is PoisonBuff) {
+                eventService.fire(CombatPlayerBuffAddEvent(StatusType.POISON))
+            } else if (buff is SlowBuff) {
+                eventService.fire(CombatPlayerBuffAddEvent(StatusType.SLOW))
+            }
+        }
     }
 
     fun Buff.removeBuff() = with(world) {
         onRemove()
         owner[Combat].buffs -= this@removeBuff
+
+        // fire special events for specific player buffs to show them (=PlayerStatusAilmentSystem)
+        if (owner has Player) {
+            if (this@removeBuff is PoisonBuff) {
+                eventService.fire(CombatPlayerBuffRemoveEvent(StatusType.POISON))
+            } else if (this@removeBuff is SlowBuff) {
+                eventService.fire(CombatPlayerBuffRemoveEvent(StatusType.SLOW))
+            }
+        }
     }
 
     fun performFirst() {

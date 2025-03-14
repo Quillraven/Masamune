@@ -51,6 +51,7 @@ import io.github.masamune.system.DissolveSystem
 import io.github.masamune.system.FadeSystem
 import io.github.masamune.system.GrayscaleSystem
 import io.github.masamune.system.MoveBySystem
+import io.github.masamune.system.PlayerStatusAilmentSystem
 import io.github.masamune.system.RemoveSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
@@ -69,13 +70,8 @@ import ktx.app.gdxError
 import ktx.log.logger
 import ktx.math.vec3
 import ktx.scene2d.actors
-import kotlin.collections.Map
-import kotlin.collections.MutableList
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.firstOrNull
-import kotlin.collections.forEach
-import kotlin.collections.sum
 
 class CombatScreen(
     private val masamune: Masamune,
@@ -135,6 +131,7 @@ class CombatScreen(
                 add(ScaleSystem())
                 add(ShakeSystem())
                 add(SelectorSystem())
+                add(PlayerStatusAilmentSystem())
                 // grayscale system must be before any other render system
                 add(GrayscaleSystem())
                 add(ScreenBgdRenderSystem())

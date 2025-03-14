@@ -12,7 +12,7 @@ class PoisonBuff(
 
     override fun ActionExecutorService.onTurnEnd() {
         val damage = owner.stats.lifeMax * damageFactor
-        dealDoTDamage(damage, owner, "slow1", 1.25f, 1.75f, SoundAsset.SLOW, 1f)
+        dealDoTDamage(damage, owner, "poison2", 0.9f, 1.5f, SoundAsset.POISON1, 1f)
         if (--duration <= 0) {
             removeBuff()
         }

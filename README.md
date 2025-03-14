@@ -41,6 +41,12 @@ Imagine an epic story here. Will be updated later.
   // in this example two 16x16 images are combined into a single image with 1 image per row and 2 rows in total (=-tile 1x2)
   magick montage .\FlagBlue16x16.png .\FlagGray16x16.png -tile 1x2 -geometry 16x16+0+0< -background none Flags.png
   ```
+- PowerShell
+  ```shell
+  // rename files called idle_40.png, idle_41.png to idle_00.png, idle_01.png, ...
+  // used in combination with image magick scripts from above
+  $i=0; Get-ChildItem "idle_*.png" | Sort-Object Name | % { Rename-Item $_ ("idle_{0:D2}.png" -f $i); $i++ }
+  ```
 - [Ninja Adventure Asset Pack](https://pixel-boy.itch.io/ninja-adventure-asset-pack)
 - [8-Bit Fantasy Adventure Music Pack](https://xdeviruchi.itch.io/8-bit-fantasy-adventure-music-pack)
 - [Cherry Cream Soda font](https://fonts.google.com/specimen/Cherry+Cream+Soda)
