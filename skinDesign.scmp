@@ -947,6 +947,26 @@ atlasData: {
 			type: TEXTURE
 			hidden: false
 		}
+		{
+			file: C:/Users/Simon/IdeaProjects/Masamune/skinDesign_data/snowy.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: snowy
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
 	]
 	fontDrawables: []
 }

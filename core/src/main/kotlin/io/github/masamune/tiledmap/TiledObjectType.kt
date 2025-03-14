@@ -22,4 +22,5 @@ enum class TiledObjectType(val isEnemy: Boolean) {
     AXOLOT(true),
     SPIDER(true),
     SLIME(true),
+    SNOWY(false),
 }

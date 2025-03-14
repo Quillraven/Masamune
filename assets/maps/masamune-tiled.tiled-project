@@ -406,7 +406,8 @@
                 "CYCLOPS_NPC",
                 "AXOLOT",
                 "SPIDER",
-                "SLIME"
+                "SLIME",
+                "SNOWY"
             ],
             "valuesAsFlags": false
         },

@@ -13,6 +13,7 @@ import io.github.masamune.dialog.forest.path.manGreen00Dialog
 import io.github.masamune.dialog.forest.path.manGreen10Dialog
 import io.github.masamune.dialog.forest.path.manGreen20Dialog
 import io.github.masamune.dialog.forest.path.manGreen30Dialog
+import io.github.masamune.dialog.forest.path.snowyDialog
 import io.github.masamune.dialog.village.elder00Dialog
 import io.github.masamune.dialog.village.elder10Dialog
 import io.github.masamune.dialog.village.flowerGirl00Dialog
@@ -34,6 +35,7 @@ class DialogConfigurator(val bundle: I18NBundle) {
     val dialogOptionOk: String = bundle[I18NKey.DIALOG_OPTION_OK]
     val dialogOptionExit: String = bundle[I18NKey.DIALOG_OPTION_EXIT]
     val dialogOptionBuy: String = bundle[I18NKey.DIALOG_OPTION_BUY]
+    val dialogOptionNo: String = bundle[I18NKey.GENERAL_NO]
 
     operator fun get(name: String, world: World, triggeringEntity: Entity): Dialog {
         log.debug { "Creating new dialog $name" }
@@ -59,6 +61,7 @@ class DialogConfigurator(val bundle: I18NBundle) {
             "masamune_forest_30" -> masamuneForest30Dialog(name)
             "masamune_forest_40" -> masamuneForest40Dialog(name, world, triggeringEntity)
             "combat_defeat" -> combatDefeatDialog(name, world, triggeringEntity)
+            "snowy" -> snowyDialog(name)
 
             else -> gdxError("There is no dialog configured for name $name")
         }
