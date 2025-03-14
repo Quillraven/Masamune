@@ -87,7 +87,7 @@ i:b:/maps/objects/merchant.png:494:1
 i:b:/maps/objects/scroll_inferno.png:2975:1
 i:b:/maps/village.tmx:3622:1
 i:b:/maps/menu.tmx:1843:1
-i:b:/maps/objects.tsx:28087:1
+i:b:/maps/objects.tsx:28086:1
 i:b:/maps/tileset.tsx:26263:1
 i:b:/maps/forest_masamune.tmx:3395:1
 i:b:/maps/masamune-tiled.tiled-project:17173:1
