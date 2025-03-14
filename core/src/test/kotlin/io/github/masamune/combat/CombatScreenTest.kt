@@ -114,7 +114,7 @@ private class CombatScreenTest : KtxGame<KtxScreen>() {
     private fun spawnEnemy(world: World): Entity = world.entity {
         it += Enemy(
             combatEntities = mapOf(
-//                TiledObjectType.BUTTERFLY to 1,
+                TiledObjectType.BUTTERFLY to 1,
                 TiledObjectType.CYCLOPS to 1,
 //                TiledObjectType.MUSHROOM to 1,
             ),

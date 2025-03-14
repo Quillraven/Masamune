@@ -5,6 +5,7 @@ import com.github.quillraven.fleks.World
 import io.github.masamune.combat.ActionExecutorService
 import io.github.masamune.combat.ActionState
 import io.github.masamune.combat.buff.OnDeathBuff
+import io.github.masamune.component.Combat
 import io.github.masamune.event.CombatEntityDeadEvent
 import io.github.masamune.event.CombatEntityHealEvent
 import io.github.masamune.event.CombatEntityManaUpdateEvent
@@ -114,6 +115,11 @@ data class EffectStack(
                     }
 
                     if (effect.target.hasNoTransformEffect()) {
+                        // cleanup target buffs
+                        with(world) {
+                            effect.target[Combat].buffs.clear()
+                        }
+                        // fire dead event for dissolve effect and update combat UI
                         eventService.fire(CombatEntityDeadEvent(effect.target))
                     }
                 }

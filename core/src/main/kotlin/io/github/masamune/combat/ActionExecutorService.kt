@@ -338,6 +338,45 @@ class ActionExecutorService(
         return target
     }
 
+    // Damage without a source that cannot be dodged and doesn't apply source buffs.
+    // Also, doesn't redirect damage because it is coming from a buff that is applied to a specific entity.
+    fun dealDoTDamage(
+        amount: Float,
+        target: Entity,
+        sfxAtlasKey: String,
+        sfxDuration: Float,
+        sfxScale: Float,
+        soundAsset: SoundAsset?,
+        delay: Float,
+    ) {
+
+        if (world.isEntityDead(target)) {
+            // target is already dead -> do nothing
+            return
+        }
+
+        // reduce damage by resistance
+        val targetStats = target.stats
+        val resistance = targetStats.resistance
+        val reduction = 75f / (75f + resistance)
+        var damage = amount * reduction
+
+        // pre magic buffs
+        target.applyBuffs<OnMagicDamageTakenBuff> { damage = preMagicDamageTaken(Entity.NONE, target, damage) }
+
+        // add effects on effect stack (sfx, sound, damage, ...)
+        soundAsset?.let { effectStack.addLast(SoundEffect(Entity.NONE, target, it)) }
+        effectStack.addLast(SfxEffect(Entity.NONE, target, sfxAtlasKey, sfxDuration, sfxScale))
+        val damageEffect = DamageEffect(Entity.NONE, target, damage, false)
+        effectStack.addLast(damageEffect)
+        if (delay > 0f) {
+            effectStack.addLast(DelayEffect(Entity.NONE, target, delay))
+        }
+
+        // post magic buffs
+        target.applyBuffs<OnMagicDamageTakenBuff> { postMagicDamageTaken(Entity.NONE, target, damage) }
+    }
+
     fun dealMagicDamage(
         source: Entity,
         amount: Float,

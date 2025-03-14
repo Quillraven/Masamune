@@ -474,7 +474,7 @@
  <tile id="28" type="EnemyObject">
   <properties>
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE"/>
+   <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,POISON_ATTACK"/>
    <property name="level" type="int" value="2"/>
    <property name="objType" propertytype="MapObjectType" value="SPIDER"/>
    <property name="stats" type="class" propertytype="CharStats">

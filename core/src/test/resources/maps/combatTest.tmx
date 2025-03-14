@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="combatObjects" tilewidth="50" tileheight="50" tilecount="9" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0" type="PlayerObject">
    <properties>
     <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
-    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,USE_ITEM,SLOW,DEMI1,DOUBLE_STRIKE"/>
+    <property name="combatActions" propertytype="ActionType" value="ATTACK_SINGLE,FIREBOLT,FIREBALL,USE_ITEM,SLOW,DEMI1,DOUBLE_STRIKE,POISON_ATTACK"/>
     <property name="objType" propertytype="MapObjectType" value="HERO"/>
     <property name="stats" type="class" propertytype="CharStats">
      <properties>

@@ -12,6 +12,7 @@ enum class ActionType(private val actionFactory: () -> Action) {
     HEAL(::HealAction),
     ITEM_HEALTH_RESTORE(::ItemHealthRestoreAction),
     ITEM_MANA_RESTORE(::ItemManaRestoreAction),
+    POISON_ATTACK(::PoisonAttackAction),
     REGENERATE1(::Regenerate1Action),
     REGENERATE_MANA_RING(::RegenerateManaRingAction),
     SCROLL_INFERNO(::ScrollInfernoAction),
