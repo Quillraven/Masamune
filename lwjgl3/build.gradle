@@ -9,7 +9,7 @@ buildscript {
   }
 }
 plugins {
-  id "io.github.fourlastor.construo" version "1.2.0"
+  id "io.github.fourlastor.construo" version "1.4.1"
   id "application"
 }
 apply plugin: 'org.jetbrains.kotlin.jvm'
@@ -71,8 +71,6 @@ construo {
     name.set(appName)
     // human-readable name, used for example in the `.app` name for macOS
     humanName.set(appName)
-    // Optional, defaults to project version
-    version.set("0.0.0")
 
     targets.configure {
       create("linuxX64", Target.Linux) {

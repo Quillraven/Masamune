@@ -14,6 +14,6 @@ fun main() {
     Lwjgl3Application(Masamune(webLauncher = false), Lwjgl3ApplicationConfiguration().apply {
         setTitle("Masamune")
         setWindowedMode(1280, 960)
-        setWindowIcon(*(arrayOf(128, 64, 32, 16).map { "libgdx$it.png" }.toTypedArray()))
+        setWindowIcon("icon32.png")
     })
 }

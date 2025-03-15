@@ -5,9 +5,18 @@
 [![LibKTX](https://img.shields.io/badge/LibKTX-1.13.1--rc1-blue.svg)](https://github.com/libktx/ktx)
 [![Tiled](https://img.shields.io/badge/Tiled-1.11.0-teal.svg)](https://www.mapeditor.org/)
 
+# Available on itch.io
+
+itch.io [link](https://quillraven.itch.io/masamune)
+
 # Masamune
 
-Imagine an epic story here. Will be updated later.
+In Masamune you play the hero **Alexxius**. Your home village was
+safe for many decades thanks to your ancestors' magic and the **Masamune** sword.
+
+However, the darkness seems to return and the protective magic of the sword is fading.
+
+This is where your story begins...
 
 ### Controls
 
