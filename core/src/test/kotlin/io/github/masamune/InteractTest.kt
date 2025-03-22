@@ -80,7 +80,11 @@ private class InteractTest : KtxApplicationAdapter {
 
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
-        val tiledMap = TmxMapLoader(ClasspathFileHandleResolver()).load("maps/interactTest.tmx")
+        val tiledMap = TmxMapLoader(ClasspathFileHandleResolver())
+            .load("maps/interactTest.tmx", TmxMapLoader.Parameters().apply {
+                projectFilePath = "maps/masamune-tiled.tiled-project"
+            })
+        TiledService.PLAYER_START_ITEMS = emptyMap()
         tiledMap.properties[TILED_MAP_ASSET_PROPERTY_KEY] = TiledMapAsset.VILLAGE
         tiledService.setMap(tiledMap, world)
 

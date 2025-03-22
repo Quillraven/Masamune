@@ -15,6 +15,7 @@ import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.ShaderService
+import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.component.Tag
 import io.github.masamune.component.Transform
 import io.github.masamune.event.EventService
@@ -23,11 +24,13 @@ import io.github.masamune.system.CameraSystem
 import io.github.masamune.system.DebugPhysicRenderSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.tiledmap.TiledService.Companion.TILED_MAP_ASSET_PROPERTY_KEY
 import ktx.app.KtxApplicationAdapter
 import ktx.app.KtxInputAdapter
 import ktx.app.clearScreen
 import ktx.box2d.createWorld
 import ktx.math.vec2
+import ktx.tiled.set
 
 /**
  * Test for [CameraSystem].
@@ -91,7 +94,13 @@ class CameraTest : KtxApplicationAdapter {
 
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
-        tiledMap = TmxMapLoader(ClasspathFileHandleResolver()).load("maps/test.tmx")
+        TiledService.PLAYER_START_ITEMS = emptyMap()
+        tiledMap = TmxMapLoader(ClasspathFileHandleResolver())
+            .load("maps/test.tmx", TmxMapLoader.Parameters().apply {
+                projectFilePath = "maps/masamune-tiled.tiled-project"
+            })
+        tiledMap.properties[TILED_MAP_ASSET_PROPERTY_KEY] = TiledMapAsset.VILLAGE
+
         tiledService.setMap(tiledMap, world)
 
         Gdx.input.inputProcessor = CameraController(gameViewport, world)

@@ -699,8 +699,7 @@ class TiledService(
         entity += Inventory(
             talons = 100,
             items = mutableEntityBagOf(
-                loadItem(world, ItemType.SMALL_HEALTH_POTION, 3),
-                loadItem(world, ItemType.SMALL_MANA_POTION, 1),
+                *PLAYER_START_ITEMS.map { loadItem(world, it.key, it.value) }.toTypedArray()
             )
         )
         entity += Equipment()
@@ -813,6 +812,10 @@ class TiledService(
     companion object {
         private val log = logger<TiledService>()
         const val TILED_MAP_ASSET_PROPERTY_KEY = "tiledMapAsset"
+        var PLAYER_START_ITEMS = mapOf(
+            ItemType.SMALL_HEALTH_POTION to 3,
+            ItemType.SMALL_MANA_POTION to 1,
+        )
 
         fun TiledMap.portal(portalId: Int): MapObject {
             return layer("portal").objects

@@ -55,6 +55,7 @@ import io.github.masamune.system.PlayerStatusAilmentSystem
 import io.github.masamune.system.RemoveSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.system.ScaleSystem
+import io.github.masamune.system.ScreenBgdRenderSystem
 import io.github.masamune.system.SelectorSystem
 import io.github.masamune.system.ShakeSystem
 import io.github.masamune.tiledmap.AnimationType

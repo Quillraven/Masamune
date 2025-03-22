@@ -13,15 +13,18 @@ import com.github.quillraven.fleks.configureWorld
 import io.github.masamune.asset.AssetService
 import io.github.masamune.asset.AtlasAsset
 import io.github.masamune.asset.ShaderService
+import io.github.masamune.asset.TiledMapAsset
 import io.github.masamune.event.EventService
 import io.github.masamune.system.AnimationSystem
 import io.github.masamune.system.CameraSystem
 import io.github.masamune.system.DebugPhysicRenderSystem
 import io.github.masamune.system.RenderSystem
 import io.github.masamune.tiledmap.TiledService
+import io.github.masamune.tiledmap.TiledService.Companion.TILED_MAP_ASSET_PROPERTY_KEY
 import ktx.app.KtxApplicationAdapter
 import ktx.app.clearScreen
 import ktx.box2d.createWorld
+import ktx.tiled.set
 
 /**
  * Test for tiledPhysic.kt.
@@ -70,7 +73,12 @@ private class TiledPhysicTest : KtxApplicationAdapter {
 
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
-        tiledMap = TmxMapLoader(ClasspathFileHandleResolver()).load("maps/tiledTest.tmx")
+        tiledMap = TmxMapLoader(ClasspathFileHandleResolver())
+            .load("maps/tiledTest.tmx", TmxMapLoader.Parameters().apply {
+                projectFilePath = "maps/masamune-tiled.tiled-project"
+            })
+        tiledMap.properties[TILED_MAP_ASSET_PROPERTY_KEY] = TiledMapAsset.VILLAGE
+        TiledService.PLAYER_START_ITEMS = emptyMap()
         tiledService.setMap(tiledMap, world)
     }
 

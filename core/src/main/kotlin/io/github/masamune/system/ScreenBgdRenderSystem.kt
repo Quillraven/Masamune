@@ -1,4 +1,4 @@
-package io.github.masamune.screen
+package io.github.masamune.system
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
