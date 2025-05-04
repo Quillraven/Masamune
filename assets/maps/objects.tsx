@@ -185,7 +185,6 @@
      <property name="intelligence" type="float" value="1"/>
      <property name="lifeMax" type="float" value="0"/>
      <property name="manaMax" type="float" value="0"/>
-     <property name="physicalDamage" type="float" value="3"/>
     </properties>
    </property>
   </properties>
