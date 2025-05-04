@@ -7,14 +7,14 @@ i:b:/shader/outline.frag:847:1
 i:b:/shader/dissolve.frag:966:1
 i:d:/ui:0:1
 i:b:/ui/logo.png:347638:1
-i:b:/ui/messages_de.properties:16242:1
+i:b:/ui/messages_de.properties:16606:1
 i:b:/ui/skin.json:7801:1
 i:b:/ui/logo_bgd.png:366428:1
 i:b:/ui/Fipps-Regular.otf:34220:1
 i:b:/ui/CherryCreamSoda-Regular.ttf:49404:1
 i:b:/ui/skin.png:10416:1
 i:b:/ui/skin.atlas:4069:1
-i:b:/ui/messages.properties:15056:1
+i:b:/ui/messages.properties:15421:1
 i:d:/sound:0:1
 i:b:/sound/attack_miss.wav:117714:1
 i:b:/sound/demon_teleport.wav:229878:1
@@ -42,7 +42,7 @@ i:b:/music/combat2.mp3:1927961:1
 i:d:/maps:0:1
 i:b:/maps/menu.tmx:1843:1
 i:b:/maps/tileset.png:473544:1
-i:b:/maps/objects.tsx:28086:1
+i:b:/maps/objects.tsx:28024:1
 i:b:/maps/tileset.tsx:26263:1
 i:b:/maps/masamune-tiled.tiled-project:17173:1
 i:b:/maps/path_to_forest.tmx:4931:1
