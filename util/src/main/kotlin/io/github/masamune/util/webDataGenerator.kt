@@ -121,6 +121,7 @@ fun itemInfo(resourceBundle: PropertyResourceBundle): List<ItemInfo> {
         var action = ""
         var speed = 0f
         val stats = mutableMapOf<String, Float>()
+        var cost = 0
 
         // Extract properties
         for (j in 0 until propertyList.length) {
@@ -134,6 +135,7 @@ fun itemInfo(resourceBundle: PropertyResourceBundle): List<ItemInfo> {
                 "action" -> action = itemAction(propertyValue)
                 "speed" -> speed = propertyValue.toFloatOrNull() ?: 0f
                 "stats" -> stats.parseStats(property.getElementsByTagName("properties").item(0))
+                "cost" -> cost = propertyValue.toIntOrNull() ?: 0
             }
         }
 
@@ -153,7 +155,8 @@ fun itemInfo(resourceBundle: PropertyResourceBundle): List<ItemInfo> {
                 category,
                 stats,
                 speed,
-                action
+                action,
+                cost
             )
         )
     }

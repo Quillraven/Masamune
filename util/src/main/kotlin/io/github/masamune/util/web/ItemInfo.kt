@@ -10,4 +10,5 @@ data class ItemInfo(
     val stats: Map<String, Float>,
     val speed: Float,
     val action: String,
+    val cost: Int,
 )
