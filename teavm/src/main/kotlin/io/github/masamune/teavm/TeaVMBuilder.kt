@@ -16,6 +16,7 @@ import com.rafaskoberg.gdx.typinglabel.effects.ShakeEffect
 import com.ray3k.tenpatch.TenPatchDrawable
 import io.github.masamune.ui.view.DialogViewStyle
 import io.github.masamune.ui.widget.DialogOptionStyle
+import org.teavm.tooling.TeaVMTargetType
 import org.teavm.vm.TeaVMOptimizationLevel
 import java.io.File
 
@@ -54,8 +55,9 @@ object TeaVMBuilder {
         tool.mainClass = "io.github.masamune.teavm.TeaVMLauncher"
         // For many (or most) applications, using the highest optimization won't add much to build time.
         // If your builds take too long, and runtime performance doesn't matter, you can change FULL to SIMPLE .
-        tool.optimizationLevel = TeaVMOptimizationLevel.FULL
+        tool.optimizationLevel = TeaVMOptimizationLevel.ADVANCED
         tool.setObfuscated(true)
+        tool.targetType = TeaVMTargetType.WEBASSEMBLY_GC
         TeaBuilder.build(tool)
     }
 }
