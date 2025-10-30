@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="50" tileheight="50" tilecount="39" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="objects" tilewidth="50" tileheight="50" tilecount="39" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="PlayerObject">
   <properties>
@@ -295,6 +295,11 @@
    <property name="atlas" propertytype="AtlasAsset" value="CHARS_AND_PROPS"/>
    <property name="category" propertytype="ItemCategory" value="QUEST"/>
    <property name="itemType" propertytype="ItemType" value="TEREALIS_FLOWER"/>
+   <property name="stats" type="class" propertytype="Stats">
+    <properties>
+     <property name="physicalEvade" type="float" value="0.01"/>
+    </properties>
+   </property>
   </properties>
   <image source="objects/terealis_plant.png" width="16" height="16"/>
  </tile>

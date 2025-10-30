@@ -63,7 +63,7 @@
 </div>
 <script>
     async function start() {
-        let teavm = await TeaVM.wasmGC.load("teavm/app.js.wasm"); teavm.exports.main([]);
+        let teavm = await TeaVM.wasmGC.load("app.wasm"); teavm.exports.main([]);
     }
     var maxPercentage = 25;
     var delay = 500;
@@ -83,6 +83,6 @@
     }
     setTimeout(barUpdater, delay);
 </script>
-<script type="text/javascript" charset="utf-8" src="teavm/wasm-gc-runtime.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="wasm-gc-runtime.min.js"></script>
 </body>
 </html>
