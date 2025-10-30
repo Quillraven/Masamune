@@ -8,11 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Scaling
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.github.tommyettinger.textra.TypingLabel
 import io.github.masamune.ui.model.QuestItemViewModel
 import ktx.actors.plusAssign
 import ktx.actors.then
-import ktx.actors.txt
 import ktx.scene2d.KGroup
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
@@ -57,13 +56,13 @@ class QuestItemView(
         viewModel.onPropertyChange(QuestItemViewModel::itemPosition) { position ->
             debug = true
             if (position.isZero) {
-                label.txt = ""
+                label.setText("")
                 itemImage.drawable = null
                 isVisible = false
                 return@onPropertyChange
             }
 
-            label.txt = "{EASE=6;6;1}{RAINBOW}${viewModel.itemName}"
+            label.setText("{EASE=6;6;1}{RAINBOW}${viewModel.itemName}")
             label.restart()
             itemImage.drawable = viewModel.itemDrawable
             itemInfoTable.pack()

@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.github.tommyettinger.textra.TypingLabel
 import io.github.masamune.ui.model.DialogUiContent
 import io.github.masamune.ui.model.DialogViewModel
 import io.github.masamune.ui.widget.FrameImage

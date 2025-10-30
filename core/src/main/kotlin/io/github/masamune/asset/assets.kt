@@ -8,12 +8,13 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.maps.tiled.BaseTiledMapLoader
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.maps.tiled.TiledMapLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.I18NBundle
-import com.ray3k.stripe.FreeTypeSkinLoader
+import com.github.tommyettinger.freetypist.FreeTypistSkinLoader
 import ktx.assets.getAsset
 import ktx.assets.load
 import ktx.log.logger
@@ -117,9 +118,9 @@ enum class SoundAsset {
 class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleResolver()) : Disposable {
 
     private val manager = AssetManager(fileHandleResolver).apply {
-        setLoader(TiledMap::class.java, TmxMapLoader(this.fileHandleResolver))
+        setLoader(TiledMap::class.java, TiledMapLoader(this.fileHandleResolver))
         setLoader(CachingAtlas::class.java, CachingAtlasLoader(this.fileHandleResolver))
-        setLoader(Skin::class.java, FreeTypeSkinLoader(this.fileHandleResolver))
+        setLoader(Skin::class.java, FreeTypistSkinLoader(this.fileHandleResolver))
     }
 
     /**
@@ -138,7 +139,7 @@ class AssetService(fileHandleResolver: FileHandleResolver = InternalFileHandleRe
      * Queues a [TiledMapAsset] for loading.
      */
     fun load(asset: TiledMapAsset) {
-        manager.load<TiledMap>(asset.path, TmxMapLoader.Parameters().apply {
+        manager.load<TiledMap>(asset.path, BaseTiledMapLoader.Parameters().apply {
             projectFilePath = "maps/masamune-tiled.tiled-project"
         })
     }

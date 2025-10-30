@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.github.tommyettinger.textra.TypingLabel
 import io.github.masamune.ui.view.typingLabel
 import ktx.actors.txt
 import ktx.scene2d.KTable
@@ -59,7 +59,7 @@ class ItemInfoTable(skin: Skin) : Table(skin), KTable {
 
     fun clearItem() {
         this.nameLabel.txt = ""
-        this.descriptionLabel.txt = ""
+        this.descriptionLabel.setText("")
         this.image.drawable = null
     }
 }

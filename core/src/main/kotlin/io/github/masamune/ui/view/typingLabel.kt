@@ -1,7 +1,7 @@
 package io.github.masamune.ui.view
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.github.tommyettinger.textra.TypingLabel
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
@@ -13,7 +13,7 @@ import kotlin.contracts.contract
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.typingLabel(
-    text: CharSequence,
+    text: String,
     style: String = defaultStyle,
     skin: Skin,
     init: (@Scene2dDsl TypingLabel).(S) -> Unit = {},

@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.github.tommyettinger.textra.TypingLabel
 import io.github.masamune.ui.view.typingLabel
 import ktx.actors.txt
 import ktx.scene2d.KTable
@@ -49,7 +49,7 @@ class QuestInfoTable(skin: Skin) : Table(skin), KTable {
 
     fun clearQuest() {
         this.nameLabel.txt = ""
-        this.descriptionLabel.txt = ""
+        this.descriptionLabel.setText("")
     }
 }
 

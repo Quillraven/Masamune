@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.github.tommyettinger.textra.TypingLabel
 import io.github.masamune.ui.model.CombatFinishViewModel
 import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.UIStats
@@ -89,12 +89,12 @@ class CombatFinishView(
         viewModel.onPropertyChange(CombatFinishViewModel::levelsToGain) { lvl ->
             levelUpLabel.isVisible = lvl > 0
             lvlUpStatsLabel.isVisible = lvl > 0
-            levelUpLabel.txt = buildString {
+            levelUpLabel.setText(buildString {
                 append("{RAINBOW}")
                 append(i18nTxt(I18NKey.COMBAT_LEVEL_UPS))
                 append(": ")
                 append(lvl)
-            }
+            })
         }
         viewModel.onPropertyChange(CombatFinishViewModel::statsToGain) { stats ->
             val supportedStats = listOf(

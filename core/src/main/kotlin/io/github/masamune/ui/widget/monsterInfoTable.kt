@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.github.tommyettinger.textra.TypingLabel
 import io.github.masamune.ui.model.UIStats
 import io.github.masamune.ui.view.typingLabel
 import ktx.actors.txt
@@ -99,7 +99,7 @@ class MonsterInfoTable(
 
     fun clearMonster() {
         this.nameLabel.txt = ""
-        this.descriptionLabel.txt = ""
+        this.descriptionLabel.setText("")
         this.lifeLabel.txt = ""
         this.manaLabel.txt = ""
         this.agilityLabel.txt = ""

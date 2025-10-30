@@ -10,13 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.github.tommyettinger.textra.TypingLabel
 import io.github.masamune.ui.model.CutSceneViewModel
 import io.github.masamune.ui.model.I18NKey
 import ktx.actors.alpha
 import ktx.actors.plusAssign
 import ktx.actors.then
-import ktx.actors.txt
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2dDsl
@@ -81,7 +80,7 @@ class CutSceneView(
 
             label.run {
                 this.restart()
-                this.txt = textModel.text
+                this.setText(textModel.text)
                 this.setAlignment(textModel.align)
 
                 this.clearActions()

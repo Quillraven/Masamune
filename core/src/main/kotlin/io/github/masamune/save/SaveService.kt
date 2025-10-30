@@ -131,6 +131,7 @@ class SaveService(
         }
     }
 
+    @Suppress("DEPRECATION") // can be replaced with Locale.of with Java Version 19+
     fun loadLocale(): Locale {
         val locale = Locale(settingsPreferences.getString("locale", Locale.getDefault().language))
         if (locale.language == "de") {

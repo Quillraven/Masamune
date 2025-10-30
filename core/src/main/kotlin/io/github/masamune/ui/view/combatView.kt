@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.github.tommyettinger.textra.TypingLabel
 import io.github.masamune.ui.model.CombatViewModel
 import io.github.masamune.ui.model.I18NKey
 import io.github.masamune.ui.model.ItemCombatModel
@@ -388,7 +388,7 @@ class CombatView(
         }
 
     private fun updateActionDescription(description: String) {
-        actionDescriptionLabel.txt = description
+        actionDescriptionLabel.setText(description)
         actionDescriptionLabel.skipToTheEnd()
     }
 
@@ -464,6 +464,7 @@ class CombatView(
                 viewModel.playSndMenuClick()
                 updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
             }
+
             UiCombatState.SELECT_ITEM -> {
                 if (itemTable.hasNoEntries()) {
                     return
@@ -472,6 +473,7 @@ class CombatView(
                 viewModel.playSndMenuClick()
                 updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
             }
+
             UiCombatState.VICTORY_DEFEAT -> Unit
         }
     }
@@ -493,6 +495,7 @@ class CombatView(
                 viewModel.playSndMenuClick()
                 updateActionDescription(magicModels[magicTable.selectedEntryIdx].description)
             }
+
             UiCombatState.SELECT_ITEM -> {
                 if (itemTable.hasNoEntries()) {
                     return
@@ -501,6 +504,7 @@ class CombatView(
                 viewModel.playSndMenuClick()
                 updateActionDescription(itemModels[itemTable.selectedEntryIdx].description)
             }
+
             UiCombatState.VICTORY_DEFEAT -> Unit
         }
     }
@@ -624,6 +628,7 @@ class CombatView(
                 itemTable.isVisible = false
                 actionDescriptionTable.isVisible = false
             }
+
             UiCombatState.VICTORY_DEFEAT -> Unit
         }
     }

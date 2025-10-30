@@ -20,7 +20,6 @@ import ktx.app.gdxError
 import ktx.collections.GdxArray
 import ktx.collections.gdxArrayOf
 import ktx.log.logger
-import com.badlogic.gdx.utils.StringBuilder as GdxStringBuilder
 
 /**
  * A [TextureAtlas] implementation that caches the regions of [findRegions][TextureAtlas.findRegions] calls.
@@ -35,8 +34,8 @@ data class CachingAtlas(
 ) : Disposable {
 
     private val regionCache = mutableMapOf<String, GdxArray<TextureAtlas.AtlasRegion>>()
-    private val animationCache = mutableMapOf<GdxStringBuilder, GdxAnimation>()
-    private val stringBuilder = GdxStringBuilder()
+    private val animationCache = mutableMapOf<String, GdxAnimation>()
+    private val stringBuilder = StringBuilder()
 
     /**
      * Returns all regions with the specified [name]. If the regions
@@ -92,7 +91,7 @@ data class CachingAtlas(
                 .append(direction.atlasKey)
         }
 
-        return animationCache.getOrPut(stringBuilder) {
+        return animationCache.getOrPut(stringBuilder.toString()) {
             val regionKey = stringBuilder.toString()
             var texRegions = findRegions(regionKey, errorOnMissingRegions = false)
             if (texRegions.isEmpty) {
