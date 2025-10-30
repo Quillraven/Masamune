@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.maps.tiled.BaseTiledMapLoader
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.Vector2
@@ -70,7 +71,7 @@ private class TiledTest : KtxApplicationAdapter {
         assetService.finishLoading()
         TiledService.PLAYER_START_ITEMS = emptyMap()
         tiledMap = TmxMapLoader(ClasspathFileHandleResolver())
-            .load("maps/test.tmx", TmxMapLoader.Parameters().apply {
+            .load("maps/test.tmx", BaseTiledMapLoader.Parameters().apply {
                 projectFilePath = "maps/masamune-tiled.tiled-project"
             })
         tiledMap.properties[TILED_MAP_ASSET_PROPERTY_KEY] = TiledMapAsset.VILLAGE

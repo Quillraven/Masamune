@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.maps.tiled.BaseTiledMapLoader
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.ExtendViewport
@@ -81,7 +82,7 @@ private class InteractTest : KtxApplicationAdapter {
         assetService.load(AtlasAsset.CHARS_AND_PROPS)
         assetService.finishLoading()
         val tiledMap = TmxMapLoader(ClasspathFileHandleResolver())
-            .load("maps/interactTest.tmx", TmxMapLoader.Parameters().apply {
+            .load("maps/interactTest.tmx", BaseTiledMapLoader.Parameters().apply {
                 projectFilePath = "maps/masamune-tiled.tiled-project"
             })
         TiledService.PLAYER_START_ITEMS = emptyMap()
