@@ -33,7 +33,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v2
+        uses: gradle/actions/wrapper-validation@v5
 
       - name: Verify with Gradle Wrapper
         run: ./gradlew core:check
