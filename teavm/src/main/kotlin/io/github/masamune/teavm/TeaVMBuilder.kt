@@ -10,11 +10,11 @@ import com.github.tommyettinger.textra.effects.ShakeEffect
 import com.github.xpenatan.gdx.backends.teavm.config.AssetFileHandle
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuildConfiguration
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuilder
-import com.github.xpenatan.gdx.backends.teavm.config.TeaTargetType
 import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSupplier
 import com.ray3k.tenpatch.TenPatchDrawable
 import io.github.masamune.ui.view.DialogViewStyle
 import io.github.masamune.ui.widget.DialogOptionStyle
+import org.teavm.tooling.TeaVMTargetType
 import org.teavm.tooling.TeaVMTool
 import org.teavm.vm.TeaVMOptimizationLevel
 import java.io.File
@@ -50,7 +50,7 @@ object TeaVMBuilder {
         TeaReflectionSupplier.addReflectionClass(FreeTypeFontGenerator::class.java)
 
 
-        teaBuildConfiguration.targetType = TeaTargetType.WEBASSEMBLY
+        teaBuildConfiguration.targetType = TeaVMTargetType.WEBASSEMBLY_GC
         TeaBuilder.config(teaBuildConfiguration)
 
         val tool = TeaVMTool()

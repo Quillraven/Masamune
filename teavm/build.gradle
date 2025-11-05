@@ -24,12 +24,6 @@ dependencies {
   implementation "com.github.xpenatan.gdx-teavm:backend-teavm:$gdxTeaVMVersion"
   implementation "com.github.raeleus.stripe:freetype:$stripeVersion:sources"
   implementation "com.github.raeleus.stripe:stripe:$stripeVersion:sources"
-  implementation "org.teavm:teavm-classlib:$teaVMVersion"
-  implementation "org.teavm:teavm-core:$teaVMVersion"
-  implementation "org.teavm:teavm-jso-apis:$teaVMVersion"
-  implementation "org.teavm:teavm-jso-impl:$teaVMVersion"
-  implementation "org.teavm:teavm-jso:$teaVMVersion"
-  implementation "org.teavm:teavm-tooling:$teaVMVersion"
   implementation project(':core')
 
 }
