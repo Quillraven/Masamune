@@ -5,6 +5,8 @@ plugins {
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
+sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
+
 dependencies {
   api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
   api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"

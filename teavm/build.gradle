@@ -8,7 +8,6 @@ gretty {
   extraResourceBase 'build/dist/webapp'
 }
 
-sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
 project.ext.mainClassName = 'io.github.masamune.teavm.TeaVMBuilder'
 eclipse.project.name = appName + '-teavm'
 
