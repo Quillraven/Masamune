@@ -41,7 +41,7 @@ i:b:/ui/CherryCreamSoda-Regular.ttf:49404:1
 i:b:/ui/logo.png:347638:1
 i:b:/ui/skin.atlas:4069:1
 i:b:/ui/skin.png:10416:1
-i:b:/ui/messages_de.properties:16606:1
+i:b:/ui/messages_de.properties:16605:1
 i:b:/ui/skin.json:7801:1
 i:b:/ui/Fipps-Regular.otf:34220:1
 i:d:/maps:0:1
