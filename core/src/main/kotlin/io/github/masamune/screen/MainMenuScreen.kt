@@ -102,7 +102,7 @@ class MainMenuScreen(
     override fun hide() {
         logoDelay = 2f
         eventService.clearListeners()
-        audioService.stopMusic()
+        audioService.unloadMusic()
         masamune.save.saveAudioSettings(audioService)
     }
 

@@ -1,6 +1,7 @@
 package io.github.masamune.trigger
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityUpdateContext
@@ -47,7 +48,15 @@ class TriggerCfg(
     ) {
         val configurator = world.inject<DialogConfigurator>()
         val eventService = world.inject<EventService>()
-        actions += TriggerActionDialog(configurator, dialogName, withSound, world, triggeringEntity, eventService, closeAction)
+        actions += TriggerActionDialog(
+            configurator,
+            dialogName,
+            withSound,
+            world,
+            triggeringEntity,
+            eventService,
+            closeAction
+        )
     }
 
     fun actionAddItem(entity: Entity, itemType: ItemType, amount: Int = 1) {
@@ -92,6 +101,16 @@ class TriggerCfg(
     fun actionPlayMusic(music: MusicAsset, loop: Boolean = true, keepPrevious: Boolean = false) {
         val audioService = world.inject<AudioService>()
         actions += TriggerActionPlayMusic(audioService, music, loop, keepPrevious)
+    }
+
+    fun actionStopMusic() {
+        val audioService = world.inject<AudioService>()
+        actions += TriggerActionStopMusic(audioService)
+    }
+
+    fun actionResumeMusic() {
+        val audioService = world.inject<AudioService>()
+        actions += TriggerActionResumeMusic(audioService)
     }
 
     fun actionPlaySound(sound: SoundAsset, pitch: Float = 1f) {
@@ -174,8 +193,18 @@ class TriggerCfg(
         actions += TriggerActionSpawnEntity(type, location, tiledService)
     }
 
-    fun actionSpawnSfx(sfxAtlasKey: String, location: Vector2, duration: Float, scaling: Float) {
-        actions += TriggerActionSpawnSfx(sfxAtlasKey, location, duration, scaling)
+    fun actionSpawnSfx(
+        sfxAtlasKey: String,
+        location: Vector2,
+        duration: Float,
+        scaling: Float,
+        wait: Boolean = false,
+        playMode: Animation.PlayMode = Animation.PlayMode.NORMAL,
+    ) {
+        actions += TriggerActionSpawnSfx(sfxAtlasKey, location, duration, scaling, playMode)
+        if (wait) {
+            actionDelay(duration)
+        }
     }
 
     fun actionStartCombat(

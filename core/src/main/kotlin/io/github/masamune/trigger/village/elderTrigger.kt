@@ -2,17 +2,32 @@ package io.github.masamune.trigger.village
 
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import io.github.masamune.hasQuest
+import io.github.masamune.component.QuestLog
 import io.github.masamune.quest.MainQuest
 import io.github.masamune.tiledmap.ItemType
 import io.github.masamune.trigger.TriggerScript
 import io.github.masamune.trigger.trigger
 
 fun World.elderTrigger(name: String, triggeringEntity: Entity): TriggerScript {
+    val mainQuest = triggeringEntity.getOrNull(QuestLog)?.getOrNull<MainQuest>()
+
     return when {
-        hasQuest<MainQuest>(triggeringEntity) -> {
+        mainQuest != null && mainQuest.progress < 50 -> {
             trigger(name, this, triggeringEntity) {
                 actionDialog("elder_10")
+            }
+        }
+
+        mainQuest != null && mainQuest.progress == 50 -> {
+            trigger(name, this, triggeringEntity) {
+                actionDialog("elder_20")
+                actionCompleteQuest(mainQuest)
+            }
+        }
+
+        mainQuest != null && mainQuest.isCompleted() -> {
+            trigger(name, this, triggeringEntity) {
+                actionDialog("elder_30")
             }
         }
 

@@ -10,14 +10,11 @@ import io.github.masamune.getEntityByTiledIdOrNull
 import io.github.masamune.quest.FlowerGirlQuest
 import io.github.masamune.quest.MainQuest
 import io.github.masamune.quest.SpiritQuest
-import io.github.masamune.screen.CutSceneScreen
-import io.github.masamune.screen.FadeTransitionType
 import io.github.masamune.teleportEntity
 import io.github.masamune.tiledmap.TiledService
 import io.github.masamune.trigger.TriggerScript
-import io.github.masamune.trigger.trigger
 
-fun World.forestEntranceTrigger(name: String): TriggerScript? {
+fun World.forestEntranceTrigger(): TriggerScript? {
     val player = this.family { all(Player) }.single()
 
     // the next code never happens in a real game but is useful if we need to test the forest entrance
@@ -25,21 +22,6 @@ fun World.forestEntranceTrigger(name: String): TriggerScript? {
     // In the real game this is impossible because the player always has the MainQuest at this point.
     if (player[QuestLog].quests.isEmpty()) {
         player[QuestLog].quests += MainQuest()
-    }
-
-    // check main quest progress: if boss fight is completed then demo is over
-    val mainQuest = player[QuestLog].get<MainQuest>()
-    if (mainQuest.progress >= 50) {
-        return trigger(name, this, player) {
-            actionChangeScreen {
-                transitionScreen<CutSceneScreen>(
-                    FadeTransitionType(1f, 0f, 3f),
-                    FadeTransitionType(0f, 1f, 1f)
-                ) {
-                    it.startCutScene("outro")
-                }
-            }
-        }
     }
 
     val flowerQuest = player[QuestLog].getOrNull<FlowerGirlQuest>()

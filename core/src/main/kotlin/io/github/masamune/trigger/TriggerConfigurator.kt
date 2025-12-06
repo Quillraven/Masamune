@@ -52,7 +52,7 @@ class TriggerConfigurator {
     operator fun get(name: String, world: World): TriggerScript? {
         log.debug { "Creating new trigger $name" }
         return when (name) {
-            "forest_entrance" -> world.forestEntranceTrigger(name)
+            "forest_entrance" -> world.forestEntranceTrigger()
             "village_intro" -> world.villageIntroTrigger(name)
             "forest_masamune" -> world.forestMasamuneMapTrigger(name)
             else -> gdxError("There is no trigger configured for name $name")

@@ -1,8 +1,10 @@
 package io.github.masamune.trigger.forest.masamune
 
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import io.github.masamune.Masamune
+import io.github.masamune.Masamune.Companion.UNIT_SCALE
 import io.github.masamune.asset.MusicAsset
 import io.github.masamune.asset.SoundAsset
 import io.github.masamune.component.FacingDirection
@@ -106,7 +108,24 @@ fun World.masamuneForestTrigger(
                 )
             }
         } else {
+            actionStopMusic()
             actionDialog("masamune_forest_40", withSound = true)
+
+            // masamune protes effect
+            actionEnableInput(false)
+            val offset = 64f * UNIT_SCALE * 0.5f
+            val masaSfxPos = tiledService.loadPoint("masa_sfx").sub(offset, offset * 0.75f)
+            actionSpawnSfx("flower_red", masaSfxPos, 1f, 0.5f, playMode = PlayMode.LOOP_PINGPONG)
+            actionPlaySound(SoundAsset.PROTES_1)
+            actionDelay(0.8f)
+            actionSpawnSfx("flower_blue", masaSfxPos, 1.25f, 0.75f, playMode = PlayMode.LOOP_PINGPONG)
+            actionPlaySound(SoundAsset.PROTES_1, 0.8f)
+            actionDelay(1f)
+            actionSpawnSfx("flower_purple", masaSfxPos.sub(0f, 0.1f), 1.5f, 0.85f, wait = true, PlayMode.LOOP_PINGPONG)
+            actionPlaySound(SoundAsset.PROTES_2)
+            actionDelay(2f)
+            actionResumeMusic()
+            actionEnableInput(true)
         }
     }
 }

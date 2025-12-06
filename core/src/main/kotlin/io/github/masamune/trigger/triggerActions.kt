@@ -3,6 +3,7 @@ package io.github.masamune.trigger
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
@@ -302,6 +303,24 @@ class TriggerActionPlayMusic(
     }
 }
 
+class TriggerActionStopMusic(
+    private val audioService: AudioService,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        audioService.stopMusic()
+        return true
+    }
+}
+
+class TriggerActionResumeMusic(
+    private val audioService: AudioService,
+) : TriggerAction {
+    override fun World.onUpdate(): Boolean {
+        audioService.resumeMusic()
+        return true
+    }
+}
+
 class TriggerActionPlaySound(
     private val audioService: AudioService,
     private val sound: SoundAsset,
@@ -463,9 +482,10 @@ class TriggerActionSpawnSfx(
     private val location: Vector2,
     private val duration: Float,
     private val scale: Float,
+    private val playMode: PlayMode
 ) : TriggerAction {
     override fun World.onUpdate(): Boolean {
-        spawnSfx(sfxAtlasKey, location, duration, scale)
+        spawnSfx(sfxAtlasKey, location, duration, scale, playMode)
         return true
     }
 }

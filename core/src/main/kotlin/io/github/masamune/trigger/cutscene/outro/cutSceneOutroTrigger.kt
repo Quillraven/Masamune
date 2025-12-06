@@ -10,6 +10,10 @@ import io.github.masamune.trigger.TriggerScript
 import io.github.masamune.trigger.trigger
 import io.github.masamune.ui.model.I18NKey
 
+// not used anymore for now because Outro of demo was replaced with a real elder dialog so
+// that people can continue playing and spend the money of the boss fight
+//
+// might be useful for future real outro/credit scenes, so let's keep it
 fun World.cutSceneOutroTrigger(
     name: String,
     scriptEntity: Entity,

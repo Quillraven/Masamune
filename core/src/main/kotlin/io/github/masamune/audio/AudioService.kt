@@ -69,13 +69,21 @@ class AudioService(
         prevMusic?.let { play(it) }
     }
 
-    fun stopMusic() {
+    fun unloadMusic() {
         lastMusic?.let { (prevMusic, prevMusicAsset) ->
             log.debug { "Unloading previous music $prevMusicAsset" }
             prevMusic.stop()
             assetService.unload(prevMusicAsset)
             lastMusic = null
         }
+    }
+
+    fun stopMusic() {
+        lastMusic?.let { (prevMusic, _) -> prevMusic.stop() }
+    }
+
+    fun resumeMusic() {
+        lastMusic?.let { (prevMusic, _) -> prevMusic.play() }
     }
 
     fun play(soundAsset: SoundAsset, pitch: Float = 1f) {

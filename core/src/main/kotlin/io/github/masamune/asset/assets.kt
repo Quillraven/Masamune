@@ -99,6 +99,8 @@ enum class SoundAsset {
     DEMI1,
     CONSUME,
     POISON1,
+    PROTES_1,
+    PROTES_2,
     ;
 
     val path = "sound/${name.lowercase()}.wav"

@@ -1,5 +1,6 @@
 package io.github.masamune
 
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
@@ -203,14 +204,20 @@ fun World.spawnSfx(target: Entity, sfxAtlasKey: String, duration: Float, scale: 
 
         val animation = Animation.ofAtlas(sfxAtlas, sfxAtlasKey, AnimationType.IDLE)
         animation.speed = 1f / (duration / animation.gdxAnimation.animationDuration)
-        animation.playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
+        animation.playMode = PlayMode.NORMAL
         it += animation
         it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
         it += Remove(duration)
     }
 }
 
-fun World.spawnSfx(sfxAtlasKey: String, location: Vector2, duration: Float, scale: Float = 1f) {
+fun World.spawnSfx(
+    sfxAtlasKey: String,
+    location: Vector2,
+    duration: Float,
+    scale: Float = 1f,
+    playMode: PlayMode = PlayMode.NORMAL,
+) {
     val sfxAtlas = inject<CachingAtlas>(AtlasAsset.SFX.name)
     val animation = Animation.ofAtlas(sfxAtlas, sfxAtlasKey, AnimationType.IDLE)
     val keyFrame = animation.gdxAnimation.getKeyFrame(0f, false)
@@ -219,10 +226,13 @@ fun World.spawnSfx(sfxAtlasKey: String, location: Vector2, duration: Float, scal
     entity {
         it += Transform(vec3(location, z = 3f), size, scale)
         animation.speed = 1f / (duration / animation.gdxAnimation.animationDuration)
-        animation.playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
+        animation.playMode = playMode
         it += animation
         it += Graphic(animation.gdxAnimation.getKeyFrame(0f))
-        it += Remove(duration)
+        it += when (playMode) {
+            PlayMode.NORMAL, PlayMode.REVERSED -> Remove(duration)
+            else -> Remove(duration * 2f) // loop version -> double duration of normal playmode
+        }
     }
 }
 
