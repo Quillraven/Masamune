@@ -20,6 +20,8 @@ import io.github.masamune.dialog.forest.path.manGreen30Dialog
 import io.github.masamune.dialog.forest.path.snowyDialog
 import io.github.masamune.dialog.village.elder00Dialog
 import io.github.masamune.dialog.village.elder10Dialog
+import io.github.masamune.dialog.village.elder20Dialog
+import io.github.masamune.dialog.village.elder30Dialog
 import io.github.masamune.dialog.village.flowerGirl00Dialog
 import io.github.masamune.dialog.village.flowerGirl10Dialog
 import io.github.masamune.dialog.village.flowerGirl20Dialog
@@ -47,6 +49,8 @@ class DialogConfigurator(val bundle: I18NBundle) {
         return when (name) {
             "elder_00" -> elder00Dialog(name, world, triggeringEntity)
             "elder_10" -> elder10Dialog(name)
+            "elder_20" -> elder20Dialog(name, world, triggeringEntity)
+            "elder_30" -> elder30Dialog(name)
             "merchant_00" -> merchantDialog(name)
             "smith_00" -> smithDialog(name, world, triggeringEntity)
             "flower_girl_00" -> flowerGirl00Dialog(name, world, triggeringEntity)

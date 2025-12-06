@@ -32,3 +32,26 @@ fun DialogConfigurator.elder10Dialog(name: String): Dialog = dialog(name) {
         option(dialogOptionOk, ActionExit)
     }
 }
+
+fun DialogConfigurator.elder20Dialog(name: String, world: World, triggeringEntity: Entity): Dialog = dialog(name) {
+    val playerName = entityName(world, triggeringEntity)
+    val elderTitle = bundle[I18NKey.NPC_ELDER_TITLE]
+
+    page(bundle[I18NKey.DIALOG_ELDER_20_PAGE1, playerName], "elder", elderTitle) {
+        option(dialogOptionNext, ActionNext)
+    }
+    page(bundle[I18NKey.DIALOG_ELDER_20_PAGE2], "hero", playerName) {
+        option(dialogOptionNext, ActionNext)
+    }
+    page(bundle[I18NKey.DIALOG_ELDER_20_PAGE3], "elder", elderTitle) {
+        option(dialogOptionOk, ActionExit)
+    }
+}
+
+fun DialogConfigurator.elder30Dialog(name: String): Dialog = dialog(name) {
+    val elderTitle = bundle[I18NKey.NPC_ELDER_TITLE]
+
+    page(bundle[I18NKey.DIALOG_ELDER_30_PAGE1], "elder", elderTitle) {
+        option(dialogOptionOk, ActionExit)
+    }
+}
