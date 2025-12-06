@@ -93,7 +93,7 @@ data class EffectStack(
                 eventService.fire(
                     CombatEntityTakeDamageEvent(
                         effect.target,
-                        effect.damage,
+                        effect.roundedDamage,
                         effect.targetLife,
                         effect.targetLifeMax,
                         effect.critical

@@ -162,7 +162,7 @@ class CombatViewModel(
                 val (position, size) = event.entity[Transform]
                 val uiPos = vec2(position.x + MathUtils.random(size.x * 0.1f, size.x * 0.3f), position.y)
                     .toUiPosition(gameViewport, uiViewport)
-                combatDamage = Triple(uiPos, event.amount.toInt(), event.critical)
+                combatDamage = Triple(uiPos, event.amount, event.critical)
             }
 
             is CombatEntityHealEvent -> {
