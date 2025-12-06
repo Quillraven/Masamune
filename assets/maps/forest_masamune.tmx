@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="44">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="45">
  <properties>
   <property name="music" value="FOREST"/>
   <property name="trigger" value="forest_masamune"/>
@@ -8,12 +8,12 @@
  <tileset firstgid="4097" source="objects.tsx"/>
  <layer id="1" name="ground" width="20" height="17">
   <data encoding="base64" compression="zlib">
-   eJzNlMEOgyAMQDlYPG3J/nD/4nXuG/gUNeOmi/ujlVFM7VDQedjhhQLh0dJor5XqkSeN/8DA4hqUusP3OmdL7gO6LsK7xpjhc9QuD9iXE7/jRs4Xcj7gLU/EEa7Uu48re3v79WtOYQ6luhYExtM+RNaifRZzPNNUOLY+nly6VKZja7k4nyUfOpqCXK24Y4svnJVoX6/JdYW6rPA8IrmleguiLkeVkdvSd+jq7NhZ5BNb5lr6b8T6C/7tjQM8s3nK8wZdXAOS
+   eJzNlEEOgyAQRf+CGVZt0hv2Lm5rz+BR1JSdNvZGDWFoKUVB66KLH5ghPP7MRAcGBgbusv6DxmBfE3Cl73yoNd5HAk4Rd0lTAc+qtj5om6fwjYswHwQcd+jlQbQHK9f3aeFs67x+9eRj0jgrEen3OSVyyTlHsdJoKwY6t3+xWKPpg1ypLM8IjzVaJawuemMNz9+Nxa7eppTl6zIR55bwlpstRXVZVQXe5r5DW2cf3GXt9iZgzf03UvMl1/vGipw+4hznCV1cA5I=
   </data>
  </layer>
  <layer id="2" name="decoration" width="20" height="17">
   <data encoding="base64" compression="zlib">
-   eJyLZmVgiAFifECcjYFBAoglgViKDT8/EmhWFNS8I/wMDEf5sZuZyUmcubhANA53EzLTg5+hAZ9f77Kg8m+z4zeXHIDPjZQAUsIPH7jFjttMbOGHKy6IcStyesEHXIDpyBVHWkIPv1igeXFYzLzBjimGyxxKwg+fmbCwQk9nxABJoPul2CFpEl/43SLgTxiIBKqLQkvfIIAr/IgF2MqDDE7yzUM2lxi3Xcfhf1iY4yqviAXIfkGPXwCSASCR
+   eJyllLENwjAQRV+BbaVyCck8ILFCEqCGLRgOZgAFsQsFWDLGdzHJ6+zi6e77y72BnUFlaWFlobbQWP3cGug+vouHq887T1WZV6IX5h5zbj1nbdfn4vv8cLp3CtqMc/gnP43Byc5cftJblMwa90Vj7WEjdCnNb2/gkHHe3e+d5JmTn+YMWaU9K6F20Lh3J7X8hpE9A62DLuk3Sn6l5P6DYzXdF3tLZrsJ+4fMpf+qlHiX9H1fkgEgkQ==
   </data>
  </layer>
  <layer id="3" name="decoration 2" width="20" height="17">
@@ -53,6 +53,9 @@
   <object id="43" name="despawn_demon_2" x="206" y="192">
    <point/>
   </object>
+  <object id="44" name="masa_sfx" x="160.526" y="218.75">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup color="#ffaa00" id="6" name="portal">
   <object id="33" name="FOREST_ENTRANCE" type="Portal" x="-3" y="64" width="16" height="48">
@@ -64,7 +67,7 @@
  </objectgroup>
  <layer id="5" name="foreground" width="20" height="17">
   <data encoding="base64" compression="zlib">
-   eJyTZGVgkAJiEGjhZ2Bo5WfACSShavHRuIA0UE4GizwhMzn4GRpwm0q6W6lpFj7/kmsupYCY8MMVF6SYSwiwANMRK460hO5fWSAtR4bf6RF+5IQVMeZSyzwQIDf8sLmNWu6DmUup26jtPmrHAzoAAOKEDVY=
+   eJy9kjkOgDAMBKfAEp1rzrdSwL+REDRRnNNimhSJRut1JoFZeDgVLsVket+mTotFYI3c55yjctjW+qyertS8rd5eSvqzdlHjzTEoiPGXwnk3gb1h9j/6a+mqxOvlo6O/WDavfJ+3N5t3Pu89hNzihA1W
   </data>
  </layer>
  <layer id="8" name="foreground2" width="20" height="17">
