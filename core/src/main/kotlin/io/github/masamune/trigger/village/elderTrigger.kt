@@ -22,6 +22,7 @@ fun World.elderTrigger(name: String, triggeringEntity: Entity): TriggerScript {
             trigger(name, this, triggeringEntity) {
                 actionDialog("elder_20")
                 actionCompleteQuest(mainQuest)
+                actionDialog("demo_end")
             }
         }
 

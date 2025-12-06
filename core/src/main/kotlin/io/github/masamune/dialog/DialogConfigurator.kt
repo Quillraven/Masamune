@@ -74,8 +74,21 @@ class DialogConfigurator(val bundle: I18NBundle) {
             "spiritForest_10" -> spiritForest10Dialog(name)
             "spiritForest_20" -> spiritForest20Dialog(name)
             "spiritForest_30" -> spiritForest30Dialog(name)
+            "demo_end" -> demoEndDialog(name)
 
             else -> gdxError("There is no dialog configured for name $name")
+        }
+    }
+
+    fun DialogConfigurator.demoEndDialog(name: String): Dialog = dialog(name) {
+        page(bundle[I18NKey.CUT_SCENE_OUTRO_TEXT1]) {
+            option(dialogOptionNext, ActionNext)
+        }
+        page(bundle[I18NKey.CUT_SCENE_OUTRO_TEXT2]) {
+            option(dialogOptionOk, ActionNext)
+        }
+        page(bundle[I18NKey.CUT_SCENE_OUTRO_TEXT3]) {
+            option(dialogOptionOk, ActionExit)
         }
     }
 
