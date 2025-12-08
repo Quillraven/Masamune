@@ -42,7 +42,7 @@ import ktx.scene2d.actors
  * - Mana should be 80 (30 default + 50 bonus)
  */
 
-fun main() = gdxTest("UI Stats Test; 1-4 change HP,MP,XP values", UiStatsTest())
+fun main() = gdxTest("UI Stats Test; 1-4 change HP,MP values; 5 add XP", UiStatsTest())
 
 private class UiStatsTest : KtxApplicationAdapter {
     private val uiViewport = uiViewport()
@@ -65,7 +65,7 @@ private class UiStatsTest : KtxApplicationAdapter {
             it += Player()
             it += Inventory(talons = 100)
             it += Name("Test Hero")
-            it += Experience(level = 2)
+            it += Experience()
             it += CharacterStats(
                 strength = 10f,
                 baseLife = 100f,
@@ -105,13 +105,18 @@ private class UiStatsTest : KtxApplicationAdapter {
         stage.viewport.update(width, height, true)
     }
 
-    private fun updatePlayer(lifePerc: Float, manaPerc: Float, xpPerc: Float) = with(world) {
+    private fun updatePlayer(lifePerc: Float, manaPerc: Float) = with(world) {
         val playerEntity = family { all(Player) }.first()
         val stats = playerEntity[CharacterStats]
         stats.life = stats.lifeMax * lifePerc
         stats.mana = stats.manaMax * manaPerc
-        val experience = playerEntity[Experience]
-        experience.current = (experience.forLevelUp * xpPerc).toInt()
+
+        eventService.fire(MenuBeginEvent(MenuType.STATS))
+    }
+
+    private fun updatePlayerXp() = with(world) {
+        val playerEntity = family { all(Player) }.first()
+        playerEntity[Experience].gainXp(20)
 
         eventService.fire(MenuBeginEvent(MenuType.STATS))
     }
@@ -123,10 +128,11 @@ private class UiStatsTest : KtxApplicationAdapter {
         stage.draw()
 
         when {
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> updatePlayer(lifePerc = 0f, manaPerc = 0f, xpPerc = 0f)
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> updatePlayer(lifePerc = 0.25f, manaPerc = 0.25f, xpPerc = 0.25f)
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> updatePlayer(lifePerc = 0.75f, manaPerc = 0.75f, xpPerc = 0.75f)
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_4) -> updatePlayer(lifePerc = 1f, manaPerc = 1f, xpPerc = 1f)
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> updatePlayer(lifePerc = 0f, manaPerc = 0f)
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) -> updatePlayer(lifePerc = 0.25f, manaPerc = 0.25f)
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) -> updatePlayer(lifePerc = 0.75f, manaPerc = 0.75f)
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_4) -> updatePlayer(lifePerc = 1f, manaPerc = 1f)
+            Gdx.input.isKeyJustPressed(Input.Keys.NUM_5) -> updatePlayerXp()
         }
     }
 

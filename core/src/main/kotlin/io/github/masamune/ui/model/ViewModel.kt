@@ -77,6 +77,7 @@ abstract class ViewModel(
                     result += UIStats.LEVEL to "${component.level}"
                     result += UIStats.XP to "${component.current}"
                     result += UIStats.XP_NEEDED to "${component.forLevelUp}"
+                    result += UIStats.PREV_XP_NEEDED to "${Experience.calcLevelUpXp(component.level - 1)}"
                 }
 
                 is Inventory -> {
@@ -160,23 +161,23 @@ abstract class ViewModel(
         val equipmentStats = this@toUiStatsMap.items.map { it[ItemStats] }
         return UIStats.entries.associateWith { uiStat ->
             equipmentStats.sumOf {
-                    when (uiStat) {
-                        UIStats.AGILITY -> it.agility.toInt()
-                        UIStats.ARCANE_STRIKE -> round((it.arcaneStrike * 100)).toInt()
-                        UIStats.ARMOR -> it.armor.toInt()
-                        UIStats.CONSTITUTION -> it.constitution.toInt()
-                        UIStats.CRITICAL_STRIKE -> round((it.criticalStrike * 100)).toInt()
-                        UIStats.DAMAGE -> it.damage.toInt()
-                        UIStats.INTELLIGENCE -> it.intelligence.toInt()
-                        UIStats.LIFE_MAX -> it.life.toInt()
-                        UIStats.MAGICAL_EVADE -> round((it.magicalEvade * 100)).toInt()
-                        UIStats.MANA_MAX -> it.mana.toInt()
-                        UIStats.PHYSICAL_EVADE -> round((it.physicalEvade * 100)).toInt()
-                        UIStats.RESISTANCE -> it.resistance.toInt()
-                        UIStats.STRENGTH -> it.strength.toInt()
-                        else -> 0
-                    }
+                when (uiStat) {
+                    UIStats.AGILITY -> it.agility.toInt()
+                    UIStats.ARCANE_STRIKE -> round((it.arcaneStrike * 100)).toInt()
+                    UIStats.ARMOR -> it.armor.toInt()
+                    UIStats.CONSTITUTION -> it.constitution.toInt()
+                    UIStats.CRITICAL_STRIKE -> round((it.criticalStrike * 100)).toInt()
+                    UIStats.DAMAGE -> it.damage.toInt()
+                    UIStats.INTELLIGENCE -> it.intelligence.toInt()
+                    UIStats.LIFE_MAX -> it.life.toInt()
+                    UIStats.MAGICAL_EVADE -> round((it.magicalEvade * 100)).toInt()
+                    UIStats.MANA_MAX -> it.mana.toInt()
+                    UIStats.PHYSICAL_EVADE -> round((it.physicalEvade * 100)).toInt()
+                    UIStats.RESISTANCE -> it.resistance.toInt()
+                    UIStats.STRENGTH -> it.strength.toInt()
+                    else -> 0
                 }
+            }
         }
     }
 
@@ -241,7 +242,8 @@ abstract class ViewModel(
         val region: TextureRegion? = itemEntity.getOrNull(Graphic)?.region
 
         val i18nName = bundle["item.$itemName.name"]
-        val isConsumable = consumableType == ConsumableType.INVENTORY_ONLY || consumableType == ConsumableType.COMBAT_AND_INVENTORY
+        val isConsumable =
+            consumableType == ConsumableType.INVENTORY_ONLY || consumableType == ConsumableType.COMBAT_AND_INVENTORY
         val i18nDescription = buildString {
             if (withConsumeInfo && isConsumable) {
                 appendLine("{BLINK=#695454FF;#69545455;2.5;0.6}${i18nTxt(I18NKey.ITEM_INFO_CONSUMABLE)}{ENDBLINK}")
@@ -305,11 +307,20 @@ abstract class ViewModel(
             return mapOf(
                 UIStats.STRENGTH to (selectedStats.getOrDefault(UIStats.STRENGTH, 0) - equipStats.strength).toInt(),
                 UIStats.AGILITY to (selectedStats.getOrDefault(UIStats.AGILITY, 0) - equipStats.agility).toInt(),
-                UIStats.CONSTITUTION to (selectedStats.getOrDefault(UIStats.CONSTITUTION, 0) - equipStats.constitution).toInt(),
-                UIStats.INTELLIGENCE to (selectedStats.getOrDefault(UIStats.INTELLIGENCE, 0) - equipStats.intelligence).toInt(),
+                UIStats.CONSTITUTION to (selectedStats.getOrDefault(
+                    UIStats.CONSTITUTION,
+                    0
+                ) - equipStats.constitution).toInt(),
+                UIStats.INTELLIGENCE to (selectedStats.getOrDefault(
+                    UIStats.INTELLIGENCE,
+                    0
+                ) - equipStats.intelligence).toInt(),
                 UIStats.DAMAGE to (selectedStats.getOrDefault(UIStats.DAMAGE, 0) - equipStats.damage).toInt(),
                 UIStats.ARMOR to (selectedStats.getOrDefault(UIStats.ARMOR, 0) - equipStats.armor).toInt(),
-                UIStats.RESISTANCE to (selectedStats.getOrDefault(UIStats.RESISTANCE, 0) - equipStats.resistance).toInt(),
+                UIStats.RESISTANCE to (selectedStats.getOrDefault(
+                    UIStats.RESISTANCE,
+                    0
+                ) - equipStats.resistance).toInt(),
             )
         }
     }

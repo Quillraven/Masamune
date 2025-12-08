@@ -25,7 +25,10 @@ data class Experience(
     }
 
     companion object : ComponentType<Experience>() {
-        fun calcLevelUpXp(forLevel: Int): Int = (80f + ((forLevel - 1) * 120) * 1.2f).toInt()
+        fun calcLevelUpXp(forLevel: Int): Int = when {
+            forLevel <= 0 -> 0
+            else -> (80f + ((forLevel - 1) * 120) * 1.2f).toInt()
+        }
 
         fun calcLevelUps(level: Int, currentXp: Int, xpGain: Int): Int {
             var tmpLvl = level

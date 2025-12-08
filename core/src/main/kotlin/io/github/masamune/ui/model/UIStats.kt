@@ -19,6 +19,7 @@ enum class UIStats {
     LEVEL,
     XP,
     XP_NEEDED,
+    PREV_XP_NEEDED,
     TALONS;
 
     val bundleKey = "stats.${name.toCamelCase()}"

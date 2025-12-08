@@ -184,9 +184,14 @@ class StatsView(
 
             // experience
             levelMenuItemLabel.value(stats[UIStats.LEVEL] ?: missingValue)
+            val prevXpNeeded = stats[UIStats.PREV_XP_NEEDED] ?: missingValue
             val xpNeededValue = stats[UIStats.XP_NEEDED] ?: "1"
             val xpCurrent = stats[UIStats.XP] ?: missingValue
-            val xpPercentage = xpCurrent.toFloat() / xpNeededValue.toFloat()
+
+            val lowXp = xpCurrent.toFloat() - prevXpNeeded.toInt()
+            val highXp = xpNeededValue.toFloat() - prevXpNeeded.toFloat()
+            val xpPercentage = lowXp / highXp
+
             xpMenuItemLabel.value("${(xpNeededValue.toInt() - xpCurrent.toInt()).coerceAtLeast(0)}")
             xpProgressBar.value = xpPercentage.coerceIn(0f, 1f)
 
