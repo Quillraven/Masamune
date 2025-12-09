@@ -10,10 +10,12 @@ import io.github.masamune.Masamune
 fun main() {
     // This handles macOS support and helps on Windows.
     if (StartupHelper.startNewJvmIfRequired())
-      return
+        return
     Lwjgl3Application(Masamune(webLauncher = false), Lwjgl3ApplicationConfiguration().apply {
         setTitle("Masamune")
-        setWindowedMode(1280, 960)
         setWindowIcon("icon32.png")
+        val displayMode = Lwjgl3ApplicationConfiguration.getDisplayMode()
+        setDecorated(false)
+        setWindowedMode(displayMode.width, displayMode.height)
     })
 }
