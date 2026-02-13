@@ -110,7 +110,7 @@ class DefaultMapTransitionService(
 
     override fun update(world: World, deltaTime: Float) = with(world) {
         if (transitionTime == 0f) {
-            return
+            return@with
         }
 
         transitionTime -= deltaTime

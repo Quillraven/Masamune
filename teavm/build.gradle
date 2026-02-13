@@ -1,11 +1,5 @@
 plugins {
   id 'java'
-  id 'org.gretty' version '3.1.8'
-}
-
-gretty {
-  contextPath = '/'
-  extraResourceBase 'build/dist/webapp'
 }
 
 project.ext.mainClassName = 'io.github.masamune.teavm.TeaVMBuilder'
@@ -20,22 +14,18 @@ java.sourceCompatibility = "11"
 dependencies {
   implementation "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion"
   implementation "com.github.xpenatan.gdx-teavm:gdx-freetype-teavm:$gdxTeaVMVersion"
-  implementation "com.github.xpenatan.gdx-teavm:backend-teavm:$gdxTeaVMVersion"
+  implementation "com.github.xpenatan.gdx-teavm:backend-web:$gdxTeaVMVersion"
   implementation "com.github.raeleus.stripe:freetype:$stripeVersion:sources"
   implementation "com.github.raeleus.stripe:stripe:$stripeVersion:sources"
   implementation project(':core')
 
 }
 
-tasks.register('buildJavaScript', JavaExec) {
+tasks.register('buildAndRun', JavaExec) {
+  setGroup("teavm")
+  setDescription("Transpile bytecode to JavaScript via TeaVM and run it locally at http://localhost:8080/")
   dependsOn classes
-  setDescription("Transpile bytecode to JavaScript via TeaVM")
   mainClass.set(project.mainClassName)
   setClasspath(sourceSets.main.runtimeClasspath)
 }
-build.dependsOn buildJavaScript
-
-tasks.register("run") {
-  description = "Run the JavaScript application hosted via a local Jetty server at http://localhost:8080/"
-  dependsOn(buildJavaScript, tasks.named("jettyRun"))
-}
+build.dependsOn buildAndRun

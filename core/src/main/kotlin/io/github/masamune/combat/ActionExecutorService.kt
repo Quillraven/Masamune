@@ -259,7 +259,7 @@ class ActionExecutorService(
         val realTarget = verifyTarget(target)
         if (realTarget == Entity.NONE) {
             // target is already dead and no other target is available -> do nothing
-            return
+            return@with
         }
 
         // will target evade?
