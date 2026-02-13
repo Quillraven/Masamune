@@ -1,11 +1,5 @@
 plugins {
   id 'java'
-  id 'org.gretty' version '3.1.8'
-}
-
-gretty {
-  contextPath = '/'
-  extraResourceBase 'build/dist/webapp'
 }
 
 project.ext.mainClassName = 'io.github.masamune.teavm.TeaVMBuilder'
@@ -27,17 +21,14 @@ dependencies {
 
 }
 
-tasks.register('buildJavaScript', JavaExec) {
+tasks.register('buildAndRun', JavaExec) {
   setGroup("teavm")
-  setDescription("Transpile bytecode to JavaScript via TeaVM")
+  setDescription("Transpile bytecode to JavaScript via TeaVM and run it at localhost")
   dependsOn classes
   mainClass.set(project.mainClassName)
   setClasspath(sourceSets.main.runtimeClasspath)
+  if(project.hasProperty("ghPages")) {
+    args("noAutoJetty")
+  }
 }
-build.dependsOn buildJavaScript
-
-tasks.register("run") {
-  setGroup("teavm")
-  setDescription("Run the JavaScript application hosted via a local Jetty server at http://localhost:8080/")
-  dependsOn(buildJavaScript, tasks.named("jettyRun"))
-}
+build.dependsOn buildAndRun

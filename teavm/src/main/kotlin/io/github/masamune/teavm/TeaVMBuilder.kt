@@ -25,7 +25,7 @@ object TeaVMBuilder {
             .setHtmlTitle("Masamune")
             .setHtmlWidth(960)
             .setHtmlHeight(540)
-            .setStartJettyAfterBuild(false)
+            .setStartJettyAfterBuild(arguments.none { it == "noAutoJetty" })
             .setJettyPort(8080)
             // set 'webAssembly' to false for creating JAVASCRIPT target
             .setWebAssembly(true)
